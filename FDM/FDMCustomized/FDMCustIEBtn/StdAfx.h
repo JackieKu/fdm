@@ -11,7 +11,9 @@
 #pragma once
 #endif 
 
+#if _MSC_VER < 1300
 typedef void SHANDLE_PTR;
+#endif
 
 #define STRICT
 #ifndef _WIN32_WINNT
