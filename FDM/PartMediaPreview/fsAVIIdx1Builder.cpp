@@ -4,9 +4,9 @@
 
     
 
-#define WINVER 0x400
+#define WINVER 0x0500
 #define _WIN32_IE 0x501
-#define _WIN32_WINNT 0x400
+#define _WIN32_WINNT 0x0500
 
 #include "fsAVIIdx1Builder.h"
 #include <fsString.h>
