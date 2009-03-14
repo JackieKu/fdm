@@ -5,7 +5,6 @@
     
 
 #include "Crc32.h"
-#include <fstream.h>  
 
 DWORD CCrc32Static::s_arrdwCrc32Table[256] =
 {
@@ -145,45 +144,27 @@ DWORD CCrc32Static::StringCrc32(LPCTSTR szString, DWORD &dwCrc32)
 
 DWORD CCrc32Static::FileCrc32Streams(LPCTSTR szFilename, DWORD &dwCrc32)
 {
-#if UNICODE || _UNICODE
-	return ERROR_NOT_SUPPORTED;
-#else
-
 	DWORD dwErrorCode = NO_ERROR;
-	ifstream file;
+	HANDLE hFile = INVALID_HANDLE_VALUE;
 
 	dwCrc32 = 0xFFFFFFFF;
 
-	try
-	{
-		
-		file.open(szFilename, ios::in | ios::nocreate | ios::binary, filebuf::sh_read);
+	if ((hFile = CreateFile(szFilename, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL)) == INVALID_HANDLE_VALUE)
+		return ERROR_CRC;
 
-		if(file.is_open())
-		{
-			char buffer[MAX_BUFFER_SIZE];
-			int nLoop, nCount;
-			nCount = file.read(buffer, sizeof(buffer)).gcount();
-			while(nCount)
-			{
-				for(nLoop = 0; nLoop < nCount; nLoop++)
-					CalcCrc32(buffer[nLoop], dwCrc32);
-				nCount = file.read(buffer, sizeof(buffer)).gcount();
-			}
+	BYTE buffer[MAX_BUFFER_SIZE];
+	int nLoop;
+	DWORD nCount;
 
-			file.close();
-		}
-	}
-	catch(...)
+	while(ReadFile(hFile, buffer, sizeof(buffer), &nCount, NULL) && nCount > 0)
 	{
-		
-		dwErrorCode = ERROR_CRC;
+		for(nLoop = 0; nLoop < nCount; nLoop++)
+			CalcCrc32(buffer[nLoop], dwCrc32);
 	}
 
-	if(file.is_open()) file.close();
-
+	CloseHandle(hFile);
+	
 	dwCrc32 = ~dwCrc32;
 
 	return dwErrorCode;
-#endif
 }

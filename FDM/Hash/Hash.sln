@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Hash", "Hash.vcproj", "{CCCA2493-22B7-4D3F-8528-1D316454DE86}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CCCA2493-22B7-4D3F-8528-1D316454DE86}.Debug|Win32.ActiveCfg = Debug|Win32
+		{CCCA2493-22B7-4D3F-8528-1D316454DE86}.Debug|Win32.Build.0 = Debug|Win32
+		{CCCA2493-22B7-4D3F-8528-1D316454DE86}.Release|Win32.ActiveCfg = Release|Win32
+		{CCCA2493-22B7-4D3F-8528-1D316454DE86}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
