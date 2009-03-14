@@ -380,7 +380,7 @@ BOOL fsIsUrlRelative (LPCSTR pszUrl)
 
 void fsRemoveWWW (LPCSTR pszUrl)
 {
-	char* psz = max (strstr (pszUrl, "://"), strstr (pszUrl, ":\\\\"));
+	char* psz = (char *) max (strstr (pszUrl, "://"), strstr (pszUrl, ":\\\\"));
 
 	if (psz)
 		if (strnicmp (psz+3, "www.", 4) == 0)

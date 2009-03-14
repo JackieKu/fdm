@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "InetFile", "InetFile.vcproj", "{9071F78A-C4C3-42B0-BD64-295BFE1731F0}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cURL_lib", "cURL_lib\cURL_lib.vcproj", "{F0CF6D2A-D687-447B-A2C7-41E6D3913F91}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release_nossl|Win32 = Release_nossl|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9071F78A-C4C3-42B0-BD64-295BFE1731F0}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9071F78A-C4C3-42B0-BD64-295BFE1731F0}.Debug|Win32.Build.0 = Debug|Win32
+		{9071F78A-C4C3-42B0-BD64-295BFE1731F0}.Release_nossl|Win32.ActiveCfg = Release|Win32
+		{9071F78A-C4C3-42B0-BD64-295BFE1731F0}.Release_nossl|Win32.Build.0 = Release|Win32
+		{9071F78A-C4C3-42B0-BD64-295BFE1731F0}.Release|Win32.ActiveCfg = Release|Win32
+		{9071F78A-C4C3-42B0-BD64-295BFE1731F0}.Release|Win32.Build.0 = Release|Win32
+		{F0CF6D2A-D687-447B-A2C7-41E6D3913F91}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F0CF6D2A-D687-447B-A2C7-41E6D3913F91}.Debug|Win32.Build.0 = Debug|Win32
+		{F0CF6D2A-D687-447B-A2C7-41E6D3913F91}.Release_nossl|Win32.ActiveCfg = Release_nossl|Win32
+		{F0CF6D2A-D687-447B-A2C7-41E6D3913F91}.Release_nossl|Win32.Build.0 = Release_nossl|Win32
+		{F0CF6D2A-D687-447B-A2C7-41E6D3913F91}.Release|Win32.ActiveCfg = Release|Win32
+		{F0CF6D2A-D687-447B-A2C7-41E6D3913F91}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

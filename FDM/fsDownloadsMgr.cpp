@@ -2829,7 +2829,7 @@ DWORD WINAPI fsDownloadsMgr::_threadIntegrityCheckAndVirCheckAndLaunch(LPVOID lp
 		vmsHash hash;
 		hash.set_SHA2Strength ((vmsHash_SHA2Strength) HIWORD (dp->dwIntegrityCheckAlgorithm));
 		fsString strHashResult = hash.Hash (dp->pszFileName, (vmsHashAlgorithm) LOWORD (dp->dwIntegrityCheckAlgorithm)).c_str ();
-		if (strHashResult == dp->pszCheckSum)
+		if (strHashResult == (LPCTSTR)dp->pszCheckSum)
 		{
 			
 			_DldsMgr.Event (dld, LS (L_INTEGRITYCHECKSUCCEEDED), EDT_RESPONSE_S);

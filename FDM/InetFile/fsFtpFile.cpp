@@ -263,7 +263,7 @@ fsInternetResult fsFtpFile::QuerySize(LPCSTR pszFilePath)
 	strcpy (szFile, pszFilePath);
 
 	
-	char *pszFile = max (strrchr (pszFilePath, '/'), strrchr (pszFilePath, '\\'));
+	char *pszFile = (char *) max (strrchr (pszFilePath, '/'), strrchr (pszFilePath, '\\'));
 
 	if (pszFile)
 	{
@@ -398,7 +398,7 @@ fsInternetResult fsFtpFile::OpenEx(LPCSTR pszFilePath, UINT64 uStartPos, UINT64 
 	strcpy (szFile, pszFilePath);
 
 	
-	char *pszFile = max (strrchr (pszFilePath, '/'), strrchr (pszFilePath, '\\'));
+	char *pszFile = (char *) max (strrchr (pszFilePath, '/'), strrchr (pszFilePath, '\\'));
 
 	if (pszFile)
 	{
