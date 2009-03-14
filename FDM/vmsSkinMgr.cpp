@@ -71,7 +71,7 @@ void vmsSkinMgr::Scan_TryFolder(LPCSTR pszFolder)
 
 	while (*pszValue)
 	{
-		LPCTSTR pszVVal = strchr (pszValue, '=');
+		LPSTR pszVVal = (LPSTR) strchr (pszValue, '=');
 		*pszVVal = 0;
 		pszVVal++;
 

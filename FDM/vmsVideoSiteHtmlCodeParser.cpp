@@ -64,7 +64,7 @@ BOOL vmsVideoSiteHtmlCodeParser::Parse_Youtube(LPCSTR pszHtml)
 {
 	fsString strTitle, strUrl; 
 
-	LPSTR psz = strstr (pszHtml, "<meta name=\"title\"");
+	LPSTR psz = (LPSTR) strstr (pszHtml, "<meta name=\"title\"");
 
 	if (psz)
 	{
@@ -86,7 +86,7 @@ BOOL vmsVideoSiteHtmlCodeParser::Parse_Youtube(LPCSTR pszHtml)
 		}
 	}
 
-	psz = strstr (pszHtml, "swfArgs =");
+	psz = (LPSTR) strstr (pszHtml, "swfArgs =");
 	if (psz == NULL)
 		return FALSE;
 	psz = strchr (psz, '{');

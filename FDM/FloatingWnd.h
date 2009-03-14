@@ -50,7 +50,7 @@ protected:
 
 	
 	//{{AFX_MSG(CFloatingWnd)
-#ifdef _MSC_VER >= 1400
+#if _MSC_VER >= 1400
 	afx_msg LRESULT OnNcHitTest(CPoint point);
 #else
 	afx_msg UINT OnNcHitTest(CPoint point);

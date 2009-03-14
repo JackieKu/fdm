@@ -86,7 +86,7 @@ DWORD fsZipArchiveFastRebuilder::RetreiveArchiveContent()
 		pS += sizeof (ecd);
 
 		m_strZipComment.alloc (ecd.wZipCommentLen);
-		CopyMemory (m_strZipComment, pS, ecd.wZipCommentLen);
+		CopyMemory (m_strZipComment.pszString, pS, ecd.wZipCommentLen);
 	}
 	else
 	{
@@ -94,7 +94,7 @@ DWORD fsZipArchiveFastRebuilder::RetreiveArchiveContent()
 			return ARR_STREAMERROR;
 
 		m_strZipComment.alloc (ecd.wZipCommentLen);
-		if (m_in->Read (m_strZipComment, ecd.wZipCommentLen) != ecd.wZipCommentLen)
+		if (m_in->Read (m_strZipComment.pszString, ecd.wZipCommentLen) != ecd.wZipCommentLen)
 			return m_in->GetLastError () != ASE_NOMOREDATA ? ARR_STREAMERROR : ARR_BADARCHIVE;;
 	}
 
@@ -124,7 +124,7 @@ DWORD fsZipArchiveFastRebuilder::RetreiveArchiveContent()
 		fsString strFileName;
 		strFileName.alloc (hdr.wFileNameLen);
 
-		if (m_in->Read (strFileName, hdr.wFileNameLen) != hdr.wFileNameLen)
+		if (m_in->Read (strFileName.pszString, hdr.wFileNameLen) != hdr.wFileNameLen)
 			return m_in->GetLastError () != ASE_NOMOREDATA ? ARR_STREAMERROR : ARR_BADARCHIVE;;
 
 		BYTE *pbExtra = NULL;
@@ -140,7 +140,7 @@ DWORD fsZipArchiveFastRebuilder::RetreiveArchiveContent()
 		fsString strComment;
 		strComment.alloc (hdr.wFileCommentLen);
 		
-		if (m_in->Read (strComment, hdr.wFileCommentLen) != hdr.wFileCommentLen)
+		if (m_in->Read (strComment.pszString, hdr.wFileCommentLen) != hdr.wFileCommentLen)
 			return m_in->GetLastError () != ASE_NOMOREDATA ? ARR_STREAMERROR : ARR_BADARCHIVE;
 
 		fsZipFile file;

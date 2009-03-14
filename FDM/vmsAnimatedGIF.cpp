@@ -247,7 +247,7 @@ int vmsAnimatedGIF::GetNextBlockLen()
 			reinterpret_cast<TGIFImageDescriptor *> (&m_pRawData[m_nCurrOffset]);
 		int nLCTSize = (int)
 			(pIDescr->GetPackedValue(ID_PACKED_LOCALCT)*3*
-			pow(2,pIDescr->GetPackedValue(ID_PACKED_LOCALCTSIZE)+1));
+			(1<<(pIDescr->GetPackedValue(ID_PACKED_LOCALCTSIZE)+1)));
 
 		int nTmp = GetSubBlocksLen(m_nCurrOffset+
 			sizeof(TGIFImageDescriptor) + nLCTSize + 1);
@@ -506,7 +506,7 @@ BOOL vmsAnimatedGIF::Load()
 	{
 		
 		m_nGlobalCTSize = static_cast<int>
-			(3*pow(2,m_pGIFLSDescriptor->GetPackedValue(LSD_PACKED_GLOBALCTSIZE)+1));
+			(3*(1 << (m_pGIFLSDescriptor->GetPackedValue(LSD_PACKED_GLOBALCTSIZE)+1)));
 		
 		unsigned char *pBkClr = m_pRawData + sizeof(TGIFHeader) + 
 			sizeof(TGIFLSDescriptor) + 3*m_pGIFLSDescriptor->m_cBkIndex;

@@ -64,7 +64,7 @@ DWORD fsZipArchiveRebuilder::RetreiveArchiveContent()
 		fsString strFileName;
 		strFileName.alloc (hdr.wFileNameLen);
 
-		if (m_in->Read (strFileName, hdr.wFileNameLen) != hdr.wFileNameLen)
+		if (m_in->Read (strFileName.pszString, hdr.wFileNameLen) != hdr.wFileNameLen)
 			return m_in->GetLastError () != ASE_NOMOREDATA ? ARR_STREAMERROR : ARR_BADARCHIVE;;
 
 		dwPos += hdr.wFileNameLen;
@@ -173,7 +173,7 @@ DWORD fsZipArchiveRebuilder::RetreiveArchiveContent()
 		fsString strFileName;
 		strFileName.alloc (hdr.wFileNameLen);
 
-		if (m_in->Read (strFileName, hdr.wFileNameLen) != hdr.wFileNameLen)
+		if (m_in->Read (strFileName.pszString, hdr.wFileNameLen) != hdr.wFileNameLen)
 			return m_in->GetLastError () != ASE_NOMOREDATA ? ARR_STREAMERROR : ARR_BADARCHIVE;;
 
 		BYTE *pbExtra = NULL;
@@ -189,7 +189,7 @@ DWORD fsZipArchiveRebuilder::RetreiveArchiveContent()
 		fsString strComment;
 		strComment.alloc (hdr.wFileCommentLen);
 		
-		if (m_in->Read (strComment, hdr.wFileCommentLen) != hdr.wFileCommentLen)
+		if (m_in->Read (strComment.pszString, hdr.wFileCommentLen) != hdr.wFileCommentLen)
 			return m_in->GetLastError () != ASE_NOMOREDATA ? ARR_STREAMERROR : ARR_BADARCHIVE;;
 
 		
@@ -220,7 +220,7 @@ DWORD fsZipArchiveRebuilder::RetreiveArchiveContent()
 	m_hdrEndOfCDir = hdr;
 
 	m_strZipComment.alloc (hdr.wZipCommentLen);
-	if (m_in->Read (m_strZipComment, hdr.wZipCommentLen) != hdr.wZipCommentLen)
+	if (m_in->Read (m_strZipComment.pszString, hdr.wZipCommentLen) != hdr.wZipCommentLen)
 		return m_in->GetLastError () != ASE_NOMOREDATA ? ARR_STREAMERROR : ARR_BADARCHIVE;;
 	
 	return NOERROR;
@@ -400,7 +400,7 @@ DWORD fsZipArchiveRebuilder::SaveLocalFilesHeaders()
 		if (m_out->Write (&file->hdr, sizeof (file->hdr)) != sizeof (file->hdr))
 			return ARR_STREAMERROR;
 
-		if (m_out->Write (file->strFileName, file->hdr.wFileNameLen) != file->hdr.wFileNameLen)
+		if (m_out->Write (file->strFileName.pszString, file->hdr.wFileNameLen) != file->hdr.wFileNameLen)
 			return ARR_STREAMERROR;
 
 		if (file->hdr.wExtraLen)
@@ -442,7 +442,7 @@ DWORD fsZipArchiveRebuilder::SaveFilesHeaders()
 		if (m_out->Write (&file->hdr, sizeof (file->hdr)) != sizeof (file->hdr))
 			return ARR_STREAMERROR;
 
-		if (m_out->Write (file->strFileName, file->hdr.wFileNameLen) != file->hdr.wFileNameLen)
+		if (m_out->Write (file->strFileName.pszString, file->hdr.wFileNameLen) != file->hdr.wFileNameLen)
 			return ARR_STREAMERROR;
 		
 		if (file->hdr.wExtraLen)
@@ -450,7 +450,7 @@ DWORD fsZipArchiveRebuilder::SaveFilesHeaders()
 				return ARR_STREAMERROR;
 
 		if (file->hdr.wFileCommentLen)
-			if (m_out->Write (file->strComment, file->hdr.wFileCommentLen) != file->hdr.wFileCommentLen)
+			if (m_out->Write (file->strComment.pszString, file->hdr.wFileCommentLen) != file->hdr.wFileCommentLen)
 				return ARR_STREAMERROR;
 	}
 
@@ -468,7 +468,7 @@ DWORD fsZipArchiveRebuilder::SaveEndOfCDirRecord()
 		return ARR_STREAMERROR;
 
 	if (m_hdrEndOfCDir.wZipCommentLen)
-		if (m_out->Write (m_strZipComment, m_hdrEndOfCDir.wZipCommentLen) != m_hdrEndOfCDir.wZipCommentLen)
+		if (m_out->Write (m_strZipComment.pszString, m_hdrEndOfCDir.wZipCommentLen) != m_hdrEndOfCDir.wZipCommentLen)
 			return ARR_STREAMERROR;
 
 	return NOERROR;

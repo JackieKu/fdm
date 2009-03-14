@@ -335,7 +335,7 @@ typedef HRESULT  (CALLBACK *fntDllGetVersion) (DLLVERSIONINFO*);
 
 DWORD GetShell32Version ()
 {
-	static dwVer = 0;
+	static DWORD dwVer = 0;
 
 	if (dwVer == 0)
 	{

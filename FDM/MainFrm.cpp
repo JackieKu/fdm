@@ -916,7 +916,7 @@ void CMainFrame::OnStopall()
 
 void CMainFrame::OnHelp() 
 {
-	HtmlHelp (m_hWnd, "Help\\Free Download Manager.chm", HH_DISPLAY_TOC, NULL);	
+	::HtmlHelp (m_hWnd, "Help\\Free Download Manager.chm", HH_DISPLAY_TOC, NULL);	
 }
 
 void CMainFrame::OnHomepage() 
@@ -1024,7 +1024,7 @@ void CMainFrame::OnEndSession(BOOL bEnding)
 
 void CMainFrame::OnHowregister() 
 {
-	HtmlHelp (m_hWnd, "Help\\Free Download Manager.chm::/Topics/Registration.html", HH_DISPLAY_TOPIC, NULL);
+	::HtmlHelp (m_hWnd, "Help\\Free Download Manager.chm::/Topics/Registration.html", HH_DISPLAY_TOPIC, NULL);
 }
 
 void CMainFrame::OnHangupwhendone() 

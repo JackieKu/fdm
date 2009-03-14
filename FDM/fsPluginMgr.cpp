@@ -86,7 +86,7 @@ BOOL fsPluginMgr::LoadBuiltIn()
 		CSitesWnd::Plugin_GetViewMenu,
 		CSpiderWnd::Plugin_GetViewMenu,
 	};
-	const cPlugins = sizeof (afnGMM) / sizeof (fntGetMainMenu);
+	const size_t cPlugins = sizeof (afnGMM) / sizeof (fntGetMainMenu);
 
 	
 	fntCreateMainWindow afnCMW [] = {

@@ -141,7 +141,7 @@ struct fsString
 		return !(str == pszStr);
 	}
 
-	operator LPCTSTR () const
+	operator LPTSTR () const
 	{
 		return pszString;
 	}

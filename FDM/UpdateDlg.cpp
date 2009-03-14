@@ -336,7 +336,7 @@ void CUpdateDlg::OnWhatisthis()
 
 void CUpdateDlg::OnHelp() 
 {
-	HtmlHelp (AfxGetApp ()->m_pMainWnd->m_hWnd, "Help\\Free Download Manager.chm::/Update.htm", HH_DISPLAY_TOPIC, NULL);	
+	::HtmlHelp (AfxGetApp ()->m_pMainWnd->m_hWnd, "Help\\Free Download Manager.chm::/Update.htm", HH_DISPLAY_TOPIC, NULL);	
 }
 
 void CUpdateDlg::ApplyLanguage()
