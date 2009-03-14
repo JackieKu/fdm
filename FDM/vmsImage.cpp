@@ -30,8 +30,8 @@ HRESULT vmsImage::Load(LPCSTR pszFile)
 	if (pszFile [1] != ':')
 	{
 		GetCurrentDirectory (sizeof (szFile), szFile);
-		lstrcat (szFile, "\\");
-		lstrcat (szFile, pszFile);
+		_tcscat (szFile, "\\");
+		_tcscat (szFile, pszFile);
 		pszFile = szFile;
 	}
 

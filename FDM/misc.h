@@ -50,7 +50,8 @@ extern void fsPathToGoodPath (LPSTR pszPath);
 extern void fsPathToGoodUrlPath (LPSTR pszPath);    
 
 extern BOOL fsSaveStrToFile(LPCSTR pszStr, HANDLE hFile);
-extern BOOL fsReadStrFromFile(LPSTR *ppszStr, HANDLE hFile);
+extern BOOL fsReadStrFromFile(LPTSTR *ppszStr, HANDLE hFile);
+extern BOOL fsReadStrFromFile(CString &ppszStr, HANDLE hFile);
 extern BOOL fsReadStringFromFile (HANDLE hFile, fsString &str);  
 
 extern DWORD fsGetTimeDelta (FILETIME *t1, FILETIME *t2);

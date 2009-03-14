@@ -19,14 +19,14 @@ vmsFirefoxUtil::~vmsFirefoxUtil()
 void vmsFirefoxUtil::GetProfilesPath(LPSTR pszPath)
 {
 	vmsFirefoxUtil::GetDataPath (pszPath);
-	lstrcat (pszPath, "Profiles\\");
+	_tcscat (pszPath, "Profiles\\");
 }
 
 void vmsFirefoxUtil::GetDataPath(LPSTR pszPath)
 {
 	vmsFileUtil::GetAppDataPath ("Mozilla", pszPath);
 	vmsFileUtil::MakePathOK (pszPath, true);
-	lstrcat (pszPath, "Firefox\\");
+	_tcscat (pszPath, "Firefox\\");
 }
 
 bool vmsFirefoxUtil::GetProfilesPathes(FU_STRINGLIST &v, int &nDefaultProfile)
@@ -38,8 +38,8 @@ try {
 	
 
 	char szProfilesIni [MY_MAX_PATH];
-	lstrcpy (szProfilesIni, szPath);
-	lstrcat (szProfilesIni, "profiles.ini");
+	_tcscpy (szProfilesIni, szPath);
+	_tcscat (szProfilesIni, "profiles.ini");
 
 	if (GetFileAttributes (szProfilesIni) != DWORD (-1))
 	{
@@ -66,8 +66,8 @@ try {
 			{
 				
 				char sz [MY_MAX_PATH];
-				lstrcpy (sz, szPath);
-				lstrcat (sz, szPP);
+				_tcscpy (sz, szPath);
+				_tcscat (sz, szPP);
 				v.add (sz);
 			}
 
@@ -85,7 +85,7 @@ try {
 
 		char szProfiles [MY_MAX_PATH];
 		vmsFirefoxUtil::GetProfilesPath (szProfiles);
-		lstrcat (szProfiles, "*");
+		_tcscat (szProfiles, "*");
 
 		WIN32_FIND_DATA wfd;
 		HANDLE hFind = FindFirstFile (szProfiles, &wfd);
@@ -98,15 +98,15 @@ try {
 				continue;
 
 			char sz [MY_MAX_PATH];
-			lstrcpy (sz, szPath);
-			lstrcat (sz, wfd.cFileName);
+			_tcscpy (sz, szPath);
+			_tcscat (sz, wfd.cFileName);
 
 			DWORD dw = GetFileAttributes (sz);
 			if (dw != DWORD (-1) && (dw & FILE_ATTRIBUTE_DIRECTORY))
 			{
 				char sz2 [MY_MAX_PATH];
-				lstrcpy (sz2, sz);
-				lstrcat (sz2, "\\extensions\\");
+				_tcscpy (sz2, sz);
+				_tcscat (sz2, "\\extensions\\");
 				
 				DWORD dw = GetFileAttributes (sz2);
 				if (dw != DWORD (-1) && (dw & FILE_ATTRIBUTE_DIRECTORY))
@@ -133,7 +133,7 @@ bool vmsFirefoxUtil::GetDefaultProfilePath(LPSTR pszPath)
 	if (nDefaultProfile == -1)
 		nDefaultProfile = 0;
 
-	lstrcpy (pszPath, v [nDefaultProfile]);
+	_tcscpy (pszPath, v [nDefaultProfile]);
 
 	return  true;
 }

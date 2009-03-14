@@ -55,7 +55,7 @@ BOOL vmsUploaderDllPersist::GetProfileString (LPCSTR pszSection, LPCSTR pszName,
 		*pdwValueSize = str.GetLength () + 1;
 		return FALSE;
 	}
-	lstrcpy (pszValue, str);
+	_tcscpy (pszValue, str);
 	return TRUE;
 }
 

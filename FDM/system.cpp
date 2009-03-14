@@ -557,15 +557,15 @@ BOOL vmsMoveFileAtWinBoot (LPCSTR pszSrc, LPCSTR pszDst)
 	char szWinInit [MAX_PATH] = "";
 	GetWindowsDirectory (szWinInit, MAX_PATH);
 	if (szWinInit [3] != 0)
-		lstrcat (szWinInit, "\\");
-	lstrcat (szWinInit, "wininit.ini");
+		_tcscat (szWinInit, "\\");
+	_tcscat (szWinInit, "wininit.ini");
 
 	char sz [32000] = "";
 	DWORD dwLen = GetPrivateProfileSection ("rename", sz, sizeof (sz), szWinInit);
 	LPSTR psz = sz + dwLen;
-	lstrcpy (psz, pszDst ? pszDst : "NUL");
-	lstrcat (psz, "=");
-	lstrcat (psz, pszSrc);
+	_tcscpy (psz, pszDst ? pszDst : "NUL");
+	_tcscat (psz, "=");
+	_tcscat (psz, pszSrc);
 	psz [lstrlen (psz) + 1] = 0;
 	return WritePrivateProfileSection ("rename", sz, szWinInit);
 }

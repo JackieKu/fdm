@@ -234,7 +234,7 @@ BOOL CDownloadProperties_IntegrityPage::OnApply()
 		CString str; GetDlgItemText (IDC_CHECKSUM, str);
 		MakeChecksumValid (str);
 		dp0->pszCheckSum = new char [str.GetLength () + 1];
-		lstrcpy (dp0->pszCheckSum, str);
+		_tcscpy (dp0->pszCheckSum, str);
 
 		dp0->dwIntegrityCheckAlgorithm = m_wndAlgorithm.GetItemData (m_wndAlgorithm.GetCurSel ());
 	}

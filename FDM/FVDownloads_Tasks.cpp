@@ -120,7 +120,7 @@ void CFVDownloads_Tasks::OnGetdispinfo(NMHDR* pNMHDR, LRESULT* pResult)
 	{
 		int nSubItem = SubItemToSubItem (pItem->iSubItem);
 		if (nSubItem != -1)
-			lstrcpy (pItem->pszText, CDownloads_Tasks::GetDownloadText (dld, nSubItem));
+			_tcscpy (pItem->pszText, CDownloads_Tasks::GetDownloadText (dld, nSubItem));
 	}
 
 	}catch (...) {}

@@ -31,6 +31,7 @@
 #include "vmsVideoSiteHtmlCodeParser.h"
 #include "FlashVideoDownloadsWnd.h"
 #include "TorrentsWnd.h"
+#include <Ipmib.h>
 #include <Iphlpapi.h>
 
 #ifndef FDM_DLDR__RAWCODEONLY
@@ -1794,7 +1795,7 @@ BOOL fsDownloadsMgr::PerformVirusCheck(vmsDownloadSmartPtr dld, BOOL bCheckExtRe
 
 		if (bCheckExtReqs)
 		{
-			char *pszExt = strrchr (strFile, '.');
+			const char *pszExt = strrchr (strFile, '.');
 
 			
 			if (pszExt && IsExtInExtsStr (m_strVirExts, pszExt+1))
@@ -2489,7 +2490,7 @@ void fsDownloadsMgr::LaunchDownload(vmsDownloadSmartPtr dld, UINT nWaitForConfir
 		if (dld->pMgr->GetDownloadMgr ())
 			fsGetFileName (dld->pMgr->get_OutputFilePathName (), szFile);
 		else if (dld->pMgr->GetBtDownloadMgr ())
-			lstrcpy (szFile, dld->pMgr->GetBtDownloadMgr ()->get_TorrentName ());
+			_tcscpy (szFile, dld->pMgr->GetBtDownloadMgr ()->get_TorrentName ());
 		CString strMsg = "\""; strMsg += szFile; strMsg += "\" ";
 		if (dld->strComment != "") {
 			strMsg += '('; strMsg += dld->strComment; strMsg += ") ";
@@ -3039,7 +3040,7 @@ BOOL fsDownloadsMgr::OnDldDone_CheckDownloadIsMetaLink(vmsDownloadSmartPtr dld)
 			dld->pMgr->GetDownloadMgr ()->GetDP ()->dwIntegrityCheckAlgorithm = dwAlg;
 			SAFE_DELETE_ARRAY (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszCheckSum);
 			dld->pMgr->GetDownloadMgr ()->GetDP ()->pszCheckSum = new char [hash->strChecksum.GetLength () + 1];
-			lstrcpy (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszCheckSum, hash->strChecksum);
+			_tcscpy (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszCheckSum, hash->strChecksum);
 		}
 
 		if (iFile == 0)
@@ -3051,13 +3052,13 @@ BOOL fsDownloadsMgr::OnDldDone_CheckDownloadIsMetaLink(vmsDownloadSmartPtr dld)
 			*psz = 0;
 
 		char szNewFile [MY_MAX_PATH];
-		lstrcpy (szNewFile, dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName);
-		lstrcat (szNewFile, "\\");
+		_tcscpy (szNewFile, dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName);
+		_tcscat (szNewFile, "\\");
 		if (file->strName.pszString != NULL)
-			lstrcat (szNewFile, file->strName);
+			_tcscat (szNewFile, file->strName);
 		SAFE_DELETE_ARRAY (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName);
 		dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName = new char [lstrlen (szNewFile) + 1];
-		lstrcpy (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, szNewFile);
+		_tcscpy (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, szNewFile);
 
 		if (dld->strComment.GetLength () != 0)
 			dld->strComment += "\r\n";
@@ -3903,13 +3904,13 @@ BOOL fsDownloadsMgr::OnDldDone_CheckDownloadIsHtmlPageWithVideo(vmsDownloadSmart
 		psz [1] = 0;
 
 	char szNewFile [MY_MAX_PATH];
-	lstrcpy (szNewFile, pMgr->GetDP ()->pszFileName);
+	_tcscpy (szNewFile, pMgr->GetDP ()->pszFileName);
 	fsString strFile;
 	if (vshcp.get_VideoTitle () != NULL && *vshcp.get_VideoTitle ())
 	{
 		strFile = vshcp.get_VideoTitle ();
-		LPCSTR pszInvChars = "\\/:*?\"<>|";
-		LPSTR psz = strFile;
+		LPCTSTR pszInvChars = "\\/:*?\"<>|";
+		LPTSTR psz = (LPTSTR)(LPCTSTR) strFile;
 		while (*psz)
 		{
 			if (strchr (pszInvChars, *psz) != NULL)
@@ -3925,13 +3926,13 @@ BOOL fsDownloadsMgr::OnDldDone_CheckDownloadIsHtmlPageWithVideo(vmsDownloadSmart
 	{
 		strFile = LS (L_UNKNOWN);
 	}
-	lstrcat (szNewFile, strFile);
-	lstrcat (szNewFile, ".");
-	lstrcat (szNewFile, vshcp.get_VideoType ());
+	_tcscat (szNewFile, strFile);
+	_tcscat (szNewFile, ".");
+	_tcscat (szNewFile, vshcp.get_VideoType ());
 
 	SAFE_DELETE_ARRAY (pMgr->GetDP ()->pszFileName);
 	pMgr->GetDP ()->pszFileName = new char [lstrlen (szNewFile) + 1];
-	lstrcpy (pMgr->GetDP ()->pszFileName, szNewFile);
+	_tcscpy (pMgr->GetDP ()->pszFileName, szNewFile);
 
 	dld->pMgr->StartDownloading ();	
 

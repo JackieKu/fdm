@@ -7,6 +7,7 @@
 
 #include <ras.h>  
 
+#if _MSC_VER < 1300
 typedef struct _RAS_STATS
 {
     DWORD   dwSize;
@@ -26,6 +27,7 @@ typedef struct _RAS_STATS
     DWORD   dwConnectDuration;
 
 } RAS_STATS, *PRAS_STATS;    
+#endif
 
 extern void fsSysGetConnectionStatistics (HRASCONN hRasConn, RAS_STATS* pStatistics);
 

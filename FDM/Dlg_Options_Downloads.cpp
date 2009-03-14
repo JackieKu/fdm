@@ -364,13 +364,13 @@ BOOL CDlg_Options_Downloads::DlgToVir()
 				char sz [MY_MAX_PATH];
 				SHGetPathFromIDList (pidl, sz);
 				if (sz [lstrlen (sz)-1] != '\\')
-					lstrcat (sz, "\\");
+					_tcscat (sz, "\\");
 				IMallocPtr spMalloc;
 				SHGetMalloc (&spMalloc);
 				spMalloc->Free (pidl);
-				lstrcat (sz, strVirPath);
-				lstrcat (sz, "\\");
-				lstrcat (sz, strVir);
+				_tcscat (sz, strVirPath);
+				_tcscat (sz, "\\");
+				_tcscat (sz, strVir);
 				if (GetFileAttributes (sz) != DWORD (-1))
 				{
 					strVir = sz;

@@ -266,5 +266,5 @@ LPCSTR fsDownloads_GroupsMgr::GetGroupFolder(int iGrp)
 
 void fsDownloads_GroupsMgr::SetGroupFolder(int iGrp, LPCSTR pszFldr)
 {
-	lstrcpy (m_vGroups [iGrp].szOutFolder, pszFldr);
+	_tcscpy (m_vGroups [iGrp].szOutFolder, pszFldr);
 }

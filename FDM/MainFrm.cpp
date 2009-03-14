@@ -2490,7 +2490,7 @@ void CMainFrame::OnFileImportImportlistofdownloadsfromclipboard()
 				fsDownload_Properties *dp = dld->pMgr->GetDownloadMgr ()->GetDP ();
 				SAFE_DELETE_ARRAY (dp->pszFileName);
 				dp->pszFileName = new char [pGrp->strOutFolder.Length () + 1];
-				lstrcpy (dp->pszFileName, pGrp->strOutFolder);
+				_tcscpy (dp->pszFileName, pGrp->strOutFolder);
 			}
 
 			v.push_back (dld);
@@ -2609,7 +2609,7 @@ BOOL CMainFrame::ImportListOfDownloads_FromURLListFile(LPCSTR pszFile)
 			{
 				dld->pGroup = pGrp;
 				LPSTR psz = new char [pGrp->strOutFolder.Length () + 1];
-				lstrcpy (psz, pGrp->strOutFolder);
+				_tcscpy (psz, pGrp->strOutFolder);
 				delete [] dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName;
 				dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName = psz;
 			}
@@ -2739,7 +2739,7 @@ BOOL CMainFrame::ImportDownload(IXMLDOMNode *pNode, DLDS_LIST_REF v)
 		{
 			dld->pGroup = params.pGroup;
 			LPSTR psz = new char [params.pGroup->strOutFolder.Length () + 1];
-			lstrcpy (psz, params.pGroup->strOutFolder);
+			_tcscpy (psz, params.pGroup->strOutFolder);
 			delete [] dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName;
 			dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName = psz;
 		}

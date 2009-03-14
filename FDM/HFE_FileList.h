@@ -66,7 +66,7 @@ protected:
 	static fs::tree <fsFileInfo*>* BuildList (LPCSTR pszFolder, BOOL *pbNeedStop, int* piProgress, int iProgressDone);
 	
 	void DownloadSelected();
-	fs::tree* m_pDldList;	
+//	fs::tree* m_pDldList;	
 	void OnKeyDown (WORD wVK);
 	
 	

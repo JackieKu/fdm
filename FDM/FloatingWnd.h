@@ -50,7 +50,11 @@ protected:
 
 	
 	//{{AFX_MSG(CFloatingWnd)
+#ifdef _MSC_VER >= 1400
+	afx_msg LRESULT OnNcHitTest(CPoint point);
+#else
 	afx_msg UINT OnNcHitTest(CPoint point);
+#endif
 	afx_msg void OnPaint();
 	afx_msg void OnNcRButtonUp(UINT nHitTest, CPoint point);
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);

@@ -310,7 +310,7 @@ void CDownloads_Groups::OnOpengroupfolder()
 	str.Replace ("%sdrive%", CString (vmsGetExeDriveLetter ()) + ":");
 
 	char sz [MY_MAX_PATH];
-	lstrcpy (sz, str);
+	_tcscpy (sz, str);
 
 	
 	

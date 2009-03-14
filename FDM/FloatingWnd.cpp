@@ -70,7 +70,11 @@ BOOL CFloatingWnd::Create()
 	return TRUE;
 }
 
-UINT CFloatingWnd::OnNcHitTest(CPoint ) 
+#ifdef _MSC_VER >= 1400
+LRESULT CFloatingWnd::OnNcHitTest(CPoint )
+#else
+UINT CFloatingWnd::OnNcHitTest(CPoint )
+#endif
 {
 	return HTCAPTION;
 }

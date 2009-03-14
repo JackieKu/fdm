@@ -152,7 +152,7 @@ void CCreateDownloadDlg::OnOK()
 
 	CString strFile = strOutFolder + strFileName;
 	fsnew (m_dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, CHAR, strFile.GetLength () + 1);
-	lstrcpy (m_dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, strFile);
+	_tcscpy (m_dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, strFile);
 	
 	if (_App.CheckIfDownloadWithSameUrlExists ())
 	{
@@ -627,7 +627,7 @@ void CCreateDownloadDlg::UrlChanged()
 	fsSiteInfo *site = _SitesMgr.FindSite2 (url.GetHostName (), fsNPToSiteValidFor (fsSchemeToNP (url.GetInternetScheme ())));
 	if (site)
 	{
-		if (site->strUser != NULL && m_bAuthChanged == FALSE && *url.GetUserName () == 0)
+		if (!site->strUser.IsEmpty() && m_bAuthChanged == FALSE && *url.GetUserName () == 0)
 		{
 			CheckDlgButton (IDC_USELOGIN, BST_CHECKED);
 			SetDlgItemText (IDC_USER, site->strUser);
@@ -808,14 +808,14 @@ try{
 	{
 		SAFE_DELETE_ARRAY (pThis->m_dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszCookies);
 		pThis->m_dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszCookies = new char [lstrlen (pThis->m_pszCookies) + 1];
-		lstrcpy (pThis->m_dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszCookies, pThis->m_pszCookies);
+		_tcscpy (pThis->m_dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszCookies, pThis->m_pszCookies);
 	}
 
 	if (pThis->m_pszPostData)
 	{
 		SAFE_DELETE_ARRAY (pThis->m_dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszPostData);
 		pThis->m_dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszPostData = new char [lstrlen (pThis->m_pszPostData) + 1];
-		lstrcpy (pThis->m_dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszPostData, pThis->m_pszPostData);
+		_tcscpy (pThis->m_dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszPostData, pThis->m_pszPostData);
 	}
 
 	fsInternetResult ir = pThis->m_dld->pMgr->GetDownloadMgr ()->QuerySize ();
@@ -952,7 +952,7 @@ int CCreateDownloadDlg::_CheckDownloadAlrExists(vmsDownloadSmartPtr dld, BOOL bN
 						{
 							SAFE_DELETE_ARRAY (d->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName);
 							d->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName = new char [lstrlen (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName)+1];
-							lstrcpy (d->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName);
+							_tcscpy (d->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName);
 						}
 					}
 					_pwndDownloads->RestartDownload (d, TRUE);

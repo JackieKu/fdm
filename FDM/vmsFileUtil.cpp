@@ -70,8 +70,8 @@ void vmsFileUtil::GetAppDataPath(LPCSTR pszAppName, LPSTR szPath)
 	SHGetPathFromIDList (pidl, szPath);
 
 	vmsFileUtil::MakePathOK (szPath);
-	lstrcat (szPath, pszAppName);
-	lstrcat (szPath, "\\");
+	_tcscat (szPath, pszAppName);
+	_tcscat (szPath, "\\");
 }
 
 void vmsFileUtil::BuildPathToFile(LPCSTR pszPathName)
@@ -82,7 +82,7 @@ void vmsFileUtil::BuildPathToFile(LPCSTR pszPathName)
 fsString vmsFileUtil::GetPathFromPathName(LPCSTR pszPathName)
 {
 	char szPath [MY_MAX_PATH];
-	lstrcpy (szPath, pszPathName);
+	_tcscpy (szPath, pszPathName);
 	MakePathOK (szPath, false);
 	LPSTR psz = strrchr (szPath, '\\');
 	if (psz == NULL)
@@ -94,7 +94,7 @@ fsString vmsFileUtil::GetPathFromPathName(LPCSTR pszPathName)
 void vmsFileUtil::BuildPath(LPCSTR pszPath)
 {
 	char szPath [MY_MAX_PATH];
-	lstrcpy (szPath, pszPath);
+	_tcscpy (szPath, pszPath);
 	MakePathOK (szPath, true);
 	LPSTR psz = szPath;
 	if (psz [1] == ':')
@@ -104,7 +104,7 @@ void vmsFileUtil::BuildPath(LPCSTR pszPath)
 	{
 		char szPathNow [MY_MAX_PATH];
 		psz = strchr (psz, '\\') + 1;
-		lstrcpyn (szPathNow, szPath, psz - szPath);
+		_tcsncpy (szPathNow, szPath, psz - szPath);
 		if (FALSE == CreateDirectory (szPathNow, NULL) && 
 				ERROR_ALREADY_EXISTS != GetLastError ())
 			throw GetLastError ();

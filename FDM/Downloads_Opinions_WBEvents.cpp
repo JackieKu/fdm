@@ -6,7 +6,6 @@
 #include "FdmApp.h"
 #include "Downloads_Opinions_WBEvents.h"
 #include "Downloads_Opinions.h"
-#include <mshtml.h>
 #include "MainFrm.h"
 
 _COM_SMARTPTR_TYPEDEF(IHTMLInputElement, __uuidof(IHTMLInputElement));

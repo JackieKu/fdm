@@ -302,7 +302,7 @@ void CCreateBatchDownload::UrlChanged()
 	fsSiteInfo *site = _SitesMgr.FindSite2 (url.GetHostName (), fsNPToSiteValidFor (fsSchemeToNP (url.GetInternetScheme ())));
 	if (site)
 	{
-		if (site->strUser != NULL && m_bAuthChanged == FALSE && *url.GetUserName () == 0)
+		if (!site->strUser.IsEmpty() && m_bAuthChanged == FALSE && *url.GetUserName () == 0)
 		{
 			
 			CheckDlgButton (IDC_USELOGIN, BST_CHECKED);
@@ -794,8 +794,8 @@ void CCreateBatchDownload::GenerateAndAddDownloads()
 			delete [] dp->pszFileName;
 
 		dp->pszFileName = new char [len + lstrlen (pszAs) + 1];
-		lstrcpy (dp->pszFileName, psz);
-		lstrcat (dp->pszFileName, pszAs);
+		_tcscpy (dp->pszFileName, psz);
+		_tcscat (dp->pszFileName, pszAs);
 	}
 
 	

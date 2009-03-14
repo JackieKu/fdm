@@ -147,14 +147,14 @@ void CTorrents_Tasks::OnGetdispinfo(NMHDR *pNMHDR, LRESULT *pResult)
 				int nDlSubItem = SubItemToDlSubItem (nSubItem);
 				if (nDlSubItem != -1)
 				{
-					lstrcpy (pItem->pszText, CDownloads_Tasks::GetDownloadText (dld, nDlSubItem));
+					_tcscpy (pItem->pszText, CDownloads_Tasks::GetDownloadText (dld, nDlSubItem));
 				}
 				else
 				{
 					
 					CString str; str.Format ("%.*g", 4, 
 						(float)dld->pMgr->GetBtDownloadMgr ()->getRatio ());
-					lstrcpy (pItem->pszText, str);
+					_tcscpy (pItem->pszText, str);
 				}
 			}
 		}

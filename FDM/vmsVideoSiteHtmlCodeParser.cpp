@@ -124,7 +124,7 @@ BOOL vmsVideoSiteHtmlCodeParser::Parse_Youtube(LPCSTR pszHtml)
 
 		if (str.Length () > 2 && str [0] == '"' && str [str.Length () - 1] == '"')
 		{
-			lstrcpy (str, str.pszString+1);
+			_tcscpy (str, str.pszString+1);
 			str [str.Length () - 1] = 0;
 		}
 

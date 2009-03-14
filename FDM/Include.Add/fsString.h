@@ -96,22 +96,22 @@ struct fsString
 		return str;
 	}
 
-	BOOL operator == (const fsString& str) const
+	friend BOOL operator == (const fsString& str1, const fsString& str2)
 	{
-		return str == pszString;
+		return str1 == (LPCTSTR) str2.pszString;
 	}
 
-	BOOL operator != (const fsString& str) const
+	friend BOOL operator != (const fsString& str1, const fsString& str2)
 	{
-		return str != pszString;
+		return !(str1 == str2);
 	}
 
-	BOOL operator == (LPCTSTR pszStr) const
+	friend BOOL operator == (const fsString& str, LPCTSTR pszStr)
 	{
-		if (pszString == NULL || pszStr == NULL)
-			return pszStr == pszString;
+		if (str.pszString == NULL || pszStr == NULL)
+			return pszStr == str.pszString;
 
-		return _tcscmp ( pszString, pszStr ) == 0;
+		return _tcscmp ( str.pszString, pszStr ) == 0;
 	}
 
 	void clear ()
@@ -123,7 +123,7 @@ struct fsString
 		}
 	}
 
-	void ncpy (LPCSTR pszStr, int nch)
+	void ncpy (LPCTSTR pszStr, int nch)
 	{
 		alloc (nch);
 		strncpy (pszString, pszStr, nch);
@@ -136,12 +136,12 @@ struct fsString
 		pszString [nch] = 0;
 	}
 
-	BOOL operator != (LPCSTR pszStr) const
+	friend BOOL operator != (const fsString& str, LPCTSTR pszStr)
 	{
-		return !(*this == pszStr);
+		return !(str == pszStr);
 	}
 
-	operator LPTSTR () const
+	operator LPCTSTR () const
 	{
 		return pszString;
 	}
@@ -166,9 +166,9 @@ struct fsString
 
 	int GetLength () const {return Length ();}
 
-	void Replace (LPCSTR , LPCSTR ) {}
+	void Replace (LPCTSTR , LPCTSTR ) {}
 
-	void Format (LPCSTR pszFormat ...)
+	void Format (LPCTSTR pszFormat ...)
 	{
 		LPSTR psz = new char [100000];
                 va_list ap;

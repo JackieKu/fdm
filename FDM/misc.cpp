@@ -548,8 +548,8 @@ LPCSTR strcmpi_m (LPCSTR pszWhere, LPCSTR pszWhat)
 	char *psz1 = new char [lstrlen (pszWhere) + 1];
 	char *psz2 = new char [lstrlen (pszWhat) + 1];
 
-	lstrcpy (psz1, pszWhere);
-	lstrcpy (psz2, pszWhat);
+	_tcscpy (psz1, pszWhere);
+	_tcscpy (psz2, pszWhat);
 
 	CharLower (psz1);
 	CharLower (psz2);
@@ -646,6 +646,33 @@ BOOL fsReadStrFromFile(LPSTR *ppszStr, HANDLE hFile)
 	else
 		*ppszStr = NULL;
 	
+	return TRUE;
+}
+
+BOOL fsReadStrFromFile(CString &str, HANDLE hFile)
+{
+	int len;
+
+	DWORD dw;
+
+	if (!ReadFile (hFile, &len, sizeof (len), &dw, NULL) || dw != sizeof (len))
+		return FALSE;
+
+	if (len != -1)
+	{
+		if (UINT (len) > 100000)
+			return FALSE; 
+
+		if (!ReadFile (hFile, str.GetBufferSetLength(len), len, &dw, NULL))
+			return FALSE;
+		str.ReleaseBuffer();
+
+		if (len != int (dw))
+			return FALSE;
+	}
+	else
+		str.Empty();
+
 	return TRUE;
 }
 

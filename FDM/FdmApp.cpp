@@ -815,7 +815,7 @@ LONG CFdmApp::_UEF(_EXCEPTION_POINTERS *info)
 	char szFile [MAX_PATH]; char szName [100];
 	wsprintf (szName, "fdm%s.dmp", vmsFdmAppMgr::getBuildNumber ());
 	GetTempPath (MAX_PATH, szFile);
-	lstrcat (szFile, szName);
+	_tcscat (szFile, szName);
 	HANDLE hFile = CreateFile (szFile, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS,
 		0, NULL);
 

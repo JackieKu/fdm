@@ -39,9 +39,9 @@ bool vmsFirefoxExtensionInstaller::Do(LPCSTR pszCID, LPCSTR pszExtPath, bool bIn
 	for (int i = 0; i < v.size (); i++)
 	{
 		char sz [MY_MAX_PATH];
-		lstrcpy (sz, v [i]);
-		lstrcat (sz, "\\extensions\\");
-		lstrcat (sz, pszCID);
+		_tcscpy (sz, v [i]);
+		_tcscat (sz, "\\extensions\\");
+		_tcscat (sz, pszCID);
 
 		if (bInstall)
 		{
@@ -94,9 +94,9 @@ bool vmsFirefoxExtensionInstaller::IsInstalled(LPCSTR pszCID, bool bInDefaultPro
 			continue;
 
 		char sz [MY_MAX_PATH];
-		lstrcpy (sz, v [i]);
-		lstrcat (sz, "\\extensions\\");
-		lstrcat (sz, pszCID);
+		_tcscpy (sz, v [i]);
+		_tcscat (sz, "\\extensions\\");
+		_tcscat (sz, pszCID);
 
 		if (GetFileAttributes (sz) != DWORD (-1))
 			return true;

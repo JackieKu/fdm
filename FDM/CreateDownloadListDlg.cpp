@@ -665,7 +665,7 @@ DLDS_LIST* CCreateDownloadListDlg::GenerateDownloads(BOOL bCheckDldExistance)
 			{
 				SAFE_DELETE_ARRAY (dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszReferer);
 				dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszReferer = new char [len+1];
-				lstrcpy (dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszReferer, pszReferer);
+				_tcscpy (dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszReferer, pszReferer);
 			}
 		}
 
@@ -673,7 +673,7 @@ DLDS_LIST* CCreateDownloadListDlg::GenerateDownloads(BOOL bCheckDldExistance)
 		{
 			SAFE_DELETE_ARRAY (dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszCookies);
 			dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszCookies = new char [lstrlen (pszCookies) + 1];
-			lstrcpy (dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszCookies, pszCookies);
+			_tcscpy (dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszCookies, pszCookies);
 		}
 
 		pvpDlds->push_back (dld);

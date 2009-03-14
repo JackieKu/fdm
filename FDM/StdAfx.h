@@ -11,9 +11,9 @@
 
 #define VC_EXTRALEAN		
 
-#define WINVER 0x400
+#define WINVER 0x0500
 #define _WIN32_IE 0x501
-#define _WIN32_WINNT 0x400  
+#define _WIN32_WINNT 0x0500  
 
 const char* const IE_USERAGENT_ADDITION	= "FDM";      
 
@@ -25,6 +25,10 @@ const char* const IE_USERAGENT_ADDITION	= "FDM";
 #define _TB_SIZE_Y	_SkinMgr.tbSizeY()
 #define _TB_USE_ALPHA	_SkinMgr.tbUseAlpha()            
 
+#define _CRT_SECURE_NO_WARNINGS
+#define _CRT_NONSTDC_NO_DEPRECATE
+#define _CRT_NON_CONFORMING_SWPRINTFS
+
 #include <afxwin.h>         
 #include <afxext.h>         
 #include <afxdisp.h>        
@@ -33,6 +37,8 @@ const char* const IE_USERAGENT_ADDITION	= "FDM";
 #include <afxcmn.h>			
 #endif 
 
+#include <mshtml.h>
+#include <mshtmhst.h>
 #pragma warning (disable : 4192)
 #pragma warning (disable : 4146)
 #import "mshtml.tlb"
@@ -45,8 +51,13 @@ _COM_SMARTPTR_TYPEDEF(IXMLDOMDocument, __uuidof(IXMLDOMDocument));
 _COM_SMARTPTR_TYPEDEF(IXMLDOMNode, __uuidof(IXMLDOMNode));
 _COM_SMARTPTR_TYPEDEF(IXMLDOMElement, __uuidof(IXMLDOMElement));
 _COM_SMARTPTR_TYPEDEF(IXMLDOMNodeList, __uuidof(IXMLDOMNodeList));
+#if _MSC_VER >= 1300
+_COM_SMARTPTR_TYPEDEF(IDocHostUIHandler, __uuidof(IDocHostUIHandler));
+#endif
 
+#if _MSC_VER < 1400
 #define _ATL_APARTMENT_THREADED
+#endif
 #include <atlbase.h>  
 
 class CFdmModule : public CComModule

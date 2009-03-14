@@ -1106,9 +1106,9 @@ UINT CDownloadsWnd::CreateDownload(LPCSTR pszStartUrl, BOOL bReqTopMostDialog, L
 			LPCSTR pszFolder = dld->pGroup->strOutFolder;
 			delete [] dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName;
 			dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName = new char [lstrlen (pszFolder) + 2];
-			lstrcpy (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, pszFolder);
+			_tcscpy (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, pszFolder);
 			if (pszFolder [lstrlen (pszFolder) - 1] != '\\')
-				lstrcat (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, "\\");
+				_tcscat (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, "\\");
 		}
 
 		if (pParams->dwMask & DWCDAP_FILENAME)
@@ -1118,8 +1118,8 @@ UINT CDownloadsWnd::CreateDownload(LPCSTR pszStartUrl, BOOL bReqTopMostDialog, L
 					dp->pszFileName [lstrlen (dp->pszFileName) - 1] == '/')
 			{
 				LPSTR psz = new char [lstrlen (dp->pszFileName) + pParams->strFileName.GetLength () + 1];
-				lstrcpy (psz, dp->pszFileName);
-				lstrcat (psz, pParams->strFileName);
+				_tcscpy (psz, dp->pszFileName);
+				_tcscat (psz, pParams->strFileName);
 				delete [] dp->pszFileName;
 				dp->pszFileName = psz;
 			}
@@ -1134,20 +1134,20 @@ UINT CDownloadsWnd::CreateDownload(LPCSTR pszStartUrl, BOOL bReqTopMostDialog, L
 				SHGetSpecialFolderLocation (NULL, CSIDL_DESKTOP, &pidl);
 				SHGetPathFromIDList (pidl, szDesktop);
 				if (szDesktop [lstrlen (szDesktop) - 1] != '\\')
-					lstrcat (szDesktop, "\\");
+					_tcscat (szDesktop, "\\");
 				delete [] dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName;
 				dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName = new char [lstrlen (szDesktop) + 1];
-				lstrcpy (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, szDesktop);
+				_tcscpy (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, szDesktop);
 			}
 			else if (pParams->dwFlags & DWDCDAP_F_SAVETOTEMPFLDR)
 			{
 				char szTmpFolder [MY_MAX_PATH];
 				GetTempPath (MY_MAX_PATH, szTmpFolder);
 				if (szTmpFolder [lstrlen (szTmpFolder) - 1] != '\\')
-					lstrcat (szTmpFolder, "\\");
+					_tcscat (szTmpFolder, "\\");
 				delete [] dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName;
 				dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName = new char [lstrlen (szTmpFolder) + 1];
-				lstrcpy (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, szTmpFolder);
+				_tcscpy (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, szTmpFolder);
 			}
 
 			if (pParams->dwFlags & DWDCDAP_F_DELWHENDONE)
@@ -1179,14 +1179,14 @@ UINT CDownloadsWnd::CreateDownload(LPCSTR pszStartUrl, BOOL bReqTopMostDialog, L
 		{
 			SAFE_DELETE_ARRAY (dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszCookies);
 			dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszCookies = new char [pParams->strCookies.GetLength () + 1];
-			lstrcpy (dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszCookies, pParams->strCookies);
+			_tcscpy (dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszCookies, pParams->strCookies);
 		}
 
 		if (pParams->dwMask & DWCDAP_POSTDATA)
 		{
 			SAFE_DELETE_ARRAY (dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszPostData);
 			dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszPostData = new char [pParams->strPostData.GetLength () + 1];
-			lstrcpy (dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszPostData, pParams->strPostData);
+			_tcscpy (dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszPostData, pParams->strPostData);
 		}
 
 		if (pParams->dwMask & DWCDAP_MEDIA_CONVERT_SETTINGS)
@@ -1798,7 +1798,7 @@ BOOL CDownloadsWnd::CreateDownloadWithDefSettings(vmsDownloadSmartPtr dld, LPCST
 	fsDownload_NetworkProperties* dnp = dld->pMgr->GetDownloadMgr ()->GetDNP ();
 
 	fsSiteInfo *site = _SitesMgr.FindSite2 (dnp->pszServerName, fsNPToSiteValidFor (dnp->enProtocol));
-	if (site && site->strUser != NULL && *dnp->pszUserName == 0)
+	if (site && !site->strUser.IsEmpty() && *dnp->pszUserName == 0)
 		fsDNP_SetAuth (dnp, site->strUser, site->strPassword);
 
 	CString strFolder;

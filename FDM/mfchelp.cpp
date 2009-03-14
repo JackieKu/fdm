@@ -86,7 +86,7 @@ void fsGetSystemAppDataFolder (LPSTR pszRes)
 	{
 		SHGetPathFromIDList (pidl, pszRes);
 		if (pszRes [lstrlen (pszRes)-1] != '\\')
-			lstrcat (pszRes, "\\");
+			_tcscat (pszRes, "\\");
 		IMallocPtr spMalloc;
 		SHGetMalloc (&spMalloc);
 		spMalloc->Free (pidl);
@@ -95,8 +95,8 @@ void fsGetSystemAppDataFolder (LPSTR pszRes)
 	{
 		GetWindowsDirectory (pszRes, MAX_PATH);
 		if (pszRes [3] != 0)
-			lstrcat (pszRes, "\\");
-		lstrcat (pszRes, "Application Data\\");
+			_tcscat (pszRes, "\\");
+		_tcscat (pszRes, "Application Data\\");
 	}
 }
 
@@ -114,21 +114,21 @@ LPCSTR fsGetAppDataFolder ()
 	CString str = _App.DataFolder ();
 	if (str.IsEmpty () == FALSE)
 	{
-		lstrcpy (_szAppDataFolder, str);
+		_tcscpy (_szAppDataFolder, str);
 		if (_szAppDataFolder [lstrlen (_szAppDataFolder)-1] != '\\')
-			lstrcat (_szAppDataFolder, "\\");
+			_tcscat (_szAppDataFolder, "\\");
 		return _szAppDataFolder;
 	}
 
 	if (IS_PORTABLE_MODE)
 	{
-		lstrcpy (_szAppDataFolder, ((CFdmApp*)AfxGetApp ())->m_strAppPath);
-		lstrcat (_szAppDataFolder, "Data\\");
+		_tcscpy (_szAppDataFolder, ((CFdmApp*)AfxGetApp ())->m_strAppPath);
+		_tcscat (_szAppDataFolder, "Data\\");
 		return _szAppDataFolder;
 	}
 
 	fsGetSystemAppDataFolder (_szAppDataFolder);
-	lstrcat (_szAppDataFolder, "Free Download Manager\\");
+	_tcscat (_szAppDataFolder, "Free Download Manager\\");
 	return _szAppDataFolder;
 }
 
@@ -173,8 +173,8 @@ LPCSTR fsGetFumProgramFilesFolder ()
 
 		if (*_szPath == 0)
 		{
-			lstrcpy (_szPath, theApp.m_strAppPath);
-			lstrcat (_szPath, "fum\\");
+			_tcscpy (_szPath, theApp.m_strAppPath);
+			_tcscat (_szPath, "fum\\");
 		}
 	}
 	return _szPath;

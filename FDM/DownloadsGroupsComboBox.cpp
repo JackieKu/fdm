@@ -37,7 +37,11 @@ END_MESSAGE_MAP()
 
 void CDownloadsGroupsComboBox::Fill()
 {
-	m_wndTree.CreateEx (0, WC_TREEVIEW, "", WS_POPUP | WS_BORDER |
+	m_wndTree.CreateEx (0, 
+#if _MSC_VER < 1300
+		WC_TREEVIEW, "", 
+#endif
+		WS_POPUP | WS_BORDER |
 		TVS_FULLROWSELECT | TVS_HASLINES |  TVS_TRACKSELECT, 
 		CRect (0,0,0,0), GetParent (), 0);
 	m_wndTree.SetWindowPos (&CWnd::wndTopMost, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);

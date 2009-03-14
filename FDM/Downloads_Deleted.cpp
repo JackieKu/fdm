@@ -105,9 +105,9 @@ void CDownloads_Deleted::UpdateDownload(int iItem)
 
 	CHAR szFile [10000];	
 	CDownloads_Tasks::GetFileName (dld, szFile);
-	lstrcat (szFile, " (");
-	lstrcat (szFile, dld->pMgr->get_URL ());
-	lstrcat (szFile, ")");
+	_tcscat (szFile, " (");
+	_tcscat (szFile, dld->pMgr->get_URL ());
+	_tcscat (szFile, ")");
 	SetItemText (iItem, 0, szFile);
 
 	int cSects = dld->pMgr->GetNumberOfSections ();

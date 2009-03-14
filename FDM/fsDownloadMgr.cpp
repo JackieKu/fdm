@@ -1743,7 +1743,7 @@ void fsDownloadMgr::OnDone()
 		DWORD dwLastError = GetLastError ();
 		Event (LS (L_CANTRENAMEBACK), EDT_RESPONSE_E);
 		DescribeAPIError (&dwLastError);
-		lstrcpy (m_dp.pszFileName, szFileNameFrom);
+		_tcscpy (m_dp.pszFileName, szFileNameFrom);
 	}
 }
 
@@ -2325,7 +2325,7 @@ BOOL fsDownloadMgr::MoveFile(LPCSTR pszNewFileName)
 
 	SAFE_DELETE_ARRAY (m_dp.pszFileName);
 	fsnew (m_dp.pszFileName, char, lstrlen (pszNewFileName) + 1);
-	lstrcpy (m_dp.pszFileName, pszNewFileName);
+	_tcscpy (m_dp.pszFileName, pszNewFileName);
 
 	return TRUE;
 }
@@ -2339,13 +2339,13 @@ BOOL fsDownloadMgr::MoveToFolder(LPCSTR pszPath)
 	fsGetFileName (m_dp.pszFileName, szFile);
 
 	char szNewFile [MY_MAX_PATH];
-	lstrcpy (szNewFile, str);
+	_tcscpy (szNewFile, str);
 
 	if (szNewFile [lstrlen (szNewFile) - 1] != '\\' &&
 			szNewFile [lstrlen (szNewFile) - 1] != '/')
-		lstrcat (szNewFile, "\\");
+		_tcscat (szNewFile, "\\");
 
-	lstrcat (szNewFile, szFile);
+	_tcscat (szNewFile, szFile);
 
 	return MoveFile (szNewFile);
 }
@@ -2448,7 +2448,7 @@ void fsDownloadMgr::InitFile_ProcessMacroses()
 
 	delete [] m_dp.pszFileName;
 	m_dp.pszFileName = new char [str.GetLength () + 1];
-	lstrcpy (m_dp.pszFileName, str);
+	_tcscpy (m_dp.pszFileName, str);
 }
 
 void fsDownloadMgr::ProcessFilePathMacroses(CString &str)
@@ -2505,9 +2505,9 @@ void fsDownloadMgr::DoRapidshareSupport()
 				strnicmp (dnp->pszServerName, "www.rapidshare.", 15) == 0)
 		{
 			char szCookies [1000];
-			lstrcpy (szCookies, "user=");
-			lstrcat (szCookies, dnp->pszUserName);
-			lstrcat (szCookies, "-");
+			_tcscpy (szCookies, "user=");
+			_tcscat (szCookies, dnp->pszUserName);
+			_tcscat (szCookies, "-");
 			LPCSTR psz = dnp->pszPassword;
 			while (*psz)
 				sprintf (szCookies + lstrlen (szCookies), "%%%x", *psz++);
@@ -2527,14 +2527,14 @@ void fsDownloadMgr::DoRapidshareSupport()
 				}
 
 				char *psz = new char [lstrlen (dnp->pszCookies) + lstrlen (szCookies) + 10];
-				lstrcpy (psz, dnp->pszCookies);
+				_tcscpy (psz, dnp->pszCookies);
 				if (psz [lstrlen (psz) - 1] != ';')
-					lstrcat (psz, ";");
+					_tcscat (psz, ";");
 				delete [] dnp->pszCookies;
 				dnp->pszCookies = psz;
 			}
 
-			lstrcat (dnp->pszCookies, szCookies);
+			_tcscat (dnp->pszCookies, szCookies);
 
 			dnp->dwFlags |= DNPF_IMMEDIATELY_SEND_AUTH_AS_BASIC;
 		}

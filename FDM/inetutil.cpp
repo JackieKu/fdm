@@ -162,7 +162,7 @@ BOOL fsFileNameFromUrlPath (LPCSTR pszUrl, BOOL bUsingFTP, BOOL bDecode, LPSTR p
 		
 		char sz [1000] = "";
 		fsGetFileName (pszBuf, sz);
-		lstrcpy (pszBuf, sz);
+		_tcscpy (pszBuf, sz);
 	}
 
 	return TRUE;
@@ -300,16 +300,16 @@ void vmsMakeWinInetProxy (LPCSTR pszProxy, fsNetworkProtocol npConnection, fsNet
 	switch (npConnection)
 	{
 		case NP_FTP:
-			lstrcpy (pszWProxy, "ftp=");
+			_tcscpy (pszWProxy, "ftp=");
 			break;
 
 		case NP_HTTP:
 		case NP_FILE:
-			lstrcpy (pszWProxy, "http=");
+			_tcscpy (pszWProxy, "http=");
 			break;
 
 		case NP_HTTPS:
-			lstrcpy (pszWProxy, "https=");
+			_tcscpy (pszWProxy, "https=");
 			break;
 
 		default:
@@ -320,16 +320,16 @@ void vmsMakeWinInetProxy (LPCSTR pszProxy, fsNetworkProtocol npConnection, fsNet
 	switch (npProxy)
 	{
 		case NP_FTP:
-			lstrcat (pszWProxy, "ftp://");
+			_tcscat (pszWProxy, "ftp://");
 			break;
 
 		case NP_HTTP:
 		case NP_FILE:
-			lstrcat (pszWProxy, "http://");
+			_tcscat (pszWProxy, "http://");
 			break;
 
 		case NP_HTTPS:
-			lstrcat (pszWProxy, "https://");
+			_tcscat (pszWProxy, "https://");
 			break;
 
 		default:
@@ -337,7 +337,7 @@ void vmsMakeWinInetProxy (LPCSTR pszProxy, fsNetworkProtocol npConnection, fsNet
 			return;
 	}
 
-	lstrcat (pszWProxy, pszProxy);
+	_tcscat (pszWProxy, pszProxy);
 }
 
 void fsDecodeHtmlText (fsString &str)

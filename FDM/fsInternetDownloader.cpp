@@ -1272,7 +1272,7 @@ fsInternetResult fsInternetDownloader::OpenUrl_imp(UINT64 uStartPos, fsInternetU
 
 					if (pszUrlPath [lstrlen (pszUrlPath)-1] != '\\' &&
 							pszUrlPath [lstrlen (pszUrlPath)-1] != '/')
-						lstrcat (pszUrlPath, "\\");
+						_tcscat (pszUrlPath, "\\");
 					
 					strcat (pszUrlPath, pszUrlTo);
 				}
@@ -2418,7 +2418,7 @@ fsInternetResult fsInternetDownloader::QuerySize(fsInternetURLFile *file)
 
 					if (szUrlPath [lstrlen (szUrlPath)-1] != '\\' &&
 							szUrlPath [lstrlen (szUrlPath)-1] != '/')
-						lstrcat (szUrlPath, "\\");
+						_tcscat (szUrlPath, "\\");
 					
 					strcat (szUrlPath, pszUrl);
 				}

@@ -1219,7 +1219,7 @@ void CDownloads_Tasks::GetFileName(vmsDownloadSmartPtr dld, LPSTR pszFileName)
 		{
 			str = dld->pMgr->GetBtDownloadMgr ()->get_TorrentName ();
 		}
-		lstrcpy (pszFileName, str);
+		_tcscpy (pszFileName, str);
 		return;
 	}
 
@@ -1387,7 +1387,7 @@ void CDownloads_Tasks::OnGetdispinfo(NMHDR *pNMHDR, LRESULT *pResult)
 	{
 		int nSubItem = SubItemToSubItem (pItem->iSubItem);
 		if (nSubItem != -1)
-			lstrcpy (pItem->pszText, GetDownloadText (dld, nSubItem));		
+			_tcscpy (pItem->pszText, GetDownloadText (dld, nSubItem));		
 	}
 
 	}catch (...) {}
@@ -1403,7 +1403,7 @@ CString CDownloads_Tasks::GetDownloadText(vmsDownloadSmartPtr dld, int nSubItem)
 		if (lstrlen (szFile) > 233)
 		{
 			szFile [233] = 0;
-			lstrcat (szFile, "...");
+			_tcscat (szFile, "...");
 		}
 		return szFile;
 	}
@@ -1927,7 +1927,7 @@ void CDownloads_Tasks::OnDldcheckintegrity()
 
 	SAFE_DELETE_ARRAY (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszCheckSum);
 	dld->pMgr->GetDownloadMgr ()->GetDP ()->pszCheckSum = new char [dlg.m_strChecksum.GetLength () + 1];
-	lstrcpy (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszCheckSum, dlg.m_strChecksum);
+	_tcscpy (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszCheckSum, dlg.m_strChecksum);
 	dld->pMgr->GetDownloadMgr ()->GetDP ()->dwIntegrityCheckAlgorithm = MAKELONG (dlg.m_nAlgorithm, dlg.m_nSHA2Strength);
 
 	CDlg_CheckFileIntegrity_Progress dlg2;

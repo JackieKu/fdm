@@ -139,7 +139,7 @@ void CDlg_CreateNewTorrent::OnSaveTrackers()
 	while (pos)
 	{
 		CString str = sl.GetNext (pos);
-		lstrcpy (psz, str);
+		_tcscpy (psz, str);
 		psz += str.GetLength () + 1;
 	}
 	*psz = 0;
@@ -243,7 +243,7 @@ DWORD WINAPI CDlg_CreateNewTorrent::_threadCreateNewTorrent(LPVOID lp)
 	while (pos)
 	{
 		CString str = sl.GetNext (pos);
-		lstrcpy (psz, str);
+		_tcscpy (psz, str);
 		psz += str.GetLength () + 1;
 	}
 	*psz = 0;

@@ -41,5 +41,5 @@ DWORD _dwAppState = 0;
 #ifdef _ATL_STATIC_REGISTRY
 #include <statreg.h>
 #endif
-#include <atlimpl.cpp>
+//#include <atlimpl.cpp>
 

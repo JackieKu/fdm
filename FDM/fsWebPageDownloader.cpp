@@ -135,16 +135,16 @@ fsDLWebPage* fsWebPageDownloader::AddPage(fs::ListTree <fsDLWebPage> *root, LPCS
 		
 		
 		
-		lstrcpy (szAddPath, m_strStartServer);
-		lstrcat (szAddPath, "\\");
-		lstrcat (szAddPath, szPath);
+		_tcscpy (szAddPath, m_strStartServer);
+		_tcscat (szAddPath, "\\");
+		_tcscat (szAddPath, szPath);
 	}
 
 	
 	fsnew (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, char, m_wpds.strFolderSaveTo.Length () + strlen (szAddPath) + 1);
 	LPSTR pszFile = dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName;
-	lstrcpy (pszFile, m_wpds.strFolderSaveTo);	
-	lstrcat (pszFile, szAddPath);		
+	_tcscpy (pszFile, m_wpds.strFolderSaveTo);	
+	_tcscat (pszFile, szAddPath);		
 
 	ApplySettingsToDld (dld);
 	dld->bAutoStart = m_bStopped ? FALSE : bAutoStart;
@@ -501,12 +501,12 @@ UINT fsWebPageDownloader::ParseHTML(LPCSTR pszHTML, t_wptree wptree, BOOL bFixUr
 		fsURL url;
 		if (url.Crack (pszBaseURL) != IR_SUCCESS)
 		{
-			lstrcpy (szBaseURL, "http://");	
-			lstrcat (szBaseURL, pszBaseURL);
+			_tcscpy (szBaseURL, "http://");	
+			_tcscat (szBaseURL, pszBaseURL);
 			if (url.Crack (szBaseURL) == IR_SUCCESS)
 			{
 				if (szBaseURL [strlen (szBaseURL)-1] != '/' && szBaseURL [strlen (szBaseURL)-1] != '\\')
-					lstrcat (szBaseURL, "/");
+					_tcscat (szBaseURL, "/");
 
 				pszBaseURL = szBaseURL;
 			}
@@ -517,8 +517,8 @@ UINT fsWebPageDownloader::ParseHTML(LPCSTR pszHTML, t_wptree wptree, BOOL bFixUr
 		{
 			if (pszBaseURL [strlen (pszBaseURL)-1] != '/' && pszBaseURL [strlen (pszBaseURL)-1] != '\\')
 			{
-				lstrcpy (szBaseURL, pszBaseURL);
-				lstrcat (szBaseURL, "/");
+				_tcscpy (szBaseURL, pszBaseURL);
+				_tcscat (szBaseURL, "/");
 				pszBaseURL = szBaseURL;
 			}
 		}

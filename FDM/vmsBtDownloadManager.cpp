@@ -1634,7 +1634,7 @@ fsString vmsBtDownloadManager::get_RootFolderName()
 		return "";
 
 	char sz [MY_MAX_PATH];
-	lstrcpyn (sz, get_FileName (0), nOffset);
+	_tcscpyn (sz, get_FileName (0), nOffset);
 	return sz;	
 }
 

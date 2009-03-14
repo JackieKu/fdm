@@ -517,7 +517,7 @@ void CHFEWnd::LogFailedMessage(LPCSTR pszMsg)
 	event.clrText = RGB (0, 0, 0);
 	event.iImage = 3;
 	fsnew (event.pszEvent, char, lstrlen (pszMsg) + 1);
-	lstrcpy (event.pszEvent, pszMsg);
+	_tcscpy (event.pszEvent, pszMsg);
 	m_evMgr.add (&event);
 	m_wndListLog.m_wndLog.AddRecord (&event);
 }

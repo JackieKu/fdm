@@ -60,7 +60,7 @@ public:
 	void set (double f) {clear (); enType = VVT_DOUBLE; fVal = f;}
 	void set (LPCSTR psz) {
 		clear (); enType = VVT_ASTRING; pszVal = new char [lstrlen (psz) + 1];
-		lstrcpy (pszVal, psz);
+		_tcscpy (pszVal, psz);
 	}
 	void set (const LPBYTE pb, UINT nSize) {
 		clear (); enType = VVT_LPBYTE; pbVal = new BYTE [nSize]; 

@@ -198,7 +198,7 @@ DWORD WINAPI vmsMediaConvertMgr::_threadConvertMediaFile(LPVOID lp)
 			fsDownload_Properties *dp = pcmfc->dld->pMgr->GetDownloadMgr ()->GetDP ();
 			delete [] dp->pszFileName;
 			dp->pszFileName = new char [strDst.GetLength () + 1];
-			lstrcpy (dp->pszFileName, strDst);
+			_tcscpy (dp->pszFileName, strDst);
 		}
 		else
 		{

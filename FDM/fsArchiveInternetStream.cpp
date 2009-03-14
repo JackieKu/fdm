@@ -199,7 +199,7 @@ fsInternetResult fsArchiveInternetStream::Open_imp(UINT64 uStartPos)
 
 					if (pszUrlPath [lstrlen (pszUrlPath)-1] != '\\' &&
 							pszUrlPath [lstrlen (pszUrlPath)-1] != '/')
-						lstrcat (pszUrlPath, "\\");
+						_tcscat (pszUrlPath, "\\");
 					
 					strcat (pszUrlPath, pszUrlTo);
 				}

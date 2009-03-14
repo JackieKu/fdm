@@ -83,12 +83,12 @@ vmsUploadsDll::vmsDllPersist* vmsUploadsDllCaller::GetPersist()
 
 void vmsUploadsDllCaller::GetDataFilePath(LPCSTR pszName, LPSTR pszResult)
 {
-	lstrcpy (pszResult, fsGetDataFilePath (pszName));
+	_tcscpy (pszResult, fsGetDataFilePath (pszName));
 }
 
 void vmsUploadsDllCaller::GetCommonFilesFolder(LPSTR psz)
 {
-	lstrcpy (psz, fsGetFumProgramFilesFolder ());
+	_tcscpy (psz, fsGetFumProgramFilesFolder ());
 }
 
 BOOL vmsUploadsDllCaller::OnBeforeUpload(LPSTR, bool*)

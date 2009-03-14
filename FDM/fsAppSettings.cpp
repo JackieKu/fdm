@@ -1896,7 +1896,7 @@ void fsAppSettings::SaveStringList(LPCSTR pszSubKey, LPCSTR pszValue, CStringLis
 	for (i = 0; i < v.GetCount (); i++)
 	{
 		CString& str = v.GetAt (v.FindIndex (i));
-		lstrcpy (pbp, str);
+		_tcscpy (pbp, str);
 		pbp += str.GetLength ()+1;
 	}
 
@@ -2503,8 +2503,8 @@ void fsAppSettings::Scheduler_LastTask_read(fsSchedule *task)
 				strArgs = Scheduler_LastTask_ProgArgs ();
 		fsnew (task->wts.prog.pszName, char, strProg.GetLength () + 1);
 		fsnew (task->wts.prog.pszArgs, char, strArgs.GetLength () + 1);
-		lstrcpy (task->wts.prog.pszName, strProg);
-		lstrcpy (task->wts.prog.pszArgs, strArgs);
+		_tcscpy (task->wts.prog.pszName, strProg);
+		_tcscpy (task->wts.prog.pszArgs, strArgs);
 		
 		task->hts.enType = HTS_ONCE;
 		task->hts.last.dwHighDateTime = task->hts.last.dwLowDateTime = UINT_MAX;
@@ -2548,8 +2548,8 @@ void fsAppSettings::Scheduler_LastTask_read(fsSchedule *task)
 				strArgs = Scheduler_LastTask_ProgArgs ();
 			fsnew (task->wts.prog.pszName, char, strProg.GetLength () + 1);
 			fsnew (task->wts.prog.pszArgs, char, strArgs.GetLength () + 1);
-			lstrcpy (task->wts.prog.pszName, strProg);
-			lstrcpy (task->wts.prog.pszArgs, strArgs);
+			_tcscpy (task->wts.prog.pszName, strProg);
+			_tcscpy (task->wts.prog.pszArgs, strArgs);
 		}
 		break;
 
