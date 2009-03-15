@@ -82,9 +82,9 @@ struct fsString
 		return pszString;
 	}
 
-	LPCTSTR  operator += (char c)
+	LPCTSTR  operator += (TCHAR c)
 	{
-			char sz [2];
+			TCHAR sz [2];
 			sz [0] = c; sz [1] = 0;
 			return *this += sz;
 	}
@@ -126,13 +126,13 @@ struct fsString
 	void ncpy (LPCTSTR pszStr, int nch)
 	{
 		alloc (nch);
-		strncpy (pszString, pszStr, nch);
+		_tcsncpy (pszString, pszStr, nch);
 	}
 
 	void alloc (int nch)
 	{
 		clear ();
-		pszString = new char [nch+1];
+		pszString = new TCHAR [nch+1];
 		pszString [nch] = 0;
 	}
 
@@ -159,9 +159,9 @@ struct fsString
 		return pszString == NULL || *pszString == 0;
 	}
 
-	char LastChar () const
+	TCHAR LastChar () const
 	{
-		return pszString ? pszString [GetLength () - 1] : (char)0;
+		return pszString ? pszString [GetLength () - 1] : (TCHAR)0;
 	}
 
 	int GetLength () const {return Length ();}
@@ -170,11 +170,11 @@ struct fsString
 
 	void Format (LPCTSTR pszFormat ...)
 	{
-		LPSTR psz = new char [100000];
-                va_list ap;
+		LPTSTR psz = new TCHAR [100000];
+		va_list ap;
 		va_start (ap, pszFormat);
-		vsprintf (psz, pszFormat, ap);
-                va_end (ap);
+		_vstprintf (psz, pszFormat, ap);
+		va_end (ap);
 		*this = psz;
 		delete [] psz;
 	}

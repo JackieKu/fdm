@@ -16,7 +16,7 @@ class CAERDlg : public CDialog
 public:
 	BOOL m_bDontAskAgain;	
 	fsAlreadyExistReaction m_enAER;	
-	LPCSTR m_pszFile;		
+	LPCTSTR m_pszFile;		
 	void DisableStopAndResume();	
 	CAERDlg(CWnd* pParent = NULL);     
 

@@ -8,7 +8,7 @@
 
 #ifdef _DEBUG
 #undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
+static TCHAR THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif        
 
@@ -71,7 +71,7 @@ void fsContextHelpMgr::OnWT()
 	popup.clrForeground = UINT (-1);
 	popup.clrBackground = UINT (-1);
 	popup.rcMargins = CRect (-1, -1, -1, -1);
-	popup.pszFont = "MS Sans Serif, 8, DEFAULT_CHARSET";
+	popup.pszFont = _T("MS Sans Serif, 8, DEFAULT_CHARSET");
 
 	HtmlHelp (m_pLastDlg->m_hWnd, NULL, HH_DISPLAY_TEXT_POPUP, (DWORD) &popup);		
 

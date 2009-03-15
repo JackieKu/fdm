@@ -23,7 +23,7 @@
 			UseOfMFC="2"
 			UseOfATL="1"
 			ATLMinimizesCRunTimeLibraryUsage="false"
-			CharacterSet="2"
+			CharacterSet="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -8775,11 +8775,11 @@
 				>
 			</File>
 			<File
-				RelativePath="res\fdm.ico"
+				RelativePath="res\Fdm.ico"
 				>
 			</File>
 			<File
-				RelativePath="res\Fdm.ico"
+				RelativePath="res\fdm.ico"
 				>
 			</File>
 			<File

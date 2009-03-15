@@ -12,9 +12,9 @@
 struct fsCtrlContextHelp
 {
 	UINT nIDCtrl;	
-	LPCSTR pszDesc;	
+	LPCTSTR pszDesc;	
 
-	fsCtrlContextHelp (UINT nID, LPCSTR pszContextHelp) : nIDCtrl (nID), pszDesc (pszContextHelp) {}
+	fsCtrlContextHelp (UINT nID, LPCTSTR pszContextHelp) : nIDCtrl (nID), pszDesc (pszContextHelp) {}
 	fsCtrlContextHelp () {};
 };
 

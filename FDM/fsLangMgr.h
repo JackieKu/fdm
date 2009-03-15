@@ -28,9 +28,9 @@ public:
 	
 	int GetLngCount();
 	
-	LPCSTR GetLngName (int iIndex);
+	LPCTSTR GetLngName (int iIndex);
 	
-	int FindLngByName (LPCSTR pszName);
+	int FindLngByName (LPCTSTR pszName);
 	
 	BOOL LoadLng (int iIndex);
 	
@@ -38,7 +38,7 @@ public:
 	
 	int GetCurLng();
 	
-	LPCSTR GetString (int iIndex);
+	LPCTSTR GetString (int iIndex);
 	
 	CString GetStringNP (int iIndex);
 

@@ -78,6 +78,12 @@ extern CFdmModule _Module;
 
 #define MY_MAX_PATH		10000
 
+#ifdef _UNICODE
+#define tstring wstring
+#else
+#define tstring string
+#endif
+
 #pragma warning (push, 3)
 #include <vector>
 #include <list>

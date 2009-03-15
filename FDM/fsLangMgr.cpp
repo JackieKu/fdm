@@ -8,7 +8,7 @@
 
 #ifdef _DEBUG
 #undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
+static TCHAR THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif        
 
@@ -22,7 +22,7 @@ fsLangMgr::~fsLangMgr()
 
 }  
 
-#define LNG_COMMENT_CHAR	';'
+#define LNG_COMMENT_CHAR	_T(';')
 
 BOOL fsLangMgr::Initialize()
 {
@@ -31,10 +31,10 @@ BOOL fsLangMgr::Initialize()
 	WIN32_FIND_DATA wfd;
 
 	m_strLngFolder = ((CFdmApp*)AfxGetApp ())->m_strAppPath;
-	m_strLngFolder += "Language\\";
+	m_strLngFolder += _T("Language\\");
 
 	CString strMask = m_strLngFolder;
-	strMask += "*.lng";
+	strMask += _T("*.lng");
 
 	HANDLE hFind = FindFirstFile (strMask, &wfd);
 	BOOL bFind = hFind != INVALID_HANDLE_VALUE;
@@ -73,9 +73,9 @@ int fsLangMgr::GetLngCount()
 	return m_vLngFiles.size ();
 }
 
-LPCSTR fsLangMgr::GetLngName(int iIndex)
+LPCTSTR fsLangMgr::GetLngName(int iIndex)
 {
-	static char szBuiltIn [] = "Built In";
+	static TCHAR szBuiltIn [] = _T("Built In");
 	if (iIndex < 0 || iIndex >= m_vLngFiles.size ())
 		return szBuiltIn;
 	return m_vLngFiles [iIndex].strLngName;
@@ -123,7 +123,7 @@ BOOL fsLangMgr::LoadLng(int iIndex)
 	}
 }
 
-int fsLangMgr::FindLngByName(LPCSTR pszName)
+int fsLangMgr::FindLngByName(LPCTSTR pszName)
 {
 	for (int i = 0; i < m_vLngFiles.size (); i++)
 	{
@@ -142,9 +142,9 @@ int fsLangMgr::GetStringCount()
 	return m_vStrings.size ();
 }
 
-LPCSTR fsLangMgr::GetString(int iIndex)
+LPCTSTR fsLangMgr::GetString(int iIndex)
 {
-	static char szNull [1] = {0};
+	static TCHAR szNull [1] = {0};
 
 	try{
 
@@ -167,7 +167,7 @@ int fsLangMgr::GetCurLng()
 CString fsLangMgr::GetStringNP(int iIndex)
 {
 	CString str = GetString (iIndex);
-	str.Remove ('&');
+	str.Remove (_T('&'));
 	return str;
 }
 
@@ -191,7 +191,7 @@ void fsLangMgr::LoadBuiltInLngStrings()
 	HRSRC hRes;
 	LPBYTE pbRes;
 
-	hRes = FindResource (NULL, MAKEINTRESOURCE (IDR_ENG_LNGSTRINGS), "RT_LNGSTRINGS");
+	hRes = FindResource (NULL, MAKEINTRESOURCE (IDR_ENG_LNGSTRINGS), _T("RT_LNGSTRINGS"));
 	if (hRes == NULL)
 		return;
 
@@ -199,19 +199,19 @@ void fsLangMgr::LoadBuiltInLngStrings()
 	pbRes = (LPBYTE) LockResource (hResource);
 	LPBYTE pbResEnd = pbRes + SizeofResource (NULL, hRes);
 
-	LPCSTR psz = (LPCSTR) pbRes;
-	LPCSTR pszE = (LPCSTR) pbResEnd;
+	LPCTSTR psz = (LPCTSTR) pbRes;
+	LPCTSTR pszE = (LPCTSTR) pbResEnd;
 	bool bLngNamePassed = false;
 
 	while (psz < pszE) 
 	{
 		CString str;
-		while (psz < pszE && *psz != '\n' && *psz != '\r')
+		while (psz < pszE && *psz != _T('\n') && *psz != _T('\r'))
 			str += *psz++;
-		while (psz < pszE && (*psz == '\n' || *psz == '\r'))
+		while (psz < pszE && (*psz == _T('\n') || *psz == _T('\r')))
 			psz++;
 
-		if (str == "" || str [0] == LNG_COMMENT_CHAR)
+		if (str == _T("") || str [0] == LNG_COMMENT_CHAR)
 			continue;
 
 		if (bLngNamePassed == false) {
@@ -226,5 +226,5 @@ void fsLangMgr::LoadBuiltInLngStrings()
 
 void fsLangMgr::PreprocessLanguageString(CString &str)
 {
-	str.Replace ("\\n", "\n");
+	str.Replace (_T("\\n"), _T("\n"));
 }

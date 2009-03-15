@@ -8,18 +8,22 @@
 #if _MSC_VER > 1000
 #pragma once
 #endif 
-
-#include "tree.h"
-#include "vmsFile.h"  
-
+#include "tree.h"
+#include "vmsFile.h"
 enum vmsVariantValueType
 {
 	VVT_EMPTY,			
 	VVT_INT,			
 	VVT_DOUBLE,			
 	VVT_INT64,			
-	VVT_ASTRING,		
-	VVT_LPBYTE,			
+	VVT_ASTRING,
+	VVT_LPBYTE,
+	VVT_WSTRING,
+#ifdef _UNICODE
+	VVT_STRING = VVT_WSTRING
+#else
+	VVT_STRING = VVT_ASTRING
+#endif
 };  
 
 struct vmsVariantValue
@@ -30,7 +34,8 @@ protected:
 		int iVal;			
 		double fVal;		
 		__int64 i64Val;		
-		LPSTR pszVal;		
+		LPSTR pszVal;
+		LPWSTR pszwVal;
 		struct {
 			LPBYTE pbVal;	
 			UINT nByteBufferSize;	
@@ -51,6 +56,7 @@ public:
 	operator double () const {ASSERT (enType == VVT_DOUBLE); return fVal;}
 	operator __int64 () const {ASSERT (enType == VVT_INT64); return i64Val;}
 	operator LPCSTR () const {ASSERT (enType == VVT_ASTRING); return pszVal;}
+	operator LPCWSTR () const {ASSERT (enType == VVT_WSTRING); return pszwVal;}
 	operator const LPBYTE () const {ASSERT (enType == VVT_LPBYTE); return pbVal;}
 	operator LPBYTE () {ASSERT (enType == VVT_LPBYTE); return pbVal;}
 	UINT bytebuffersize () {return nByteBufferSize;}
@@ -59,8 +65,12 @@ public:
 	void set (__int64 i) {clear (); enType = VVT_INT64; i64Val = i;}
 	void set (double f) {clear (); enType = VVT_DOUBLE; fVal = f;}
 	void set (LPCSTR psz) {
-		clear (); enType = VVT_ASTRING; pszVal = new char [lstrlen (psz) + 1];
-		_tcscpy (pszVal, psz);
+		clear (); enType = VVT_ASTRING; pszVal = new char [strlen (psz) + 1];
+		strcpy (pszVal, psz);
+	}
+	void set (LPCWSTR psz) {
+		clear (); enType = VVT_WSTRING; pszwVal = new wchar_t [wcslen (psz) + 1];
+		wcscpy (pszwVal, psz);
 	}
 	void set (const LPBYTE pb, UINT nSize) {
 		clear (); enType = VVT_LPBYTE; pbVal = new BYTE [nSize]; 
@@ -71,7 +81,7 @@ public:
 	int operator = (int i) {set (i); return i;}
 	__int64 operator = (__int64 i) {set (i); return i;}
 	double operator = (double f) {set (f); return f;}
-	LPCSTR operator = (LPCSTR psz) {set (psz); return psz;}
+	LPCTSTR operator = (LPCTSTR psz) {set (psz); return psz;}
 
 	void clear () {
 		switch (enType) 
@@ -83,7 +93,7 @@ public:
 
 		case VVT_LPBYTE: delete [] pbVal; break;
 		case VVT_ASTRING: delete [] pszVal; break;
-
+		case VVT_WSTRING: delete [] pszwVal; break;
 		default: ASSERT (false);	
 		}
 		enType = VVT_EMPTY;
@@ -97,6 +107,7 @@ public:
 		case VVT_DOUBLE: set ((double)vt); break;
 		case VVT_INT64: set ((__int64)vt); break;
 		case VVT_ASTRING: set ((LPCSTR)vt); break;
+		case VVT_WSTRING: set ((LPCWSTR)vt); break;
 		case VVT_LPBYTE: set ((const LPBYTE)vt, vt.nByteBufferSize); break;
 		default: ASSERT (false); 
 		}
@@ -117,20 +128,20 @@ typedef vmsVariantValue DATAFILEITEM, *LPDATAFILEITEM;
 class vmsDataFile
 {
 public:
-	void get_Value (LPCSTR pszSection, LPCSTR pszValueName, LPBYTE& pbValue, UINT& nValueSize);
-	void get_Value (LPCSTR pszSection, LPCSTR pszValueName, LPCSTR& strValue);
-	void get_Value (LPCSTR pszSection, LPCSTR pszValueName, double& fValue);
-	void get_Value (LPCSTR pszSection, LPCSTR pszValueName, __int64& i64Value);
-	void get_Value (LPCSTR pszSection, LPCSTR pszValueName, int& iValue);
-	void set_Value(LPCSTR pszSection, LPCSTR pszValueName, LPBYTE pbValue, UINT nValueSize);
-	void set_Value(LPCSTR pszSection, LPCSTR pszValueName, LPCSTR pszValue);
-	void set_Value(LPCSTR pszSection, LPCSTR pszValueName, double fValue);
-	void set_Value(LPCSTR pszSection, LPCSTR pszValueName, __int64 i64Value);
-	void set_Value (LPCSTR pszSection, LPCSTR pszValueName, int iValue);
+	void get_Value (LPCTSTR pszSection, LPCTSTR pszValueName, LPBYTE& pbValue, UINT& nValueSize);
+	void get_Value (LPCTSTR pszSection, LPCTSTR pszValueName, LPCTSTR& strValue);
+	void get_Value (LPCTSTR pszSection, LPCTSTR pszValueName, double& fValue);
+	void get_Value (LPCTSTR pszSection, LPCTSTR pszValueName, __int64& i64Value);
+	void get_Value (LPCTSTR pszSection, LPCTSTR pszValueName, int& iValue);
+	void set_Value(LPCTSTR pszSection, LPCTSTR pszValueName, LPBYTE pbValue, UINT nValueSize);
+	void set_Value(LPCTSTR pszSection, LPCTSTR pszValueName, LPCTSTR pszValue);
+	void set_Value(LPCTSTR pszSection, LPCTSTR pszValueName, double fValue);
+	void set_Value(LPCTSTR pszSection, LPCTSTR pszValueName, __int64 i64Value);
+	void set_Value (LPCTSTR pszSection, LPCTSTR pszValueName, int iValue);
 	
-	LPDATAFILEITEM CreateItem(LPCSTR pszSection, LPCSTR pszItemName);
-	LPDATAFILEITEM CreateItem (LPDATAFILETREE pSection, LPCSTR pszItemName);
-	LPDATAFILETREE CreateSection (LPCSTR pszSection, LPDATAFILETREE ptRoot = NULL);
+	LPDATAFILEITEM CreateItem(LPCTSTR pszSection, LPCTSTR pszItemName);
+	LPDATAFILEITEM CreateItem (LPDATAFILETREE pSection, LPCTSTR pszItemName);
+	LPDATAFILETREE CreateSection (LPCTSTR pszSection, LPDATAFILETREE ptRoot = NULL);
 	
 	void LoadFromFile (HANDLE hFile);
 	void SaveToFile (HANDLE hFile);
@@ -147,7 +158,7 @@ protected:
 	
 	
 	
-	LPDATAFILETREE FindItem (LPCSTR pszSection, LPCSTR pszValueName, LPDATAFILETREE ptRoot = NULL);
+	LPDATAFILETREE FindItem (LPCTSTR pszSection, LPCTSTR pszValueName, LPDATAFILETREE ptRoot = NULL);
 
 	
 	DATAFILETREE m_tData;

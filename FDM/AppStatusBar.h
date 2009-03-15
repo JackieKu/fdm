@@ -24,7 +24,7 @@ public:
 	//}}AFX_VIRTUAL  
 
 public:
-	void SetToolTipText (UINT nIDTip, LPCSTR pszText);
+	void SetToolTipText (UINT nIDTip, LPCTSTR pszText);
 	virtual ~CAppStatusBar();
 
 	

@@ -38,11 +38,11 @@ struct vmsAppVersionPart
 		}
 	}
 
-	std::string toString () const 
+	std::tstring toString () const 
 	{
-		std::string tstr;
+		std::tstring tstr;
 		for (int i = 0; i < cPreZeros; i++)
-			tstr += '0';
+			tstr += _T('0');
 		TCHAR tsz [100] = _T ("");
 		tstr += _itot (dwVal, tsz, 10);
 		return tstr;
@@ -81,10 +81,10 @@ class vmsAppVersion : public std::vector <vmsAppVersionPart>
 {
 public:
 	void clear();
-	std::string ToString() const;
+	std::tstring ToString() const;
 	BOOL FromString (LPCTSTR ptszVersion);
 
-	std::string m_strReleaseType; 
+	std::tstring m_strReleaseType; 
 
 	vmsAppVersion();
 	virtual ~vmsAppVersion();
