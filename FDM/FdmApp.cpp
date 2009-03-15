@@ -66,6 +66,16 @@ CFdmApp theApp;
 
 BOOL CFdmApp::InitInstance()
 {
+	// InitCommonControlsEx() is required on Windows XP if an application
+	// manifest specifies use of ComCtl32.dll version 6 or later to enable
+	// visual styles.  Otherwise, any window creation will fail.
+	INITCOMMONCONTROLSEX InitCtrls;
+	InitCtrls.dwSize = sizeof(InitCtrls);
+	// Set this to include all the common control classes you want to use
+	// in your application.
+	InitCtrls.dwICC = ICC_WIN95_CLASSES;
+	InitCommonControlsEx(&InitCtrls);
+
 	SetUnhandledExceptionFilter (_UEF);
 
 	AfxEnableControlContainer ();
@@ -99,7 +109,7 @@ BOOL CFdmApp::InitInstance()
 
 	
 	
-	if (strPath == "" || FALSE == SetCurrentDirectory (strPath))
+	if (strPath == "" || !SetCurrentDirectory (strPath))
 		_dwAppState |= APPSTATE_PORTABLE_MODE;
 
 	char szExeDir [MY_MAX_PATH], szExeFile [MY_MAX_PATH];
@@ -113,14 +123,14 @@ BOOL CFdmApp::InitInstance()
 	}
 
 	m_strAppPath = strPath;
-	if (m_strAppPath.IsEmpty () == FALSE)
+	if (!m_strAppPath.IsEmpty ())
 	{
 		if (m_strAppPath [m_strAppPath.GetLength ()-1] != '\\' &&
 				m_strAppPath [m_strAppPath.GetLength ()-1] != '/')
 			m_strAppPath += '\\';
 	}
 
-	if (IS_PORTABLE_MODE == false)
+	if (!IS_PORTABLE_MODE)
 	{
 		CString strDataFldr = szExeDir; strDataFldr += "Data";
 		
@@ -246,12 +256,13 @@ BOOL CFdmApp::InitInstance()
 	if (bNeedLocalRegister)
 		RegisterServer (FALSE);
 
-	
-
+// Enable3dControls() is DEPRECATED
+#if _MSC_VER < 1300
 #ifdef _AFXDLL
 	Enable3dControls();			
 #else
 	Enable3dControlsStatic();	
+#endif
 #endif
 
 	CheckLocked ();

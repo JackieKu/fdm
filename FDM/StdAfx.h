@@ -162,11 +162,10 @@ extern vmsFdmAppMgr _AppMgr;
 #define APPSTATE_PORTABLE_MODE					1
 #define APPSTATE_PORTABLE_MODE_NOREG			2
 extern DWORD _dwAppState;	
-#ifndef _DEBUG
+//#ifndef _DEBUG
 #define IS_PORTABLE_MODE	((_dwAppState & APPSTATE_PORTABLE_MODE) != 0)
-#else
-
-#define IS_PORTABLE_MODE	FALSE	
+//#else
+//#define IS_PORTABLE_MODE	FALSE	
 #endif
 
 #include "lngphrases.h"  
@@ -175,5 +174,17 @@ extern DWORD _dwAppState;
 #define TRAY_ICON_DOWNLOADING	1
 #define TRAY_ICON_ERRORS		2
 #define TRAY_ICON_UNKNOWN		3
+
+#if _MSC_VER >= 1400 && defined(_UNICODE)
+#if defined _M_IX86
+#pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='x86' publicKeyToken='6595b64144ccf1df' language='*'\"")
+#elif defined _M_IA64
+#pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='ia64' publicKeyToken='6595b64144ccf1df' language='*'\"")
+#elif defined _M_X64
+#pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='amd64' publicKeyToken='6595b64144ccf1df' language='*'\"")
+#else
+#pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
+#endif
+#endif
 
 #endif 
