@@ -11,13 +11,13 @@
 
 #include <windows.h>
 #include "../list.h"
-#include <fsString.h>
+#include <atlstr.h>
 #include "fsinet.h"	
 #include "fsInternetSession.h"  
 
 struct fsFileInfo
 {
-	fsString strName;		
+	fsString strName;
 	UINT64 uSize;			
 	FILETIME date;			
 	BOOL bAvailable;		
@@ -33,10 +33,6 @@ struct fsFileInfo
 class fsInternetFiles  
 {
 public:
-	
-	
-	
-	
 	virtual fsInternetResult GetList (LPCSTR pszPath) = NULL;
 	
 	virtual void Abort () = NULL;
@@ -52,7 +48,7 @@ public:
 	virtual ~fsInternetFiles();
 
 protected:
-	fsString m_strPath;					
+	CStringA m_strPath;					
 	fs::list <fsFileInfo> m_vFiles;		
 };
 

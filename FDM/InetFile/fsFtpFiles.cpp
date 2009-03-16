@@ -2,6 +2,7 @@
   Free Download Manager Copyright (c) 2003-2007 FreeDownloadManager.ORG
 */        
 
+#include <atlconv.h>
 #include "fsFtpFiles.h"
 #include "fsURL.h"
 
@@ -38,7 +39,7 @@ fsInternetResult fsFtpFiles::BuildList()
 {
 	fsInternetResult ir = IR_SUCCESS;
 	
-	WIN32_FIND_DATA wfd;
+	WIN32_FIND_DATAA wfd;
 
 	m_vFiles.clear ();
 
@@ -46,7 +47,7 @@ fsInternetResult fsFtpFiles::BuildList()
 		return IR_S_FALSE;
 
 	
-	HINTERNET hFind = FtpFindFirstFile (m_pServer->GetHandle (), NULL, &wfd, m_bReload ? INTERNET_FLAG_RELOAD : 0, NULL);
+	HINTERNET hFind = FtpFindFirstFileA (m_pServer->GetHandle (), NULL, &wfd, m_bReload ? INTERNET_FLAG_RELOAD : 0, NULL);
 
 	if (hFind)
 	{
@@ -57,7 +58,8 @@ fsInternetResult fsFtpFiles::BuildList()
 			if (strcmp (wfd.cFileName, ".") == 0 || strcmp (wfd.cFileName, "..") == 0)
 				continue;
 
-			file.strName = wfd.cFileName;
+#pragma message("TODO: support other codepages.")
+			file.strName = CA2CT(wfd.cFileName, CP_UTF8);
 			file.uSize = wfd.nFileSizeLow;
 			file.date = wfd.ftLastWriteTime;
 			file.bAvailable = TRUE;
@@ -69,7 +71,6 @@ fsInternetResult fsFtpFiles::BuildList()
 				return IR_OUTOFMEMORY;
 			}
 
-			
 			m_vFiles.add (file);
 		}
 		while (InternetFindNextFile (hFind, &wfd) && m_bAbort == FALSE);

@@ -10,7 +10,7 @@
 #endif 
 
 #include <windows.h>
-#include <fsString.h>
+#include <atlstr.h>
 #include "../list.h"  
 
 enum fsLinkRelType
@@ -112,13 +112,13 @@ protected:
 	LPCSTR Parse_HTMLGiving (LPCSTR pszGiving, LPSTR* ppszValue, LPCSTR pszAddEnds = NULL);
 	
 	LPSTR m_pszHTML;	
-	fs::list <fsString> m_vUrls, m_vImgs, m_vLinkUrls, m_vFrameUrls; 
+	fs::list <CStringA> m_vUrls, m_vImgs, m_vLinkUrls, m_vFrameUrls; 
 	fs::list <fsTextRegion> m_vUrlsRgns, m_vImgsRgns, m_vLinkUrlsRgns, m_vFrameRgns;	
 	fs::list <fsLinkRelType> m_vLRTs;	
 	fs::list <int> m_vImgsLinksTo;		
 	int m_htmlLen;					
 	BOOL m_bKillDupes;				
-	fsString m_strBaseURL;
+	CStringA m_strBaseURL;
 	fsTextRegion m_BaseURLPosition;
 private:
 	int m_iTagAOpened;				

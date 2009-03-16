@@ -12,6 +12,7 @@
 #include <windows.h>
 #include <wininet.h>
 #include "fsinet.h"	
+#include <atlstr.h>
 #include <fsString.h>
 #include "fsSpeaking.h"
 
@@ -44,8 +45,8 @@ public:
 
 protected:
 	INTERNET_PORT m_uPort;	
-	fsString m_strServer;	
-	char *m_pszLastError;	
+	CStringA m_strServer;	
+	char *m_pszLastError;
 	HINTERNET m_hServer;	
 	class fsInternetSession* m_pSession;	
 };

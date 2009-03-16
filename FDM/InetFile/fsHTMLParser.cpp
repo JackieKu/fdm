@@ -800,7 +800,7 @@ LPCSTR fsHTMLParser::ParseTag_Frame_Src(LPCSTR pszTag, LPCSTR )
 	if (pszUrl)
 	{
 		fsTextRegion rgn;
-		rgn.nStart = pszTag - lstrlen (pszUrl) - m_pszHTML;
+		rgn.nStart = pszTag - strlen (pszUrl) - m_pszHTML;
 		rgn.nEnd = pszTag - m_pszHTML;
 		if (pszTag [-1] == '"' || pszTag [-1] == '\'') 
 		{

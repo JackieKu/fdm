@@ -19,29 +19,29 @@
 class fsURL  
 {
 public:
-	fsInternetResult Crack (LPCSTR pszUrl, BOOL bCheckScheme = TRUE);
-	fsInternetResult Create (INTERNET_SCHEME nScheme, LPCTSTR lpszHostName, INTERNET_PORT nPort, LPCTSTR lpszUserName, LPCTSTR lpszPassword, LPCTSTR lpszUrlPath, LPSTR lpszUrl, DWORD* pdwUrlLength);
+	fsInternetResult Crack (LPCTSTR pszUrl, BOOL bCheckScheme = TRUE);
+	fsInternetResult Create (INTERNET_SCHEME nScheme, LPCTSTR lpszHostName, INTERNET_PORT nPort, LPCTSTR lpszUserName, LPCTSTR lpszPassword, LPCTSTR lpszUrlPath, LPTSTR lpszUrl, DWORD* pdwUrlLength);
 	
 	INTERNET_PORT GetPort();
 	INTERNET_SCHEME GetInternetScheme();
-	LPCSTR GetPassword();
-	LPCSTR GetUserName();
-	LPCSTR GetScheme();
-	LPCSTR GetHostName();
-	LPCSTR GetPath();
+	LPCTSTR GetPassword();
+	LPCTSTR GetUserName();
+	LPCTSTR GetScheme();
+	LPCTSTR GetHostName();
+	LPCTSTR GetPath();
 	void FixWinInetBug();
 		
 	fsURL();
 	virtual ~fsURL();
 
 protected:
-	static void Encode (LPCSTR psz, LPSTR sz);
+	static void Encode (LPCTSTR psz, LPTSTR sz);
 	URL_COMPONENTS m_url;
-	CHAR m_szScheme [URL_SCHEME_SIZE];	
-	CHAR m_szHost [URL_HOSTNAME_SIZE];	
-	CHAR m_szUser [URL_USERNAME_SIZE];	
-	CHAR m_szPassword [URL_PASSWORD_SIZE];	
-	CHAR m_szPath [URL_PATH_SIZE];		
+	TCHAR m_szScheme [URL_SCHEME_SIZE];	
+	TCHAR m_szHost [URL_HOSTNAME_SIZE];	
+	TCHAR m_szUser [URL_USERNAME_SIZE];	
+	TCHAR m_szPassword [URL_PASSWORD_SIZE];	
+	TCHAR m_szPath [URL_PATH_SIZE];		
 };
 
 #endif 

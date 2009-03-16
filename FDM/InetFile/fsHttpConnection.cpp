@@ -28,7 +28,7 @@ fsInternetResult fsHttpConnection::Connect(LPCSTR pszServer, LPCSTR pszUser, LPC
 	if (m_hServer)
 		InternetCloseHandle (m_hServer);
 
-	m_hServer = InternetConnect (hSession, pszServer, nPort,
+	m_hServer = InternetConnectA (hSession, pszServer, nPort,
 					pszUser, pszPassword, INTERNET_SERVICE_HTTP, 0, NULL);
 
 	if (!m_hServer)

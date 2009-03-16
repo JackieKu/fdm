@@ -11,7 +11,7 @@
 
 #include <winsock.h>
 #include "fsInternetFile.h"
-#include "fsinet.h"	  
+#include "fsinet.h"
 
 enum fsFtpTransferType
 {
@@ -62,7 +62,7 @@ protected:
 	
 	SHORT OpenSocket();
 
-	fsString m_strPORT;	
+	CStringA m_strPORT;	
 	SOCKET m_sFile;		
 	SOCKET m_sRcv;		
 	void ReceiveExtError ();	

@@ -38,7 +38,7 @@ void fsSpeaking::DialogFtpResponse()
 		DWORD dwErr, dwLen = sizeof (sz);
 		
 		
-		if (InternetGetLastResponseInfo (&dwErr, sz, &dwLen))
+		if (InternetGetLastResponseInfoA (&dwErr, sz, &dwLen))
 			m_pfnDlgFunc (IFDD_FROMSERVER, sz, m_lpDlgParam1, m_lpDlgParam2);
 	}
 }
@@ -51,7 +51,7 @@ void fsSpeaking::DialogHttpResponse(HINTERNET hInet)
 		DWORD dwLen = sizeof (sz), dwIndex = 0;
 		
 		
-		if (HttpQueryInfo (hInet, HTTP_QUERY_RAW_HEADERS_CRLF, sz, &dwLen, &dwIndex))
+		if (HttpQueryInfoA (hInet, HTTP_QUERY_RAW_HEADERS_CRLF, sz, &dwLen, &dwIndex))
 			m_pfnDlgFunc (IFDD_FROMSERVER, sz, m_lpDlgParam1, m_lpDlgParam2);
 	}
 }

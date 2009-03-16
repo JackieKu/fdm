@@ -34,7 +34,7 @@ fsInternetResult fsFtpConnection::Connect(LPCSTR pszServer, LPCSTR pszUser, LPCS
 	if (m_hServer)
 		InternetCloseHandle (m_hServer);
 
-	m_hServer = InternetConnect (hSession, pszServer, nPort, pszUser, pszPassword, 
+	m_hServer = InternetConnectA (hSession, pszServer, nPort, pszUser, pszPassword, 
 					INTERNET_SERVICE_FTP, m_bPassiveMode ? INTERNET_FLAG_PASSIVE : 0,
 					NULL);
 
@@ -72,7 +72,7 @@ void fsFtpConnection::ReceiveExtError()
 	{
 		dwLen ++;	
 		fsnew (m_pszLastError, char, dwLen);	
-		InternetGetLastResponseInfo (&dwErr, m_pszLastError, &dwLen);	
+		InternetGetLastResponseInfoA (&dwErr, m_pszLastError, &dwLen);	
 	}
 }
 
@@ -83,7 +83,7 @@ fsInternetResult fsFtpConnection::SetCurrentDirectory(LPCSTR pszDir)
 	Dialog (IFDD_TOSERVER, szCmd);	
 									
 
-	if (!FtpSetCurrentDirectory (m_hServer, pszDir))
+	if (!FtpSetCurrentDirectoryA (m_hServer, pszDir))
 	{
 		fsInternetResult ir = fsWinInetErrorToIR ();
 		if (ir == IR_EXTERROR)

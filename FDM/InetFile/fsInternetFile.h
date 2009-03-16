@@ -14,7 +14,7 @@
 #include <windows.h>
 #include <wininet.h>
 #include "fsServerConnection.h"
-#include <fsString.h>
+#include <atlstr.h>
 #include "fsSpeaking.h"  
 
 enum fsResumeSupportType
@@ -73,14 +73,14 @@ public:
 protected:
 	fsResumeSupportType m_enRST;		
 	LPSTR m_pszLastError;		
-	fsString m_strContentType;	
+	CStringA m_strContentType;	
 	BOOL m_bContentTypeValid;	
 	FILETIME m_date;			
 	BOOL m_bDateValid;			
 	UINT64 m_uFileSize;			
 	HINTERNET m_hFile;			
 	fsInternetServerConnection *m_pServer;	
-	fsString m_strSuggFileName;	
+	CStringA m_strSuggFileName;	
 };
 
 #endif 

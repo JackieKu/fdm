@@ -25,3 +25,5 @@ CVS/
 /FDM/FDMCustomized/FDMCustIEBtn/FDMCustIEBtn.tlb
 /FDM/FDMCustomized/FDMCustIEBtn/FDMCustIEBtn_i.c
 /FDM/FDMCustomized/FDMCustIEBtn/FDMCustIEBtn_p.c
+
+*.pl

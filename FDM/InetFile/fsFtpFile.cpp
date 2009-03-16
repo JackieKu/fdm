@@ -73,7 +73,7 @@ void fsFtpFile::ReceiveExtError()
 	{
 		dwLen++;
 		fsnew (m_pszLastError, char, dwLen);
-		InternetGetLastResponseInfo (&dwErr, m_pszLastError, &dwLen);
+		InternetGetLastResponseInfoA (&dwErr, m_pszLastError, &dwLen);
 	}
 }
 
@@ -137,10 +137,8 @@ SHORT fsFtpFile::OpenSocket()
 
 	listen (m_sRcv, 1); 
 
-	CHAR ipAddr [100];
-	sprintf (ipAddr, "%d,%d,%d,%d,%d,%d", (int) (BYTE) he->h_addr_list [0][0], (int) (BYTE) he->h_addr_list [0][1], (int) (BYTE) he->h_addr_list [0][2], (int) (BYTE) he->h_addr_list [0][3],
+	m_strPORT.Format("%d,%d,%d,%d,%d,%d", (int) (BYTE) he->h_addr_list [0][0], (int) (BYTE) he->h_addr_list [0][1], (int) (BYTE) he->h_addr_list [0][2], (int) (BYTE) he->h_addr_list [0][3],
 					DWORD (port) >> 8, DWORD (port) & 0xff);
-	m_strPORT = ipAddr; 
 
 	return port;
 }
@@ -294,7 +292,7 @@ fsInternetResult fsFtpFile::QuerySize(LPCSTR pszFilePath)
 	if (bListOK == FALSE)
 	{
 		
-		lstrcpy (szCmd, "TYPE I");
+		strcpy (szCmd, "TYPE I");
 		Dialog (IFDD_TOSERVER, szCmd);	
 		fsInternetResult ir;
 		if (!FtpCommand (hServer, FALSE, FTP_TRANSFER_TYPE_BINARY, szCmd, NULL, NULL)) 
@@ -331,9 +329,9 @@ BOOL fsFtpFile::Send_LIST(LPSTR pszCmd, LPCSTR pszFile)
 	sprintf (pszCmd, "LIST %s", pszFile);
 	Dialog (IFDD_TOSERVER, pszCmd);
 
-	WIN32_FIND_DATA wfd;
+	WIN32_FIND_DATAA wfd;
 
-	HINTERNET hFind = FtpFindFirstFile (m_pServer->GetHandle (), pszFile, &wfd, INTERNET_FLAG_NO_CACHE_WRITE | 
+	HINTERNET hFind = FtpFindFirstFileA (m_pServer->GetHandle (), pszFile, &wfd, INTERNET_FLAG_NO_CACHE_WRITE | 
 		INTERNET_FLAG_RELOAD, 0);
 
 	DialogFtpResponse ();
@@ -429,7 +427,7 @@ fsInternetResult fsFtpFile::OpenEx(LPCSTR pszFilePath, UINT64 uStartPos, UINT64 
 	if (bListOK == FALSE)
 	{
 		
-		lstrcpy (szCmd, "TYPE I");
+		strcpy (szCmd, "TYPE I");
 		Dialog (IFDD_TOSERVER, szCmd);	
 		fsInternetResult ir;
 		if (!FtpCommand (hServer, FALSE, FTP_TRANSFER_TYPE_BINARY, szCmd, NULL, NULL)) 
@@ -610,5 +608,5 @@ BOOL fsFtpFile::FtpCommand(HINTERNET hConnect, BOOL fExpectResponse, DWORD dwFla
 		pszCommand = szCmd;
 	}
 
-	return ::FtpCommand (hConnect, fExpectResponse, dwFlags, pszCommand, dwContext, phFtpCommand);
+	return ::FtpCommandA (hConnect, fExpectResponse, dwFlags, pszCommand, dwContext, phFtpCommand);
 }
