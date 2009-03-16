@@ -16,7 +16,7 @@ public:
 	virtual CString get_PageShortTitle () = NULL;
 	virtual BOOL Apply () = NULL;
 
-	LPCSTR get_Template();
+	LPCTSTR get_Template();
 
 	CDlg_Options_Page(UINT u, CWnd* wnd);
 	virtual ~CDlg_Options_Page();

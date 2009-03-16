@@ -17,7 +17,7 @@ public:
 	
 	HRESULT RegisterServer (bool bRegister);
 	
-	virtual bool Load(LPCSTR pszDll);
+	virtual bool Load(LPCTSTR pszDll);
 
 	vmsComDLL();
 	virtual ~vmsComDLL();

@@ -18,7 +18,7 @@ class vmsImage
 {
 public:
 	
-	HRESULT Load (LPCSTR pszFile);
+	HRESULT Load (LPCTSTR pszFile);
 	
 	int get_FrameCount();
 	
@@ -40,7 +40,7 @@ public:
 
 protected:
 	
-	IImgCtx* LoadImage (LPCSTR pszFile);
+	IImgCtx* LoadImage (LPCTSTR pszFile);
 	IImgCtx* m_pImage;	
 	
 	std::vector <IImgCtx*> m_vFrames;

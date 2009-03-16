@@ -78,9 +78,9 @@ void CUploadsWnd::Plugin_GetToolBarInfo(wgTButtonInfo **ppButtons, int *pcButton
 {
 	static wgTButtonInfo btns [] = 
 	{
-		wgTButtonInfo (ID_UPL_CREATENEW, TBSTYLE_BUTTON, ""),
-		wgTButtonInfo (ID_UPL_START, TBSTYLE_BUTTON, ""),
-		wgTButtonInfo (ID_UPL_STOP, TBSTYLE_BUTTON, ""),
+		wgTButtonInfo (ID_UPL_CREATENEW, TBSTYLE_BUTTON, _T("")),
+		wgTButtonInfo (ID_UPL_START, TBSTYLE_BUTTON, _T("")),
+		wgTButtonInfo (ID_UPL_STOP, TBSTYLE_BUTTON, _T("")),
 		
 	};
 
@@ -115,7 +115,7 @@ void CUploadsWnd::Plugin_GetMenuViewItems(wgMenuViewItem **ppItems, int *)
 	*ppItems = NULL;
 }
 
-void CUploadsWnd::Plugin_GetPluginNames(LPCSTR *ppszLong, LPCSTR *ppszShort)
+void CUploadsWnd::Plugin_GetPluginNames(LPCTSTR *ppszLong, LPCTSTR *ppszShort)
 {
 	static CString strName;
 	strName = LSNP (L_UPLOADS);
@@ -216,12 +216,12 @@ int CUploadsWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;
 
 	vmsUploadsDll::FNSDC pfnSetCaller = (vmsUploadsDll::FNSDC) GetProcAddress (m_hUploadsDll, 
-		"_SetDllCaller");
+		_T("_SetDllCaller"));
 	ASSERT (pfnSetCaller != NULL);
 	pfnSetCaller (&m_udc);
 
 	vmsUploadsDll::FNCUW pfnCreate = (vmsUploadsDll::FNCUW) GetProcAddress (m_hUploadsDll, 
-		"_CreateUploadsWindow");
+		_T("_CreateUploadsWindow"));
 	ASSERT (pfnCreate != NULL);
 
 	m_pwndUploads = pfnCreate (this);
@@ -266,7 +266,7 @@ void CUploadsWnd::ApplyLanguageToMenuView(CMenu *menu)
 
 	UINT aCmds [] = {ID_ULLIST_1, ID_ULLIST_2, ID_ULLIST_3, ID_ULLIST_4, ID_ULLIST_5, 
 		ID_ULLIST_6, ID_ULLIST_7, ID_ULOG_1, ID_ULOG_2, ID_ULOG_3 };
-	LPCSTR apszCmds [] = {"URL", LS (L_NAME), LS (L_SIZE), LS (L_UPLOADED),
+	LPCTSTR apszCmds [] = {_T("URL"), LS (L_NAME), LS (L_SIZE), LS (L_UPLOADED),
 		LS (L_TIMELEFT), LS (L_SPEED), LS (L_ADDED),
 		LS (L_TIME), LS (L_DATE), LS (L_INFORMATION)};
 	
@@ -324,9 +324,9 @@ BOOL CUploadsWnd::LoadFumCoreDll(bool bShowUI)
 	{
 		#ifndef _DEBUG
 			CString strFP = fsGetFumProgramFilesFolder ();
-			m_hUploadsDll = LoadLibrary (strFP + "fumcore.dll");
+			m_hUploadsDll = LoadLibrary (strFP + _T("fumcore.dll"));
 		#else
-			m_hUploadsDll = LoadLibrary ("D:\\VCW\\FDM\\FDM\\Uploader\\CoreDll\\Debug\\fumcore.dll");
+			m_hUploadsDll = LoadLibrary (_T("D:\\VCW\\FDM\\FDM\\Uploader\\CoreDll\\Debug\\fumcore.dll"));
 
 		#endif
 	
@@ -335,7 +335,7 @@ BOOL CUploadsWnd::LoadFumCoreDll(bool bShowUI)
 	}
 
     vmsUploadsDll::FNGV pfnGetVersion = (vmsUploadsDll::FNGV) GetProcAddress (m_hUploadsDll,
-     	"_GetVersion");
+     	_T("_GetVersion"));
 	DWORD dwMajorVer;
     pfnGetVersion (&dwMajorVer, NULL);
 	if (dwMajorVer != vmsUploadsDll::DLL_INTERFACE_VERSION)

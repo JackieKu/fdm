@@ -18,12 +18,12 @@ struct IInStream;
 class vms7zipArchive : public vmsArchive
 {
 public:
-	virtual bool Extract (LPCSTR pszArchive, LPCSTR pszOutFolder);
+	virtual bool Extract (LPCTSTR pszArchive, LPCTSTR pszOutFolder);
 	vms7zipArchive();
 	virtual ~vms7zipArchive();
 
 protected:
-	bool Find7zipDLL(vms7zipFormatDLL &dll, LPCSTR pszArchive, bool bByExt, CMyComPtr <IInStream> &spFile, CMyComPtr <IInArchive> &spArc);
+	bool Find7zipDLL(vms7zipFormatDLL &dll, LPCTSTR pszArchive, bool bByExt, CMyComPtr <IInStream> &spFile, CMyComPtr <IInArchive> &spArc);
 };
 
 #endif 

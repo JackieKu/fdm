@@ -48,8 +48,8 @@ BOOL CMyMessageBox::OnInitDialog()
 	const int DY = 10;
 	const int BTN_DX = 3;
 	
-	ASSERT (m_strBtn1Text != "");
-	ASSERT (m_strText != "");
+	ASSERT (m_strBtn1Text != _T(""));
+	ASSERT (m_strText != _T(""));
 
 	if (m_hIcon)
 		m_wndIcon.SetIcon (m_hIcon);
@@ -70,10 +70,10 @@ BOOL CMyMessageBox::OnInitDialog()
 	m_wndBtn1.GetWindowRect (&rcBtn);
 	ScreenToClient (&rcBtn);
 	dc->DrawText (m_strBtn1Text, &rcBtn1, DT_CALCRECT);
-	if (m_strBtn2Text != "")
+	if (m_strBtn2Text != _T(""))
 	{
 		dc->DrawText (m_strBtn2Text, &rcBtn2, DT_CALCRECT);
-		if (m_strBtn3Text != "")
+		if (m_strBtn3Text != _T(""))
 			dc->DrawText (m_strBtn3Text, &rcBtn3, DT_CALCRECT);
 	}
 	int w = max (rcBtn1.Width (), rcBtn2.Width ());
@@ -103,7 +103,7 @@ BOOL CMyMessageBox::OnInitDialog()
 	m_wndMsg.GetWindowRect (&rcMsg);
 	ScreenToClient (&rcMsg);
 
-	if (m_strCheckBoxText == "")
+	if (m_strCheckBoxText == _T(""))
 		rcDlg.bottom -= rcCheckbox.Height () + DX;
 
 	if (m_hIcon == NULL)
@@ -120,9 +120,9 @@ BOOL CMyMessageBox::OnInitDialog()
 
 	
 	int BTNSW = rcBtn.Width () + LEFT + FRAME_WIDTH;
-	if (m_strBtn3Text != "")
+	if (m_strBtn3Text != _T(""))
 		BTNSW += (rcBtn.Width () + BTN_DX) * 2;
-	else if (m_strBtn2Text != "")
+	else if (m_strBtn2Text != _T(""))
 		BTNSW += rcBtn.Width () + BTN_DX;
 
 	
@@ -140,7 +140,7 @@ BOOL CMyMessageBox::OnInitDialog()
 	rcCheckbox.top = rcMsg.top + rcText.Height () + DY;
 	rcCheckbox.bottom = rcCheckbox.top + h;
 
-	if (m_strCheckBoxText != "")
+	if (m_strCheckBoxText != _T(""))
 	{
 		m_wndCheckbox.SetWindowText (m_strCheckBoxText);
 		m_wndCheckbox.MoveWindow (LEFT, rcCheckbox.top, rcText.Width (), rcCheckbox.Height ());
@@ -149,7 +149,7 @@ BOOL CMyMessageBox::OnInitDialog()
 	else
 		m_wndCheckbox.ShowWindow (SW_HIDE);  
 
-	if (m_strCheckBoxText != "")
+	if (m_strCheckBoxText != _T(""))
 	{
 		int h = rcBtn.Height ();
 		rcBtn.top = rcCheckbox.bottom + DY;
@@ -165,7 +165,7 @@ BOOL CMyMessageBox::OnInitDialog()
 	CRect rc; GetClientRect (&rc);
 	int BTN_X = (rc.Width () + (BTNSW - LEFT)) / 2 - rcBtn.Width ();
 
-	if (m_strBtn3Text != "")
+	if (m_strBtn3Text != _T(""))
 	{
 		m_wndBtn3.SetWindowText (m_strBtn3Text);
 		m_wndBtn3.MoveWindow (BTN_X, rcBtn.top, rcBtn.Width (), rcBtn.Height ());
@@ -174,7 +174,7 @@ BOOL CMyMessageBox::OnInitDialog()
 	else
 		m_wndBtn3.ShowWindow (SW_HIDE);
 
-	if (m_strBtn2Text != "")
+	if (m_strBtn2Text != _T(""))
 	{
 		m_wndBtn2.SetWindowText (m_strBtn2Text);
 		m_wndBtn2.MoveWindow (BTN_X, rcBtn.top, rcBtn.Width (), rcBtn.Height ());
@@ -186,7 +186,7 @@ BOOL CMyMessageBox::OnInitDialog()
 	m_wndBtn1.SetWindowText (m_strBtn1Text);
 	m_wndBtn1.MoveWindow (BTN_X, rcBtn.top, rcBtn.Width (), rcBtn.Height ());
 	
-	if (m_strBtn2Text != "")
+	if (m_strBtn2Text != _T(""))
 		m_wndBtn2.SetWindowText (m_strBtn2Text);
 	else
 		m_wndBtn2.ShowWindow (SW_HIDE);
@@ -217,7 +217,7 @@ void CMyMessageBox::OnBtn3()
 
 void CMyMessageBox::OnCancel() 
 {
-	if (m_strBtn2Text == "")
+	if (m_strBtn2Text == _T(""))
 		OnBtn1 ();
 	
 	

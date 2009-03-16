@@ -28,7 +28,7 @@ public:
 
 protected:
 	void PrepareCHMgr(CPoint point);
-	BOOL RegisterKey (LPCSTR pszKey);
+	BOOL RegisterKey (LPCTSTR pszKey);
 	void ApplyLanguage();
 
 	

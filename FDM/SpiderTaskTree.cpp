@@ -270,7 +270,7 @@ void CSpiderTaskTree::ShowContextMenu()
 	menu.LoadMenu (IDM_SPIDER_TREE);
 	CMenu *pPopup = menu.GetSubMenu (0);
 
-	CString str = LS (L_DONTDOWNLOADANDDEL); str += "\tDel";
+	CString str = LS (L_DONTDOWNLOADANDDEL); str += _T("\tDel");
 	menu.ModifyMenu (ID_DONTDOWNLOADANDDEL, MF_BYCOMMAND|MF_STRING, ID_DONTDOWNLOADANDDEL, str);
 
 	fsDLWebPage *wp = &m_vConfs [iItem].wptree->GetData ();

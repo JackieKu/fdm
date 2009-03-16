@@ -24,7 +24,7 @@ vmsMetalinkFile::~vmsMetalinkFile()
 	CoUninitialize ();
 }
 
-BOOL vmsMetalinkFile::Parse(LPCSTR pszFile)
+BOOL vmsMetalinkFile::Parse(LPCTSTR pszFile)
 {
 	USES_CONVERSION;
 
@@ -285,7 +285,7 @@ BOOL vmsMetalinkFile::ReadUrlNode(IXMLDOMNode *pNode, vmsMetalinkFile_File_Url *
 	return TRUE;
 }
 
-LPCSTR vmsMetalinkFile::get_Description()
+LPCTSTR vmsMetalinkFile::get_Description()
 {
 	return m_strDescription;
 }

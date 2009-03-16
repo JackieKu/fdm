@@ -67,7 +67,7 @@ protected:
 	
 	
 	
-	BOOL OnBeforeNavigate (LPCSTR pszUrl, BOOL bCheckALT = TRUE);
+	BOOL OnBeforeNavigate (LPCTSTR pszUrl, BOOL bCheckALT = TRUE);
 };
 
 #endif 

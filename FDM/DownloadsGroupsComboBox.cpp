@@ -39,7 +39,7 @@ void CDownloadsGroupsComboBox::Fill()
 {
 	m_wndTree.CreateEx (0, 
 #if _MSC_VER < 1300
-		WC_TREEVIEW, "", 
+		WC_TREEVIEW, _T(""), 
 #endif
 		WS_POPUP | WS_BORDER |
 		TVS_FULLROWSELECT | TVS_HASLINES |  TVS_TRACKSELECT, 
@@ -264,7 +264,7 @@ void CDownloadsGroupsComboBox::Tree_UpdateSelection(BOOL bPostNotificationMsg)
 		
 
 		m_pSelectedGroup = NULL;
-		AddString ("");
+		AddString (_T(""));
 	}
 	SetCurSel (0);	
 

@@ -26,7 +26,7 @@ fsTrayIconMgr::~fsTrayIconMgr()
 
 }
 
-BOOL fsTrayIconMgr::Create(HWND hWnd, UINT *pIcons, UINT cIcons, LPCSTR pszTooltip, UINT uCallbackMsg)
+BOOL fsTrayIconMgr::Create(HWND hWnd, UINT *pIcons, UINT cIcons, LPCTSTR pszTooltip, UINT uCallbackMsg)
 {
 	LoadIcons (pIcons, cIcons);
 	m_hWnd = hWnd;
@@ -85,7 +85,7 @@ BOOL fsTrayIconMgr::InitializeTrayIcon()
 	data.cbSize = m_cbNIDSize;
 	data.hIcon = m_pIcons [0];
 	data.hWnd = m_hWnd;
-	strcpy (data.szTip, m_strTip);
+	_tcscpy (data.szTip, m_strTip);
 	data.uCallbackMessage = m_uCallbackMsg;
 	data.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
 	data.uID = m_nID = 0;
@@ -102,7 +102,7 @@ void fsTrayIconMgr::TestIcon()
 	}
 }
 
-BOOL fsTrayIconMgr::ShowBalloon(LPCSTR pszInfo, LPCSTR pszInfoTitle, DWORD dwNiifIcon)
+BOOL fsTrayIconMgr::ShowBalloon(LPCTSTR pszInfo, LPCTSTR pszInfoTitle, DWORD dwNiifIcon)
 {
 	if (GetShell32Version () < 5)
 		return FALSE;
@@ -116,19 +116,19 @@ BOOL fsTrayIconMgr::ShowBalloon(LPCSTR pszInfo, LPCSTR pszInfoTitle, DWORD dwNii
 	
 	if (strlen (pszInfo) > 255)
 	{
-		strncpy (data.szInfo, pszInfo, 255);
+		_tcsncpy (data.szInfo, pszInfo, 255);
 		data.szInfo [255] = 0;
 	}
 	else
-		strcpy (data.szInfo, pszInfo);
+		_tcscpy (data.szInfo, pszInfo);
 
 	if (strlen (pszInfoTitle) > 63)
 	{
-		strncpy (data.szInfoTitle, pszInfoTitle, 63);
+		_tcsncpy (data.szInfoTitle, pszInfoTitle, 63);
 		data.szInfoTitle [63] = 0;
 	}
 	else
-		strcpy (data.szInfoTitle, pszInfoTitle);
+		_tcscpy (data.szInfoTitle, pszInfoTitle);
 
 	data.dwInfoFlags = dwNiifIcon;
 	data.uTimeout = UINT_MAX;

@@ -27,7 +27,7 @@ struct vmsAppVersionPart
 			cPreZeros = 0;
 			if (dwVal)
 			{
-				while (*ptsz++ == '0')
+				while (*ptsz++ == _T('0'))
 					cPreZeros++;
 			}
 		}

@@ -28,7 +28,7 @@ vmsAnimatedGIF::~vmsAnimatedGIF()
 	Free ();
 }
 
-BOOL vmsAnimatedGIF::Load(LPCSTR pszFile)
+BOOL vmsAnimatedGIF::Load(LPCTSTR pszFile)
 {
 	HANDLE hFile = CreateFile (pszFile, GENERIC_READ, FILE_SHARE_READ,
 		NULL, OPEN_EXISTING, 0, NULL);
@@ -43,7 +43,7 @@ BOOL vmsAnimatedGIF::Load(LPCSTR pszFile)
 		return FALSE;
 	m_bAutoFree = TRUE;
 
-	char *pData = reinterpret_cast<char*>(GlobalLock(m_hGIF));
+	TCHAR *pData = reinterpret_cast<TCHAR*>(GlobalLock(m_hGIF));
 	if (!pData)
 	{
 		CloseHandle (hFile);
@@ -456,7 +456,7 @@ HGLOBAL vmsAnimatedGIF::GetNextGraphicBlock(UINT *pBlockLen, UINT *pDelay, SIZE 
 	return hGlobal;
 }
 
-int vmsAnimatedGIF::SaveGIFFrames(LPCSTR pszFileTemplate)
+int vmsAnimatedGIF::SaveGIFFrames(LPCTSTR pszFileTemplate)
 {
 	UINT nBlockLen;
 	HGLOBAL hFrameData;
@@ -471,7 +471,7 @@ int vmsAnimatedGIF::SaveGIFFrames(LPCSTR pszFileTemplate)
 				&frame.m_nDelay, &frame.m_frameSize,
 				&frame.m_frameOffset, &frame.m_nDisposal)) != NULL)
 	{
-		char szFile [MY_MAX_PATH];
+		TCHAR szFile [MY_MAX_PATH];
 		wsprintf (szFile, pszFileTemplate, nCurFrame);
 		if (FALSE == WriteDataOnDisk (szFile, hFrameData, nBlockLen))
 			break;
@@ -492,9 +492,9 @@ BOOL vmsAnimatedGIF::Load()
 	
 	m_pGIFHeader = (TGIFHeader*) m_pRawData;
 
-	if ((memcmp(&m_pGIFHeader->m_cSignature,"GIF", 3) != 0) &&
-			((memcmp(&m_pGIFHeader->m_cVersion,"87a", 3) != 0) ||
-		(memcmp(&m_pGIFHeader->m_cVersion,"89a", 3) != 0)) )
+	if ((memcmp(&m_pGIFHeader->m_cSignature,_T("GIF"), 3) != 0) &&
+			((memcmp(&m_pGIFHeader->m_cVersion,_T("87a"), 3) != 0) ||
+		(memcmp(&m_pGIFHeader->m_cVersion,_T("89a"), 3) != 0)) )
 	{
 		GlobalUnlock (m_hGIF);
 		return FALSE;
@@ -534,7 +534,7 @@ BOOL vmsAnimatedGIF::Load()
 	return TRUE;
 }
 
-BOOL vmsAnimatedGIF::WriteDataOnDisk(LPCSTR pszFile, HGLOBAL hData, DWORD dwSize)
+BOOL vmsAnimatedGIF::WriteDataOnDisk(LPCTSTR pszFile, HGLOBAL hData, DWORD dwSize)
 {
 	HANDLE hFile = CreateFile (pszFile, GENERIC_WRITE, 0, NULL,
 		CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);

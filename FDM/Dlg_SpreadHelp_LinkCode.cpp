@@ -48,7 +48,7 @@ BOOL CDlg_SpreadHelp_LinkCode::OnInitDialog()
 	m_bRunning = TRUE;
 
 	m_fntFDM.CreateFont (15, 0, 0, 0, FW_NORMAL, 0, TRUE, 0, DEFAULT_CHARSET,
-		0, 0, 0, 0, "MS Sans Serif");
+		0, 0, 0, 0, _T("MS Sans Serif"));
 
 	m_bRunning = TRUE;
 	m_dwThrJob = IMGT_DRAW;
@@ -97,7 +97,7 @@ DWORD WINAPI CDlg_SpreadHelp_LinkCode::_threadImage(LPVOID lp)
 
 	pThis->m_bRunning = TRUE;
 
-	pThis->m_img.Load ("fdm_01.gif");
+	pThis->m_img.Load (_T("fdm_01.gif"));
 	pThis->m_bImgLoaded = TRUE;
 
 	if (pThis->m_img.get_FrameCount ())

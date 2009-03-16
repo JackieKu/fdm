@@ -24,7 +24,7 @@ fsInternetResult fsURL::Crack(LPCSTR pszUrl, BOOL bCheckScheme)
 	else if (lstrcmpi (pszUrl, "ftp://") == 0)
 		pszUrl = "ftp://url";
 	else if (lstrcmpi (pszUrl, "https://") == 0)
-		pszUrl = "https://url";  
+		pszUrl = "https://url";
 
 	DWORD urlLen = strlen (pszUrl) * 2;
 	CHAR *pszCanUrl = NULL;
@@ -33,8 +33,6 @@ fsInternetResult fsURL::Crack(LPCSTR pszUrl, BOOL bCheckScheme)
 	
 	if (*pszUrl == '"' || *pszUrl == '\'')
 	{
-		
-		
 		strUrl = pszUrl + 1;
 		if (strUrl [0] == 0)
 			return IR_BADURL;
@@ -55,7 +53,6 @@ fsInternetResult fsURL::Crack(LPCSTR pszUrl, BOOL bCheckScheme)
 
 	if (strnicmp (pszUrl, "file://", 7)) 
 	{
-		
 		if (!InternetCanonicalizeUrl (pszUrl, pszCanUrl, &urlLen, ICU_BROWSER_MODE))
 		{
 			delete pszCanUrl;
@@ -102,8 +99,6 @@ fsInternetResult fsURL::Crack(LPCSTR pszUrl, BOOL bCheckScheme)
 		return fsWinInetErrorToIR ();
 	}
 
-	
-
 	delete pszCanUrl;
 	
 	if (bCheckScheme)	
@@ -120,17 +115,14 @@ fsInternetResult fsURL::Crack(LPCSTR pszUrl, BOOL bCheckScheme)
 _lFileUrl:
 	if (m_url.nScheme == INTERNET_SCHEME_FILE)
 	{
-		
 		if (m_szPath [0] == '\\' && m_szPath [1] == '\\') 
-														
 		{
-			
 			size_t iPathStart = strcspn (m_szPath + 2, "\\/") + 2; 
 			if (iPathStart == strlen (m_szPath))
 				return IR_BADURL;
 			strncpy (m_szHost, m_szPath + 2, iPathStart - 2); 
 			m_szHost [iPathStart - 2] = 0;
-			strcpy (m_szPath, m_szPath + iPathStart);	
+			strcpy (m_szPath, m_szPath + iPathStart);
 		}
 	}
 
@@ -259,7 +251,7 @@ void fsURL::Encode(LPCSTR psz, LPSTR sz)
 
 		if (c == ':' || c == '@' || c == '%')
 		{
-			sprintf (sz2, "%%%x", (int)(BYTE)c);		
+			sprintf (sz2, "%%%x", (int)(BYTE)c);
 		}
 		else
 		{

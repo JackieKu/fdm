@@ -20,9 +20,9 @@ public:
 	
 	int Get_ParameterCount();
 	
-	LPCSTR Get_Parameter(int iIndex);
+	LPCTSTR Get_Parameter(int iIndex);
 	
-	LPCSTR Get_ParameterValue (int iIndex);
+	LPCTSTR Get_ParameterValue (int iIndex);
 	
 	fsCommandLineParser();
 	virtual ~fsCommandLineParser();

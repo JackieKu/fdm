@@ -24,7 +24,7 @@ vmsUploadsDllCaller::~vmsUploadsDllCaller()
 
 }
 
-LPCSTR vmsUploadsDllCaller::GetTranslatedString(int nId)
+LPCTSTR vmsUploadsDllCaller::GetTranslatedString(int nId)
 {
 	return LS (nId);
 }
@@ -34,7 +34,7 @@ vmsUploadsDll::vmsDllCallerSettings* vmsUploadsDllCaller::GetSettings()
 	return &m_stgs;
 }
 
-void vmsUploadsDllCaller::IRToStr(int ir, char *sz, UINT cch)
+void vmsUploadsDllCaller::IRToStr(int ir, TCHAR *sz, UINT cch)
 {
 	fsIRToStr ((fsInternetResult)ir, sz, cch);
 }
@@ -81,17 +81,17 @@ vmsUploadsDll::vmsDllPersist* vmsUploadsDllCaller::GetPersist()
 	return &m_persist;
 }
 
-void vmsUploadsDllCaller::GetDataFilePath(LPCSTR pszName, LPSTR pszResult)
+void vmsUploadsDllCaller::GetDataFilePath(LPCTSTR pszName, LPTSTR pszResult)
 {
 	_tcscpy (pszResult, fsGetDataFilePath (pszName));
 }
 
-void vmsUploadsDllCaller::GetCommonFilesFolder(LPSTR psz)
+void vmsUploadsDllCaller::GetCommonFilesFolder(LPTSTR psz)
 {
 	_tcscpy (psz, fsGetFumProgramFilesFolder ());
 }
 
-BOOL vmsUploadsDllCaller::OnBeforeUpload(LPSTR, bool*)
+BOOL vmsUploadsDllCaller::OnBeforeUpload(LPTSTR, bool*)
 {
 	return TRUE;
 }

@@ -20,8 +20,8 @@ public:
 public:
 	UINT getId();
 	float getProgress();
-	void getUrl (LPSTR pszUrl);
-	void getFileName (LPSTR pszFileName);
+	void getUrl (LPTSTR pszUrl);
+	void getFileName (LPTSTR pszFileName);
 	void DeleteFileOnDisk ();
 	void DeleteDownload (BOOL bAskConfirmation);
 	void PerformCommand (vmsFdmApiDownloadCommand enCmd);

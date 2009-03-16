@@ -13,9 +13,9 @@ class fsClipboardMgr
 {
 public:
 	
-	BOOL Text (LPCSTR psz);
+	BOOL Text (LPCTSTR psz);
 	
-	LPCSTR Text();
+	LPCTSTR Text();
 	
 	void Initialize (HWND hWnd);
 

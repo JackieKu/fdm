@@ -63,7 +63,7 @@ void CDlgExportDownloads::ApplyLanguage()
 	};
 
 	CString str = _LngMgr.GetStringNP (L_EXPORT);
-	str += "...";
+	str += _T("...");
 	SetDlgItemText (IDC__EXPORT, str);
 
 	_LngMgr.ApplyLanguage (this, lnginfo, sizeof (lnginfo) / sizeof (fsDlgLngInfo), L_EXPORTLISTOFDLDS);
@@ -166,25 +166,25 @@ void CDlgExportDownloads::ExportDownloads(int iWhich, BOOL bNoDone, BOOL bAppend
 	if (vpDlds.size ())
 	{
 		CString strFilter;
-		strFilter.Format ("%s (*.txt)|*.txt|%s (*.xml)|*.xml||", LS (L_URLLISTFILES), LS (L_DLINFOLISTFILES));
+		strFilter.Format (_T("%s (*.txt)|*.txt|%s (*.xml)|*.xml||"), LS (L_URLLISTFILES), LS (L_DLINFOLISTFILES));
 		UINT flags = OFN_NOCHANGEDIR;
 		if (bAppend == FALSE)
 			flags |= OFN_OVERWRITEPROMPT;
-		CFileDialog dlg (FALSE, "txt", NULL, flags, strFilter, NULL);
+		CFileDialog dlg (FALSE, _T("txt"), NULL, flags, strFilter, NULL);
 
 		if (_DlgMgr.DoModal (&dlg) == IDCANCEL)
 			return;
 
 		
 
-		if (dlg.GetFileExt ().CollateNoCase ("txt") == 0)
+		if (dlg.GetFileExt ().CollateNoCase (_T("txt")) == 0)
 			ExportDownloads_ToURLListFile (dlg.GetPathName (), &vpDlds, bAppend);
 		else
 			ExportDownloads_ToDLInfoListFile (dlg.GetPathName (), &vpDlds, bAppend);
 	}
 }
 
-BOOL CDlgExportDownloads::ExportDownloads_ToURLListFile(LPCSTR pszFile, DLDS_LIST* pvpDlds, BOOL bAppend)
+BOOL CDlgExportDownloads::ExportDownloads_ToURLListFile(LPCTSTR pszFile, DLDS_LIST* pvpDlds, BOOL bAppend)
 {
 	CStdioFile file;
 
@@ -206,7 +206,7 @@ BOOL CDlgExportDownloads::ExportDownloads_ToURLListFile(LPCSTR pszFile, DLDS_LIS
 	{
 		try {
 			file.WriteString (pvpDlds->at (i)->pMgr->get_URL ());
-			file.WriteString ("\n");
+			file.WriteString (_T("\n"));
 		} 
 		catch (...)
 		{
@@ -217,7 +217,7 @@ BOOL CDlgExportDownloads::ExportDownloads_ToURLListFile(LPCSTR pszFile, DLDS_LIS
 	return TRUE;
 }
 
-BOOL CDlgExportDownloads::ExportDownloads_ToDLInfoListFile(LPCSTR pszFile, DLDS_LIST* pvpDlds, BOOL bAppend)
+BOOL CDlgExportDownloads::ExportDownloads_ToDLInfoListFile(LPCTSTR pszFile, DLDS_LIST* pvpDlds, BOOL bAppend)
 {
 	IXMLDOMDocumentPtr spXML;
 	IXMLDOMNodePtr spNode, spNode2;
@@ -256,7 +256,7 @@ BOOL CDlgExportDownloads::ExportDownloads_ToDLInfoListFile(LPCSTR pszFile, DLDS_
 	spXML->get_xml (&bstr);
 
 	CString str = bstr;
-	str.Replace ("><", ">\n<");
+	str.Replace (_T("><"), _T(">\n<"));
 
 	bstr = str;
 
@@ -290,7 +290,7 @@ BOOL CDlgExportDownloads::ExportDownload_ToXML(IXMLDOMDocument *pDoc, IXMLDOMNod
 	spNode->put_nodeTypedValue (COleVariant (dld->pMgr->get_URL ()));
 	spNodeDL->appendChild (spNode, &spNodeTmp);
 
-	if (dld->strComment != "")
+	if (dld->strComment != _T(""))
 	{
 		spNode = NULL; spNodeTmp = NULL;
 		pDoc->createNode (COleVariant ((long)NODE_ELEMENT), L"comment", NULL, &spNode);

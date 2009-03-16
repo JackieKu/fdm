@@ -42,8 +42,8 @@ enum fsWhenToStartType
 
 struct fsProgramInfo
 {
-	LPSTR pszName;		
-	LPSTR pszArgs;		
+	LPTSTR pszName;		
+	LPTSTR pszArgs;		
 };  
 
 enum fsShutdownType
@@ -63,7 +63,7 @@ struct fsShutdown
 
 struct fsDialInfo
 {
-	LPSTR pszConnection;	
+	LPTSTR pszConnection;	
 	UINT  cAttempts;		
 	UINT  cPauseBetween;	
 	DWORD dwHangupLess;		
@@ -98,7 +98,7 @@ struct fsWhatToStart
 		fsDialInfo dial;  
 		
 		
-		LPSTR pszHangupConnection;
+		LPTSTR pszHangupConnection;
 		fsRestrainAllDlds enRAD; 
 	};
 };  
@@ -171,21 +171,21 @@ enum fsExternalEvent
 };    
 
 #define SCHEDULERFILE_CURRENT_VERSION	(2)
-#define SCHEDULERFILE_SIG     "FDM Scheduler Tasks"
+#define SCHEDULERFILE_SIG     _T("FDM Scheduler Tasks")
 struct fsSchedulerFileHdr
 {
-	char szSig [sizeof (SCHEDULERFILE_SIG) + 1];
+	TCHAR szSig [sizeof (SCHEDULERFILE_SIG) + 1];
 	WORD wVer;
 	
 	fsSchedulerFileHdr ()
 	{
-		strcpy (szSig, SCHEDULERFILE_SIG);
+		_tcscpy (szSig, SCHEDULERFILE_SIG);
 		wVer = SCHEDULERFILE_CURRENT_VERSION;
 	}
 };      
 
 typedef void (*fntScheduleMgrEvents)(fsSchedule *task, fsScheduleMgrEvent ev, LPVOID lp);
-typedef void (*fntScheduleMgrEventDesc)(LPCSTR pszEvent, fsScheduleMgrEventType type, LPVOID lp);
+typedef void (*fntScheduleMgrEventDesc)(LPCTSTR pszEvent, fsScheduleMgrEventType type, LPVOID lp);
 
 class fsScheduleMgr
 {
@@ -248,7 +248,7 @@ public:
 
 protected:
 	
-	void Event (LPCSTR pszEvent, fsScheduleMgrEventType enType = SMET_S);
+	void Event (LPCTSTR pszEvent, fsScheduleMgrEventType enType = SMET_S);
 	void Event (fsSchedule* task, fsScheduleMgrEvent ev);
 	
 

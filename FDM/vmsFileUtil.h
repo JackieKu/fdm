@@ -17,27 +17,27 @@ class vmsFileUtil
 public:
 	
 	
-	static void BuildPath (LPCSTR pszPath);
+	static void BuildPath (LPCTSTR pszPath);
 	
-	static fsString GetPathFromPathName (LPCSTR pszPathName);
+	static fsString GetPathFromPathName (LPCTSTR pszPathName);
 	
-	static void BuildPathToFile (LPCSTR pszFileName);
+	static void BuildPathToFile (LPCTSTR pszFileName);
 	
 	
-	static void GetAppDataPath (LPCSTR pszAppName, LPSTR szPath);
+	static void GetAppDataPath (LPCTSTR pszAppName, LPTSTR szPath);
 	
-	static void MakePathOK (LPSTR szPath, bool bNeedBackslashAtEnd = true);
+	static void MakePathOK (LPTSTR szPath, bool bNeedBackslashAtEnd = true);
 	
 	
 	static void ReadHeader (vmsFile& file, fsString& strDesc, WORD& wVersion);
 	
-	static void WriteHeader (vmsFile& file, LPCSTR pszDesc, WORD wVersion);
+	static void WriteHeader (vmsFile& file, LPCTSTR pszDesc, WORD wVersion);
 	
 	static void ReadString (vmsFile& file, fsString &str);
-	static void WriteString (vmsFile& file, LPCSTR psz);
+	static void WriteString (vmsFile& file, LPCTSTR psz);
 };    
 
-inline void vmsFILE_SAVE(vmsFile& file, LPCSTR psz) {vmsFileUtil::WriteString (file, psz);}
+inline void vmsFILE_SAVE(vmsFile& file, LPCTSTR psz) {vmsFileUtil::WriteString (file, psz);}
 inline void vmsFILE_SAVE(vmsFile& file, int iValue){file.Write (&iValue, sizeof (int));}
 inline void vmsFILE_SAVE(vmsFile& file, UINT uValue){file.Write (&uValue, sizeof (UINT));}
 inline void vmsFILE_SAVE(vmsFile& file, DWORD uValue){file.Write (&uValue, sizeof (DWORD));}

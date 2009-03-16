@@ -36,7 +36,7 @@ fsSiteInfo* fsSitesMgr::GetSite(int iIndex)
 	return &m_vSites [iIndex];
 }
 
-int fsSitesMgr::FindSite(LPCSTR pszName, DWORD dwValidFor, BOOL bAllReq)
+int fsSitesMgr::FindSite(LPCTSTR pszName, DWORD dwValidFor, BOOL bAllReq)
 {
 	for (int i = 0; i < m_vSites.size (); i++)
 	{
@@ -62,7 +62,7 @@ int fsSitesMgr::FindSite(LPCSTR pszName, DWORD dwValidFor, BOOL bAllReq)
 	return -1;
 }
 
-fsSiteInfo* fsSitesMgr::FindSite2(LPCSTR pszSite, DWORD dwValidFor, BOOL bAllReq)
+fsSiteInfo* fsSitesMgr::FindSite2(LPCTSTR pszSite, DWORD dwValidFor, BOOL bAllReq)
 {
 	int iIndex = FindSite (pszSite, dwValidFor, bAllReq);
 	

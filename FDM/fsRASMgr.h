@@ -21,7 +21,7 @@ public:
 	
 	UINT GetEntriesCount();
 	
-	LPCSTR GetEntry (UINT nEntry);
+	LPCTSTR GetEntry (UINT nEntry);
 
 	
 	

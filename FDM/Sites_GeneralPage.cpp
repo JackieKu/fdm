@@ -321,7 +321,7 @@ void CSites_GeneralPage::ApplyLanguage()
 		fsDlgLngInfo (IDC_DONTSENDLIST2, L_DONTRETRFILEDATEFROMSERV),
 	};
 
-	CString str; str = LS (L_SITENAME); str += ':';
+	CString str; str = LS (L_SITENAME); str += _T(':');
 	SetDlgItemText (IDC__SITE, str);
 
 	_LngMgr.ApplyLanguage (this, lnginfo, sizeof (lnginfo) / sizeof (fsDlgLngInfo), 0);

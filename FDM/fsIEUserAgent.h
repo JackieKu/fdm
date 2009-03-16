@@ -12,8 +12,8 @@
 class fsIEUserAgent  
 {
 public:
-	void RemovePP (LPCSTR pszPP);
-	void SetPP (LPCSTR pszPP);
+	void RemovePP (LPCTSTR pszPP);
+	void SetPP (LPCTSTR pszPP);
 	
 	
 	

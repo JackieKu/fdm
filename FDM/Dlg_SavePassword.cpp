@@ -36,7 +36,7 @@ END_MESSAGE_MAP()
 void CDlg_SavePassword::ApplyLanguage()
 {
 	CString str = LS (L_SAVEPASSWORD_0);
-	str += "\n"; str += LS (L_SAVEPASSWORD_1);
+	str += _T("\n"); str += LS (L_SAVEPASSWORD_1);
 	SetDlgItemText (IDC__MSG, str);
 	
 	fsDlgLngInfo lnginfo [] =  {

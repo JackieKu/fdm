@@ -71,7 +71,7 @@ BOOL CSheduler_Tasks::Create(CWnd *pParent)
 	InsertColumn (2, LS (L_NEXTSTART), LVCFMT_LEFT, 100, 0);
 	InsertColumn (3, LS (L_LASTSTART), LVCFMT_LEFT, 100, 0);
 
-	ReadState ("SchedulerTasks");
+	ReadState (_T("SchedulerTasks"));
 
 	ShowWindow (SW_SHOW);
 
@@ -355,16 +355,16 @@ void CSheduler_Tasks::ApplyLanguageToMenu(CMenu *menu)
 {
 	menu->ModifyMenu (0, MF_BYPOSITION|MF_STRING, 0, LS (L_SCHEDULER));
 	
-	CString str = LS (L_NEWTASK); str += "\tCtrl+T";
+	CString str = LS (L_NEWTASK); str += _T("\tCtrl+T");
 	menu->ModifyMenu (ID_CREATENEWTASK, MF_BYCOMMAND|MF_STRING, ID_CREATENEWTASK, str);
 	
 	menu->ModifyMenu (ID_TASKS_ENABLE, MF_BYCOMMAND|MF_STRING, ID_TASKS_ENABLE, LS (L_ENABLETASK));
 	menu->ModifyMenu (ID_TASKS_DISABLE, MF_BYCOMMAND|MF_STRING, ID_TASKS_DISABLE, LS (L_DISABLETASK));
 	
-	str = LS (L_DELETETASK); str += "\tDel";
+	str = LS (L_DELETETASK); str += _T("\tDel");
 	menu->ModifyMenu (ID_TASKS_DELETETASK, MF_BYCOMMAND|MF_STRING, ID_TASKS_DELETETASK, str);
 	
-	str = LS (L_TASKPROP); str += "\tEnter";
+	str = LS (L_TASKPROP); str += _T("\tEnter");
 	menu->ModifyMenu (ID_TASKS_PROPERTIES, MF_BYCOMMAND|MF_STRING, ID_TASKS_PROPERTIES, str);
 }
 

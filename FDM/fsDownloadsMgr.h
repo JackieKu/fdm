@@ -117,15 +117,15 @@ enum fsTUMManage
 };
 
 #define DLMGRFILE_CURRENT_VERSION	(1)
-#define DLMGRFILE_SIG		"FDM Dl Mgr SI"
+#define DLMGRFILE_SIG		_T("FDM Dl Mgr SI")
 struct fsStateInfoFileHdr
 {
-	char szSig [sizeof (DLMGRFILE_SIG) + 1];
+	TCHAR szSig [sizeof (DLMGRFILE_SIG) + 1];
 	WORD wVer;
 
 	fsStateInfoFileHdr ()
 	{
-		strcpy (szSig, DLMGRFILE_SIG);
+		_tcscpy (szSig, DLMGRFILE_SIG);
 		wVer = DLMGRFILE_CURRENT_VERSION;
 	}
 };
@@ -142,7 +142,7 @@ public:
 	DWORD m_dwPDTimeLimit;
 	BOOL AllowStartNewDownloads();
 	vmsDownloadSmartPtr get_HighestPriorityDownload();
-	void AddEvent (vmsDownloadSmartPtr dld, LPCSTR pszEvent, fsDownloadMgr_EventDescType enType = EDT_RESPONSE_S);
+	void AddEvent (vmsDownloadSmartPtr dld, LPCTSTR pszEvent, fsDownloadMgr_EventDescType enType = EDT_RESPONSE_S);
 	void DownloadStateChanged (vmsDownloadSmartPtr dld);
 	
 	
@@ -317,7 +317,7 @@ protected:
 	bool isAllowedToPDCurrently () const;
 	void ManagePD ();
 	static DWORD WINAPI _threadStartSeeding (LPVOID lp);
-	void EventEx (vmsDownloadSmartPtr dld, LPCSTR pszEvent, fsDownloadMgr_EventDescType enType, int nMaxCharsPerLine);
+	void EventEx (vmsDownloadSmartPtr dld, LPCTSTR pszEvent, fsDownloadMgr_EventDescType enType, int nMaxCharsPerLine);
 	BOOL OnDldDone_CheckDownloadIsHtmlPageWithVideo(vmsDownloadSmartPtr dld);
 	
 	void ApplyTrafficLimitForListOfDownloads (DLDS_LIST vDlds, UINT nLimit);
@@ -343,7 +343,7 @@ protected:
 		fsTicksMgr timeStateChange;
 	} m_gabInfo;
 	
-	void OnDownloadDescEventRcvd (vmsDownloadSmartPtr dld, fsDownloadMgr_EventDescType enType, LPCSTR pszEvent);
+	void OnDownloadDescEventRcvd (vmsDownloadSmartPtr dld, fsDownloadMgr_EventDescType enType, LPCTSTR pszEvent);
 	
 	BOOL OnDownloadStoppedOrDone (vmsDownloadSmartPtr dld);
 	
@@ -438,7 +438,7 @@ protected:
 	BOOL IsMaxConnsReached();
 	
 	
-	BOOL IsServerFilled (LPCSTR pszServer, DWORD dwReqProtocols);
+	BOOL IsServerFilled (LPCTSTR pszServer, DWORD dwReqProtocols);
 	
 	void InitTUM();
 	fsMutex m_mxDlList;	
@@ -458,7 +458,7 @@ protected:
 	void ManageTraffic();
 	
 	void OnSectionStop (vmsDownloadSmartPtr dld);
-	void Event (vmsDownloadSmartPtr dld, LPCSTR pszEvent, fsDownloadMgr_EventDescType enType = EDT_RESPONSE_S);
+	void Event (vmsDownloadSmartPtr dld, LPCTSTR pszEvent, fsDownloadMgr_EventDescType enType = EDT_RESPONSE_S);
 	
 	
 	BOOL OnQueryNewSection (vmsDownloadSmartPtr dld, UINT nUsingMirror);
@@ -473,7 +473,7 @@ protected:
 	fsDownloadRegSaver m_saver;	
 	DWORD Event (vmsDownloadSmartPtr dld, fsDownloadsMgrEvent ev);
 	
-	static void _DownloadMgrEventDesc (fsDownloadMgr *pMgr, fsDownloadMgr_EventDescType enType, LPCSTR pszEvent, LPVOID lp);
+	static void _DownloadMgrEventDesc (fsDownloadMgr *pMgr, fsDownloadMgr_EventDescType enType, LPCTSTR pszEvent, LPVOID lp);
 	static DWORD _DownloadMgrEvents (fsDownloadMgr *pMgr, fsDownloaderEvent enEvent, UINT uInfo, LPVOID lp);
 	DLDS_LIST m_vDownloads;	
 	DLDS_LIST m_vDeletedDownloads;	

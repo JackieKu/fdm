@@ -10,13 +10,13 @@
 #endif 
 
 #ifndef __AFXWIN_H__
-	#error include 'stdafx.h' before including this file for PCH
+	#error include _T('stdafx.h') before including this file for PCH
 #endif
 
 #include "resource.h"       
 #include "fdm.h"          
 
-const char* const _pszAppMutex = "Free Download Manager";
+const TCHAR* const _pszAppMutex = _T("Free Download Manager");
 
 class CFdmApp : public CWinApp
 {

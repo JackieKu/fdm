@@ -15,7 +15,7 @@ vmsMozillaPrefs::~vmsMozillaPrefs()
 
 }
 
-bool vmsMozillaPrefs::LoadPrefs(LPCSTR pszFile)
+bool vmsMozillaPrefs::LoadPrefs(LPCTSTR pszFile)
 {
 	Free ();
 
@@ -27,7 +27,7 @@ bool vmsMozillaPrefs::LoadPrefs(LPCSTR pszFile)
 		return false;
 	
 	int n = GetFileSize (hFile, NULL);
-	m_strPrefs.pszString = new char [n+1];
+	m_strPrefs.pszString = new TCHAR [n+1];
 
 	DWORD dw;
 	ReadFile (hFile, m_strPrefs.pszString, n, &dw, NULL);
@@ -46,14 +46,14 @@ void vmsMozillaPrefs::Free()
 	}
 }
 
-fsString vmsMozillaPrefs::get_Value(LPCSTR pszPrefName) const
+fsString vmsMozillaPrefs::get_Value(LPCTSTR pszPrefName) const
 {
-	LPCSTR pszPrefs = m_strPrefs.pszString;
+	LPCTSTR pszPrefs = m_strPrefs.pszString;
 
 	fsString strPrefName; 
-	strPrefName = "\""; 
+	strPrefName = _T("\""); 
 	strPrefName += pszPrefName;
-	strPrefName += "\""; 
+	strPrefName += _T("\""); 
 
 	
 
@@ -66,7 +66,7 @@ fsString vmsMozillaPrefs::get_Value(LPCSTR pszPrefName) const
 	pszPrefs += strPrefName.Length ();
 	
 	
-	while (*pszPrefs && *pszPrefs != ',')
+	while (*pszPrefs && *pszPrefs != _T(','))
 		pszPrefs++;
 
 	if (*pszPrefs == 0)
@@ -74,11 +74,11 @@ fsString vmsMozillaPrefs::get_Value(LPCSTR pszPrefName) const
 
 	
 	pszPrefs++;
-	while (*pszPrefs == ' ' || *pszPrefs == '\t')
+	while (*pszPrefs == _T(' ') || *pszPrefs == _T('\t'))
 		pszPrefs++;
 
 	bool bInQ = false; 
-	if (*pszPrefs == '"') {
+	if (*pszPrefs == _T('"')) {
 		pszPrefs++;
 		bInQ = true;
 	}
@@ -89,18 +89,18 @@ fsString vmsMozillaPrefs::get_Value(LPCSTR pszPrefName) const
 	
 	if (bInQ)
 	{
-		while (*pszPrefs && *pszPrefs != '"')
+		while (*pszPrefs && *pszPrefs != _T('"'))
 		{
-			char c = *pszPrefs++;
+			TCHAR c = *pszPrefs++;
 
 			
-			if (c == '\\')
+			if (c == _T('\\'))
 			{
 				switch (*pszPrefs)
 				{
-				case 'n': c = '\n'; break;
-				case 't': c = '\t'; break;
-				case 'r': c = '\r'; break;
+				case _T('n'): c = _T('\n'); break;
+				case _T('t'): c = _T('\t'); break;
+				case _T('r'): c = _T('\r'); break;
 				default: c = *pszPrefs; break;
 				}
 

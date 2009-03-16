@@ -73,16 +73,16 @@ BOOL CFVDownloads_Tasks::Create(CWnd *pwndParent)
 	m_selimages.Add (&bmp2, RGB (255, 0, 255));
 	SetSelectedImages (&m_selimages);
 
-	InsertColumn (0, "", LVCFMT_LEFT, 200, 0);
-	InsertColumn (1, "", LVCFMT_LEFT, 50, 0);
-	InsertColumn (2, "", LVCFMT_LEFT, 100, 0);
-	InsertColumn (3, "", LVCFMT_LEFT, 60, 0);
-	InsertColumn (4, "", LVCFMT_LEFT, 58, 0);
-	InsertColumn (5, "", LVCFMT_LEFT, 70, 0);
-	InsertColumn (6, "", LVCFMT_LEFT, 200, 0);
-	InsertColumn (7, "", LVCFMT_LEFT, 120, 0);
+	InsertColumn (0, _T(""), LVCFMT_LEFT, 200, 0);
+	InsertColumn (1, _T(""), LVCFMT_LEFT, 50, 0);
+	InsertColumn (2, _T(""), LVCFMT_LEFT, 100, 0);
+	InsertColumn (3, _T(""), LVCFMT_LEFT, 60, 0);
+	InsertColumn (4, _T(""), LVCFMT_LEFT, 58, 0);
+	InsertColumn (5, _T(""), LVCFMT_LEFT, 70, 0);
+	InsertColumn (6, _T(""), LVCFMT_LEFT, 200, 0);
+	InsertColumn (7, _T(""), LVCFMT_LEFT, 120, 0);
 	
-	ReadState ("FVDownloadsTasks");
+	ReadState (_T("FVDownloadsTasks"));
 	
 
 	ShowWindow (SW_SHOW);
@@ -217,24 +217,24 @@ void CFVDownloads_Tasks::ApplyLanguageToMenu(CMenu *menu)
 
 	menu->ModifyMenu (0, MF_BYPOSITION|MF_STRING, 0, LS (L_FVDOWNLOADS));
 	
-	str = LS (L_CREATEFVDLD); str += "\tIns";
+	str = LS (L_CREATEFVDLD); str += _T("\tIns");
 	menu->ModifyMenu (ID_FVDLD_CREATE, MF_BYCOMMAND|MF_STRING, ID_FVDLD_CREATE, str);
 
-	str = LS (L_STARTDLDS); str += "\tShift+S";
+	str = LS (L_STARTDLDS); str += _T("\tShift+S");
 	menu->ModifyMenu (ID_FVDLD_START, MF_BYCOMMAND|MF_STRING, ID_FVDLD_START, str);
-	str = LS (L_STOPDLDS); str += "\tShift+O";
+	str = LS (L_STOPDLDS); str += _T("\tShift+O");
 	menu->ModifyMenu (ID_FVDLD_STOP, MF_BYCOMMAND|MF_STRING, ID_FVDLD_STOP, str);
-	str = LS (L_DELETEDLD); str += "\tDel (Shift+Del)";
+	str = LS (L_DELETEDLD); str += _T("\tDel (Shift+Del)");
 	menu->ModifyMenu (ID_FVDLD_DELETE, MF_BYCOMMAND|MF_STRING, ID_FVDLD_DELETE, str);
 	menu->ModifyMenu (ID_FVDLD_LAUNCH, MF_BYCOMMAND|MF_STRING, ID_FVDLD_LAUNCH, LS (L_LAUNCHFILE));
 	menu->ModifyMenu (ID_FVDLD_CONVERT, MF_BYCOMMAND|MF_STRING, ID_FVDLD_CONVERT, LS (L_CONVERT_MEDIA_FILE));	
 	menu->ModifyMenu (ID_FVDLD_OPENFOLDER, MF_BYCOMMAND|MF_STRING, ID_FVDLD_OPENFOLDER, LS (L_OPENFOLDER));
 	menu->ModifyMenu (ID_FVDLD_PASSTODLDS, MF_BYCOMMAND|MF_STRING, ID_FVDLD_PASSTODLDS, LS (L_PASSTODLDS));
 
-	str = LS (L_AUTOSTARTDLD); str += '\t';
+	str = LS (L_AUTOSTARTDLD); str += _T('\t');
 	menu->ModifyMenu (ID_FVDLD_AUTOSTART, MF_BYCOMMAND|MF_STRING, ID_FVDLD_AUTOSTART, str);
 
-	str = LS (L_DLDPROP); str += "\tAlt+Enter";
+	str = LS (L_DLDPROP); str += _T("\tAlt+Enter");
 	menu->ModifyMenu (ID_FVDLD_PROPERTIES, MF_BYCOMMAND|MF_STRING, ID_FVDLD_PROPERTIES, str);
 }
 
@@ -542,7 +542,7 @@ void CFVDownloads_Tasks::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 	switch (nChar)
 	{
-		case 'S':
+		case _T('S'):
 			if (bShift)
 			{
 				OnFvdldStart ();
@@ -550,7 +550,7 @@ void CFVDownloads_Tasks::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 			}
 			break;
 
-		case 'O':
+		case _T('O'):
 			if (bShift)
 			{
 				OnFvdldStop ();
@@ -558,7 +558,7 @@ void CFVDownloads_Tasks::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 			}
 			break;
 
-		case 'A':
+		case _T('A'):
 			if (bCtrl)
 			{
 				int cItems = GetItemCount ();
@@ -646,7 +646,7 @@ int CFVDownloads_Tasks::OnUpdateToolBar(UINT nID)
 
 void CFVDownloads_Tasks::SaveState()
 {
-	CListCtrlEx::SaveState ("FVDownloadsTasks");
+	CListCtrlEx::SaveState (_T("FVDownloadsTasks"));
 }
 
 void CFVDownloads_Tasks::OnDeleteItem(NM_LISTVIEW *pNM)

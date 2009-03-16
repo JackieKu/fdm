@@ -15,7 +15,7 @@
 
 #define MAX_EXTS_LEN	1000    
 
-#define GRP_OTHER_NAME	"Other"  
+#define GRP_OTHER_NAME	_T("Other")  
 
 struct fsDownloadGroup
 {
@@ -32,19 +32,19 @@ struct fsDownloadGroup
 class fsDownloads_GroupsMgr
 {
 public:
-	void SetGroupFolder(int iGrp, LPCSTR pszFldr);
-	LPCSTR GetGroupFolder (int iGrp);
+	void SetGroupFolder(int iGrp, LPCTSTR pszFldr);
+	LPCTSTR GetGroupFolder (int iGrp);
 	
 	void CreateGroup (fsDownloadGroup* grp);
 	
-	void DeleteGroup (LPCSTR pszGroup);
+	void DeleteGroup (LPCTSTR pszGroup);
 	
 	
-	int FindGroupByName (LPCSTR pszName);
+	int FindGroupByName (LPCTSTR pszName);
 	
-	int FindGroupByExt (LPCSTR pszExt);
+	int FindGroupByExt (LPCTSTR pszExt);
 	
-	LPCSTR GetGroupName (int iGrp);
+	LPCTSTR GetGroupName (int iGrp);
 	
 	
 	void UpdateGroup (int iGrp, fsDownloadGroup *grp);

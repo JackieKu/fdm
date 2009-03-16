@@ -23,7 +23,7 @@ vmsAppSettingsStore::~vmsAppSettingsStore()
 
 }
 
-UINT vmsAppSettingsStore::GetProfileInt(LPCSTR pszSection, LPCSTR pszEntry, INT nDefault)
+UINT vmsAppSettingsStore::GetProfileInt(LPCTSTR pszSection, LPCTSTR pszEntry, INT nDefault)
 {
 	if (m_bUseRegistry)
 		return m_app->GetProfileInt (pszSection, pszEntry, nDefault);
@@ -33,7 +33,7 @@ UINT vmsAppSettingsStore::GetProfileInt(LPCSTR pszSection, LPCSTR pszEntry, INT 
 	return iValue;
 }
 
-BOOL vmsAppSettingsStore::WriteProfileInt(LPCSTR pszSection, LPCSTR pszEntry, int nValue)
+BOOL vmsAppSettingsStore::WriteProfileInt(LPCTSTR pszSection, LPCTSTR pszEntry, int nValue)
 {
 	if (m_bUseRegistry)
 		return m_app->WriteProfileInt (pszSection, pszEntry, nValue);
@@ -42,17 +42,17 @@ BOOL vmsAppSettingsStore::WriteProfileInt(LPCSTR pszSection, LPCSTR pszEntry, in
 	return TRUE;
 }
 
-CString vmsAppSettingsStore::GetProfileString(LPCSTR pszSection, LPCSTR pszEntry, LPCSTR pszDefault)
+CString vmsAppSettingsStore::GetProfileString(LPCTSTR pszSection, LPCTSTR pszEntry, LPCTSTR pszDefault)
 {
 	if (m_bUseRegistry)
 		return m_app->GetProfileString (pszSection, pszEntry, pszDefault);
 
-	LPCSTR pszValue = pszDefault;
+	LPCTSTR pszValue = pszDefault;
 	m_file.get_Value (pszSection, pszEntry, pszValue);
 	return pszValue;
 }
 
-BOOL vmsAppSettingsStore::WriteProfileString(LPCSTR pszSection, LPCSTR pszEntry, LPCSTR pszValue)
+BOOL vmsAppSettingsStore::WriteProfileString(LPCTSTR pszSection, LPCTSTR pszEntry, LPCTSTR pszValue)
 {
 	if (m_bUseRegistry)
 		return m_app->WriteProfileString (pszSection, pszEntry, pszValue);
@@ -61,7 +61,7 @@ BOOL vmsAppSettingsStore::WriteProfileString(LPCSTR pszSection, LPCSTR pszEntry,
 	return TRUE;
 }
 
-BOOL vmsAppSettingsStore::GetProfileBinary(LPCSTR pszSection, LPCSTR pszEntry, LPBYTE *ppData, UINT *pBytes)
+BOOL vmsAppSettingsStore::GetProfileBinary(LPCTSTR pszSection, LPCTSTR pszEntry, LPBYTE *ppData, UINT *pBytes)
 {
 	if (m_bUseRegistry)
 		return m_app->GetProfileBinary (pszSection, pszEntry, ppData, pBytes);
@@ -83,7 +83,7 @@ BOOL vmsAppSettingsStore::GetProfileBinary(LPCSTR pszSection, LPCSTR pszEntry, L
 	return TRUE;
 }
 
-BOOL vmsAppSettingsStore::WriteProfileBinary(LPCSTR pszSection, LPCSTR pszEntry, LPBYTE pbData, UINT nBytes)
+BOOL vmsAppSettingsStore::WriteProfileBinary(LPCTSTR pszSection, LPCTSTR pszEntry, LPBYTE pbData, UINT nBytes)
 {
 	if (m_bUseRegistry)
 		return m_app->WriteProfileBinary (pszSection, pszEntry, pbData, nBytes);
@@ -92,7 +92,7 @@ BOOL vmsAppSettingsStore::WriteProfileBinary(LPCSTR pszSection, LPCSTR pszEntry,
 	return TRUE;
 }
 
-void vmsAppSettingsStore::LoadSettingsFromFile(LPCSTR pszFile)
+void vmsAppSettingsStore::LoadSettingsFromFile(LPCTSTR pszFile)
 {
 	m_bUseRegistry = false;
 
@@ -108,7 +108,7 @@ void vmsAppSettingsStore::LoadSettingsFromFile(LPCSTR pszFile)
 	CloseHandle (hFile);
 }
 
-void vmsAppSettingsStore::SaveSettingsToFile(LPCSTR pszFile)
+void vmsAppSettingsStore::SaveSettingsToFile(LPCTSTR pszFile)
 {
 	HANDLE hFile = CreateFile (pszFile, GENERIC_WRITE, 0, NULL,
 		CREATE_ALWAYS, FILE_ATTRIBUTE_HIDDEN, NULL);

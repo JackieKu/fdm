@@ -22,7 +22,7 @@ vmsStringRecentList::~vmsStringRecentList()
 
 }
 
-void vmsStringRecentList::Add(LPCSTR psz)
+void vmsStringRecentList::Add(LPCTSTR psz)
 {
 	m_vList.Add (psz);
 
@@ -50,7 +50,7 @@ int vmsStringRecentList::get_Count() const
 	return m_vList.get_Count ();
 }
 
-LPCSTR vmsStringRecentList::get_String(int nIndex) const
+LPCTSTR vmsStringRecentList::get_String(int nIndex) const
 {
 	return m_vList.get_String (nIndex);
 }

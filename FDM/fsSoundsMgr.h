@@ -22,7 +22,7 @@ enum fsSoundsMgrEvent
 class fsSoundsMgr  
 {
 public:
-	void PlaySnd (LPCSTR pszSoundFile);
+	void PlaySnd (LPCTSTR pszSoundFile);
 	
 	void Event (fsSoundsMgrEvent ev);
 	void ReadSettings();

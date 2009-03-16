@@ -49,13 +49,13 @@ BOOL fsUpdateMgr::StartUpdater()
 	ZeroMemory (&pi, sizeof (pi));
 
 	CString strCmdLine;
-	strCmdLine.Format ("\"%s\" \"%s\" \"%s\" \"%s\" \"/silent\" \"0\"",
-		vmsGetAppFolder () + "updater.exe", 
-		((CFdmApp*)AfxGetApp ())->m_strAppPath + "fdm.exe", 
+	strCmdLine.Format (_T("\"%s\" \"%s\" \"%s\" \"%s\" \"/silent\" \"0\""),
+		vmsGetAppFolder () + _T("updater.exe"), 
+		((CFdmApp*)AfxGetApp ())->m_strAppPath + _T("fdm.exe"), 
 		_pszAppMutex, 
 		m_strUpdateFile);
 
-	if (FALSE == CreateProcess (NULL, (LPSTR)(LPCSTR)strCmdLine, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi))
+	if (FALSE == CreateProcess (NULL, (LPTSTR)(LPCTSTR)strCmdLine, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi))
 		return FALSE;
 
 	return TRUE;
@@ -80,12 +80,12 @@ void fsUpdateMgr::CheckForUpdate(bool bByUser)
 
 	CString strUrl = m_strUpdateUrl;
 
-	strUrl += "proupd.lst";
+	strUrl += _T("proupd.lst");
 
-	LPCSTR pszCustomizer = pFrm->get_Customizations ()->get_Customizer ();
+	LPCTSTR pszCustomizer = pFrm->get_Customizations ()->get_Customizer ();
 	if (pszCustomizer != NULL && lstrlen (pszCustomizer) != 0)
 	{
-		strUrl += "?edition=";
+		strUrl += _T("?edition=");
 		strUrl += pszCustomizer;
 	}
 
@@ -95,9 +95,9 @@ void fsUpdateMgr::CheckForUpdate(bool bByUser)
 	fsDownload_NetworkProperties *dnp = m_dldr->GetDNP ();
 
 	SAFE_DELETE_ARRAY (dp->pszFileName);
-	CString strFile = fsGetDataFilePath ("Update\\");	
-	fsnew (dp->pszFileName, char, strFile.GetLength () + 1);
-	strcpy (dp->pszFileName, strFile);
+	CString strFile = fsGetDataFilePath (_T("Update\\"));	
+	fsnew (dp->pszFileName, TCHAR, strFile.GetLength () + 1);
+	_tcscpy (dp->pszFileName, strFile);
 	dp->uMaxSections = 1;
 	dp->uMaxAttempts = 1;
 	dp->dwFlags |= DPF_DONTRESTARTIFNORESUME;
@@ -107,8 +107,8 @@ void fsUpdateMgr::CheckForUpdate(bool bByUser)
 
 	SAFE_DELETE_ARRAY (dnp->pszReferer);
 
-	fsnew (dnp->pszReferer, char, 100);
-	sprintf (dnp->pszReferer, "FDM - Build number = %s", vmsFdmAppMgr::getBuildNumber ());
+	fsnew (dnp->pszReferer, TCHAR, 100);
+	_stprintf (dnp->pszReferer, _T("FDM - Build number = %s"), vmsFdmAppMgr::getBuildNumber ());
 
 	Event (UME_CONNECTING);
 
@@ -179,20 +179,20 @@ DWORD fsUpdateMgr::_DownloadMgrEvents(fsDownloadMgr* pMgr, fsDownloaderEvent ev,
 
 void fsUpdateMgr::ProcessUpdateLstFile()
 {	
-	char szSections [10000];
+	TCHAR szSections [10000];
 	*szSections = 0;
-	char szValues [10000];
+	TCHAR szValues [10000];
 
 	if (::GetVersion () & 0x80000000)
-		FixIniFileFor9x (fsGetDataFilePath ("Update\\proupd.lst"));
+		FixIniFileFor9x (fsGetDataFilePath (_T("Update\\proupd.lst")));
 
 	
 	
 	if (0 == GetPrivateProfileSectionNames (szSections, sizeof (szSections), 
-		fsGetDataFilePath ("Update\\proupd.lst")) || 
-		atoi (szSections) <= (int)vmsFdmAppMgr::getVersion ()->m_appVersion [2].dwVal)
+		fsGetDataFilePath (_T("Update\\proupd.lst"))) || 
+		_ttoi (szSections) <= (int)vmsFdmAppMgr::getVersion ()->m_appVersion [2].dwVal)
 	{
-		ASSERT (GetPrivateProfileSectionNames (szSections, sizeof (szSections), fsGetDataFilePath ("Update\\proupd.lst")));
+		ASSERT (GetPrivateProfileSectionNames (szSections, sizeof (szSections), fsGetDataFilePath (_T("Update\\proupd.lst"))));
 		
 		_App.NewVerExists (FALSE);
 		Event (UME_NEWVERSIONNOTAVAIL);
@@ -206,60 +206,60 @@ void fsUpdateMgr::ProcessUpdateLstFile()
 	CString strCurBN;	
 	strCurBN = vmsFdmAppMgr::getBuildNumber ();
 	
-	m_strUpgSize = "";
-	m_strUpgFileName = "";
+	m_strUpgSize = _T("");
+	m_strUpgFileName = _T("");
 	m_vWN.clear ();
 
-	LPCSTR pszSect = szSections;
+	LPCTSTR pszSect = szSections;
 
 	while (*pszSect)
 	{
 		
 		GetPrivateProfileSection (pszSect, szValues, sizeof (szValues), 
-			fsGetDataFilePath ("Update\\proupd.lst"));
-		LPSTR pszValue = szValues;
+			fsGetDataFilePath (_T("Update\\proupd.lst")));
+		LPTSTR pszValue = szValues;
 
 		
-		BOOL bCommon = stricmp (pszSect, "Common") == 0;
+		BOOL bCommon = stricmp (pszSect, _T("Common")) == 0;
 
 		
-		BOOL bNewBNNow = bCommon == FALSE && strcmp (pszSect, m_strBN) == 0;
+		BOOL bNewBNNow = bCommon == FALSE && _tcscmp (pszSect, m_strBN) == 0;
 		
-		BOOL bBiggerBNNow = bCommon == FALSE && atoi (pszSect) > (int)vmsFdmAppMgr::getVersion ()->m_appVersion [2].dwVal;
+		BOOL bBiggerBNNow = bCommon == FALSE && _ttoi (pszSect) > (int)vmsFdmAppMgr::getVersion ()->m_appVersion [2].dwVal;
 
 		
 		while (*pszValue)
 		{
 			
-			LPSTR pszVVal = strchr (pszValue, '=');
+			LPTSTR pszVVal = _tcschr (pszValue, _T('='));
 			*pszVVal = 0;
 			pszVVal++;	
 
 			if (bCommon)
 			{
 				
-				if (stricmp (pszValue, "DownloadPathForFullInstall") == 0)
+				if (stricmp (pszValue, _T("DownloadPathForFullInstall")) == 0)
 				{
 					m_strDlFullInstallPath = pszVVal;
-					if (m_strDlFullInstallPath [m_strDlFullInstallPath.GetLength () - 1] != '\\' && 
-							m_strDlFullInstallPath [m_strDlFullInstallPath.GetLength () - 1] != '/')
-						m_strDlFullInstallPath += '/';
+					if (m_strDlFullInstallPath [m_strDlFullInstallPath.GetLength () - 1] != _T('\\') && 
+							m_strDlFullInstallPath [m_strDlFullInstallPath.GetLength () - 1] != _T('/'))
+						m_strDlFullInstallPath += _T('/');
 				}
 
-				if (stricmp (pszValue, "DownloadPathForUpgrades") == 0)
+				if (stricmp (pszValue, _T("DownloadPathForUpgrades")) == 0)
 				{
 					m_strDlUpgradesPath = pszVVal;
-					if (m_strDlUpgradesPath [m_strDlUpgradesPath.GetLength () - 1] != '\\' && 
-							m_strDlUpgradesPath [m_strDlUpgradesPath.GetLength () - 1] != '/')
-						m_strDlUpgradesPath += '/';
+					if (m_strDlUpgradesPath [m_strDlUpgradesPath.GetLength () - 1] != _T('\\') && 
+							m_strDlUpgradesPath [m_strDlUpgradesPath.GetLength () - 1] != _T('/'))
+						m_strDlUpgradesPath += _T('/');
 				}
 			}
 
 			if (bNewBNNow)
 			{
-				if (stricmp (pszValue, "Version") == 0)
+				if (stricmp (pszValue, _T("Version")) == 0)
 					m_strVersion = pszVVal;	
-				else if (stricmp (pszValue, "FullSize") == 0)
+				else if (stricmp (pszValue, _T("FullSize")) == 0)
 					m_strFullSize = pszVVal;	
 				else if (stricmp (pszValue, strCurBN) == 0)
 					m_strUpgSize = pszVVal;	
@@ -267,17 +267,17 @@ void fsUpdateMgr::ProcessUpdateLstFile()
 				{
 					
 					
-					if (stricmp (pszValue + strCurBN.GetLength (), "-name") == 0)
+					if (stricmp (pszValue + strCurBN.GetLength (), _T("-name")) == 0)
 						m_strUpgFileName = pszVVal;
 					
 					
-					else if (stricmp (pszValue + strCurBN.GetLength (), "-size") == 0)
+					else if (stricmp (pszValue + strCurBN.GetLength (), _T("-size")) == 0)
 						m_strUpgSize = pszVVal;
 				}
-				else if (stricmp (pszValue, "FrmtVer") == 0)
+				else if (stricmp (pszValue, _T("FrmtVer")) == 0)
 				{
 					
-					int nVer = atoi (pszVVal);
+					int nVer = _ttoi (pszVVal);
 					if (nVer != 1)
 					{
 						
@@ -291,7 +291,7 @@ void fsUpdateMgr::ProcessUpdateLstFile()
 
 			
 			
-			if (bBiggerBNNow && strncmp (pszValue, "WN", 2) == 0)
+			if (bBiggerBNNow && _tcsncmp (pszValue, _T("WN"), 2) == 0)
 				m_vWN.add (pszVVal);
 
 			pszValue = pszVVal;
@@ -321,12 +321,12 @@ void fsUpdateMgr::SetEventsFunc(fntUpdateMgrEventsFunc pfn, LPVOID lp)
 	m_lpEventsParam = lp;
 }
 
-LPCSTR fsUpdateMgr::GetVersion()
+LPCTSTR fsUpdateMgr::GetVersion()
 {
 	return m_strVersion;
 }
 
-LPCSTR fsUpdateMgr::GetBuildNumber()
+LPCTSTR fsUpdateMgr::GetBuildNumber()
 {
 	return m_strBN;
 }
@@ -339,12 +339,12 @@ void fsUpdateMgr::Stop()
 		m_bRunning = FALSE;
 }
 
-LPCSTR fsUpdateMgr::GetFullSize()
+LPCTSTR fsUpdateMgr::GetFullSize()
 {
 	return m_strFullSize;
 }
 
-LPCSTR fsUpdateMgr::GetUpgSize()
+LPCTSTR fsUpdateMgr::GetUpgSize()
 {
 	return m_strUpgSize;
 }
@@ -368,16 +368,16 @@ void fsUpdateMgr::Update(BOOL bByFull)
 
 	CString strUrl;	
 	if (bByFull)
-		strUrl.Format ("%sfdminst.exe", m_strDlFullInstallPath);
+		strUrl.Format (_T("%sfdminst.exe"), m_strDlFullInstallPath);
 	else
 	{
 		
 		if (m_strUpgFileName.GetLength () == 0)
 			
-			strUrl.Format ("%sfdm%sto%supg.exe", m_strDlUpgradesPath, vmsFdmAppMgr::getBuildNumber (), m_strBN);
+			strUrl.Format (_T("%sfdm%sto%supg.exe"), m_strDlUpgradesPath, vmsFdmAppMgr::getBuildNumber (), m_strBN);
 		else
 			
-			strUrl.Format ("%s%s", m_strDlUpgradesPath, m_strUpgFileName);
+			strUrl.Format (_T("%s%s"), m_strDlUpgradesPath, m_strUpgFileName);
 	}
 
 	m_dldr->CreateByUrl (strUrl);
@@ -385,9 +385,9 @@ void fsUpdateMgr::Update(BOOL bByFull)
 	fsDownload_Properties *dp = m_dldr->GetDP ();
 
 	SAFE_DELETE_ARRAY (dp->pszFileName);
-	CString strFile = fsGetDataFilePath ("Update\\");
-	fsnew (dp->pszFileName, char, strFile.GetLength () + 1);
-	strcpy (dp->pszFileName, strFile);
+	CString strFile = fsGetDataFilePath (_T("Update\\"));
+	fsnew (dp->pszFileName, TCHAR, strFile.GetLength () + 1);
+	_tcscpy (dp->pszFileName, strFile);
 	dp->enAER = AER_REWRITE;
 	dp->uMaxAttempts = 1;
 	*dp->pszAdditionalExt = 0;
@@ -397,7 +397,7 @@ void fsUpdateMgr::Update(BOOL bByFull)
 	m_dldr->StartDownloading ();
 }
 
-void fsUpdateMgr::_DownloadMgrDescEvents(fsDownloadMgr* , fsDownloadMgr_EventDescType , LPCSTR pszDesc, LPVOID lp)
+void fsUpdateMgr::_DownloadMgrDescEvents(fsDownloadMgr* , fsDownloadMgr_EventDescType , LPCTSTR pszDesc, LPVOID lp)
 {
 	fsUpdateMgr *pThis = (fsUpdateMgr*) lp;
 	pThis->Event (pszDesc);
@@ -409,7 +409,7 @@ void fsUpdateMgr::SetDescEventsFunc(fntUpdateMgrDescEvents pfn, LPVOID lpParam)
 	m_lpDescEventsParam = lpParam;
 }
 
-void fsUpdateMgr::Event(LPCSTR pszEvent)
+void fsUpdateMgr::Event(LPCTSTR pszEvent)
 {
 	if (m_pfnDescEvents)
 		m_pfnDescEvents (pszEvent, m_lpDescEventsParam);
@@ -417,18 +417,18 @@ void fsUpdateMgr::Event(LPCSTR pszEvent)
 
 void fsUpdateMgr::UpdateOnNextStart()
 {
-	AfxGetApp ()->WriteProfileString ("Settings\\Update", "UpdateFile", m_strUpdateFile);
+	AfxGetApp ()->WriteProfileString (_T("Settings\\Update"), _T("UpdateFile"), m_strUpdateFile);
 }
 
 BOOL fsUpdateMgr::IsStartUpdaterNeeded (BOOL bUpdaterWillBeLaunchedNow)
 {
-	m_strUpdateFile = AfxGetApp ()->GetProfileString ("Settings\\Update", "UpdateFile", "");
+	m_strUpdateFile = AfxGetApp ()->GetProfileString (_T("Settings\\Update"), _T("UpdateFile"), _T(""));
 	if (bUpdaterWillBeLaunchedNow)
-		AfxGetApp ()->WriteProfileString ("Settings\\Update", "UpdateFile", "");
+		AfxGetApp ()->WriteProfileString (_T("Settings\\Update"), _T("UpdateFile"), _T(""));
 	return m_strUpdateFile.GetLength () != 0;
 }
 
-void fsUpdateMgr::FixIniFileFor9x(LPCSTR pszIni)
+void fsUpdateMgr::FixIniFileFor9x(LPCTSTR pszIni)
 {
 	HANDLE hFile = CreateFile (pszIni, GENERIC_READ | GENERIC_WRITE, 0, NULL, 
 		OPEN_EXISTING, 0, NULL);
@@ -436,7 +436,7 @@ void fsUpdateMgr::FixIniFileFor9x(LPCSTR pszIni)
 		return;
 
 	DWORD dwLen = GetFileSize (hFile, NULL);
-	LPSTR psz = new char [dwLen + 1];
+	LPTSTR psz = new TCHAR [dwLen + 1];
 	DWORD dw;
 	if (FALSE == ReadFile (hFile, psz, dwLen, &dw, NULL))
 		return;
@@ -445,12 +445,12 @@ void fsUpdateMgr::FixIniFileFor9x(LPCSTR pszIni)
 	CString str = psz;
 	delete [] psz;
 
-	str.Replace ("\r\n", "\n");
-	str.Replace ("\n\r", "\n");
-	str.Replace ("\n", "\r\n");
+	str.Replace (_T("\r\n"), _T("\n"));
+	str.Replace (_T("\n\r"), _T("\n"));
+	str.Replace (_T("\n"), _T("\r\n"));
 
 	SetFilePointer (hFile, 0, NULL, FILE_BEGIN);
-	WriteFile (hFile, (LPCSTR)str, str.GetLength (), &dw, NULL);
+	WriteFile (hFile, (LPCTSTR)str, str.GetLength (), &dw, NULL);
 	SetEndOfFile (hFile);
 
 	CloseHandle (hFile);

@@ -44,7 +44,7 @@ vmsBtSession* vmsBtSupport::get_Session()
 	
 	if (_pfnSession == NULL)
 	{
-		_pfnSession = (FNS) m_dllBt.GetProcAddress ("vmsBt_getSession");
+		_pfnSession = (FNS) m_dllBt.GetProcAddress (_T("vmsBt_getSession"));
 		if (_pfnSession)
 		{
 			_pfnSession ()->SetUserAgent (vmsFdmAppMgr::getAppAgentName ());
@@ -142,7 +142,7 @@ BOOL vmsBtSupport::SaveState()
 	if (m_pbDHTstate == NULL)
 		return TRUE;
 
-	HANDLE hFile = CreateFile (fsGetDataFilePath ("btdht.sav"), GENERIC_WRITE,
+	HANDLE hFile = CreateFile (fsGetDataFilePath (_T("btdht.sav")), GENERIC_WRITE,
 		0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_HIDDEN, NULL);
 	if (hFile == INVALID_HANDLE_VALUE)
 		return FALSE;
@@ -157,10 +157,10 @@ BOOL vmsBtSupport::SaveState()
 
 BOOL vmsBtSupport::LoadState()
 {
-	if (GetFileAttributes (fsGetDataFilePath ("btdht.sav")) == DWORD (-1))
+	if (GetFileAttributes (fsGetDataFilePath (_T("btdht.sav"))) == DWORD (-1))
 		return TRUE;
 
-	HANDLE hFile = CreateFile (fsGetDataFilePath ("btdht.sav"), GENERIC_READ,
+	HANDLE hFile = CreateFile (fsGetDataFilePath (_T("btdht.sav")), GENERIC_READ,
 		0, NULL, OPEN_EXISTING, 0, NULL);
 	if (hFile == INVALID_HANDLE_VALUE)
 		return FALSE;
@@ -183,7 +183,7 @@ void vmsBtSupport::Shutdown()
 		return;
 
 	typedef void (WINAPI *FNS)();
-	FNS pfn = (FNS) m_dllBt.GetProcAddress ("vmsBt_Shutdown");
+	FNS pfn = (FNS) m_dllBt.GetProcAddress (_T("vmsBt_Shutdown"));
 	if (pfn)
 		pfn ();
 
@@ -213,13 +213,13 @@ void vmsBtSupport::ApplyProxySettings()
 		strPwd = _App.HttpProxy_UserName ();
 		if (strIp.IsEmpty () == FALSE)
 		{
-			char sz [1000];
-			strcpy (sz, strIp);
-			LPSTR pszPort = strrchr (sz, ':');
+			TCHAR sz [1000];
+			_tcscpy (sz, strIp);
+			LPTSTR pszPort = _tcsrchr (sz, _T(':'));
 			if (pszPort)
 			{
 				*pszPort++ = 0;
-				nPort = atoi (pszPort);
+				nPort = _ttoi (pszPort);
 				strIp = sz;
 			}
 		}
@@ -235,32 +235,32 @@ void vmsBtSupport::ApplyProxySettings()
 
 void vmsBtSupport::GetIeProxySettings(fsString &strIp, fsString &strUser, fsString &strPwd, int &nPort)
 {
-	strIp = strUser = strPwd = ""; 
+	strIp = strUser = strPwd = _T(""); 
 	nPort = 0;
 
 	CRegKey key;
 	if (ERROR_SUCCESS != key.Open (HKEY_CURRENT_USER, 
-			"Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", 
+			_T("Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings"), 
 			KEY_READ))
 		return;
 
 	DWORD dw;
-	if (ERROR_SUCCESS != key.QueryValue (dw, "ProxyEnable"))
+	if (ERROR_SUCCESS != key.QueryValue (dw, _T("ProxyEnable")))
 		return;
 	if (dw == FALSE)
 		return;
 
-	char szProxy [1000];
+	TCHAR szProxy [1000];
 	dw = sizeof (szProxy);
-	if (ERROR_SUCCESS != key.QueryValue (szProxy, "ProxyServer", &dw))
+	if (ERROR_SUCCESS != key.QueryValue (szProxy, _T("ProxyServer"), &dw))
 		return;
 
-	LPSTR pszPort = strrchr (szProxy, ':');
+	LPTSTR pszPort = _tcsrchr (szProxy, _T(':'));
 	if (pszPort)
 	{
 		*pszPort = 0;
 		pszPort++;
-		nPort = atoi (pszPort);
+		nPort = _ttoi (pszPort);
 	}
 
 	strIp = szProxy;
@@ -268,14 +268,14 @@ void vmsBtSupport::GetIeProxySettings(fsString &strIp, fsString &strUser, fsStri
 
 void vmsBtSupport::GetFirefoxProxySettings(fsString &strIp, fsString &strUser, fsString &strPwd, int &nPort)
 {
-	strIp = strUser = strPwd = ""; 
+	strIp = strUser = strPwd = _T(""); 
 	nPort = 0;
 
 	if (1 != _App.FirefoxSettings_Proxy_Type ())
 		return;
 
-	strIp = _App.FirefoxSettings_Proxy_Addr ("http");
-	nPort = _App.FirefoxSettings_Proxy_Port ("http");
+	strIp = _App.FirefoxSettings_Proxy_Addr (_T("http"));
+	nPort = _App.FirefoxSettings_Proxy_Port (_T("http"));
 }
 
 vmsBtFile* vmsBtSupport::CreateTorrentFileObject()
@@ -289,7 +289,7 @@ vmsBtFile* vmsBtSupport::CreateTorrentFileObject()
 	
 	if (_pfnCreateTorrentFileObject == NULL)
 	{
-		_pfnCreateTorrentFileObject = (FNBTF) m_dllBtFile.GetProcAddress ("vmsBt_CreateTorrentFileObject");
+		_pfnCreateTorrentFileObject = (FNBTF) m_dllBtFile.GetProcAddress (_T("vmsBt_CreateTorrentFileObject"));
 		if (_pfnCreateTorrentFileObject == NULL)
 			return NULL;
 	}
@@ -303,9 +303,9 @@ bool vmsBtSupport::LoadBtDll(vmsDLL &dll)
 		return false;
 
 	CString str = ((CFdmApp*)AfxGetApp ())->m_strAppPath;
-	if (str [str.GetLength () - 1] != '\\')
-		str += '\\';
-	str += "fdmbtsupp.dll";
+	if (str [str.GetLength () - 1] != _T('\\'))
+		str += _T('\\');
+	str += _T("fdmbtsupp.dll");
 
 	return dll.Load (str);
 }
@@ -317,9 +317,9 @@ int vmsBtSupport::getBtDllVersion()
 		return ver;
 
 	CString str = ((CFdmApp*)AfxGetApp ())->m_strAppPath;
-	if (str [str.GetLength () - 1] != '\\')
-		str += '\\';
-	str += "fdmbtsupp.dll";
+	if (str [str.GetLength () - 1] != _T('\\'))
+		str += _T('\\');
+	str += _T("fdmbtsupp.dll");
 
 	if (GetFileAttributes (str) == DWORD (-1))
 		return ver = INT_MAX;

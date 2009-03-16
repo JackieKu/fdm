@@ -18,7 +18,7 @@ vmsFirefoxExtensionInstaller::~vmsFirefoxExtensionInstaller()
 
 }
 
-bool vmsFirefoxExtensionInstaller::Do(LPCSTR pszCID, LPCSTR pszExtPath, bool bInstall)
+bool vmsFirefoxExtensionInstaller::Do(LPCTSTR pszCID, LPCTSTR pszExtPath, bool bInstall)
 {
 	FU_STRINGLIST v; int nDefProf;
 	vmsFirefoxUtil::GetProfilesPathes (v, nDefProf);
@@ -26,8 +26,8 @@ bool vmsFirefoxExtensionInstaller::Do(LPCSTR pszCID, LPCSTR pszExtPath, bool bIn
 	CString str = _App.Firefox_PortableVersionPath ();
 	if (!str.IsEmpty ())
 	{
-		fsString str2 = (LPCSTR)(str + "\\data\\profile");
-		char sz [MY_MAX_PATH];
+		fsString str2 = (LPCTSTR)(str + _T("\\data\\profile"));
+		TCHAR sz [MY_MAX_PATH];
 		GetModuleFileName (NULL, sz, MY_MAX_PATH);
 		str2 [0] = sz [0];
 		v.add (str2);
@@ -38,9 +38,9 @@ bool vmsFirefoxExtensionInstaller::Do(LPCSTR pszCID, LPCSTR pszExtPath, bool bIn
 
 	for (int i = 0; i < v.size (); i++)
 	{
-		char sz [MY_MAX_PATH];
+		TCHAR sz [MY_MAX_PATH];
 		_tcscpy (sz, v [i]);
-		_tcscat (sz, "\\extensions\\");
+		_tcscat (sz, _T("\\extensions\\"));
 		_tcscat (sz, pszCID);
 
 		if (bInstall)
@@ -67,7 +67,7 @@ bool vmsFirefoxExtensionInstaller::Do(LPCSTR pszCID, LPCSTR pszExtPath, bool bIn
 	return true;
 }
 
-bool vmsFirefoxExtensionInstaller::IsInstalled(LPCSTR pszCID, bool bInDefaultProfileOnly)
+bool vmsFirefoxExtensionInstaller::IsInstalled(LPCTSTR pszCID, bool bInDefaultProfileOnly)
 {
 	FU_STRINGLIST v; int nDefaultProfile;
 	vmsFirefoxUtil::GetProfilesPathes (v, nDefaultProfile);
@@ -75,8 +75,8 @@ bool vmsFirefoxExtensionInstaller::IsInstalled(LPCSTR pszCID, bool bInDefaultPro
 	CString str = _App.Firefox_PortableVersionPath ();
 	if (!str.IsEmpty ())
 	{
-		fsString str2 = (LPCSTR)(str + "\\data\\profile");
-		char sz [MY_MAX_PATH];
+		fsString str2 = (LPCTSTR)(str + _T("\\data\\profile"));
+		TCHAR sz [MY_MAX_PATH];
 		GetModuleFileName (NULL, sz, MY_MAX_PATH);
 		str2 [0] = sz [0];
 		v.add (str2);
@@ -93,9 +93,9 @@ bool vmsFirefoxExtensionInstaller::IsInstalled(LPCSTR pszCID, bool bInDefaultPro
 		if (bInDefaultProfileOnly && i != nDefaultProfile)
 			continue;
 
-		char sz [MY_MAX_PATH];
+		TCHAR sz [MY_MAX_PATH];
 		_tcscpy (sz, v [i]);
-		_tcscat (sz, "\\extensions\\");
+		_tcscat (sz, _T("\\extensions\\"));
 		_tcscat (sz, pszCID);
 
 		if (GetFileAttributes (sz) != DWORD (-1))

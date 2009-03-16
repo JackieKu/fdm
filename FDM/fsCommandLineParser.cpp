@@ -24,11 +24,11 @@ fsCommandLineParser::~fsCommandLineParser()
 
 BOOL fsCommandLineParser::Parse()
 {
-	LPCSTR pszCmdLine = GetCommandLine ();
+	LPCTSTR pszCmdLine = GetCommandLine ();
 
-	if (*pszCmdLine == '"')
+	if (*pszCmdLine == _T('"'))
 	{
-		pszCmdLine = strchr (pszCmdLine+1, '"');
+		pszCmdLine = _tcschr (pszCmdLine+1, _T('"'));
 		if (pszCmdLine)
 			pszCmdLine++;
 		else
@@ -36,7 +36,7 @@ BOOL fsCommandLineParser::Parse()
 	}
 	else
 	{
-		while (*pszCmdLine && *pszCmdLine != ' ')
+		while (*pszCmdLine && *pszCmdLine != _T(' '))
 			pszCmdLine++;
 	}
 
@@ -44,30 +44,30 @@ BOOL fsCommandLineParser::Parse()
 
 	while (*pszCmdLine)
 	{
-		char szParam [10000], szValue [10000];
+		TCHAR szParam [10000], szValue [10000];
 		*szParam = *szValue = 0;
 		bool bHasValue = true;
 
 		
-		while (*pszCmdLine && (*pszCmdLine == ' ' || *pszCmdLine == '\r' || *pszCmdLine == '\n'))
+		while (*pszCmdLine && (*pszCmdLine == _T(' ') || *pszCmdLine == _T('\r') || *pszCmdLine == _T('\n')))
 			pszCmdLine++;
 
-		if (*pszCmdLine == '/' || *pszCmdLine == '-')
+		if (*pszCmdLine == _T('/') || *pszCmdLine == _T('-'))
 		{
 			int i = 0;
-			while (*++pszCmdLine && *pszCmdLine != ' ' && *pszCmdLine != '=')
+			while (*++pszCmdLine && *pszCmdLine != _T(' ') && *pszCmdLine != _T('='))
 				szParam [i++] = *pszCmdLine;
 
 			szParam [i] = 0;
 
-			while (*pszCmdLine == ' ')
+			while (*pszCmdLine == _T(' '))
 				pszCmdLine++;
 
 			
-			if (*pszCmdLine == '=')
+			if (*pszCmdLine == _T('='))
 			{
 				pszCmdLine++;
-				while (*pszCmdLine == ' ')
+				while (*pszCmdLine == _T(' '))
 					pszCmdLine++;
 			}
 			else
@@ -76,17 +76,17 @@ BOOL fsCommandLineParser::Parse()
 
 		if (bHasValue)
 		{
-			char cSp = ' ';	
-			char cSp1 = '\n', cSp2 = '\r';
+			TCHAR cSp = _T(' ');	
+			TCHAR cSp1 = _T('\n'), cSp2 = _T('\r');
 			
-			if (*pszCmdLine == '"' || *pszCmdLine == '\'')
+			if (*pszCmdLine == _T('"') || *pszCmdLine == _T('\''))
 			{
 				cSp = *pszCmdLine++;
 				cSp1 = cSp2 = 0;
 			}
 
 			
-			if (*pszCmdLine != '/' && *pszCmdLine != '-')
+			if (*pszCmdLine != _T('/') && *pszCmdLine != _T('-'))
 			{
 				int i = 0;
 				while (*pszCmdLine && *pszCmdLine != cSp && *pszCmdLine != cSp1 && *pszCmdLine != cSp2)
@@ -119,12 +119,12 @@ int fsCommandLineParser::Get_ParameterCount()
 	return m_vPars.size ();
 }
 
-LPCSTR fsCommandLineParser::Get_Parameter(int iIndex)
+LPCTSTR fsCommandLineParser::Get_Parameter(int iIndex)
 {
 	return m_vPars [iIndex].strParam;
 }
 
-LPCSTR fsCommandLineParser::Get_ParameterValue(int iIndex)
+LPCTSTR fsCommandLineParser::Get_ParameterValue(int iIndex)
 {
 	return m_vPars [iIndex].strValue;
 }

@@ -34,11 +34,11 @@ BEGIN_MESSAGE_MAP(fsShellBrowsersEvents, CCmdTarget)
 END_MESSAGE_MAP()
 
 BEGIN_DISPATCH_MAP(fsShellBrowsersEvents, CCmdTarget)
-	DISP_FUNCTION_ID(fsShellBrowsersEvents, "BeforeNavigate2",DISPID_BEFORENAVIGATE2,OnBeforeNavigate, VT_EMPTY, VTS_DISPATCH VTS_PVARIANT VTS_PVARIANT VTS_PVARIANT VTS_PVARIANT VTS_PVARIANT VTS_PBOOL)
-	DISP_FUNCTION_ID(fsShellBrowsersEvents, "DownloadBegin",DISPID_DOWNLOADBEGIN,OnDownloadBegin, VT_EMPTY, VTS_NONE)
-	DISP_FUNCTION_ID(fsShellBrowsersEvents, "DownloadComplete",DISPID_DOWNLOADCOMPLETE,OnDownloadComplete, VT_EMPTY, VTS_NONE)
-	DISP_FUNCTION_ID(fsShellBrowsersEvents, "DocumentComplete", DISPID_DOCUMENTCOMPLETE, OnDocumentComplete, VT_EMPTY, VTS_DISPATCH VTS_PVARIANT)
-	DISP_FUNCTION_ID(fsShellBrowsersEvents, "NavigateComplete2", DISPID_NAVIGATECOMPLETE2, OnNavigateComplete2, VT_EMPTY, VTS_DISPATCH VTS_PVARIANT)
+	DISP_FUNCTION_ID(fsShellBrowsersEvents, _T("BeforeNavigate2"),DISPID_BEFORENAVIGATE2,OnBeforeNavigate, VT_EMPTY, VTS_DISPATCH VTS_PVARIANT VTS_PVARIANT VTS_PVARIANT VTS_PVARIANT VTS_PVARIANT VTS_PBOOL)
+	DISP_FUNCTION_ID(fsShellBrowsersEvents, _T("DownloadBegin"),DISPID_DOWNLOADBEGIN,OnDownloadBegin, VT_EMPTY, VTS_NONE)
+	DISP_FUNCTION_ID(fsShellBrowsersEvents, _T("DownloadComplete"),DISPID_DOWNLOADCOMPLETE,OnDownloadComplete, VT_EMPTY, VTS_NONE)
+	DISP_FUNCTION_ID(fsShellBrowsersEvents, _T("DocumentComplete"), DISPID_DOCUMENTCOMPLETE, OnDocumentComplete, VT_EMPTY, VTS_DISPATCH VTS_PVARIANT)
+	DISP_FUNCTION_ID(fsShellBrowsersEvents, _T("NavigateComplete2"), DISPID_NAVIGATECOMPLETE2, OnNavigateComplete2, VT_EMPTY, VTS_DISPATCH VTS_PVARIANT)
 END_DISPATCH_MAP()      
 
 HRESULT fsShellBrowsersEvents::Attach(SHDocVw::IShellWindowsPtr& spSHWnds)
@@ -149,7 +149,7 @@ void fsShellBrowsersEvents::Detach()
 void fsShellBrowsersEvents::OnBeforeNavigate(LPDISPATCH, VARIANT *vtUrl, VARIANT *, VARIANT *, VARIANT *, VARIANT *, BOOL* pbCancel)
 {
 	_bstr_t bstrUrl = vtUrl->bstrVal;
-	*pbCancel = Event (SBE_BEFORENAVIGATE, (DWORD)(LPCSTR) bstrUrl) == FALSE;
+	*pbCancel = Event (SBE_BEFORENAVIGATE, (DWORD)(LPCTSTR) bstrUrl) == FALSE;
 }
 
 void fsShellBrowsersEvents::OnDownloadBegin()

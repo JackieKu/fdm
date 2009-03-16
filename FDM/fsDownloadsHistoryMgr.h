@@ -52,16 +52,16 @@ enum fsDownloadsHistoryMgrEvent
 typedef void (*fntDHMEEventFunc)(fsDownloadsHistoryMgrEvent ev, int info, LPVOID);    
 
 #define DLHISTFILE_CURRENT_VERSION	(1)
-#define DLHISTFILE_SIG "FDM Downloads History"
+#define DLHISTFILE_SIG _T("FDM Downloads History")
 
 struct fsDownloadsHistMgrFileHdr
 {
-	char szSig [sizeof (DLHISTFILE_SIG) + 1];
+	TCHAR szSig [sizeof (DLHISTFILE_SIG) + 1];
 	WORD wVer;
 
 	fsDownloadsHistMgrFileHdr ()
 	{
-		strcpy (szSig, DLHISTFILE_SIG);
+		_tcscpy (szSig, DLHISTFILE_SIG);
 		wVer = DLHISTFILE_CURRENT_VERSION;
 	}
 };

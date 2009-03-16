@@ -61,7 +61,7 @@ protected:
 
 	
 	
-	BOOL CrackProxyName (LPCSTR pszName, CString& strName, USHORT &uPort);
+	BOOL CrackProxyName (LPCTSTR pszName, CString& strName, USHORT &uPort);
 
 	fs::list <ProxyInfo> m_vProxies;	
 

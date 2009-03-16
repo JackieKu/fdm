@@ -60,7 +60,7 @@ public:
 	int getFilePriority (int nFileIndex) const;
 	void getPartialDownloadProgress (UINT64 *pnBytesToDownload, UINT64 *pnBytesDownloaded);
 	void PrioritizeFiles (int *piPriorities);
-	BOOL LoadTorrentFile (LPCSTR pszFile);
+	BOOL LoadTorrentFile (LPCTSTR pszFile);
 	struct vmsFile {
 		fsString strName;
 		UINT64 nFileSize;
@@ -90,7 +90,7 @@ public:
 	fsInternetResult RestartDownloading();
 	BOOL IsBtDownloadRunning();
 	BOOL IsCantStart();
-	BOOL MoveToFolder(LPCSTR pszPath);
+	BOOL MoveToFolder(LPCTSTR pszPath);
 	UINT GetSpeed();
 	int GetDownloadingSectionCount(bool bFromCache = true);
 	void GetSectionInfo(int nIndex, vmsSectionInfo *sect);
@@ -117,22 +117,22 @@ public:
 	UINT64 get_FileSize(int nIndex);
 	fsString get_FileName(int nIndex);
 	fsString get_TorrentComment();
-	void set_TrackerLogin(LPCSTR pszUser, LPCSTR pszPassword);
+	void set_TrackerLogin(LPCTSTR pszUser, LPCTSTR pszPassword);
 	void disable_Flags(DWORD dw);
 	void enable_Flags(DWORD dw);
 	DWORD get_Flags();
 	fsString get_URL();
 	void get_TrackerLogin (fsString &strUser, fsString &strPassword);
-	LPCSTR get_TorrentUrl();
+	LPCTSTR get_TorrentUrl();
 	fsString get_InfoHash();
 	void SetEventsHandler (fntBtDownloadManagerEventHandler pfn, LPVOID pData);
-	LPCSTR get_OutputPath();
+	LPCTSTR get_OutputPath();
 	fsString get_OutputFilePathName (int nIndex);
 	int get_FileCount();
 	UINT GetUploadSpeed();
 	fsString get_TorrentName();
 	vmsBtDownloadStateEx get_State();
-	BOOL CreateByTorrentFile (LPCSTR pszTorrentFile, LPCSTR pszOutputPath, LPCSTR pszTorrentUrl, BOOL bSeedOnly = FALSE);
+	BOOL CreateByTorrentFile (LPCTSTR pszTorrentFile, LPCTSTR pszOutputPath, LPCTSTR pszTorrentUrl, BOOL bSeedOnly = FALSE);
 	void DeleteBtDownload();
 
 	vmsBtDownloadManager();
@@ -145,7 +145,7 @@ protected:
 	void ApplyNewFilesPriorities();
 	void CalculateFilesPieces ();
 	void calculateFoldersSizesInTree(fs::ListTree <vmsFile> *pTree);
-	void addFileToTree (fs::ListTree <vmsFile> *pTree, LPCSTR pszFile, int nFileIndex);
+	void addFileToTree (fs::ListTree <vmsFile> *pTree, LPCTSTR pszFile, int nFileIndex);
 	bool m_bWasFatalErrorInLoadState;
 	
 	struct _inc_CachedValues {

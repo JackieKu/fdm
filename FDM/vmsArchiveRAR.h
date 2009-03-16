@@ -15,7 +15,7 @@
 class vmsArchiveRAR : public vmsArchive  
 {
 public:
-	virtual bool Extract (LPCSTR pszArchive, LPCSTR pszOutFolder);
+	virtual bool Extract (LPCTSTR pszArchive, LPCTSTR pszOutFolder);
 	vmsArchiveRAR();
 	virtual ~vmsArchiveRAR();
 

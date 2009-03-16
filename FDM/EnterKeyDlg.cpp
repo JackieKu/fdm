@@ -76,18 +76,18 @@ void CEnterKeyDlg::ApplyLanguage()
 	_LngMgr.ApplyLanguage (this, lnginfo, sizeof (lnginfo) / sizeof (fsDlgLngInfo), L_REGISTRATION);
 }
 
-BOOL CEnterKeyDlg::RegisterKey(LPCSTR pszKey)
+BOOL CEnterKeyDlg::RegisterKey(LPCTSTR pszKey)
 {
 	HKEY hKey;
     DWORD dwDisposition;
 
-	if (ERROR_SUCCESS != RegCreateKeyEx (HKEY_CURRENT_USER, "Software\\FreeDownloadManager.ORG\\Free Download Manager", 0, NULL,
+	if (ERROR_SUCCESS != RegCreateKeyEx (HKEY_CURRENT_USER, _T("Software\\FreeDownloadManager.ORG\\Free Download Manager"), 0, NULL,
 				REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey, &dwDisposition)) 
     {
         return FALSE;
     }
 
-	if (ERROR_SUCCESS != RegSetValueEx (hKey, "Key", 0, REG_SZ, (BYTE*)pszKey, strlen (pszKey) ))
+	if (ERROR_SUCCESS != RegSetValueEx (hKey, _T("Key"), 0, REG_SZ, (BYTE*)pszKey, _tcslen (pszKey) ))
     { 
         RegCloseKey(hKey);
         return FALSE;
@@ -101,7 +101,7 @@ void CEnterKeyDlg::OnOK()
 {
 	CString strKey;
 	GetDlgItemText (IDC_KEY, strKey);
-	if (strKey != "")
+	if (strKey != _T(""))
 	{
 		if (RegisterKey (strKey) == FALSE)
 			MessageBox (LS (L_FAILEDTOREG), LS (L_ERR), MB_ICONERROR);

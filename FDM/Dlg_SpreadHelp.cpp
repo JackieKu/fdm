@@ -87,7 +87,7 @@ void CDlg_SpreadHelp::ApplyLanguage()
 		fsDlgLngInfo (IDC_VIEWLINKCODE, L_VIEWLINKHTMLCODE),
 	};
 
-	CString str = LS (L_SPREADHELPDLG_TEXT4); str.Replace ("\\n", "\n");
+	CString str = LS (L_SPREADHELPDLG_TEXT4); str.Replace (_T("\\n"), _T("\n"));
 	SetDlgItemText (IDC__TEXT4, str);
 
 	_LngMgr.ApplyLanguage (this, lnginfo, sizeof (lnginfo) / sizeof (fsDlgLngInfo), L_PLACELINKTOFDM2);

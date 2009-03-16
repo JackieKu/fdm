@@ -196,7 +196,7 @@ CMainFrame::CMainFrame()
 	m_nTrafficUpldPrevMonth = 0;
 	m_nTrafficUpldThisMonth = 0;
 
-	m_nShutdownMsg = RegisterWindowMessage ("FDM - shutdown");
+	m_nShutdownMsg = RegisterWindowMessage (_T("FDM - shutdown"));
 
 	m_nUploadsMsg1 = RegisterWindowMessage (vmsUploadsDll::MSG_NAME_1);
 
@@ -247,26 +247,26 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		
 
 		
-		wgTButtonInfo (0, TBSTYLE_SEP, ""),
-		wgTButtonInfo (ID_TUM_LIGHT, TBSTYLE_BUTTON, ""),
-		wgTButtonInfo (ID_TUM_MEDIUM, TBSTYLE_BUTTON, ""),
-		wgTButtonInfo (ID_TUM_HEAVY, TBSTYLE_BUTTON, ""),
-		wgTButtonInfo (0, TBSTYLE_SEP, ""),
-		wgTButtonInfo (ID_STARTALL, TBSTYLE_BUTTON, ""),
-		wgTButtonInfo (ID_STOPALL, TBSTYLE_BUTTON, ""),
-		wgTButtonInfo (ID_PAUSEALLDLDS, TBSTYLE_BUTTON, ""),
-		wgTButtonInfo (0, TBSTYLE_SEP, ""),
-		wgTButtonInfo (ID_DLDROPTIONS, TBSTYLE_BUTTON, ""),
-		wgTButtonInfo (ID_DIAL, TBSTYLE_BUTTON, ""),
-		wgTButtonInfo (ID_HELP, TBSTYLE_BUTTON, ""),
-		wgTButtonInfo (0, 0, ""),
-		wgTButtonInfo (ID_APP_ABOUT, TBSTYLE_BUTTON, ""),
-		wgTButtonInfo (0, 0, ""),
-		wgTButtonInfo (0, 0, ""),
-		wgTButtonInfo (0, 0, ""),
-		wgTButtonInfo (0, 0, ""),
-		wgTButtonInfo (0, 0, ""),
-		wgTButtonInfo (0, 0, ""),
+		wgTButtonInfo (0, TBSTYLE_SEP, _T("")),
+		wgTButtonInfo (ID_TUM_LIGHT, TBSTYLE_BUTTON, _T("")),
+		wgTButtonInfo (ID_TUM_MEDIUM, TBSTYLE_BUTTON, _T("")),
+		wgTButtonInfo (ID_TUM_HEAVY, TBSTYLE_BUTTON, _T("")),
+		wgTButtonInfo (0, TBSTYLE_SEP, _T("")),
+		wgTButtonInfo (ID_STARTALL, TBSTYLE_BUTTON, _T("")),
+		wgTButtonInfo (ID_STOPALL, TBSTYLE_BUTTON, _T("")),
+		wgTButtonInfo (ID_PAUSEALLDLDS, TBSTYLE_BUTTON, _T("")),
+		wgTButtonInfo (0, TBSTYLE_SEP, _T("")),
+		wgTButtonInfo (ID_DLDROPTIONS, TBSTYLE_BUTTON, _T("")),
+		wgTButtonInfo (ID_DIAL, TBSTYLE_BUTTON, _T("")),
+		wgTButtonInfo (ID_HELP, TBSTYLE_BUTTON, _T("")),
+		wgTButtonInfo (0, 0, _T("")),
+		wgTButtonInfo (ID_APP_ABOUT, TBSTYLE_BUTTON, _T("")),
+		wgTButtonInfo (0, 0, _T("")),
+		wgTButtonInfo (0, 0, _T("")),
+		wgTButtonInfo (0, 0, _T("")),
+		wgTButtonInfo (0, 0, _T("")),
+		wgTButtonInfo (0, 0, _T("")),
+		wgTButtonInfo (0, 0, _T("")),
 		
 	};
 	
@@ -281,7 +281,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		!m_wndStatusBar.SetIndicators(indicators,
 		  sizeof(indicators)/sizeof(UINT)))
 	{
-		TRACE0("Failed to create status bar\n");
+		TRACE0(_T("Failed to create status bar\n"));
 		return -1;      
 	}
 
@@ -341,7 +341,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		(HBRUSH) (COLOR_3DFACE+1), NULL), NULL, AFX_WS_DEFAULT_VIEW | WS_CHILD,
 		CRect(0, 0, 0, 0), this, AFX_IDW_PANE_FIRST, NULL))
 	{
-		TRACE0("Failed to create view window\n");
+		TRACE0(_T("Failed to create view window\n"));
 		return -1;
 	}
 
@@ -363,11 +363,11 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	ApplyLanguage ();
 
-	m_umsgTaskBarCreated = RegisterWindowMessage(TEXT ("TaskbarCreated"));
+	m_umsgTaskBarCreated = RegisterWindowMessage(TEXT (_T("TaskbarCreated")));
 
 	UINT pnIcons [] = {IDI_TRAY_NORMAL, IDI_TRAY_DOWNLOADING, IDI_TRAY_ERRORS, IDI_TRAY_UNKNOWN};
 	_TrayMgr.Create (m_hWnd, pnIcons, sizeof (pnIcons) / sizeof (UINT), 
-		GetShell32Version () >= 5 ? "" : vmsFdmAppMgr::getAppName (), WM_TRAYMSG);
+		GetShell32Version () >= 5 ? _T("") : vmsFdmAppMgr::getAppName (), WM_TRAYMSG);
 
 	m_pFloatWndsThread = (CFloatingWndsThread*) AfxBeginThread (RUNTIME_CLASS (CFloatingWndsThread));
 
@@ -398,7 +398,7 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 	wc.hIcon = LoadIcon (AfxGetInstanceHandle (), MAKEINTRESOURCE (IDR_MAINFRAME));
 	wc.hInstance = AfxGetInstanceHandle ();
 	wc.lpfnWndProc = ::DefWindowProc;
-	wc.lpszClassName = "Free Download Manager Main Window";
+	wc.lpszClassName = _T("Free Download Manager Main Window");
 	cs.lpszClass = wc.lpszClassName;
 
 	return AfxRegisterClass (&wc);
@@ -652,7 +652,7 @@ LRESULT CMainFrame::OnTrayMsg(WPARAM , LPARAM lp)
 		case NIN_BALLOONTIMEOUT:
 		case NIN_BALLOONHIDE:
 			m_bBalloonShowing = FALSE;
-			m_strTimeoutBallon_Msgs = "";
+			m_strTimeoutBallon_Msgs = _T("");
 			break;
 	}
 	
@@ -701,7 +701,7 @@ void CMainFrame::ShowTrayMenu(BOOL bModeTray)
 		if (i == 0)
 			pmenuLFD->RemoveMenu (0, MF_BYPOSITION);
 
-		LPCSTR pszDispName = pLFD->get_FileDispName (i);
+		LPCTSTR pszDispName = pLFD->get_FileDispName (i);
 
 		if (*pszDispName == 0)
 			pszDispName = LS (L_UNKNOWN);
@@ -736,13 +736,13 @@ void CMainFrame::ShowTrayMenu(BOOL bModeTray)
 
 	m_odTrayMenu.SetImages (img, sizeof (img) / sizeof (fsSetImage));
 
-	CString strSMW = LS (L_SHOWMAINWND); strSMW += '\t';
-	CString strCND = LS (L_NEWDL); strCND += "\tIns";
-	CString strL = LS (L_LIGHT); strL += "\tCtrl+1";
-	CString strM = LS (L_MEDIUM); strM += "\tCtrl+2";
-	CString strH = LS (L_HEAVY); strH += "\tCtrl+3";
-	CString strDial  = LS (L_DIAL); strDial += "\tCtrl+D";
-	CString strExit = LS (L_EXIT); strExit += "\tAlt+X";
+	CString strSMW = LS (L_SHOWMAINWND); strSMW += _T('\t');
+	CString strCND = LS (L_NEWDL); strCND += _T("\tIns");
+	CString strL = LS (L_LIGHT); strL += _T("\tCtrl+1");
+	CString strM = LS (L_MEDIUM); strM += _T("\tCtrl+2");
+	CString strH = LS (L_HEAVY); strH += _T("\tCtrl+3");
+	CString strDial  = LS (L_DIAL); strDial += _T("\tCtrl+D");
+	CString strExit = LS (L_EXIT); strExit += _T("\tAlt+X");
 
 	fsSetText texts [] = {
 		fsSetText (ID_SHOWMAINWINDOW, strSMW),
@@ -916,7 +916,7 @@ void CMainFrame::OnStopall()
 
 void CMainFrame::OnHelp() 
 {
-	::HtmlHelp (m_hWnd, "Help\\Free Download Manager.chm", HH_DISPLAY_TOC, NULL);	
+	::HtmlHelp (m_hWnd, _T("Help\\Free Download Manager.chm"), HH_DISPLAY_TOC, NULL);	
 }
 
 void CMainFrame::OnHomepage() 
@@ -926,7 +926,7 @@ void CMainFrame::OnHomepage()
 
 void CMainFrame::OnRecommend() 
 {
-	ShellExecute (NULL, "open", "mailto:@?subject=Free%20Download%20Manager%20[http://www.freedownloadmanager.org]",	NULL, NULL, SW_SHOW);
+	ShellExecute (NULL, _T("open"), "mailto:@?subject=Free%20Download%20Manager%20[http://www.freedownloadmanager.org]",	NULL, NULL, SW_SHOW);
 }
 
 void CMainFrame::OnSupport() 
@@ -1024,7 +1024,7 @@ void CMainFrame::OnEndSession(BOOL bEnding)
 
 void CMainFrame::OnHowregister() 
 {
-	::HtmlHelp (m_hWnd, "Help\\Free Download Manager.chm::/Topics/Registration.html", HH_DISPLAY_TOPIC, NULL);
+	::HtmlHelp (m_hWnd, _T("Help\\Free Download Manager.chm::/Topics/Registration.html"), HH_DISPLAY_TOPIC, NULL);
 }
 
 void CMainFrame::OnHangupwhendone() 
@@ -1085,12 +1085,12 @@ void CMainFrame::UpdateTitle()
 {
 	CString strCaption = vmsFdmAppMgr::getAppName ();
 
-	LPCSTR pszCustomizer = m_Customizations.get_Customizer ();
+	LPCTSTR pszCustomizer = m_Customizations.get_Customizer ();
 	if (pszCustomizer != NULL && lstrlen (pszCustomizer) != 0)
 	{
-		strCaption += ", ";
+		strCaption += _T(", ");
 		strCaption += pszCustomizer;
-		strCaption += " version";
+		strCaption += _T(" version");
 	}
 
 	SetWindowText (strCaption);
@@ -1217,24 +1217,24 @@ void CMainFrame::OnMonitorbrowser()
 	if (dwMonitorNow) {
 		CString str;
 		if (dwMonitorNow & MONITOR_USERSWITCHEDON_IE)
-			str = "Internet Explorer";
+			str = _T("Internet Explorer");
 		if (dwMonitorNow & MONITOR_USERSWITCHEDON_FIREFOX)
-			str += str == "" ? "Firefox" : ", Firefox";
+			str += str == _T("") ? _T("Firefox") : _T(", Firefox");
 		if (dwMonitorNow & MONITOR_USERSWITCHEDON_OPERA)
-			str += str == "" ? "Opera" : ", Opera";
+			str += str == _T("") ? _T("Opera") : _T(", Opera");
 		if (dwMonitorNow & MONITOR_USERSWITCHEDON_NETSCAPE)
-			str += str == "" ? "Netscape" : ", Netscape";
+			str += str == _T("") ? _T("Netscape") : _T(", Netscape");
 		if (dwMonitorNow & MONITOR_USERSWITCHEDON_SEAMONKEY)
-			str += str == "" ? "SeaMonkey" : ", SeaMonkey";
+			str += str == _T("") ? _T("SeaMonkey") : _T(", SeaMonkey");
 		if (dwMonitorNow & MONITOR_USERSWITCHEDON_SAFARI)
-			str += str == "" ? "Apple Safari" : ", Apple Safari";
+			str += str == _T("") ? _T("Apple Safari") : _T(", Apple Safari");
 		if (dwMonitorNow & MONITOR_USERSWITCHEDON_CHROME)
-			str += str == "" ? "Google Chrome" : ", Google Chrome";
+			str += str == _T("") ? _T("Google Chrome") : _T(", Google Chrome");
 		
 		CString str2;
 		str2.Format (LS (L_MONITORING_TURNEDON_IN), str);
 		if (bRR) {
-			str2 += "\n\n";
+			str2 += _T("\n\n");
 			str2 += LS (L_BROWSERRESTARTREQ);
 		}
 		MessageBox (str2);
@@ -1276,7 +1276,7 @@ void CMainFrame::BuildSwitchToMenu()
 	{
 		fsPluginInfo *plug = &_PluginMgr.Plugin (i);
 		CString str;
-		str.Format ("%s\tAlt+%d", plug->strName, i+1);
+		str.Format (_T("%s\tAlt+%d"), plug->strName, i+1);
 		fsODMenuItemData *pData = m_odmenu.AddItem (pMenu, ID_SWITCH_TO_START+i, str);
 		if (pData)
 			pData->iCheckImage = ODMENU_CHECKIMAGE_RADIO;
@@ -1386,7 +1386,7 @@ void CMainFrame::SaveState()
 {
 	SaveSettings ();
 	m_wndView.m_wndClient.SaveState ();
-	_App.View_SaveWndPlacement (this, "MainFrm");
+	_App.View_SaveWndPlacement (this, _T("MainFrm"));
 	if (m_pFloatWndsThread)
 	{
 		m_pFloatWndsThread->m_wndFloating.SaveState ();
@@ -1434,7 +1434,7 @@ void CMainFrame::OnLngMenu(UINT id)
 		_LngMgr.LoadLng (iCurLng);
 		if (bIEMenus)
 			_IECMM.AddIEMenus ();
-		MessageBox ("Sorry, can't load this language", "Error", MB_ICONERROR);
+		MessageBox (_T("Sorry, can't load this language"), _T("Error"), MB_ICONERROR);
 		return;
 	}
 
@@ -1456,15 +1456,15 @@ void CMainFrame::ApplyLanguage()
 {
 	ApplyLanguageToMenu ();
 
-	LPCSTR ppszToolTips [] = {
-		"", LS (L_LIGHT), LS (L_MEDIUM), 
-		LS (L_HEAVY), "", LS (L_STARTALLDLDS), LS (L_STOPALLDLDS), 
-		LS (L_PAUSEALLDOWNLOADS), "", LS (L_SETTINGS), LS (L_DIALUP), 
-		LS (L_HELP), LS (L_ABOUT), "", "Make a donation",
-		LS (L_SAVEALL), "", LS (L_CUT), LS (L_COPY), LS (L_PASTE), "", 
+	LPCTSTR ppszToolTips [] = {
+		_T(""), LS (L_LIGHT), LS (L_MEDIUM), 
+		LS (L_HEAVY), _T(""), LS (L_STARTALLDLDS), LS (L_STOPALLDLDS), 
+		LS (L_PAUSEALLDOWNLOADS), _T(""), LS (L_SETTINGS), LS (L_DIALUP), 
+		LS (L_HELP), LS (L_ABOUT), _T(""), _T("Make a donation"),
+		LS (L_SAVEALL), _T(""), LS (L_CUT), LS (L_COPY), LS (L_PASTE), _T(""), 
 	};
 
-	_TBMgr.UpdateGroupToolTips (0, ppszToolTips, sizeof (ppszToolTips) / sizeof (LPCSTR));
+	_TBMgr.UpdateGroupToolTips (0, ppszToolTips, sizeof (ppszToolTips) / sizeof (LPCTSTR));
 
 	m_wndStatusBar.SetToolTipText (ID_SB_TOTALSPEED, LS (L_TOTAL_SPEED_SBTEXT));
 
@@ -1508,13 +1508,13 @@ void CMainFrame::ApplyLanguageToMenu()
 		strExport = LS (L_EXPORTSETTINGS), strSaveAll = LS (L_SAVEALL),
 		strImpFromClip = LS (L_IMPORTURLSFROMCLIPBOARD);
 
-	strCut += "\tCtrl+X"; strCopy += "\tCtrl+C"; strPaste += "\tCtrl+V";
-	strDldOpt += "\tCtrl+O"; strDldDef += "\tCtrl+E";
-	strPrgGen += "\tCtrl+P"; strLight += "\tCtrl+1"; strMedium += "\tCtrl+2"; strHeavy += "\tCtrl+3";
-	strDial += "\tCtrl+D"; strDoc += "\tF1";
-	strSpiderDefs += "\tCtrl+Q"; strExit += "\tAlt+X";
-	strExport += '\t'; strSaveAll += "\tCtrl+S";
-	strImpFromClip += "\tCtrl+Shift+V";
+	strCut += _T("\tCtrl+X"); strCopy += _T("\tCtrl+C"); strPaste += _T("\tCtrl+V");
+	strDldOpt += _T("\tCtrl+O"); strDldDef += _T("\tCtrl+E");
+	strPrgGen += _T("\tCtrl+P"); strLight += _T("\tCtrl+1"); strMedium += _T("\tCtrl+2"); strHeavy += _T("\tCtrl+3");
+	strDial += _T("\tCtrl+D"); strDoc += _T("\tF1");
+	strSpiderDefs += _T("\tCtrl+Q"); strExit += _T("\tAlt+X");
+	strExport += _T('\t'); strSaveAll += _T("\tCtrl+S");
+	strImpFromClip += _T("\tCtrl+Shift+V");
 
 	fsSetText aMenu0Texts [] = {
 		fsSetText (0, LS (L_EXPORT)),
@@ -1640,8 +1640,8 @@ void CMainFrame::OnSpiderDLWebPage()
 void CMainFrame::OnExportSettings()
 {
 	CString strFilter;
-	strFilter.Format ("%s (*.reg)|*.reg||", LS (L_REGFILES));
-	CFileDialog dlg (FALSE, "reg", NULL, OFN_OVERWRITEPROMPT|OFN_NOCHANGEDIR, strFilter, this);
+	strFilter.Format (_T("%s (*.reg)|*.reg||"), LS (L_REGFILES));
+	CFileDialog dlg (FALSE, _T("reg"), NULL, OFN_OVERWRITEPROMPT|OFN_NOCHANGEDIR, strFilter, this);
 
 	if (_DlgMgr.DoModal (&dlg) == IDCANCEL)
 		return;
@@ -1654,9 +1654,9 @@ void CMainFrame::OnExportSettings()
 	ZeroMemory (&pi, sizeof (pi));
 
 	CString strEx;
-	strEx.Format ("regedit.exe /ea \"%s\" \"HKEY_CURRENT_USER\\Software\\FreeDownloadManager.ORG\\Free Download Manager\\Settings\"", dlg.GetPathName ());
+	strEx.Format (_T("regedit.exe /ea \"%s\" \"HKEY_CURRENT_USER\\Software\\FreeDownloadManager.ORG\\Free Download Manager\\Settings\""), dlg.GetPathName ());
 
-	if (FALSE == CreateProcess (NULL, (LPSTR)(LPCSTR)strEx, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi))
+	if (FALSE == CreateProcess (NULL, (LPTSTR)(LPCTSTR)strEx, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi))
 	{
 		MessageBox (LS (L_REGEDITRUNFAILED), LS (L_ERR), MB_ICONERROR);
 		return;
@@ -1673,8 +1673,8 @@ void CMainFrame::OnExportSettings()
 void CMainFrame::OnImportSettings()
 {
 	CString strFilter;
-	strFilter.Format ("%s (*.reg)|*.reg||", LS (L_REGFILES));
-	CFileDialog dlg (TRUE, "reg", NULL, OFN_HIDEREADONLY|OFN_NOCHANGEDIR, strFilter, this);
+	strFilter.Format (_T("%s (*.reg)|*.reg||"), LS (L_REGFILES));
+	CFileDialog dlg (TRUE, _T("reg"), NULL, OFN_HIDEREADONLY|OFN_NOCHANGEDIR, strFilter, this);
 
 	if (dlg.DoModal () == IDCANCEL)
 		return;
@@ -1687,9 +1687,9 @@ void CMainFrame::OnImportSettings()
 	ZeroMemory (&pi, sizeof (pi));
 
 	CString strEx;
-	strEx.Format ("regedit.exe /s \"%s\"", dlg.GetPathName ());
+	strEx.Format (_T("regedit.exe /s \"%s\""), dlg.GetPathName ());
 
-	if (FALSE == CreateProcess (NULL, (LPSTR)(LPCSTR)strEx, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi))
+	if (FALSE == CreateProcess (NULL, (LPTSTR)(LPCTSTR)strEx, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi))
 	{
 		MessageBox (LS (L_REGEDITRUNFAILED), LS (L_ERR), MB_ICONERROR);
 		return;
@@ -1899,7 +1899,7 @@ void CMainFrame::OnTimer(UINT nIDEvent)
 		case 3:
 			KillTimer (3);
 			HideBalloon ();
-			m_strTimeoutBallon_Msgs = "";
+			m_strTimeoutBallon_Msgs = _T("");
 		break;
 
 		
@@ -1974,12 +1974,12 @@ void CMainFrame::HideBalloon()
 {
 	if (m_bBalloonShowing)
 	{
-		_TrayMgr.ShowBalloon ("", "");
+		_TrayMgr.ShowBalloon (_T(""), _T(""));
 		m_bBalloonShowing = FALSE;
 	}
 }
 
-void CMainFrame::ShowBalloon(LPCSTR pszInfo, LPCSTR pszTitle, BOOL bCheckSettings, DWORD dwIcon)
+void CMainFrame::ShowBalloon(LPCTSTR pszInfo, LPCTSTR pszTitle, BOOL bCheckSettings, DWORD dwIcon)
 {
 	if (bCheckSettings && _App.Notif_UseBalloon () == FALSE)
 		return;
@@ -2007,22 +2007,22 @@ void CMainFrame::Balloon_ShowDLInfo(BOOL bCheckSettings)
 		if (dld->pMgr->IsRunning ())
 		{
 			
-			if (i) str += '\n';
+			if (i) str += _T('\n');
 
 			CString strtmp; 
-			char szFile [MY_MAX_PATH];
+			TCHAR szFile [MY_MAX_PATH];
 			
 			CDownloads_Tasks::GetFileName (dld, szFile);
 
 			if (dld->pMgr->GetDownloadingSectionCount ())
 			{
-				strtmp.Format ("%s - %d%%", szFile, 
+				strtmp.Format (_T("%s - %d%%"), szFile, 
 					(int) dld->pMgr->GetPercentDone ());
 			}
 			else if (dld->pMgr->IsCantStart () == FALSE)
-				strtmp.Format ("%s - %s...", szFile, LS (L_STARTING));
+				strtmp.Format (_T("%s - %s..."), szFile, LS (L_STARTING));
 			else
-				strtmp.Format ("%s - %s", szFile, LS (L_ERR));
+				strtmp.Format (_T("%s - %s"), szFile, LS (L_ERR));
 
 			str += strtmp;
 		}
@@ -2042,57 +2042,57 @@ void CMainFrame::Balloon_ShowDLInfo(BOOL bCheckSettings)
 			if (bAdded == FALSE)
 			{
 				bAdded = TRUE;
-				if (str != "")
-					str += "\n\n";
+				if (str != _T(""))
+					str += _T("\n\n");
 				str += LS (L_WEBSITES);
-				str += ':';
+				str += _T(':');
 			}
 
 			CString strtmp; 
 	
-			char szUrl [10000];
+			TCHAR szUrl [10000];
 			
 			wpd->GetDownloadingSiteName (szUrl);
 
-			strtmp.Format ("%s - %d%%", szUrl, (int) wpd->GetPercentDone ());
+			strtmp.Format (_T("%s - %d%%"), szUrl, (int) wpd->GetPercentDone ());
 
-			if (str != "")
-				str += '\n';
+			if (str != _T(""))
+				str += _T('\n');
 
 			str += strtmp;
 		}
 	}
 
-	if (str != "")
+	if (str != _T(""))
 	{
 		CString s = LS (L_ACTIVEDLDS);
-		s += ':';
+		s += _T(':');
 		ShowBalloon (str, s, FALSE);
 	}
 	else
 		ShowBalloon (LS (L_THEREARENOACTDLDS), vmsFdmAppMgr::getAppName (), FALSE);
 }
 
-void CMainFrame::ShowTimeoutBalloon(LPCSTR pszInfo, LPCSTR pszTitle, DWORD dwIcon, BOOL bClear)
+void CMainFrame::ShowTimeoutBalloon(LPCTSTR pszInfo, LPCTSTR pszTitle, DWORD dwIcon, BOOL bClear)
 {
 	CMainFrame *pThis = (CMainFrame*) AfxGetApp ()->m_pMainWnd;
 
 	if (bClear)
-		pThis->m_strTimeoutBallon_Msgs = "";
+		pThis->m_strTimeoutBallon_Msgs = _T("");
 
 	
 	CString str = pThis->m_strTimeoutBallon_Msgs;
 
 	
-	pThis->ShowBalloon ("", "");
+	pThis->ShowBalloon (_T(""), _T(""));
 
 	
 	pThis->m_strTimeoutBallon_Msgs = pszInfo;
 
-	if (str != "")
+	if (str != _T(""))
 	{
 		
-		pThis->m_strTimeoutBallon_Msgs += '\n';
+		pThis->m_strTimeoutBallon_Msgs += _T('\n');
 		pThis->m_strTimeoutBallon_Msgs += str;
 	}
 
@@ -2240,13 +2240,13 @@ void CMainFrame::OnExportlistofdownloads()
 void CMainFrame::OnImportlistofdownloads() 
 {
 	CString strFilter;
-	strFilter.Format ("%s (*.txt)|*.txt|%s (*.xml)|*.xml||", LS (L_URLLISTFILES), LS (L_DLINFOLISTFILES));
-	CFileDialog dlg (TRUE, "txt", NULL, OFN_NOCHANGEDIR|OFN_HIDEREADONLY, strFilter, this);
+	strFilter.Format (_T("%s (*.txt)|*.txt|%s (*.xml)|*.xml||"), LS (L_URLLISTFILES), LS (L_DLINFOLISTFILES));
+	CFileDialog dlg (TRUE, _T("txt"), NULL, OFN_NOCHANGEDIR|OFN_HIDEREADONLY, strFilter, this);
 
 	if (_DlgMgr.DoModal (&dlg) == IDCANCEL)
 		return;
 
-	if (dlg.GetFileExt ().CompareNoCase ("txt") == 0)
+	if (dlg.GetFileExt ().CompareNoCase (_T("txt")) == 0)
 		ImportListOfDownloads_FromURLListFile (dlg.GetPathName ());
 	else
 		ImportListOfDownloads_FromDLInfoListFile (dlg.GetPathName ());
@@ -2342,7 +2342,7 @@ LRESULT CMainFrame::OnShowTrayMenu(WPARAM, LPARAM)
 BOOL CMainFrame::ReadCusomizationInfo()
 {
 	CString str = ((CFdmApp*)AfxGetApp ())->m_strAppPath;
-	str += "fdmcs.dat";
+	str += _T("fdmcs.dat");
 
 	HANDLE hFile = CreateFile (str, GENERIC_READ, FILE_SHARE_READ,
 		NULL, OPEN_EXISTING, 0, NULL);
@@ -2356,7 +2356,7 @@ BOOL CMainFrame::ReadCusomizationInfo()
 
 	try {
 		m_Customizations.Load (hFile);
-	}catch (LPCSTR){
+	}catch (LPCTSTR){
 		return FALSE;
 	}
 
@@ -2368,7 +2368,7 @@ BOOL CMainFrame::ReadCusomizationInfo()
 void CMainFrame::DisplayBanner(int iIndex)
 {
 	vmsFDMBanner* banner = m_Customizations.get_Banner (iIndex);
-	CString str = "fdmcsbr.";
+	CString str = _T("fdmcsbr.");
 	str += banner->szType;
 	CString strFile = fsGetDataFilePath (str);
 	
@@ -2420,9 +2420,9 @@ BOOL CMainFrame::IsFloatingInfoWindowVisible()
 	return ::IsWindowVisible (m_pFloatWndsThread->m_wndFloatingInfo.m_hWnd);
 }
 
-bool mainfrm__is_separator (char c)
+bool mainfrm__is_separator (TCHAR c)
 {
-	return c == ' ' || c == '\t' || c == '\n' || c == '\r';
+	return c == _T(' ') || c == _T('\t') || c == _T('\n') || c == _T('\r');
 }
 
 void CMainFrame::OnFileImportImportlistofdownloadsfromclipboard() 
@@ -2431,7 +2431,7 @@ void CMainFrame::OnFileImportImportlistofdownloadsfromclipboard()
 	ap.dwMask = DWCDAP_GROUP;
 
 	CString strURLs = _ClipbrdMgr.Text ();
-	LPCSTR pszURLs = strURLs;
+	LPCTSTR pszURLs = strURLs;
 
 	DLDS_LIST v;
 	vmsDownloadsGroupSmartPtr pGrp;
@@ -2449,14 +2449,14 @@ void CMainFrame::OnFileImportImportlistofdownloadsfromclipboard()
 		{
 			if (mainfrm__is_separator (*pszURLs))
 			{
-				LPCSTR psz = pszURLs+1;
+				LPCTSTR psz = pszURLs+1;
 				while (mainfrm__is_separator (*psz))
 					psz++;
 				if (*psz == 0)
 					break;
 				if (_strnicmp (psz, "http://", 7) == 0 || 
-						_strnicmp (psz, "https://", 8) == 0 ||
-						_strnicmp (psz, "ftp://", 6) == 0)
+						_tcsnicmp (psz, "https://", 8) == 0 ||
+						_tcsnicmp (psz, "ftp://", 6) == 0)
 				{
 					
 					pszURLs = psz;
@@ -2468,7 +2468,7 @@ void CMainFrame::OnFileImportImportlistofdownloadsfromclipboard()
 		}
 
 		
-		if (strURL != "")
+		if (strURL != _T(""))
 		{
 			if (pGrp == NULL)
 			{
@@ -2489,7 +2489,7 @@ void CMainFrame::OnFileImportImportlistofdownloadsfromclipboard()
 			{
 				fsDownload_Properties *dp = dld->pMgr->GetDownloadMgr ()->GetDP ();
 				SAFE_DELETE_ARRAY (dp->pszFileName);
-				dp->pszFileName = new char [pGrp->strOutFolder.Length () + 1];
+				dp->pszFileName = new TCHAR [pGrp->strOutFolder.Length () + 1];
 				_tcscpy (dp->pszFileName, pGrp->strOutFolder);
 			}
 
@@ -2520,7 +2520,7 @@ void CMainFrame::BuildSkinsMenu()
 	for (int i = 0; i < _SkinMgr.get_Count (); i++)
 	{
 		CString str = _SkinMgr.get_Skin (i)->strName;
-		if (str.CompareNoCase ("Old Style") == 0)
+		if (str.CompareNoCase (_T("Old Style")) == 0)
 			str = LS (L_OLDSTYLE);
 		m_odmenu.InsertMenuItem (menu, str, ID_SKIN_0+1+i, i+2, TRUE);
 	}
@@ -2530,9 +2530,9 @@ void CMainFrame::OnSkin(UINT nID)
 {
 	int nSkin = nID - ID_SKIN_0 - 1;
 	
-	CString str = nSkin == -1 ? "" : _SkinMgr.get_Skin (nSkin)->strName;
+	CString str = nSkin == -1 ? _T("") : _SkinMgr.get_Skin (nSkin)->strName;
 	if (str == LS (L_OLDSTYLE))
-		str = "Old Style";
+		str = _T("Old Style");
 	_App.Skin_Current (str);
 
 	if (nSkin != _SkinMgr.get_Current ())
@@ -2571,7 +2571,7 @@ void CMainFrame::OnTUMChanged()
 	_DlgMgr.DoModal (&dlg);
 }
 
-BOOL CMainFrame::ImportListOfDownloads_FromURLListFile(LPCSTR pszFile)
+BOOL CMainFrame::ImportListOfDownloads_FromURLListFile(LPCTSTR pszFile)
 {
 	CStdioFile file;
 	
@@ -2589,7 +2589,7 @@ BOOL CMainFrame::ImportListOfDownloads_FromURLListFile(LPCSTR pszFile)
 	{
 		file.ReadString (strUrl);
 
-		if (strUrl != "")
+		if (strUrl != _T(""))
 		{
 			if (pGrp == NULL)
 			{
@@ -2608,7 +2608,7 @@ BOOL CMainFrame::ImportListOfDownloads_FromURLListFile(LPCSTR pszFile)
 			if (dld->pGroup != pGrp)
 			{
 				dld->pGroup = pGrp;
-				LPSTR psz = new char [pGrp->strOutFolder.Length () + 1];
+				LPTSTR psz = new TCHAR [pGrp->strOutFolder.Length () + 1];
 				_tcscpy (psz, pGrp->strOutFolder);
 				delete [] dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName;
 				dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName = psz;
@@ -2617,7 +2617,7 @@ BOOL CMainFrame::ImportListOfDownloads_FromURLListFile(LPCSTR pszFile)
 			v.push_back (dld);
 		}
 	}
-	while (strUrl != "");
+	while (strUrl != _T(""));
 
 	if (v.size () != 0)
 		_pwndDownloads->CreateDownloads (v, NULL);
@@ -2625,7 +2625,7 @@ BOOL CMainFrame::ImportListOfDownloads_FromURLListFile(LPCSTR pszFile)
 	return TRUE;
 }
 
-BOOL CMainFrame::ImportListOfDownloads_FromDLInfoListFile(LPCSTR pszFile)
+BOOL CMainFrame::ImportListOfDownloads_FromDLInfoListFile(LPCTSTR pszFile)
 {
 	IXMLDOMDocumentPtr spXML;
 	IXMLDOMNodePtr spNode;
@@ -2724,7 +2724,7 @@ BOOL CMainFrame::ImportDownload(IXMLDOMNode *pNode, DLDS_LIST_REF v)
 		spItem = NULL;
 	}
 
-	if (strUrl == "")
+	if (strUrl == _T(""))
 		return FALSE;
 
 	vmsDownloadSmartPtr dld;
@@ -2738,7 +2738,7 @@ BOOL CMainFrame::ImportDownload(IXMLDOMNode *pNode, DLDS_LIST_REF v)
 		if (dld->pGroup != params.pGroup)
 		{
 			dld->pGroup = params.pGroup;
-			LPSTR psz = new char [params.pGroup->strOutFolder.Length () + 1];
+			LPTSTR psz = new TCHAR [params.pGroup->strOutFolder.Length () + 1];
 			_tcscpy (psz, params.pGroup->strOutFolder);
 			delete [] dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName;
 			dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName = psz;
@@ -2831,7 +2831,7 @@ void CMainFrame::OnUpdateLdf0(CCmdUI* pCmdUI)
 
 void CMainFrame::OnLDF(UINT nID)
 {
-	ShellExecute (NULL, "open", _DldsMgr.get_LastFilesDownloaded ()->get_FilePathName (nID - ID_LDF_0), 
+	ShellExecute (NULL, _T("open"), _DldsMgr.get_LastFilesDownloaded ()->get_FilePathName (nID - ID_LDF_0), 
 		NULL, NULL, SW_SHOW);
 }
 
@@ -2871,13 +2871,13 @@ void CMainFrame::OnUpdateTrafficThisMonth(CCmdUI *pCmdUI)
 	UINT64 u = pS ? pS->get_TotalDownloadedByteCount () : 0;
 	UINT64 u2 = pS ? pS->get_TotalUploadedByteCount () : 0;
 	CString str; 
-	str.Format ("%s; %s", 
+	str.Format (_T("%s; %s"), 
 		BytesToString (m_nTrafficUsedThisMonth + fsInternetDownloader::get_TotalTraffic () + u),
 		BytesToString (m_nTrafficUpldThisMonth + u2));
 	pCmdUI->SetText (str);
 	
 	CString str2;
-	str2.Format ("%s; %s", BytesToString (m_nTrafficUsedPrevMonth), BytesToString (m_nTrafficUpldPrevMonth));
+	str2.Format (_T("%s; %s"), BytesToString (m_nTrafficUsedPrevMonth), BytesToString (m_nTrafficUpldPrevMonth));
 	str.Format (LS (L_TRAFF_USED_SBTEXT), str2);
 	m_wndStatusBar.SetToolTipText (ID_SB_TRAFFIC_THISMONTH, str);
 	}
@@ -2890,7 +2890,7 @@ void CMainFrame::OnUpdateTotalSpeed(CCmdUI *pCmdUI)
 	UINT64 u = pS ? pS->get_TotalUploadSpeed () : 0;
 
 	CString str;
-	str.Format ("%s/%s; %s/%s", BytesToString (_pwndDownloads->get_TotalSpeed ()),
+	str.Format (_T("%s/%s; %s/%s"), BytesToString (_pwndDownloads->get_TotalSpeed ()),
 		LS (L_S), BytesToString (u), LS (L_S));
 	pCmdUI->SetText (str);
 }

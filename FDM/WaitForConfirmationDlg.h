@@ -14,11 +14,11 @@ class CWaitForConfirmationDlg : public CDialog
 
 public:
 	BOOL m_bDontAsk;
-	LPCSTR m_pszIcon;
+	LPCTSTR m_pszIcon;
 	
 	
 	
-	void Init (LPCSTR pszMsg, UINT uWait = UINT_MAX, BOOL bShowDontAsk = FALSE, BOOL bNoIsDefault = FALSE, LPCSTR pszDontAskAgainText = NULL, LPCSTR pszMsgIfDontAskAgain = NULL);
+	void Init (LPCTSTR pszMsg, UINT uWait = UINT_MAX, BOOL bShowDontAsk = FALSE, BOOL bNoIsDefault = FALSE, LPCTSTR pszDontAskAgainText = NULL, LPCTSTR pszMsgIfDontAskAgain = NULL);
 	CWaitForConfirmationDlg(CWnd* pParent = NULL);     
 
 	//{{AFX_DATA(CWaitForConfirmationDlg)

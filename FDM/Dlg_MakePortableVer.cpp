@@ -41,7 +41,7 @@ void CDlg_MakePortableVer::OnChoosefolder()
 	CString str;
 	GetDlgItemText (IDC_OUTFOLDER, str);
 
-	if (str.GetLength () > 3 && (str [str.GetLength () - 1] == '\\' || str [str.GetLength () - 1] == '/'))
+	if (str.GetLength () > 3 && (str [str.GetLength () - 1] == _T('\\') || str [str.GetLength () - 1] == _T('/')))
 		str.GetBuffer (0) [str.GetLength () - 1] = 0;
 
 	CFolderBrowser *fb = CFolderBrowser::Create (LS (L_CHOOSEOUTFOLDER), str, NULL, this);
@@ -109,11 +109,11 @@ DWORD WINAPI CDlg_MakePortableVer::_threadCreatePortableVer(LPVOID lp)
 	CString str;
 	pthis->GetDlgItemText (IDC_OUTFOLDER, str);
 
-	if (str [str.GetLength () - 1] != '\\' && str [str.GetLength () - 1] != '/')
-		str += '\\';
-	str += "Free Download Manager";
+	if (str [str.GetLength () - 1] != _T('\\') && str [str.GetLength () - 1] != _T('/'))
+		str += _T('\\');
+	str += _T("Free Download Manager");
 
-	CString str2 = str + "\\1";
+	CString str2 = str + _T("\\1");
 	fsBuildPathToFile (str2);
 
 	int nTotal = 0;

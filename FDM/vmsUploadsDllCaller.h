@@ -17,19 +17,19 @@ class vmsUploadsDllCaller : public vmsUploadsDll::vmsDllCaller
 {
 public:
 	vmsUploadsDll::vmsDllCallerEx* GetExtendedFeatures();
-	BOOL OnBeforeUpload (LPSTR, bool*);
-	void GetCommonFilesFolder (LPSTR psz);
-	void GetDataFilePath (LPCSTR pszName, LPSTR pszResult);
+	BOOL OnBeforeUpload (LPTSTR, bool*);
+	void GetCommonFilesFolder (LPTSTR psz);
+	void GetDataFilePath (LPCTSTR pszName, LPTSTR pszResult);
 	
 	vmsUploadsDll::vmsDllPersist* GetPersist();
 	
 	HBITMAP GetBitmap (vmsUploadsDll::vmsWhichBitmap enBmp);
 	
-	void IRToStr (int ir, char *sz, UINT cch);
+	void IRToStr (int ir, TCHAR *sz, UINT cch);
 	
 	virtual vmsUploadsDll::vmsDllCallerSettings* GetSettings();
 	
-	virtual LPCSTR GetTranslatedString (int nId);
+	virtual LPCTSTR GetTranslatedString (int nId);
 
 	vmsUploadsDllCaller();
 	virtual ~vmsUploadsDllCaller();

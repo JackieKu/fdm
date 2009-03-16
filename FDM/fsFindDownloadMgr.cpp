@@ -9,7 +9,7 @@
 #include "DownloadsWnd.h"
 
 extern CDownloadsWnd* _pwndDownloads;
-extern LPCSTR fsStrStrNoCase(LPCSTR pszIn, LPCSTR pszWhat);
+extern LPCTSTR fsStrStrNoCase(LPCTSTR pszIn, LPCTSTR pszWhat);
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -314,7 +314,7 @@ BOOL fsFindDownloadMgr::IsSatisfies(vmsDownloadSmartPtr dld)
 
 	if (m_dwFlags & SEARCHIN_FILENAME)
 	{
-		char sz [10000];
+		TCHAR sz [10000];
 		CDownloads_Tasks::GetFileName (dld, sz);
 		if (fsStrStrNoCase (sz, m_strWhat))
 			return TRUE;

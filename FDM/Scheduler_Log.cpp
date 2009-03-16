@@ -41,7 +41,7 @@ BOOL CScheduler_Log::Create(CWnd *pParent)
 	if (!CWndLog::Create (pParent))
 		return FALSE;
 
-	ReadState ("SchedulerLog");
+	ReadState (_T("SchedulerLog"));
 
 	return TRUE;
 }

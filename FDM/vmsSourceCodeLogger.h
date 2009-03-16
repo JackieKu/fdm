@@ -37,14 +37,14 @@ extern class vmsSourceCodeLogger _sclgr;
 class vmsSourceCodeLogger  
 {
 public:
-	void logResult (LPCSTR pszDescription, DWORD dwResultCode);
+	void logResult (LPCTSTR pszDescription, DWORD dwResultCode);
 	void logSysError (DWORD dw);
 	bool isLogForCurrentThreadDisabled();
 	void DisableLogForCurrentThread(bool bDisable = true);
 	void setLogCurrentTimeForCurrentThread(bool bLog = true);
 	void FlushBuffers();
-	void log (LPCSTR psz, bool bAddNextLine = false);
-	void logf (LPCSTR pszFormat ...);
+	void log (LPCTSTR psz, bool bAddNextLine = false);
+	void logf (LPCTSTR pszFormat ...);
 	vmsSourceCodeLogger(int bufSizePerThread = 512*1024);
 	virtual ~vmsSourceCodeLogger();
 
@@ -80,15 +80,15 @@ protected:
 class vmsSourceCodeLogger_Function
 {
 public:
-	vmsSourceCodeLogger_Function (LPCSTR pszDesc)
+	vmsSourceCodeLogger_Function (LPCTSTR pszDesc)
 	{
-		LOG ("%s started.", pszDesc);
+		LOG (_T("%s started."), pszDesc);
 		m_strDesc = pszDesc;
 	}
 
 	~vmsSourceCodeLogger_Function ()
 	{
-		LOG ("%s has finished.", m_strDesc.c_str ());
+		LOG (_T("%s has finished."), m_strDesc.c_str ());
 	}
 
 protected:

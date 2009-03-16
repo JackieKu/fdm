@@ -56,16 +56,16 @@ struct fsSiteInfo_v1
 };  
 
 #define SITESFILE_CURRENT_VERSION	((WORD)3)
-#define SITESFILE_SIG     "FDM Sites  "
+#define SITESFILE_SIG     _T("FDM Sites  ")
 
 struct fsSitesFileHdr
 {
-	char szSig [sizeof (SITESFILE_SIG) + 1];
+	TCHAR szSig [sizeof (SITESFILE_SIG) + 1];
 	WORD wVer;
 
 	fsSitesFileHdr ()
 	{
-		strcpy (szSig, SITESFILE_SIG);
+		_tcscpy (szSig, SITESFILE_SIG);
 		wVer = SITESFILE_CURRENT_VERSION;
 	}
 };  
@@ -106,10 +106,10 @@ public:
 	
 	
 	
-	fsSiteInfo* FindSite2 (LPCSTR pszSite, DWORD dwValidFor, BOOL bAllReq = TRUE);
+	fsSiteInfo* FindSite2 (LPCTSTR pszSite, DWORD dwValidFor, BOOL bAllReq = TRUE);
 	
 	
-	int FindSite (LPCSTR pszName, DWORD dwValidFor, BOOL bAllReq = TRUE);
+	int FindSite (LPCTSTR pszName, DWORD dwValidFor, BOOL bAllReq = TRUE);
 	
 	fsSiteInfo* GetSite (int iIndex);
 	

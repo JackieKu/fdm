@@ -61,7 +61,7 @@ int CHFE_Address::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_wndUrl.SetWindowText (_LastUrlPaths.GetRecordCount () ? _LastUrlPaths.GetRecord (0) : "ftp://");
 	m_wndUrl.SetReturnID (ID_HFE_GO);
 
-	m_font.CreateFont (15, 0, 0, 0, FW_NORMAL, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "MS Sans Serif");
+	m_font.CreateFont (15, 0, 0, 0, FW_NORMAL, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, _T("MS Sans Serif"));
 
 	CreateBars ();
 	
@@ -119,19 +119,19 @@ void CHFE_Address::OnHfeGo()
 	HfeGo ();
 }
 
-LPCSTR CHFE_Address::GetUrl()
+LPCTSTR CHFE_Address::GetUrl()
 {
 	m_wndUrl.GetWindowText (m_strUrl);
 
 	
-	if (strnicmp (m_strUrl, "ftp.", 4) == 0)
+	if (strnicmp (m_strUrl, _T("ftp."), 4) == 0)
 	{
 		
 		CString str = "ftp://";
 		str += m_strUrl;
 		m_strUrl = str;
 	}
-	else if (strnicmp (m_strUrl, "www.", 3) == 0)	
+	else if (strnicmp (m_strUrl, _T("www."), 3) == 0)	
 	{
 		
 		CString str = "http://";
@@ -141,8 +141,8 @@ LPCSTR CHFE_Address::GetUrl()
 
 	if (strnicmp (m_strUrl, "ftp://", 6) == 0)
 	{
-		if (m_strUrl.Right (1) != '/' && m_strUrl.Right (1) != '\\')
-			m_strUrl += '/';
+		if (m_strUrl.Right (1) != _T('/') && m_strUrl.Right (1) != _T('\\'))
+			m_strUrl += _T('/');
 	}  
 
 	
@@ -170,7 +170,7 @@ void CHFE_Address::UpdateUrl()
 		bIncPass = *url.GetPassword () != 0;
 	}
 
-	char szUrl [10000];
+	TCHAR szUrl [10000];
 	*szUrl = 0;
 	_pwndHFE->GetMgr ()->GetCurrentUrl (szUrl, sizeof (szUrl), bIncUser, bIncPass);
 	if (*szUrl)
@@ -200,7 +200,7 @@ void CHFE_Address::CreateBars()
 	UINT uID = ID_HFE_GO;
 	m_barGo.SetButtons (&uID, 1);
 	
-	m_barGo.SetButtonText (0, "Go");
+	m_barGo.SetButtonText (0, _T("Go"));
 
 	
 	m_barBack.SetSizes (CSize (35, 23), CSize (28, 16));
@@ -225,7 +225,7 @@ void CHFE_Address::CreateBars()
 	m_barBack.GetToolBarCtrl ().EnableButton (ID_HFE_BACK, FALSE);
 }  
 
-void CHFE_Address::PushUrl(LPCSTR pszUrl)
+void CHFE_Address::PushUrl(LPCTSTR pszUrl)
 {
 	if (m_vAddrs.size ())
 		if (m_vAddrs [m_vAddrs.size () - 1] == pszUrl)
@@ -240,7 +240,7 @@ void CHFE_Address::PushUrl(LPCSTR pszUrl)
 
 	url.Crack (pszUrl);
 
-	char szUrl [10000];
+	TCHAR szUrl [10000];
 	DWORD dw = sizeof (szUrl);
 	fsURL url1;
 
@@ -256,7 +256,7 @@ void CHFE_Address::PushUrl(LPCSTR pszUrl)
 void CHFE_Address::OnHfeBack()
 {
 	CString strUrl = PopUrl ();
-	if (strUrl != "")
+	if (strUrl != _T(""))
 	{
 		m_wndUrl.SetWindowText (strUrl);
 		HfeGo (FALSE);
@@ -267,7 +267,7 @@ CString CHFE_Address::PopUrl()
 {
 	
 	if (m_vAddrs.size () < 2)
-		return "";
+		return _T("");
 
 	CString strUrl = m_vAddrs [m_vAddrs.size () - 2];	
 	m_vAddrs.del (m_vAddrs.size () - 1);
@@ -303,9 +303,9 @@ BOOL CHFE_Address::OnNotify(WPARAM , LPARAM lParam, LRESULT *pResult)
 		{
 			LPNMTBGETINFOTIPA inf = (LPNMTBGETINFOTIPA) nm;
 			if (nID == ID_HFE_BACK)
-				strcpy (inf->pszText, LS (L_BACK));
+				_tcscpy (inf->pszText, LS (L_BACK));
 			else
-				strcpy (inf->pszText, LS (L_GO));
+				_tcscpy (inf->pszText, LS (L_GO));
 		}
 		break;
 	}

@@ -76,7 +76,7 @@ BOOL CHFE_FileList::Create(CWnd *pParent)
 	InsertColumn (1, LS (L_SIZE), LVCFMT_LEFT, 80, 0);
 	InsertColumn (2, LS (L_DATE), LVCFMT_LEFT, 170, 0);
 
-	ReadState ("HFEFileList");
+	ReadState (_T("HFEFileList"));
 
 	ShowWindow (SW_SHOW);
 
@@ -102,7 +102,7 @@ void CHFE_FileList::UpdateList()
 	if (mgr->IsCurrentPathRoot () == FALSE)
 	{
 		
-		int iItem = AddItem ("..", GetSysColor (COLOR_WINDOW), GetSysColor (COLOR_WINDOWTEXT), 0);
+		int iItem = AddItem (_T(".."), GetSysColor (COLOR_WINDOW), GetSysColor (COLOR_WINDOWTEXT), 0);
 		SetItemData (iItem, NULL);
 	}
 
@@ -124,7 +124,7 @@ void CHFE_FileList::UpdateList()
 				CHAR szDim [10];
 				float val;
 				BytesToXBytes (file->uSize, &val, szDim);
-				str.Format ("%.*g %s", val > 999 ? 4 : 3, val, szDim);
+				str.Format (_T("%.*g %s"), val > 999 ? 4 : 3, val, szDim);
 			}
 			else
 				str = fsBytesToStr (file->uSize);
@@ -142,8 +142,8 @@ void CHFE_FileList::UpdateList()
 
 			SystemTimeToStr (&time, strDate, strTime);
 
-			strcat (strTime, " ");
-			strcat (strTime, strDate);
+			_tcscat (strTime, _T(" "));
+			_tcscat (strTime, strDate);
 			SetItemText (iItem, 2, strTime);
 		}
 	}
@@ -336,7 +336,7 @@ void CHFE_FileList::OnHfeOpenfolder()
 	POSITION pos = GetFirstSelectedItemPosition ();
 	int iItem = GetNextSelectedItem (pos);
 
-	char szUrl [10000];
+	TCHAR szUrl [10000];
 
 	
 	if (iItem == 0 && _pwndHFE->GetMgr ()->IsCurrentPathRoot () == FALSE)
@@ -421,7 +421,7 @@ void CHFE_FileList::DownloadSelected()
 	
 	mgr->RetreiveInfoWhileGettingList (FALSE); 
 	
-	char szUrl [10000];
+	TCHAR szUrl [10000];
 	mgr->GetCurrentUrl (szUrl, 10000);
 
 	CString strOrigUrl; 
@@ -469,7 +469,7 @@ void CHFE_FileList::DownloadSelected()
 		_pwndHFE->LogFailedMessage (LS (L_FAILED));
 }
 
-fs::tree <fsFileInfo*>* CHFE_FileList::BuildList(LPCSTR pszFolder, BOOL *pbNeedStop, int* piProgress, int iProgressDone)
+fs::tree <fsFileInfo*>* CHFE_FileList::BuildList(LPCTSTR pszFolder, BOOL *pbNeedStop, int* piProgress, int iProgressDone)
 {
 	fsInternetFileListMgr *mgr = _pwndHFE->GetMgr ();
 	fs::tree <fsFileInfo*> *pRoot = NULL;
@@ -530,7 +530,7 @@ fs::tree <fsFileInfo*>* CHFE_FileList::BuildList(LPCSTR pszFolder, BOOL *pbNeedS
 
 			
 			str [str.Length ()-1] = 0;
-			if (strchr (str, '\\') || strchr (str, '/'))
+			if (strchr (str, _T('\\')) || _tcschr (str, _T('/')))
 				continue;
 
 			

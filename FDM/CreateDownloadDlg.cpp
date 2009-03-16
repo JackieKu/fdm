@@ -31,7 +31,7 @@ extern CDownloadsWnd *_pwndDownloads;
 static char THIS_FILE[] = __FILE__;
 #endif      
 
-CCreateDownloadDlg::CCreateDownloadDlg(vmsDownloadSmartPtr dld, LPCSTR pszStartUrl, LPCSTR pszComment, LPCSTR pszReferer, CWnd* pParent )
+CCreateDownloadDlg::CCreateDownloadDlg(vmsDownloadSmartPtr dld, LPCTSTR pszStartUrl, LPCTSTR pszComment, LPCTSTR pszReferer, CWnd* pParent )
 	: CDialog(CCreateDownloadDlg::IDD, pParent), m_dld (dld)
 {
 	//{{AFX_DATA_INIT(CCreateDownloadDlg)
@@ -104,7 +104,7 @@ void CCreateDownloadDlg::OnOK()
 
 	if (nDldType == 1)	
 	{
-		char sz [MY_MAX_PATH];
+		TCHAR sz [MY_MAX_PATH];
 		GetTempPath (sizeof (sz), sz);
 		strOutFolder = sz;
 	}
@@ -125,8 +125,8 @@ void CCreateDownloadDlg::OnOK()
 			_App.NewDL_GenerateNameAutomatically (TRUE);
 	}
 
-	fsPathToGoodPath ((LPSTR)(LPCSTR)strOutFolder);
-	fsPathToGoodPath ((LPSTR)(LPCSTR)strFileName);
+	fsPathToGoodPath ((LPTSTR)(LPCTSTR)strOutFolder);
+	fsPathToGoodPath ((LPTSTR)(LPCTSTR)strFileName);
 
 	if (strOutFolder.GetLength () == 0)
 	{
@@ -139,9 +139,9 @@ void CCreateDownloadDlg::OnOK()
 		_LastFolders.AddRecord (strOutFolder);
 	_LastUrlFiles.AddRecord (m_strUrl);
 
-	if (strOutFolder [strOutFolder.GetLength () - 1] != '\\' && 
-		strOutFolder [strOutFolder.GetLength () - 1] != '/')
-		strOutFolder += '\\';
+	if (strOutFolder [strOutFolder.GetLength () - 1] != _T('\\') && 
+		strOutFolder [strOutFolder.GetLength () - 1] != _T('/'))
+		strOutFolder += _T('\\');
 
 	if (_App.NewGrp_SelectWay () == NGSW_USE_ALWAYS_SAME_GROUP_WITH_OUTFOLDER_AUTO_UPDATE)
 	{
@@ -229,7 +229,7 @@ BOOL CCreateDownloadDlg::OnInitDialog()
 
 	if (m_strUrl.GetLength () == 0)
 	{
-		LPCSTR pszUrl = _ClipbrdMgr.Text ();
+		LPCTSTR pszUrl = _ClipbrdMgr.Text ();
 		if (pszUrl && *pszUrl)
 		{
 			fsURL url;
@@ -269,11 +269,11 @@ BOOL CCreateDownloadDlg::OnInitDialog()
 		m_dld->pMgr->GetDownloadMgr ()->CreateByUrl ("http://", TRUE);
 	}  
 
-	if (m_strReferer != "")
+	if (m_strReferer != _T(""))
 	{
 		SAFE_DELETE_ARRAY (m_dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszReferer);
-		m_dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszReferer = new char [m_strReferer.GetLength () + 1];
-		strcpy (m_dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszReferer, m_strReferer);
+		m_dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszReferer = new TCHAR [m_strReferer.GetLength () + 1];
+		_tcscpy (m_dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszReferer, m_strReferer);
 	}
 
 	m_bGroupChanged = m_bAuthChanged = FALSE;
@@ -282,7 +282,7 @@ BOOL CCreateDownloadDlg::OnInitDialog()
 	if (IR_SUCCESS == url.Crack (m_strUrl) && *url.GetHostName ())
 	{
 		fsURL u;
-		char szUrl [10000];
+		TCHAR szUrl [10000];
 		DWORD dwLen = 10000;
 		u.Create (url.GetInternetScheme (), url.GetHostName (), url.GetPort (), NULL, NULL, url.GetPath (), szUrl, &dwLen);
 		m_strUrl = szUrl;
@@ -293,7 +293,7 @@ BOOL CCreateDownloadDlg::OnInitDialog()
 
 	Update_User_Password ();
 
-	SetDlgItemText (IDC_URL, m_strUrl == "http://url/" ? "http://" : m_strUrl);
+	SetDlgItemText (IDC_URL, m_strUrl == _T("http://url/") ? "http://" : m_strUrl);
 	((CEdit*) GetDlgItem (IDC_URL))->SetSel (0, -1);
 
 	GetDlgItem (IDC_URL)->SetFocus ();
@@ -491,8 +491,8 @@ BOOL CCreateDownloadDlg::ReadDNP()
 
 		fsnew (dnp->pszUserName, CHAR, strUser.GetLength ()+1);
 		fsnew (dnp->pszPassword, CHAR, strPassword.GetLength ()+1);
-		strcpy (dnp->pszUserName, strUser);
-		strcpy (dnp->pszPassword, strPassword);
+		_tcscpy (dnp->pszUserName, strUser);
+		_tcscpy (dnp->pszPassword, strPassword);
 	}
 
 	m_bUrlChanged = FALSE;
@@ -501,10 +501,10 @@ BOOL CCreateDownloadDlg::ReadDNP()
 
 void CCreateDownloadDlg::OnChoosefolder() 
 {
-	CString str = "";
+	CString str = _T("");
 	GetDlgItemText (IDC_OUTFOLDER, str);
 
-	if (str.GetLength () > 3 && (str [str.GetLength () - 1] == '\\' || str [str.GetLength () - 1] == '/'))
+	if (str.GetLength () > 3 && (str [str.GetLength () - 1] == _T('\\') || str [str.GetLength () - 1] == _T('/')))
 		str.GetBuffer (0) [str.GetLength () - 1] = 0;
 
 	CFolderBrowser *fb = CFolderBrowser::Create (LS (L_CHOOSEOUTFOLDER), str, NULL, this);
@@ -596,20 +596,20 @@ void CCreateDownloadDlg::UrlChanged()
 		fsFileNameFromUrlPath (url.GetPath (), url.GetInternetScheme () == INTERNET_SCHEME_FTP, 
 			TRUE, szFile, sizeof (szFile));
 
-		int len = strlen (szFile);
+		int len = _tcslen (szFile);
 		vmsDownloadsGroupSmartPtr grp;
 
 		if (len)
 		{
 			for (int i = len-1; i > 0; i--)
-				if (szFile [i] == '.')	
+				if (szFile [i] == _T('.'))	
 					break;
 
 			if (i && i < len-1)
 			{
 				i++;
 				CHAR szExt [1000];
-				strcpy (szExt, szFile + i);
+				_tcscpy (szExt, szFile + i);
 				grp = _DldsGrps.FindGroupByExt (szExt);
 			}
 		}
@@ -695,7 +695,7 @@ void CCreateDownloadDlg::ApplyLanguage()
 		fsDlgLngInfo (IDC_PLACEATTOP, L_PLACEDLDATTOP),
 	};
 
-	CString str = LS (L_COMMENT); str += ':';
+	CString str = LS (L_COMMENT); str += _T(':');
 	SetDlgItemText (IDC__COMMENT, str);
 
 	_LngMgr.ApplyLanguage (this, lnginfo, sizeof (lnginfo) / sizeof (fsDlgLngInfo), L_NEWDLD);
@@ -807,14 +807,14 @@ try{
 	if (pThis->m_pszCookies)
 	{
 		SAFE_DELETE_ARRAY (pThis->m_dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszCookies);
-		pThis->m_dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszCookies = new char [lstrlen (pThis->m_pszCookies) + 1];
+		pThis->m_dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszCookies = new TCHAR [lstrlen (pThis->m_pszCookies) + 1];
 		_tcscpy (pThis->m_dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszCookies, pThis->m_pszCookies);
 	}
 
 	if (pThis->m_pszPostData)
 	{
 		SAFE_DELETE_ARRAY (pThis->m_dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszPostData);
-		pThis->m_dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszPostData = new char [lstrlen (pThis->m_pszPostData) + 1];
+		pThis->m_dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszPostData = new TCHAR [lstrlen (pThis->m_pszPostData) + 1];
 		_tcscpy (pThis->m_dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszPostData, pThis->m_pszPostData);
 	}
 
@@ -822,7 +822,7 @@ try{
 	
 	if (ir != IR_SUCCESS)
 	{
-		char szMsg [1000];
+		TCHAR szMsg [1000];
 		fsIRToStr (ir, szMsg, sizeof (szMsg));
 		if (pThis->m_bNeedExit == FALSE)
 		{
@@ -845,10 +845,10 @@ try{
 		{
 			if (_pwndDownloads->IsSizesInBytes () == FALSE)
 			{
-				char szDim [50];
+				TCHAR szDim [50];
 				float fSize;
 				BytesToXBytes (uSize, &fSize, szDim);
-				strSize.Format ("%.*g %s", fSize > 999 ? 4 : 3, fSize, szDim);
+				strSize.Format (_T("%.*g %s"), fSize > 999 ? 4 : 3, fSize, szDim);
 			}
 			else
 				strSize = fsBytesToStr (uSize); 
@@ -883,13 +883,13 @@ void CCreateDownloadDlg::OnFileauto()
 {
 	CString str;
 	GetDlgItemText (IDC_SAVEAS, str);
-	if (str == "" && IsDlgButtonChecked (IDC_FILEAUTO) == BST_UNCHECKED)
+	if (str == _T("") && IsDlgButtonChecked (IDC_FILEAUTO) == BST_UNCHECKED)
 	{
 		fsURL url;
 		CString strURL;
 		GetDlgItemText (IDC_URL, strURL);
 		url.Crack (strURL);
-		char szFile [MY_MAX_PATH];
+		TCHAR szFile [MY_MAX_PATH];
 		fsFileNameFromUrlPath (url.GetPath (), url.GetInternetScheme () == INTERNET_SCHEME_FTP,
 			TRUE, szFile, sizeof (szFile));
 		SetDlgItemText (IDC_SAVEAS, szFile);
@@ -951,7 +951,7 @@ int CCreateDownloadDlg::_CheckDownloadAlrExists(vmsDownloadSmartPtr dld, BOOL bN
 						if (lstrcmpi (d->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName))
 						{
 							SAFE_DELETE_ARRAY (d->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName);
-							d->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName = new char [lstrlen (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName)+1];
+							d->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName = new TCHAR [lstrlen (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName)+1];
 							_tcscpy (d->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName);
 						}
 					}
@@ -960,7 +960,7 @@ int CCreateDownloadDlg::_CheckDownloadAlrExists(vmsDownloadSmartPtr dld, BOOL bN
 
 				case IDC_LAUNCH:
 					if (d->pMgr->GetDownloadMgr ()->IsDone ())
-						ShellExecute (::GetDesktopWindow (), "open", d->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, 
+						ShellExecute (::GetDesktopWindow (), _T("open"), d->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, 
 							NULL, NULL, SW_SHOW);
 					break;
 
@@ -1001,7 +1001,7 @@ void CCreateDownloadDlg::OnMirrors()
     _DlgMgr.OnEndDialog (&sheet);	
 }
 
-fsSiteInfo* CCreateDownloadDlg::_SavePassword(LPCSTR pszServer, fsNetworkProtocol np, LPCSTR pszUser, LPCSTR pszPwd)
+fsSiteInfo* CCreateDownloadDlg::_SavePassword(LPCTSTR pszServer, fsNetworkProtocol np, LPCTSTR pszUser, LPCTSTR pszPwd)
 {
 	if (pszUser == NULL || *pszUser == 0)
 		return NULL;
@@ -1072,7 +1072,7 @@ void CCreateDownloadDlg::OnMalicious()
 	fsInternetResult ir = mdc.Check (m_strUrl);
 	if (ir != IR_SUCCESS)
 	{
-		char sz [1000];
+		TCHAR sz [1000];
 		fsIRToStr (ir, sz, sizeof (sz));
 		MessageBox (sz, LS (L_ERR), MB_ICONERROR);
 		return;
@@ -1118,7 +1118,7 @@ void CCreateDownloadDlg::OnOutfolderSetdefault()
 	_SetDownloadOutputFolderAsDefault (this, strOutFolder, m_wndGroups.GetSelectedGroup ());
 }
 
-BOOL CCreateDownloadDlg::_SetDownloadOutputFolderAsDefault(CWnd *pwndParent, LPCSTR pszFolder, vmsDownloadsGroupSmartPtr pGroup)
+BOOL CCreateDownloadDlg::_SetDownloadOutputFolderAsDefault(CWnd *pwndParent, LPCTSTR pszFolder, vmsDownloadsGroupSmartPtr pGroup)
 {
 	CMyMessageBox dlg (pwndParent);
 	dlg.m_hIcon = LoadIcon (NULL, IDI_QUESTION);
@@ -1138,11 +1138,11 @@ BOOL CCreateDownloadDlg::_SetDownloadOutputFolderAsDefault(CWnd *pwndParent, LPC
 	_App.View_SetOutputFolderAsDefForAllGrpsChecked (dlg.m_bChecked);
 
 	CString strFolder;
-	if (pszFolder [lstrlen (pszFolder) - 1] != '\\' &&
-			pszFolder [lstrlen (pszFolder) - 1] != '/')
+	if (pszFolder [lstrlen (pszFolder) - 1] != _T('\\') &&
+			pszFolder [lstrlen (pszFolder) - 1] != _T('/'))
 	{
 		strFolder = pszFolder;
-		strFolder += '\\';
+		strFolder += _T('\\');
 		pszFolder = strFolder;
 	}
 
@@ -1163,7 +1163,7 @@ BOOL CCreateDownloadDlg::_CheckFileName(CDialog *pdlg, UINT nIdCtrl)
 {
 	CString str;
 	pdlg->GetDlgItemText (nIdCtrl, str);
-	LPCSTR pszInvChars = "\\/:*?\"<>|";
+	LPCTSTR pszInvChars = _T("\\/:*?\"<>|");
 	if (str.FindOneOf (pszInvChars) != -1)
 	{
 		pdlg->MessageBox (LS (L_INVFILENAME), LS (L_INPERR), MB_ICONEXCLAMATION);
@@ -1178,8 +1178,8 @@ BOOL CCreateDownloadDlg::_CheckFolderName(CDialog *pdlg, UINT nIdCtrl)
 {
 	CString str;
 	pdlg->GetDlgItemText (nIdCtrl, str);
-	LPCSTR pszInvChars = ":*?\"<>|";
-	if (str.GetLength () > 2 && str [1] == ':')
+	LPCTSTR pszInvChars = _T(":*?\"<>|");
+	if (str.GetLength () > 2 && str [1] == _T(':'))
 		str.Delete (1);	
 	if (str.FindOneOf (pszInvChars) != -1)
 	{

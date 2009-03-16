@@ -120,7 +120,7 @@ int CShedulerWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	m_wndSplitter.SetWnd1 (m_wndTasks);
 	m_wndSplitter.SetWnd2 (m_wndLog);
-	m_wndSplitter.SetRatio (_App.View_SplitterRatio ("Scheduler_T_L"));
+	m_wndSplitter.SetRatio (_App.View_SplitterRatio (_T("Scheduler_T_L")));
 
 	LoadTasks ();
 
@@ -197,7 +197,7 @@ void CShedulerWnd::OnProperties(fsSchedule *task)
 
 void CShedulerWnd::LoadTasks()
 {
-	CString strFile = fsGetDataFilePath ("schedules.sav");
+	CString strFile = fsGetDataFilePath (_T("schedules.sav"));
 
 	if (GetFileAttributes (strFile) == DWORD (-1))
 		return;
@@ -264,7 +264,7 @@ fsScheduleMgr* CShedulerWnd::GetMgr()
 	return &m_mgr;
 }
 
-void CShedulerWnd::_ScheduleMgrEventDesc(LPCSTR pszEvent, fsScheduleMgrEventType enType, LPVOID lp)
+void CShedulerWnd::_ScheduleMgrEventDesc(LPCTSTR pszEvent, fsScheduleMgrEventType enType, LPVOID lp)
 {
 	CShedulerWnd *pThis = (CShedulerWnd*) lp;
 
@@ -291,8 +291,8 @@ void CShedulerWnd::_ScheduleMgrEventDesc(LPCSTR pszEvent, fsScheduleMgrEventType
 		break;
 	}
 
-	fsnew (ev.pszEvent, char, strlen (pszEvent) + 1);
-	strcpy (ev.pszEvent, pszEvent);
+	fsnew (ev.pszEvent, TCHAR, _tcslen (pszEvent) + 1);
+	_tcscpy (ev.pszEvent, pszEvent);
 
 	pThis->m_evMgr.add (&ev);
 	pThis->m_wndLog.AddRecord (&ev);
@@ -354,17 +354,17 @@ void CShedulerWnd::SaveAll()
 	}
 	while (TRUE);
 
-	_App.View_SplitterRatio ("Scheduler_T_L", m_wndSplitter.GetRatio ());
-	m_wndTasks.SaveState ("SchedulerTasks");
-	m_wndLog.SaveState ("SchedulerLog");
+	_App.View_SplitterRatio (_T("Scheduler_T_L"), m_wndSplitter.GetRatio ());
+	m_wndTasks.SaveState (_T("SchedulerTasks"));
+	m_wndLog.SaveState (_T("SchedulerLog"));
 }
 
 void CShedulerWnd::Plugin_GetToolBarInfo(wgTButtonInfo **ppButtons, int *pcButtons)
 {
 	static wgTButtonInfo btns [] = 
 	{
-		wgTButtonInfo (ID_CREATENEWTASK, TBSTYLE_BUTTON, ""),
-		wgTButtonInfo (ID_TASKS_PROPERTIES, TBSTYLE_BUTTON, ""),
+		wgTButtonInfo (ID_CREATENEWTASK, TBSTYLE_BUTTON, _T("")),
+		wgTButtonInfo (ID_TASKS_PROPERTIES, TBSTYLE_BUTTON, _T("")),
 	};
 
 	btns [0].pszToolTip = LS (L_NEWTASK);
@@ -567,7 +567,7 @@ void CShedulerWnd::TurnoffWhenDone(fsShutdownType enST, BOOL bUse)
 void CShedulerWnd::Plugin_GetMenuViewItems(wgMenuViewItem **ppItems, int * cItems)
 {
 	static wgMenuViewItem aItems [] = {
-		wgMenuViewItem ("", &_pwndScheduler->m_bShowLog),
+		wgMenuViewItem (_T(""), &_pwndScheduler->m_bShowLog),
 	};
 
 	aItems [0].pszName = LS (L_SCHEDULERLOG);
@@ -595,7 +595,7 @@ void CShedulerWnd::ShowLog(BOOL bShow)
 	OnSize (0, rc.right, rc.bottom);
 }
 
-void CShedulerWnd::Plugin_GetPluginNames(LPCSTR *ppszLong, LPCSTR *ppszShort)
+void CShedulerWnd::Plugin_GetPluginNames(LPCTSTR *ppszLong, LPCTSTR *ppszShort)
 {
 	static CString strName;
 	strName = LSNP (L_SCHEDULER);
@@ -604,7 +604,7 @@ void CShedulerWnd::Plugin_GetPluginNames(LPCSTR *ppszLong, LPCSTR *ppszShort)
 
 BOOL CShedulerWnd::SaveSchedules()
 {
-	CString strFile = fsGetDataFilePath ("schedules.sav");
+	CString strFile = fsGetDataFilePath (_T("schedules.sav"));
 
 	HANDLE hFile = CreateFile (strFile, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS,
 		FILE_ATTRIBUTE_HIDDEN, NULL);
@@ -646,7 +646,7 @@ void CShedulerWnd::ApplyLanguageToMenuView(CMenu *menu)
 	menu->ModifyMenu (1, MF_BYPOSITION | MF_STRING, 0, LS (L_SCHEDULERLOG));
 
 	UINT aCmds [] = {ID_TASKS_1, ID_TASKS_2, ID_TASKS_3, ID_TASKS_4, ID_LOG_1, ID_LOG_2, ID_LOG_3 };
-	LPCSTR apszCmds [] = {LS (L_WTS), LS (L_HTS), LS (L_NEXTSTART), LS (L_LASTSTART), LS (L_TIME),
+	LPCTSTR apszCmds [] = {LS (L_WTS), LS (L_HTS), LS (L_NEXTSTART), LS (L_LASTSTART), LS (L_TIME),
 		LS (L_DATE), LS (L_INFORMATION)};
 	
 	for (int i = 0; i < sizeof (aCmds) / sizeof (UINT); i++)

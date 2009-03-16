@@ -23,9 +23,9 @@
 
 struct wgMenuViewItem
 {
-	LPCSTR pszName;
+	LPCTSTR pszName;
 	BOOL* pbView;
-	wgMenuViewItem (LPCSTR psz, BOOL *pb) : pszName (psz), pbView (pb) {}
+	wgMenuViewItem (LPCTSTR psz, BOOL *pb) : pszName (psz), pbView (pb) {}
 	wgMenuViewItem () {}
 };
 
@@ -33,9 +33,9 @@ struct wgTButtonInfo
 {
 	int iIdCommand;
 	BYTE bStyle;
-	LPCSTR pszToolTip;
-	LPCSTR pszName;
-    wgTButtonInfo (int cmd, BYTE style, LPCSTR pszTip, LPCSTR pszBtnName = NULL) : iIdCommand (cmd), bStyle (style), 
+	LPCTSTR pszToolTip;
+	LPCTSTR pszName;
+    wgTButtonInfo (int cmd, BYTE style, LPCTSTR pszTip, LPCTSTR pszBtnName = NULL) : iIdCommand (cmd), bStyle (style), 
 		pszToolTip (pszTip), pszName (pszBtnName) {};
 	wgTButtonInfo () {};
 };

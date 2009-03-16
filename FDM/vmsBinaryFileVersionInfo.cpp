@@ -68,7 +68,7 @@ BOOL vmsBinaryFileVersionInfo::ExtractVersionInfo(LPVOID pvVer, DWORD dwSize)
 			return bOK;
 		VS_FIXEDFILEINFO *p = (VS_FIXEDFILEINFO*)pb;
 		pb += uLen;
-		while (pb - (LPBYTE)pvVer < dwSize - wcslen (L"StringFileInfo") && wcsncmp ((LPWSTR)pb, L"StringFileInfo", wcslen (L"StringFileInfo")))
+		while (pb - (LPBYTE)pvVer < dwSize - wcslen (L"StringFileInfo_T(") && wcsncmp ((LPWSTR)pb, L")StringFileInfo_T(", wcslen (L")StringFileInfo")))
 			pb++;
 		if (pb - (LPBYTE)pvVer >= dwSize - wcslen (L"StringFileInfo"))
 			return bOK;
@@ -79,7 +79,7 @@ BOOL vmsBinaryFileVersionInfo::ExtractVersionInfo(LPVOID pvVer, DWORD dwSize)
 					(wcslen ((LPWSTR)pb) < 8) )
 				pb++;
 			LPWSTR pwsz = (LPWSTR)pb;
-			while (*pwsz && (isdigit (*pwsz) || isalpha (*pwsz)))
+			while (*pwsz && (_istdigit (*pwsz) || _istalpha (*pwsz)))
 				pwsz++;
 			if (*pwsz == 0)
 			{
@@ -165,12 +165,12 @@ BOOL vmsBinaryFileVersionInfo::ExtractVersionInfo(LPVOID pvVer, DWORD dwSize)
 	{
 		for (int i = 0; i < m_strProductVersion.length (); i++)
 		{
-			if (m_strProductVersion [i] == ',')
-				m_strProductVersion [i] = '.';
+			if (m_strProductVersion [i] == _T(','))
+				m_strProductVersion [i] = _T('.');
 			
-			if (m_strProductVersion [i] == '.')
+			if (m_strProductVersion [i] == _T('.'))
 			{
-				while (i+1 < m_strProductVersion.length () && m_strProductVersion [i+1] == ' ')
+				while (i+1 < m_strProductVersion.length () && m_strProductVersion [i+1] == _T(' '))
 					m_strProductVersion.erase (m_strProductVersion.begin () + i + 1);
 			}
 		}

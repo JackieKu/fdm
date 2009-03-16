@@ -34,7 +34,7 @@ void fsProgramLogMgr::Set_DoLog(BOOL bDo)
 	m_bDoLog = bDo;
 }
 
-BOOL fsProgramLogMgr::Initialize(LPCSTR pszLogFileName)
+BOOL fsProgramLogMgr::Initialize(LPCTSTR pszLogFileName)
 {
 	m_hLogFile = CreateFile (pszLogFileName, GENERIC_WRITE, FILE_SHARE_READ, 
 		NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -79,7 +79,7 @@ BOOL fsProgramLogMgr::FlushBuffer()
 	if (dwLen > 0)	
 	{
 		WriteFile (m_hLogFile, m_strLogBuffer, dwLen, &dwWritten, NULL);
-		m_strLogBuffer = "";
+		m_strLogBuffer = _T("");
 	}
 	else
 	{
@@ -91,7 +91,7 @@ BOOL fsProgramLogMgr::FlushBuffer()
 	return dwWritten == dwLen;
 }
 
-void fsProgramLogMgr::AddStringToLog(LPCSTR psz)
+void fsProgramLogMgr::AddStringToLog(LPCTSTR psz)
 {
 	if (m_bDoLog == FALSE)
 		return;
@@ -102,7 +102,7 @@ void fsProgramLogMgr::AddStringToLog(LPCSTR psz)
 	UnlockFileOperations ();
 }
 
-fsProgramLogMgr& fsProgramLogMgr::operator <<(LPCSTR psz)
+fsProgramLogMgr& fsProgramLogMgr::operator <<(LPCTSTR psz)
 {
 	if (m_bDoLog == FALSE)
 		return *this;
@@ -112,13 +112,13 @@ fsProgramLogMgr& fsProgramLogMgr::operator <<(LPCSTR psz)
 	{
 		SYSTEMTIME time;
 		GetLocalTime (&time);
-		operator << (" (");
+		operator << (_T(" ("));
 		operator << (time.wHour);
-		operator << (":");
+		operator << (_T(":"));
 		operator << (time.wMinute);
-		operator << (":");
+		operator << (_T(":"));
 		operator << (time.wSecond);
-                operator << (")");
+                operator << (_T(")"));
 	}
 	AddStringToLog (psz);
 	UnlockFileOperations ();
@@ -131,7 +131,7 @@ fsProgramLogMgr& fsProgramLogMgr::operator <<(int i)
 	if (m_bDoLog == FALSE)
 		return *this;
 
-	char sz [100];
+	TCHAR sz [100];
 	itoa (i, sz, 10);
 	return operator << (sz);
 }
@@ -141,8 +141,8 @@ fsProgramLogMgr& fsProgramLogMgr::operator <<(DWORD dw)
 	if (m_bDoLog == FALSE)
 		return *this;
 
-	char sz [100];
-	sprintf (sz, "%u", dw);
+	TCHAR sz [100];
+	_stprintf (sz, _T("%u"), dw);
 	return operator << (sz);
 }
 
@@ -151,8 +151,8 @@ fsProgramLogMgr& fsProgramLogMgr::operator <<(double d)
 	if (m_bDoLog == FALSE)
 		return *this;
 
-	char sz [100];
-	sprintf (sz, "%.*g", FLT_DIG, d);
+	TCHAR sz [100];
+	_stprintf (sz, _T("%.*g"), FLT_DIG, d);
 	return operator << (sz);
 }
 
@@ -161,7 +161,7 @@ fsProgramLogMgr& fsProgramLogMgr::operator <<(UINT64 u)
 	if (m_bDoLog == FALSE)
 		return *this;
 
-	char sz [100];
-	_i64toa (u, sz, 10);
+	TCHAR sz [100];
+	_i64tot (u, sz, 10);
 	return operator << (sz);
 }

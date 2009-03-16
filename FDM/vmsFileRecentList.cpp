@@ -23,7 +23,7 @@ vmsFileRecentList::~vmsFileRecentList()
 	DeleteCriticalSection (&m_cs);
 }
 
-void vmsFileRecentList::Add(LPCSTR pszFileDispName, LPCSTR pszFilePathName)
+void vmsFileRecentList::Add(LPCTSTR pszFileDispName, LPCTSTR pszFilePathName)
 {
 	EnterCriticalSection (&m_cs);
 
@@ -100,7 +100,7 @@ BOOL vmsFileRecentList::Load(HANDLE hFile)
 
 	for (size_t i = 0; i < c; i++)
 	{
-		LPSTR pszDisp, pszPath;
+		LPTSTR pszDisp, pszPath;
 
 		if (FALSE == fsReadStrFromFile (&pszDisp, hFile))
 			return FALSE;
@@ -124,12 +124,12 @@ void vmsFileRecentList::Clear()
 	LeaveCriticalSection (&m_cs);
 }
 
-LPCSTR vmsFileRecentList::get_FileDispName(int nIndex) const
+LPCTSTR vmsFileRecentList::get_FileDispName(int nIndex) const
 {
 	return m_vList [nIndex].strDispName;
 }
 
-LPCSTR vmsFileRecentList::get_FilePathName(int nIndex) const
+LPCTSTR vmsFileRecentList::get_FilePathName(int nIndex) const
 {
 	return m_vList [nIndex].strPathName;
 }

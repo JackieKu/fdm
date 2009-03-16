@@ -211,7 +211,7 @@ DWORD WINAPI fsDownloadMgr::_threadDownloadMgr(LPVOID lp)
 					if (pThis->m_dp.uRetriesTime && i+1 != pThis->m_dp.uMaxAttempts)
 					{
 						CHAR szStr [1000];
-						sprintf (szStr, LS (L_PAUSESECS), pThis->m_dp.uRetriesTime/1000);
+						_stprintf (szStr, LS (L_PAUSESECS), pThis->m_dp.uRetriesTime/1000);
 						pThis->Event (szStr);
 						if (pThis->SleepInterval () == FALSE)
 							break; 
@@ -353,7 +353,7 @@ DWORD fsDownloadMgr::_DownloaderEvents(fsDownloaderEvent enEvent, UINT uInfo, LP
 	{
 		case DE_SECTIONSTARTED:
 			
-			sprintf (szEv, "[%s %d] - %s", LS (L_SECTION), uInfo+1, LS (L_STARTED));
+			_stprintf (szEv, _T("[%s %d] - %s"), LS (L_SECTION), uInfo+1, LS (L_STARTED));
 			pThis->Event (szEv, EDT_RESPONSE_S);
 			curTicks.Now ();
 			if (curTicks - pThis->m_ticksStart < 1200)
@@ -363,7 +363,7 @@ DWORD fsDownloadMgr::_DownloaderEvents(fsDownloaderEvent enEvent, UINT uInfo, LP
 		case DE_SECTDOWNLOADING:
 			
 			pThis->m_bCantStart = FALSE;
-			sprintf (szEv, "[%s %d] - %s", LS (L_SECTION), uInfo+1, LS (L_DOWNLOADING));
+			_stprintf (szEv, _T("[%s %d] - %s"), LS (L_SECTION), uInfo+1, LS (L_DOWNLOADING));
 			pThis->Event (szEv, EDT_RESPONSE_S);
 			pThis->AddSection ();
 		break;
@@ -373,21 +373,21 @@ DWORD fsDownloadMgr::_DownloaderEvents(fsDownloaderEvent enEvent, UINT uInfo, LP
 		break;
 
 		case DE_SPEEDISTOOLOW:
-			sprintf (szEv, "[%s %d] - %s", LS (L_SECTION), uInfo+1, LS (L_SPEEDISTOOLOW));
+			_stprintf (szEv, _T("[%s %d] - %s"), LS (L_SECTION), uInfo+1, LS (L_SPEEDISTOOLOW));
 			pThis->Event (szEv, EDT_WARNING);
 		break;
 
 		case DE_SECTIONSTOPPED:
 			
 			pThis->m_bCantStart = FALSE;
-			sprintf (szEv, "[%s %d] - %s", LS (L_SECTION), uInfo+1, LS (L_SHESTOPPED));
+			_stprintf (szEv, _T("[%s %d] - %s"), LS (L_SECTION), uInfo+1, LS (L_SHESTOPPED));
 			pThis->Event (szEv, EDT_RESPONSE_S);
 			pThis->OnSectionStopped ();
 		break;
 
 		case DE_SECTIONDONE:
 			
-			sprintf (szEv, "[%s %d] - %s", LS (L_SECTION), uInfo+1, LS (L_DONE));
+			_stprintf (szEv, _T("[%s %d] - %s"), LS (L_SECTION), uInfo+1, LS (L_DONE));
 			pThis->Event (szEv, EDT_DONE);
 			
 			if (pThis->m_dldr.IsDone () && (pThis->m_state & DS_DONE) == 0 && pThis->m_dldr.IsRunning () == FALSE)
@@ -415,9 +415,9 @@ DWORD fsDownloadMgr::_DownloaderEvents(fsDownloaderEvent enEvent, UINT uInfo, LP
 			if (fsIRToStr (ir, szErr, sizeof (szErr)))
 			{
 				if (ir == IR_FILENOTFOUND)
-					strcpy (szEv, szErr);
+					_tcscpy (szEv, szErr);
 				else
-					sprintf (szEv, "[%s %d] - %s", LS (L_SECTION), uInfo+1, szErr); 
+					_stprintf (szEv, _T("[%s %d] - %s"), LS (L_SECTION), uInfo+1, szErr); 
 				pThis->Event (szEv, EDT_RESPONSE_E);
 			}
 
@@ -429,16 +429,16 @@ DWORD fsDownloadMgr::_DownloaderEvents(fsDownloaderEvent enEvent, UINT uInfo, LP
 		case DE_PAUSE:
 		{
 			
-			char szPause [1000];
-			sprintf (szPause, LS (L_PAUSESECS), pThis->m_dp.uRetriesTime/1000);
-			sprintf (szEv, "[%s %d] - %s", LS (L_SECTION), uInfo+1, szPause);
+			TCHAR szPause [1000];
+			_stprintf (szPause, LS (L_PAUSESECS), pThis->m_dp.uRetriesTime/1000);
+			_stprintf (szEv, _T("[%s %d] - %s"), LS (L_SECTION), uInfo+1, szPause);
 			pThis->Event (szEv);
 		}
 		break;
 
 		case DE_CONNECTING:
 			
-			sprintf (szEv, "[%s %d] - %s", LS (L_SECTION), uInfo+1, LS (L_CONNECTING));
+			_stprintf (szEv, _T("[%s %d] - %s"), LS (L_SECTION), uInfo+1, LS (L_CONNECTING));
 			pThis->Event (szEv);
 		break;
 
@@ -446,7 +446,7 @@ DWORD fsDownloadMgr::_DownloaderEvents(fsDownloaderEvent enEvent, UINT uInfo, LP
 			
 			if (fsIRToStr (pThis->m_dldr.GetSectionLastError (uInfo), szErr, sizeof (szErr)))
 			{
-				sprintf (szEv, "[%s %d] - %s", LS (L_SECTION), uInfo+1, szErr);
+				_stprintf (szEv, _T("[%s %d] - %s"), LS (L_SECTION), uInfo+1, szErr);
 				pThis->Event (szEv, EDT_RESPONSE_E);
 			}
 		break;
@@ -457,7 +457,7 @@ DWORD fsDownloadMgr::_DownloaderEvents(fsDownloaderEvent enEvent, UINT uInfo, LP
 
 		case DE_CONNECTED:
 			
-			sprintf (szEv, "[%s %d] - %s", LS (L_SECTION), uInfo+1, LS (L_CONNSUCC));
+			_stprintf (szEv, _T("[%s %d] - %s"), LS (L_SECTION), uInfo+1, LS (L_CONNSUCC));
 			pThis->Event (szEv, EDT_RESPONSE_S);
 		break;
 
@@ -465,7 +465,7 @@ DWORD fsDownloadMgr::_DownloaderEvents(fsDownloaderEvent enEvent, UINT uInfo, LP
 			
 			SetLastError (pThis->m_dldr.GetSectionLastError (uInfo));
 			fsErrorToStr (szErr, sizeof (szErr));
-			sprintf (szEv, "[%s %d] - %s - %s", LS (L_SECTION), uInfo+1, LS (L_WRITEERR), szErr);
+			_stprintf (szEv, _T("[%s %d] - %s - %s"), LS (L_SECTION), uInfo+1, LS (L_WRITEERR), szErr);
 			pThis->Event (szEv, EDT_RESPONSE_E);
 			pThis->Event (DE_EXTERROR, DMEE_FATALERROR);
 			
@@ -507,8 +507,8 @@ DWORD fsDownloadMgr::_DownloaderEvents(fsDownloaderEvent enEvent, UINT uInfo, LP
 		case DE_ERRFROMSERVER:
 		{
 			
-			pThis->m_strExtError = (LPCSTR) uInfo;
-			LPCSTR pszErr1 = pThis->m_strExtError;
+			pThis->m_strExtError = (LPCTSTR) uInfo;
+			LPCTSTR pszErr1 = pThis->m_strExtError;
 			CHAR szErr [1000];
 			fsIRToStr (IR_EXTERROR, szErr, 1000);
 			pThis->Event (szErr, EDT_RESPONSE_E);
@@ -547,8 +547,8 @@ DWORD fsDownloadMgr::_DownloaderEvents(fsDownloaderEvent enEvent, UINT uInfo, LP
 			break;
 
 		case DE_MIRRFOUND:
-			char szEv [10000];
-			sprintf (szEv, LS (L_NMIRRORSFOUND), pThis->m_dldr.GetFoundMirrorCount ());
+			TCHAR szEv [10000];
+			_stprintf (szEv, LS (L_NMIRRORSFOUND), pThis->m_dldr.GetFoundMirrorCount ());
 			pThis->Event (szEv, EDT_RESPONSE_S);
 			break;
 
@@ -576,17 +576,17 @@ DWORD fsDownloadMgr::_DownloaderEvents(fsDownloaderEvent enEvent, UINT uInfo, LP
 			return pThis->Event (DE_CONFIRMARCHIVEDETECTION, uInfo);
 
 		case DE_ZIPPREVIEWSTARTED:
-			pThis->Event ("ZIP preview is in progress...");
+			pThis->Event (_T("ZIP preview is in progress..."));
 			break;
 
 		case DE_ZIPPREVIEWFAILED:
-			pThis->Event ("ZIP preview failed", EDT_RESPONSE_E);
+			pThis->Event (_T("ZIP preview failed"), EDT_RESPONSE_E);
 			pThis->Event (DE_EXTERROR, DMEE_FATALERROR);
 			pThis->m_bFatalError = TRUE;
 			break;
 
 		case DE_ARCHIVEDETECTED:
-			pThis->Event ("ZIP preview succeded", EDT_RESPONSE_S);
+			pThis->Event (_T("ZIP preview succeded"), EDT_RESPONSE_S);
 			return pThis->Event (DE_ARCHIVEDETECTED, uInfo);
 	}
 
@@ -599,27 +599,27 @@ fsInternetDownloader* fsDownloadMgr::GetDownloader()
 	return &m_dldr;
 }
 
-fsInternetResult fsDownloadMgr::CreateByUrl(LPCSTR pszUrl, BOOL bAcceptHTMLPathes)
+fsInternetResult fsDownloadMgr::CreateByUrl(LPCTSTR pszUrl, BOOL bAcceptHTMLPathes)
 {
 	fsDNP_BuffersInfo buffs;
 	fsDNP_GetByUrl_Free (m_dldr.DNP ());
 
 	CString strURL = pszUrl;
-	strURL.Replace ("&lt;", "<");
-	strURL.Replace ("&gt;", ">");
-	strURL.Replace ("&amp;", "&");
-	strURL.Replace ("&quot;", "\"");
+	strURL.Replace (_T("&lt;"), _T("<"));
+	strURL.Replace (_T("&gt;"), _T(">"));
+	strURL.Replace (_T("&amp;"), _T("&"));
+	strURL.Replace (_T("&quot;"), _T("\""));
 
 	
 	fsInternetResult ir = fsDNP_GetByUrl (m_dldr.DNP (), &buffs, TRUE, strURL);
 	if (ir != IR_SUCCESS)
 		return ir;
 
-	LPCSTR pszPathName = m_dldr.DNP ()->pszPathName;
+	LPCTSTR pszPathName = m_dldr.DNP ()->pszPathName;
 	int len = lstrlen (pszPathName);
 
 	
-	if (pszPathName == NULL || len == 0 || pszPathName [len-1] == '\\' || pszPathName [len-1] == '/')
+	if (pszPathName == NULL || len == 0 || pszPathName [len-1] == _T('\\') || pszPathName [len-1] == _T('/'))
 	{
 		if (bAcceptHTMLPathes == FALSE || (m_dldr.DNP ()->enProtocol != NP_HTTP && m_dldr.DNP ()->enProtocol != NP_HTTPS) )
 			return IR_BADURL;
@@ -717,12 +717,12 @@ void fsDownloadMgr::StopDownload()
 	}
 }
 
-void fsDownloadMgr::SetOutputFileName(LPCSTR pszName)
+void fsDownloadMgr::SetOutputFileName(LPCTSTR pszName)
 {
 	SAFE_DELETE_ARRAY (m_dp.pszFileName);
 
-	fsnew (m_dp.pszFileName, CHAR, strlen (pszName)+1);
-	strcpy (m_dp.pszFileName, pszName);
+	fsnew (m_dp.pszFileName, CHAR, _tcslen (pszName)+1);
+	_tcscpy (m_dp.pszFileName, pszName);
 }
 
 void fsDownloadMgr::SetEventFunc(fntDownloadMgrEventFunc pfnEvents, LPVOID lpParam)
@@ -737,7 +737,7 @@ void fsDownloadMgr::SetEventDescFunc(fntEventDescFunc pfn, LPVOID lpParam)
 	m_lpEventDescParam = lpParam;
 }
 
-void fsDownloadMgr::Event(LPCSTR pszEvent, fsDownloadMgr_EventDescType enType)
+void fsDownloadMgr::Event(LPCTSTR pszEvent, fsDownloadMgr_EventDescType enType)
 {
 	if (m_pfnEventDesc && *pszEvent)
 		m_pfnEventDesc (this, enType, pszEvent, m_lpEventDescParam);
@@ -787,7 +787,7 @@ BOOL fsDownloadMgr::SaveState(LPVOID lpBuffer, LPDWORD pdwSize)
 	
 	
 	
-	LPCSTR ToSave    [3000];
+	LPCTSTR ToSave    [3000];
 	DWORD  ToSaveLen [3000];
 	UINT   cToSave = 0;
 
@@ -803,16 +803,16 @@ BOOL fsDownloadMgr::SaveState(LPVOID lpBuffer, LPDWORD pdwSize)
 
 	
 
-	dp.pszFileName = LPSTR (ToSaveLen [cToSave++] = strlen (ToSave [cToSave] = dp.pszFileName));
+	dp.pszFileName = LPTSTR (ToSaveLen [cToSave++] = _tcslen (ToSave [cToSave] = dp.pszFileName));
 	dwNeedSize += (DWORD) dp.pszFileName;
 
-	dp.pszAdditionalExt = LPSTR (ToSaveLen [cToSave++] = strlen (ToSave [cToSave] = dp.pszAdditionalExt));
+	dp.pszAdditionalExt = LPTSTR (ToSaveLen [cToSave++] = _tcslen (ToSave [cToSave] = dp.pszAdditionalExt));
 	dwNeedSize += (DWORD) dp.pszAdditionalExt;
 
-	dp.pszCreateExt = LPSTR (ToSaveLen [cToSave++] = strlen (ToSave [cToSave] = dp.pszCreateExt));
+	dp.pszCreateExt = LPTSTR (ToSaveLen [cToSave++] = _tcslen (ToSave [cToSave] = dp.pszCreateExt));
 	dwNeedSize += (DWORD) dp.pszCreateExt;
 
-	dp.pszCheckSum = LPSTR (ToSaveLen [cToSave++] = strlen (ToSave [cToSave] = dp.pszCheckSum));
+	dp.pszCheckSum = LPTSTR (ToSaveLen [cToSave++] = _tcslen (ToSave [cToSave] = dp.pszCheckSum));
 	dwNeedSize += (DWORD) dp.pszCheckSum;
 
 	int cDPStrings = cToSave;
@@ -825,18 +825,18 @@ BOOL fsDownloadMgr::SaveState(LPVOID lpBuffer, LPDWORD pdwSize)
 			dwNeedSize += sizeof (dnp);
 		}
 		
-		dnp.pszAgent = LPSTR (ToSaveLen [cToSave++] = strlen (ToSave [cToSave] = dnp.pszAgent));
-		dnp.pszPassword = LPSTR (ToSaveLen [cToSave++] = strlen (ToSave [cToSave] = dnp.pszPassword));
-		dnp.pszPathName = LPSTR (ToSaveLen [cToSave++] = strlen (ToSave [cToSave] = dnp.pszPathName));
-		dnp.pszProxyName = LPSTR (ToSaveLen [cToSave++] = strlen (ToSave [cToSave] = dnp.pszProxyName));
-		dnp.pszProxyPassword = LPSTR (ToSaveLen [cToSave++] = strlen (ToSave [cToSave] = dnp.pszProxyPassword));
-		dnp.pszProxyUserName = LPSTR (ToSaveLen [cToSave++] = strlen (ToSave [cToSave] = dnp.pszProxyUserName));
-		dnp.pszReferer = LPSTR (ToSaveLen [cToSave++] = strlen (ToSave [cToSave] = dnp.pszReferer));
-		dnp.pszServerName = LPSTR (ToSaveLen [cToSave++] = strlen (ToSave [cToSave] = dnp.pszServerName));
-		dnp.pszUserName = LPSTR (ToSaveLen [cToSave++] = strlen (ToSave [cToSave] = dnp.pszUserName));
-		dnp.pszASCIIExts = LPSTR (ToSaveLen [cToSave++] = strlen (ToSave [cToSave] = dnp.pszASCIIExts));
-		dnp.pszCookies = LPSTR (ToSaveLen [cToSave++] = strlen (ToSave [cToSave] = dnp.pszCookies));
-		dnp.pszPostData = LPSTR (ToSaveLen [cToSave++] = strlen (ToSave [cToSave] = dnp.pszPostData));
+		dnp.pszAgent = LPTSTR (ToSaveLen [cToSave++] = _tcslen (ToSave [cToSave] = dnp.pszAgent));
+		dnp.pszPassword = LPTSTR (ToSaveLen [cToSave++] = _tcslen (ToSave [cToSave] = dnp.pszPassword));
+		dnp.pszPathName = LPTSTR (ToSaveLen [cToSave++] = _tcslen (ToSave [cToSave] = dnp.pszPathName));
+		dnp.pszProxyName = LPTSTR (ToSaveLen [cToSave++] = _tcslen (ToSave [cToSave] = dnp.pszProxyName));
+		dnp.pszProxyPassword = LPTSTR (ToSaveLen [cToSave++] = _tcslen (ToSave [cToSave] = dnp.pszProxyPassword));
+		dnp.pszProxyUserName = LPTSTR (ToSaveLen [cToSave++] = _tcslen (ToSave [cToSave] = dnp.pszProxyUserName));
+		dnp.pszReferer = LPTSTR (ToSaveLen [cToSave++] = _tcslen (ToSave [cToSave] = dnp.pszReferer));
+		dnp.pszServerName = LPTSTR (ToSaveLen [cToSave++] = _tcslen (ToSave [cToSave] = dnp.pszServerName));
+		dnp.pszUserName = LPTSTR (ToSaveLen [cToSave++] = _tcslen (ToSave [cToSave] = dnp.pszUserName));
+		dnp.pszASCIIExts = LPTSTR (ToSaveLen [cToSave++] = _tcslen (ToSave [cToSave] = dnp.pszASCIIExts));
+		dnp.pszCookies = LPTSTR (ToSaveLen [cToSave++] = _tcslen (ToSave [cToSave] = dnp.pszCookies));
+		dnp.pszPostData = LPTSTR (ToSaveLen [cToSave++] = _tcslen (ToSave [cToSave] = dnp.pszPostData));
 
 		vDNPs.add (dnp);
 
@@ -957,16 +957,16 @@ BOOL fsDownloadMgr::LoadState(LPVOID lpBuffer, LPDWORD pdwSize, WORD wVer)
 
 	DWORD dwDP = sizeof (fsDownload_Properties);
 	if (wVer < 8)	
-		dwDP -= sizeof (BOOL) + sizeof (vmsIntegrityCheckFailedReaction) + sizeof (LPSTR) + sizeof (DWORD);
+		dwDP -= sizeof (BOOL) + sizeof (vmsIntegrityCheckFailedReaction) + sizeof (LPTSTR) + sizeof (DWORD);
 	if (wVer == 2)
-		dwDP -= sizeof (LPSTR); 
+		dwDP -= sizeof (LPTSTR); 
 	CopyMemory (&m_dp, pB, dwDP);
 	pB += dwDP;
 
 	fsDownload_NetworkProperties *dnp = GetDNP ();
 	DWORD dwDNP = sizeof (fsDownload_NetworkProperties);
 	if (wVer < 7) 
-		dwDNP -= 2 * sizeof (LPSTR) + sizeof (DWORD) + 2 * sizeof (WORD);
+		dwDNP -= 2 * sizeof (LPTSTR) + sizeof (DWORD) + 2 * sizeof (WORD);
 	CHECK_BOUNDS ((int)dwDNP);
 	CopyMemory (dnp, pB, dwDNP);
 	pB += dwDNP;
@@ -1154,10 +1154,10 @@ BOOL fsDownloadMgr::LoadState(LPVOID lpBuffer, LPDWORD pdwSize, WORD wVer)
 		}
 		else
 		{
-			dnp->pszCookies = new char [1];
+			dnp->pszCookies = new TCHAR [1];
 			dnp->pszCookies [0] = 0;
 
-			dnp->pszPostData = new char [1];
+			dnp->pszPostData = new TCHAR [1];
 			dnp->pszPostData [0] = 0;
 
 			dnp->dwFlags = 0;
@@ -1294,14 +1294,14 @@ void fsDownloadMgr::RenameFile(BOOL bFormat1)
 
 	
 	
-	strcpy (szFileWE, m_dp.pszFileName);
+	_tcscpy (szFileWE, m_dp.pszFileName);
 
 	if (m_dp.pszAdditionalExt && *m_dp.pszAdditionalExt)
 	{
-		int fl = strlen (szFileWE);
-		int al = strlen (m_dp.pszAdditionalExt);
+		int fl = _tcslen (szFileWE);
+		int al = _tcslen (m_dp.pszAdditionalExt);
 
-		if (fl > al && szFileWE [fl - al - 1] == '.' &&
+		if (fl > al && szFileWE [fl - al - 1] == _T('.') &&
 			stricmp (szFileWE + fl - al, m_dp.pszAdditionalExt) == 0)
 		{
 			szFileWE [fl - al - 1] = 0;
@@ -1309,8 +1309,8 @@ void fsDownloadMgr::RenameFile(BOOL bFormat1)
 
 	}
 
-	LPSTR pszExt = strrchr (szFileWE, '.');	
-	LPSTR pszDirEnd = strrchr (szFileWE, '\\');	
+	LPTSTR pszExt = _tcsrchr (szFileWE, _T('.'));	
+	LPTSTR pszDirEnd = _tcsrchr (szFileWE, _T('\\'));	
 
 	if (pszExt != NULL && pszDirEnd > pszExt)
 		pszExt = NULL;	
@@ -1321,12 +1321,12 @@ void fsDownloadMgr::RenameFile(BOOL bFormat1)
 	if (m_bRename_CheckIfRenamed)
 	{
 		int l = lstrlen (szFileWE);
-		if (szFileWE [l-1] == ')')
+		if (szFileWE [l-1] == _T(')'))
 		{
-			LPSTR psz = szFileWE + l - 2;
-			while (*psz && *psz >= '0' && *psz <= '9')
+			LPTSTR psz = szFileWE + l - 2;
+			while (*psz && *psz >= _T('0') && *psz <= _T('9'))
 				psz--;
-			if (*psz == '(')
+			if (*psz == _T('('))
 				
 				
 				*psz = 0;
@@ -1340,9 +1340,9 @@ void fsDownloadMgr::RenameFile(BOOL bFormat1)
 	do
 	{
 		if (pszExt)
-			strFile.Format ("%s(%d).%s", szFileWE, i++, pszExt+1);
+			strFile.Format (_T("%s(%d).%s"), szFileWE, i++, pszExt+1);
 		else
-			strFile.Format ("%s(%d)", szFileWE, i++);
+			strFile.Format (_T("%s(%d)"), szFileWE, i++);
 
 		dwResult = GetFileAttributes (strFile);
 	}
@@ -1350,7 +1350,7 @@ void fsDownloadMgr::RenameFile(BOOL bFormat1)
 
 	SAFE_DELETE_ARRAY (m_dp.pszFileName);
 	fsnew (m_dp.pszFileName, CHAR, strFile.GetLength () + 1);
-	strcpy (m_dp.pszFileName, strFile);
+	_tcscpy (m_dp.pszFileName, strFile);
 
 	HANDLE hFile = CreateFile (m_dp.pszFileName, GENERIC_WRITE, 0, NULL, 
 		CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -1364,9 +1364,9 @@ void fsDownloadMgr::RenameFile(BOOL bFormat1)
 	fsGetFileName (strFile, szFileName);
 	CString strEv;
 	if (bFormat1)
-		strEv.Format ("%s \"%s\"", LS (L_FILEALREXISTSRENAMING), szFileName);
+		strEv.Format (_T("%s \"%s\""), LS (L_FILEALREXISTSRENAMING), szFileName);
 	else
-		strEv.Format ("%s %s", LS (L_RENAMINGTO), szFileName);
+		strEv.Format (_T("%s %s"), LS (L_RENAMINGTO), szFileName);
 
 	Event (strEv, EDT_WARNING);
 	Event (DE_EXTERROR, DMEE_FILEUPDATED);
@@ -1484,22 +1484,22 @@ DWORD fsDownloadMgr::Event(fsDownloaderEvent ev, UINT uInfo)
 	return TRUE;
 }
 
-BOOL fsDownloadMgr::BuildFileName(LPCSTR pszSetExt)
+BOOL fsDownloadMgr::BuildFileName(LPCTSTR pszSetExt)
 {
 	CHAR szFile [MY_MAX_PATH];	
 	CHAR szPath [MY_MAX_PATH];	
 
-	int fl = strlen (m_dp.pszFileName);
+	int fl = _tcslen (m_dp.pszFileName);
 
 	
 	
-	if (m_dp.pszFileName [fl - 1] != '/' && m_dp.pszFileName [fl - 1] != '\\')
+	if (m_dp.pszFileName [fl - 1] != _T('/') && m_dp.pszFileName [fl - 1] != _T('\\'))
 		return TRUE;
 
 	
-	LPCSTR pszSuggFile = m_dldr.GetSuggestedFileName ();
+	LPCTSTR pszSuggFile = m_dldr.GetSuggestedFileName ();
 	if (pszSuggFile && *pszSuggFile)	
-		strcpy (szFile, pszSuggFile);
+		_tcscpy (szFile, pszSuggFile);
 	else
 	{
 		
@@ -1511,14 +1511,14 @@ BOOL fsDownloadMgr::BuildFileName(LPCSTR pszSetExt)
 	
 	
 	if (*szFile == 0)
-		strcpy (szFile, "index.html");
+		_tcscpy (szFile, _T("index.html"));
 
 	
-	LPSTR psz = szFile;
-	char szSymbls [] = {":*?\"<>|"};
+	LPTSTR psz = szFile;
+	TCHAR szSymbls [] = {_T(":*?\"<>|")};
 	while (*psz) {
 		if (strchr (szSymbls, *psz))
-			*psz = ' ';
+			*psz = _T(' ');
 		psz++;
 	}
 
@@ -1528,33 +1528,33 @@ BOOL fsDownloadMgr::BuildFileName(LPCSTR pszSetExt)
 
 	szFile [MY_MAX_PATH - 1 - fl] = 0; 
 
-	char *pszExt = strrchr (szFile, '.');
+	TCHAR *pszExt = _tcsrchr (szFile, _T('.'));
 
 	if (pszSetExt)	
 	{
 		if (pszExt == NULL)
 		{
-			strcat (szFile, ".");
-			strcat (szFile, pszSetExt);
+			_tcscat (szFile, _T("."));
+			_tcscat (szFile, pszSetExt);
 		}
 		else
 		{
-			strcpy (pszExt+1, pszSetExt);
+			_tcscpy (pszExt+1, pszSetExt);
 		}
 	}
 	else if (pszExt == NULL && m_dp.pszCreateExt && *m_dp.pszCreateExt)
 	{
 		
-		strcat (szFile, ".");
-		strcat (szFile, m_dp.pszCreateExt);
+		_tcscat (szFile, _T("."));
+		_tcscat (szFile, m_dp.pszCreateExt);
 	}
 
-	strcpy (szPath, m_dp.pszFileName);
-	strcat (szPath, szFile);
+	_tcscpy (szPath, m_dp.pszFileName);
+	_tcscat (szPath, szFile);
 
 	SAFE_DELETE_ARRAY (m_dp.pszFileName);
-	fsnew (m_dp.pszFileName, CHAR, strlen (szPath)+1);
-	strcpy (m_dp.pszFileName, szPath);
+	fsnew (m_dp.pszFileName, CHAR, _tcslen (szPath)+1);
+	_tcscpy (m_dp.pszFileName, szPath);
 
 	Event (DE_EXTERROR, DMEE_FILEUPDATED);
 
@@ -1591,8 +1591,8 @@ BOOL fsDownloadMgr::ReserveDiskSpace()
 void fsDownloadMgr::ApplyAdditionalExt()
 {
 	CHAR szFile [MY_MAX_PATH];
-	int fl = strlen (m_dp.pszFileName);
-	int el = strlen (m_dp.pszAdditionalExt);
+	int fl = _tcslen (m_dp.pszFileName);
+	int el = _tcslen (m_dp.pszAdditionalExt);
 
 	if (el == 0) 
 		return;
@@ -1601,20 +1601,20 @@ void fsDownloadMgr::ApplyAdditionalExt()
 	{
 		
 		if (stricmp (m_dp.pszFileName + fl - el, m_dp.pszAdditionalExt) == 0 &&
-			m_dp.pszFileName [fl - el - 1] == '.' )
+			m_dp.pszFileName [fl - el - 1] == _T('.') )
 			return;
 
 		if (fl + el >= MY_MAX_PATH) 
 			return;
 	}
 
-	strcpy (szFile, m_dp.pszFileName);
-	strcat (szFile, ".");
-	strcat (szFile, m_dp.pszAdditionalExt);
+	_tcscpy (szFile, m_dp.pszFileName);
+	_tcscat (szFile, _T("."));
+	_tcscat (szFile, m_dp.pszAdditionalExt);
 
 	SAFE_DELETE_ARRAY (m_dp.pszFileName);
-	fsnew (m_dp.pszFileName, CHAR, strlen (szFile) + 1);
-	strcpy (m_dp.pszFileName, szFile);
+	fsnew (m_dp.pszFileName, CHAR, _tcslen (szFile) + 1);
+	_tcscpy (m_dp.pszFileName, szFile);
 }
 
 DWORD fsDownloadMgr::OnSCR()
@@ -1706,8 +1706,8 @@ void fsDownloadMgr::OnDone()
 	RemoveHiddenAttribute ();
 	
 	
-	int fl = strlen (m_dp.pszFileName);
-	int el = strlen (m_dp.pszAdditionalExt);
+	int fl = _tcslen (m_dp.pszFileName);
+	int el = _tcslen (m_dp.pszAdditionalExt);
 
 	if (el == 0 || el >= fl-1)
 	{
@@ -1724,7 +1724,7 @@ void fsDownloadMgr::OnDone()
 	}
 
 	CHAR szFileNameFrom [MY_MAX_PATH];	
-	strcpy (szFileNameFrom, m_dp.pszFileName);
+	_tcscpy (szFileNameFrom, m_dp.pszFileName);
 
 	
 
@@ -1759,7 +1759,7 @@ BOOL fsDownloadMgr::DeleteFile()
 	if (GetFileAttributes (m_dp.pszFileName) != DWORD (-1))
 	{
 		fsString str = m_dp.pszFileName;
-		str += ".dsc.txt";	
+		str += _T(".dsc.txt");	
 		::DeleteFile (str);
 		return ::DeleteFile (m_dp.pszFileName);
 	}
@@ -1782,7 +1782,7 @@ fsInternetResult fsDownloadMgr::GetLastError()
 	return m_lastError;
 }
 
-BOOL fsDownloadMgr::InitFile(BOOL bCreateOnDisk, LPCSTR pszSetExt)
+BOOL fsDownloadMgr::InitFile(BOOL bCreateOnDisk, LPCTSTR pszSetExt)
 {
 	CString strFileName;
 
@@ -1945,7 +1945,7 @@ try{
 	fsInternetResult ir = pThis->QuerySize (FALSE);
 	if (ir != IR_SUCCESS)
 	{
-		char szErr [10000];
+		TCHAR szErr [10000];
 		fsIRToStr (ir, szErr, sizeof (szErr));
 		pThis->Event (szErr, EDT_RESPONSE_E);
 	}
@@ -1985,20 +1985,20 @@ void fsDownloadMgr::CloneSettings(fsDownloadMgr *src)
 	m_dp.enSCR = dp->enSCR;
 
 	SAFE_DELETE_ARRAY (m_dp.pszAdditionalExt);
-	m_dp.pszAdditionalExt = new char [strlen (dp->pszAdditionalExt) + 1];
-	strcpy (m_dp.pszAdditionalExt, dp->pszAdditionalExt);
+	m_dp.pszAdditionalExt = new TCHAR [_tcslen (dp->pszAdditionalExt) + 1];
+	_tcscpy (m_dp.pszAdditionalExt, dp->pszAdditionalExt);
 
 	SAFE_DELETE_ARRAY (m_dp.pszCreateExt);
-	m_dp.pszCreateExt = new char [strlen (dp->pszCreateExt) + 1];
-	strcpy (m_dp.pszCreateExt, dp->pszCreateExt);
+	m_dp.pszCreateExt = new TCHAR [_tcslen (dp->pszCreateExt) + 1];
+	_tcscpy (m_dp.pszCreateExt, dp->pszCreateExt);
 
-	if (m_dp.pszFileName == NULL || *m_dp.pszFileName == 0 || m_dp.pszFileName [strlen (m_dp.pszFileName) - 1] == '\\' ||  m_dp.pszFileName [strlen (m_dp.pszFileName) - 1] == '/')
+	if (m_dp.pszFileName == NULL || *m_dp.pszFileName == 0 || m_dp.pszFileName [_tcslen (m_dp.pszFileName) - 1] == _T('\\') ||  m_dp.pszFileName [_tcslen (m_dp.pszFileName) - 1] == _T('/'))
 	{
 		if (dp->pszFileName)
 		{
 			SAFE_DELETE_ARRAY (m_dp.pszFileName);
-			m_dp.pszFileName = new char [strlen (dp->pszFileName) + 1];
-			strcpy (m_dp.pszFileName, dp->pszFileName);
+			m_dp.pszFileName = new TCHAR [_tcslen (dp->pszFileName) + 1];
+			_tcscpy (m_dp.pszFileName, dp->pszFileName);
 		}
 	}
 	m_dp.uMaxAttempts = dp->uMaxAttempts;
@@ -2015,24 +2015,24 @@ void fsDownloadMgr::CloneSettings(fsDownloadMgr *src)
 	mydnp->enFtpTransferType = dnp->enFtpTransferType;
 
 	SAFE_DELETE_ARRAY (mydnp->pszAgent);
-	mydnp->pszAgent = new char [strlen (dnp->pszAgent) + 1];
-	strcpy (mydnp->pszAgent, dnp->pszAgent);
+	mydnp->pszAgent = new TCHAR [_tcslen (dnp->pszAgent) + 1];
+	_tcscpy (mydnp->pszAgent, dnp->pszAgent);
 
 	SAFE_DELETE_ARRAY (mydnp->pszASCIIExts);
-	mydnp->pszASCIIExts = new char [strlen (dnp->pszASCIIExts) + 1];
-	strcpy (mydnp->pszASCIIExts, dnp->pszASCIIExts);
+	mydnp->pszASCIIExts = new TCHAR [_tcslen (dnp->pszASCIIExts) + 1];
+	_tcscpy (mydnp->pszASCIIExts, dnp->pszASCIIExts);
 
 	SAFE_DELETE_ARRAY (mydnp->pszReferer);
-	mydnp->pszReferer = new char [strlen (dnp->pszReferer) + 1];
-	strcpy (mydnp->pszReferer, dnp->pszReferer);
+	mydnp->pszReferer = new TCHAR [_tcslen (dnp->pszReferer) + 1];
+	_tcscpy (mydnp->pszReferer, dnp->pszReferer);
 
 	SAFE_DELETE_ARRAY (mydnp->pszUserName);
-	mydnp->pszUserName = new char [strlen (dnp->pszUserName) + 1];
-	strcpy (mydnp->pszUserName, dnp->pszUserName);
+	mydnp->pszUserName = new TCHAR [_tcslen (dnp->pszUserName) + 1];
+	_tcscpy (mydnp->pszUserName, dnp->pszUserName);
 
 	SAFE_DELETE_ARRAY (mydnp->pszPassword);
-	mydnp->pszPassword = new char [strlen (dnp->pszPassword) + 1];
-	strcpy (mydnp->pszPassword, dnp->pszPassword);
+	mydnp->pszPassword = new TCHAR [_tcslen (dnp->pszPassword) + 1];
+	_tcscpy (mydnp->pszPassword, dnp->pszPassword);
 }  
 
 void fsDownloadMgr::Set_MirrRecalcSpeedTime(UINT u)
@@ -2205,34 +2205,34 @@ void fsDownloadMgr::AppendCommentToFileName(BOOL bMoveFile)
 	if (m_dld == NULL || m_dld->strComment.GetLength () == 0)
 		return;
 	
-	char szOldName [MY_MAX_PATH];
-	strcpy (szOldName, m_dp.pszFileName);
+	TCHAR szOldName [MY_MAX_PATH];
+	_tcscpy (szOldName, m_dp.pszFileName);
 
-	LPCSTR pszExt = strrchr (szOldName, '.');
+	LPCTSTR pszExt = _tcsrchr (szOldName, _T('.'));
 
 	delete [] m_dp.pszFileName;
 
-	m_dp.pszFileName = new char [strlen (szOldName) + m_dld->strComment.GetLength () + 10 + 1];
+	m_dp.pszFileName = new TCHAR [_tcslen (szOldName) + m_dld->strComment.GetLength () + 10 + 1];
 
 	std::string strComment = m_dld->strComment;
-	while (strComment.empty () == false && strComment [0] == ' ')
+	while (strComment.empty () == false && strComment [0] == _T(' '))
 		strComment.erase (strComment.begin ());
-	while (strComment.empty () == false && strComment [strComment.length ()-1] == ' ')
+	while (strComment.empty () == false && strComment [strComment.length ()-1] == _T(' '))
 		strComment.erase (strComment.end ()-1);
-	LPCSTR pszInvChars = ":*?\"<>|";
+	LPCTSTR pszInvChars = _T(":*?\"<>|");
 	for (size_t i = 0; i < strComment.length (); i++)
 	{
 		if (strchr (pszInvChars, strComment [i]))
-			strComment [i] = ' ';
+			strComment [i] = _T(' ');
 	}
 
-	strcpy (m_dp.pszFileName, szOldName);
+	_tcscpy (m_dp.pszFileName, szOldName);
 	if (pszExt)
 	{
-		strcpy (m_dp.pszFileName + (pszExt - szOldName), " (");
-		strcat (m_dp.pszFileName, strComment.c_str ());
-		strcat (m_dp.pszFileName, ")");
-		strcat (m_dp.pszFileName, pszExt);
+		_tcscpy (m_dp.pszFileName + (pszExt - szOldName), _T(" ("));
+		_tcscat (m_dp.pszFileName, strComment.c_str ());
+		_tcscat (m_dp.pszFileName, _T(")"));
+		_tcscat (m_dp.pszFileName, pszExt);
 	}
 
 	if (bMoveFile)
@@ -2299,7 +2299,7 @@ void fsDownloadMgr::SetFileTime(HANDLE hFile)
 		::SetFileTime (hFile, &time, NULL, NULL);
 }
 
-BOOL fsDownloadMgr::MoveFile(LPCSTR pszNewFileName)
+BOOL fsDownloadMgr::MoveFile(LPCTSTR pszNewFileName)
 {
 	if (IsRunning ()) 
 	{
@@ -2324,26 +2324,26 @@ BOOL fsDownloadMgr::MoveFile(LPCSTR pszNewFileName)
 		return FALSE;
 
 	SAFE_DELETE_ARRAY (m_dp.pszFileName);
-	fsnew (m_dp.pszFileName, char, lstrlen (pszNewFileName) + 1);
+	fsnew (m_dp.pszFileName, TCHAR, lstrlen (pszNewFileName) + 1);
 	_tcscpy (m_dp.pszFileName, pszNewFileName);
 
 	return TRUE;
 }
 
-BOOL fsDownloadMgr::MoveToFolder(LPCSTR pszPath)
+BOOL fsDownloadMgr::MoveToFolder(LPCTSTR pszPath)
 {
 	CString str = pszPath;
 	ProcessFilePathMacroses (str);
 
-	char szFile [MY_MAX_PATH] = "";
+	TCHAR szFile [MY_MAX_PATH] = _T("");
 	fsGetFileName (m_dp.pszFileName, szFile);
 
-	char szNewFile [MY_MAX_PATH];
+	TCHAR szNewFile [MY_MAX_PATH];
 	_tcscpy (szNewFile, str);
 
-	if (szNewFile [lstrlen (szNewFile) - 1] != '\\' &&
-			szNewFile [lstrlen (szNewFile) - 1] != '/')
-		_tcscat (szNewFile, "\\");
+	if (szNewFile [lstrlen (szNewFile) - 1] != _T('\\') &&
+			szNewFile [lstrlen (szNewFile) - 1] != _T('/'))
+		_tcscat (szNewFile, _T("\\"));
 
 	_tcscat (szNewFile, szFile);
 
@@ -2353,7 +2353,7 @@ BOOL fsDownloadMgr::MoveToFolder(LPCSTR pszPath)
 fsString fsDownloadMgr::get_URL()
 {
 	fsURL url;
-	char szUrl [10000] = "";
+	TCHAR szUrl [10000] = _T("");
 	DWORD dwLen = sizeof (szUrl);
 
 	fsDownload_NetworkProperties* dnp = GetDNP ();
@@ -2383,7 +2383,7 @@ BOOL fsDownloadMgr::CheckIfMalicious()
 
 	if (ir != IR_SUCCESS)
 	{
-		char szErr [1000];
+		TCHAR szErr [1000];
 		fsIRToStr (ir, szErr, sizeof (szErr));
 		Event (szErr, EDT_RESPONSE_E);
 		return TRUE;
@@ -2447,7 +2447,7 @@ void fsDownloadMgr::InitFile_ProcessMacroses()
 	ProcessFilePathMacroses (str);
 
 	delete [] m_dp.pszFileName;
-	m_dp.pszFileName = new char [str.GetLength () + 1];
+	m_dp.pszFileName = new TCHAR [str.GetLength () + 1];
 	_tcscpy (m_dp.pszFileName, str);
 }
 
@@ -2455,39 +2455,39 @@ void fsDownloadMgr::ProcessFilePathMacroses(CString &str)
 {
 #ifndef FDM_DLDR__RAWCODEONLY
 
-	if (str.Find ('%', 0) == -1)
+	if (str.Find (_T('%'), 0) == -1)
 		return;	
 
-	if (str.Find ("%sdrive%") != -1)
+	if (str.Find (_T("%sdrive%")) != -1)
 	{
-		str.Replace ("%sdrive%", CString (vmsGetExeDriveLetter ()) + ":");
+		str.Replace (_T("%sdrive%"), CString (vmsGetExeDriveLetter ()) + _T(":"));
 		m_dwDownloadFileFlags |= DFF_USE_PORTABLE_DRIVE;
 	}
 
-	str.Replace ("%server%", GetDNP ()->pszServerName);
+	str.Replace (_T("%server%"), GetDNP ()->pszServerName);
 
-	char szUrlPath [MY_MAX_PATH];
+	TCHAR szUrlPath [MY_MAX_PATH];
 	fsGetPath (GetDNP ()->pszPathName, szUrlPath);
 	if (lstrlen (szUrlPath) > 1)
-		str.Replace ("%path_on_server%", szUrlPath);
+		str.Replace (_T("%path_on_server%"), szUrlPath);
 	else
-		str.Replace ("%path_on_server%", "");
-	str.Replace ("/", "\\");
-	str.Replace ("\\\\", "\\");
+		str.Replace (_T("%path_on_server%"), _T(""));
+	str.Replace (_T("/"), _T("\\"));
+	str.Replace (_T("\\\\"), _T("\\"));
 
 	SYSTEMTIME st;
 	GetLocalTime (&st);
 
-	str.Replace ("%date%", "%year%-%month%-%day%");
+	str.Replace (_T("%date%"), _T("%year%-%month%-%day%"));
 
 	CString strY, strM, strD;
-	strY.Format ("%04d", (int)st.wYear);
-	strM.Format ("%02d", (int)st.wMonth);
-	strD.Format ("%02d", (int)st.wDay);
+	strY.Format (_T("%04d"), (int)st.wYear);
+	strM.Format (_T("%02d"), (int)st.wMonth);
+	strD.Format (_T("%02d"), (int)st.wDay);
 
-	str.Replace ("%year%", strY);
-	str.Replace ("%month%", strM);
-	str.Replace ("%day%", strD);
+	str.Replace (_T("%year%"), strY);
+	str.Replace (_T("%month%"), strM);
+	str.Replace (_T("%day%"), strD);
 
 #endif
 }
@@ -2501,21 +2501,21 @@ void fsDownloadMgr::DoRapidshareSupport()
 
 	if (dnp->pszUserName && dnp->pszPassword && *dnp->pszUserName && *dnp->pszPassword)
 	{
-		if (strnicmp (dnp->pszServerName, "rapidshare.", 11) == 0 ||
-				strnicmp (dnp->pszServerName, "www.rapidshare.", 15) == 0)
+		if (strnicmp (dnp->pszServerName, _T("rapidshare."), 11) == 0 ||
+				strnicmp (dnp->pszServerName, _T("www.rapidshare."), 15) == 0)
 		{
-			char szCookies [1000];
-			_tcscpy (szCookies, "user=");
+			TCHAR szCookies [1000];
+			_tcscpy (szCookies, _T("user="));
 			_tcscat (szCookies, dnp->pszUserName);
-			_tcscat (szCookies, "-");
-			LPCSTR psz = dnp->pszPassword;
+			_tcscat (szCookies, _T("-"));
+			LPCTSTR psz = dnp->pszPassword;
 			while (*psz)
-				sprintf (szCookies + lstrlen (szCookies), "%%%x", *psz++);
+				_stprintf (szCookies + lstrlen (szCookies), _T("%%%x"), *psz++);
 
 			if (dnp->pszCookies == NULL || *dnp->pszCookies == 0)
 			{
 				SAFE_DELETE_ARRAY (dnp->pszCookies);
-				dnp->pszCookies = new char [lstrlen (szCookies) + 1];
+				dnp->pszCookies = new TCHAR [lstrlen (szCookies) + 1];
 				*dnp->pszCookies = 0;
 			}
 			else
@@ -2526,10 +2526,10 @@ void fsDownloadMgr::DoRapidshareSupport()
 					return;	
 				}
 
-				char *psz = new char [lstrlen (dnp->pszCookies) + lstrlen (szCookies) + 10];
+				TCHAR *psz = new TCHAR [lstrlen (dnp->pszCookies) + lstrlen (szCookies) + 10];
 				_tcscpy (psz, dnp->pszCookies);
-				if (psz [lstrlen (psz) - 1] != ';')
-					_tcscat (psz, ";");
+				if (psz [lstrlen (psz) - 1] != _T(';'))
+					_tcscat (psz, _T(";"));
 				delete [] dnp->pszCookies;
 				dnp->pszCookies = psz;
 			}

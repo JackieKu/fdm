@@ -72,8 +72,8 @@ BOOL CPrg_UpdatePage::OnApply()
 	GetDlgItemText (IDC_UPDATEURL, str);
 
 	
-	if (str [str.GetLength () - 1] != '\\' && str [str.GetLength () - 1] != '/')
-		str += '/';
+	if (str [str.GetLength () - 1] != _T('\\') && str [str.GetLength () - 1] != _T('/'))
+		str += _T('/');
 
 	fsURL url;
 	if (url.Crack (str) != IR_SUCCESS || *url.GetHostName () == 0)

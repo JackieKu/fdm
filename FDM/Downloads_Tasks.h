@@ -63,7 +63,7 @@ public:
 	
 	
 	void CallSelectedDownload();
-	static void GetFileName (vmsDownloadSmartPtr dld, LPSTR pszFile);
+	static void GetFileName (vmsDownloadSmartPtr dld, LPTSTR pszFile);
 
 	
 	

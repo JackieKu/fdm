@@ -32,7 +32,7 @@ BOOL CVideoWindow::Create(CWnd *pWndParent)
 {
 	CRect rc (2, 2, 150, 150);
 
-	LPCSTR pszClass = AfxRegisterWndClass (CS_HREDRAW|CS_VREDRAW, LoadCursor (NULL, IDC_ARROW), (HBRUSH) (GetStockObject (BLACK_BRUSH)), NULL);
+	LPCTSTR pszClass = AfxRegisterWndClass (CS_HREDRAW|CS_VREDRAW, LoadCursor (NULL, IDC_ARROW), (HBRUSH) (GetStockObject (BLACK_BRUSH)), NULL);
 
 	if (FALSE == CWnd::CreateEx (WS_EX_CLIENTEDGE, pszClass, NULL,
 			WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN, rc, pWndParent, 0))

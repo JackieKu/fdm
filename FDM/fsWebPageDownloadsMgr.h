@@ -13,15 +13,15 @@
 #include "fsWebPageDownloader.h"  
 
 #define SPIDERFILE_CURRENT_VERSION	(6)
-#define SPIDERFILE_SIG     "FDM Web Pages  "
+#define SPIDERFILE_SIG     _T("FDM Web Pages  ")
 struct fsSpiderFileHdr
 {
-	char szSig [sizeof (SPIDERFILE_SIG) + 1];
+	TCHAR szSig [sizeof (SPIDERFILE_SIG) + 1];
 	WORD wVer;
 
 	fsSpiderFileHdr ()
 	{
-		strcpy (szSig, SPIDERFILE_SIG);
+		_tcscpy (szSig, SPIDERFILE_SIG);
 		wVer = SPIDERFILE_CURRENT_VERSION;
 	}
 };  

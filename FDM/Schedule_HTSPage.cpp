@@ -83,7 +83,7 @@ BOOL CSchedule_HTSPage::OnInitDialog()
 
 	CheckRadioButton (IDC_ONCE, IDC_ONEVENT, nChecked);
 
-	m_wndTime.SetFormat ("HH:mm");
+	m_wndTime.SetFormat (_T("HH:mm"));
 
 	m_wndEveryDim.AddString (LS (L_B_MINUTES));
 	m_wndEveryDim.AddString (LS (L_B_HOURS));

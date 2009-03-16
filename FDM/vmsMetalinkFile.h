@@ -35,9 +35,9 @@ class vmsMetalinkFile
 {
 public:
 	
-	BOOL Parse (LPCSTR pszFile);
+	BOOL Parse (LPCTSTR pszFile);
 	
-	LPCSTR get_Description();
+	LPCTSTR get_Description();
 	
 	int get_FileCount();
 	vmsMetalinkFile_File* get_File (int nIndex);

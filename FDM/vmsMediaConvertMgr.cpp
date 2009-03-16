@@ -37,7 +37,7 @@ void vmsMediaConvertMgr::AddTask(vmsDownloadSmartPtr dld, const vmsMediaFileConv
 
 BOOL vmsMediaConvertMgr::SaveState()
 {
-	CString strFile = fsGetDataFilePath ("mctasks.sav");
+	CString strFile = fsGetDataFilePath (_T("mctasks.sav"));
 	HANDLE hFile = CreateFile (strFile, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS,
 		FILE_ATTRIBUTE_HIDDEN, NULL);
 	if (hFile == INVALID_HANDLE_VALUE)
@@ -94,7 +94,7 @@ _lErr:
 
 BOOL vmsMediaConvertMgr::LoadState()
 {
-	CString strFile = fsGetDataFilePath ("mctasks.sav");
+	CString strFile = fsGetDataFilePath (_T("mctasks.sav"));
 	HANDLE hFile = CreateFile (strFile, GENERIC_READ, 0, NULL, OPEN_EXISTING,
 		FILE_ATTRIBUTE_HIDDEN, NULL);
 	if (hFile == INVALID_HANDLE_VALUE)
@@ -173,9 +173,9 @@ DWORD WINAPI vmsMediaConvertMgr::_threadConvertMediaFile(LPVOID lp)
 	{
 		CString str;
 		if (i)
-			str.Format ("%s (%d).%s", strDst, i, pcmfc->stgs.strExtension);
+			str.Format (_T("%s (%d).%s"), strDst, i, pcmfc->stgs.strExtension);
 		else
-			str.Format ("%s.%s", strDst, pcmfc->stgs.strExtension);
+			str.Format (_T("%s.%s"), strDst, pcmfc->stgs.strExtension);
 
 		if (GetFileAttributes (str) == DWORD (-1))
 		{
@@ -197,19 +197,19 @@ DWORD WINAPI vmsMediaConvertMgr::_threadConvertMediaFile(LPVOID lp)
 
 			fsDownload_Properties *dp = pcmfc->dld->pMgr->GetDownloadMgr ()->GetDP ();
 			delete [] dp->pszFileName;
-			dp->pszFileName = new char [strDst.GetLength () + 1];
+			dp->pszFileName = new TCHAR [strDst.GetLength () + 1];
 			_tcscpy (dp->pszFileName, strDst);
 		}
 		else
 		{
 			CString strDst2 = strDst;
-			strDst2.SetAt (strDst2.GetLength () - 3, 't');
-			strDst2.SetAt (strDst2.GetLength () - 2, 'm');
-			strDst2.SetAt (strDst2.GetLength () - 1, 'p');
+			strDst2.SetAt (strDst2.GetLength () - 3, _T('t'));
+			strDst2.SetAt (strDst2.GetLength () - 2, _T('m'));
+			strDst2.SetAt (strDst2.GetLength () - 1, _T('p'));
 			if (FALSE == MoveFile (strDst, strDst2))
 				strDst2 = strDst;
 			CString strFilter; 
-			strFilter.Format ("%s files (*.%s)|*.%s||", pcmfc->stgs.strExtension,
+			strFilter.Format (_T("%s files (*.%s)|*.%s||"), pcmfc->stgs.strExtension,
 				pcmfc->stgs.strExtension, pcmfc->stgs.strExtension);
 			CFileDialog dlg (FALSE, pcmfc->stgs.strExtension, strDst, 
 				OFN_OVERWRITEPROMPT|OFN_NOCHANGEDIR, strFilter, AfxGetApp ()->m_pMainWnd);
@@ -226,17 +226,17 @@ DWORD WINAPI vmsMediaConvertMgr::_threadConvertMediaFile(LPVOID lp)
 				CString strMsg;
 				strMsg.Format (LS (L_CONVERTED_OK), strDst);
 				UINT nRet = MyMessageBox (NULL, strMsg, LS (L_DONE), NULL, IDI_QUESTION, 
-					LS (L_LAUNCH), LS (L_OPENFOLDER), "OK");
+					LS (L_LAUNCH), LS (L_OPENFOLDER), _T("OK"));
 
 				if (nRet == IDC_BTN1)
 				{
-					ShellExecute (0, "open", strDst, NULL, NULL, SW_SHOW);
+					ShellExecute (0, _T("open"), strDst, NULL, NULL, SW_SHOW);
 				}
 				else if (nRet == IDC_BTN2)
 				{
 					CString strCmd;
-					strCmd.Format ("/select,\"%s\"", strDst);
-					ShellExecute (NULL, "open", "explorer.exe", strCmd, NULL, SW_SHOW);
+					strCmd.Format (_T("/select,\"%s\""), strDst);
+					ShellExecute (NULL, _T("open"), _T("explorer.exe"), strCmd, NULL, SW_SHOW);
 				}
 			}
 		}

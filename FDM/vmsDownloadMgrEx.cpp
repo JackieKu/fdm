@@ -226,7 +226,7 @@ UINT vmsDownloadMgrEx::GetSpeed()
 		return m_pBtMgr->GetSpeed ();
 }
 
-BOOL vmsDownloadMgrEx::MoveToFolder(LPCSTR pszPath)
+BOOL vmsDownloadMgrEx::MoveToFolder(LPCTSTR pszPath)
 {
 	if (m_pMgr)
 		return m_pMgr->MoveToFolder (pszPath);
@@ -466,7 +466,7 @@ void vmsDownloadMgrEx::Do_OpenFolder()
 {
 	if (m_pMgr && m_pMgr->IsFileInit () == FALSE)
 	{
-		ShellExecute (NULL, "explore", get_OutputFilePathName (), NULL, NULL, SW_SHOW);
+		ShellExecute (NULL, _T("explore"), get_OutputFilePathName (), NULL, NULL, SW_SHOW);
 	}
 	else
 	{
@@ -477,16 +477,16 @@ void vmsDownloadMgrEx::Do_OpenFolder()
 
 		if (GetFileAttributes (strFileName) == DWORD (-1))
 		{
-			char szPath [MY_MAX_PATH];
+			TCHAR szPath [MY_MAX_PATH];
 			
 			fsGetPath (strFileName, szPath);
-			ShellExecute (NULL, "explore", szPath, NULL, NULL, SW_SHOW);
+			ShellExecute (NULL, _T("explore"), szPath, NULL, NULL, SW_SHOW);
 		}
 		else
 		{
 			CString strCmd;
-			strCmd.Format ("/select,\"%s\"", strFileName);
-				ShellExecute (NULL, "open", "explorer.exe", strCmd, NULL, SW_SHOW);
+			strCmd.Format (_T("/select,\"%s\""), strFileName);
+				ShellExecute (NULL, _T("open"), _T("explorer.exe"), strCmd, NULL, SW_SHOW);
 		}
 	}
 }

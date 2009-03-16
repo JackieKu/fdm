@@ -186,8 +186,8 @@ void CDlg_Options_Downloads_NewDld::OnSetgrpsfldr()
 		return;
 	
 	CString str = fb->GetPath ();
-	if (str.Right (1) != '\\')
-		str += '\\';
+	if (str.Right (1) != _T('\\'))
+		str += _T('\\');
 	
 	if (MessageBox (LS (L_ALLGRPSFLDRSWBCHANGEDTOTHISFLDR), NULL, MB_YESNO) == IDNO)
 		return;

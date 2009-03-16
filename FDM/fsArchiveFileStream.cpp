@@ -69,7 +69,7 @@ BOOL fsArchiveFileStream::Seek(UINT64 dist, fsSeekType met)
 	return fsSetFilePointer (m_hFile, dist, dwMet);
 }
 
-DWORD fsArchiveFileStream::Open(LPCSTR pszFile, DWORD dwGenFlags)
+DWORD fsArchiveFileStream::Open(LPCTSTR pszFile, DWORD dwGenFlags)
 {
 	m_hFile = CreateFile (pszFile, dwGenFlags, FILE_SHARE_READ | FILE_SHARE_WRITE, 
 		NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);

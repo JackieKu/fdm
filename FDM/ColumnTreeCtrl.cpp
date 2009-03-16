@@ -184,8 +184,8 @@ void CCustomTreeChildCtrl::OnMouseMove(UINT nFlags, CPoint point)
     {
         TOOLINFO ti;
 		WPARAM wp = MAKEWPARAM (point.x, point.y);
-		ti.lpszText = (char*)malloc (1000);
-		strcpy (ti.lpszText, "");
+		ti.lpszText = (TCHAR*)malloc (1000 * sizeof(TCHAR));
+		_tcscpy (ti.lpszText, _T(""));
 		GetParent ()->SendMessage (ID_CTCC_GETTOOLTIPTEXT, wp, (LPARAM)&ti);
 
 		static CString _strOld;
@@ -613,7 +613,7 @@ BOOL CCustomTreeChildCtrl::CheckHit(CPoint point)
 			return FALSE;
 		
 		CString strSub;
-		AfxExtractSubString(strSub, GetItemText(hItem), 0, '\t');
+		AfxExtractSubString(strSub, GetItemText(hItem), 0, _T('\t'));
 
 		CDC* pDC = GetDC();
 		pDC->SelectObject(GetFont());
@@ -988,7 +988,7 @@ void CColumnTreeCtrl::OnTreeCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
 
 			CString strText = m_Tree.GetItemText(hItem);
 			CString strSub;
-			AfxExtractSubString(strSub, strText, 0, '\t');
+			AfxExtractSubString(strSub, strText, 0, _T('\t'));
 
 			
 			CRect rcText(0,0,0,0);
@@ -1045,7 +1045,7 @@ void CColumnTreeCtrl::OnTreeCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
 			
 			for (i=1; i<nColsCnt; i++)
 			{
-				if (AfxExtractSubString(strSub, strText, i, '\t'))
+				if (AfxExtractSubString(strSub, strText, i, _T('\t')))
 				{
 					rcText = rcLabel;
 					rcText.left = xOffset+ COLUMN_MARGIN;
@@ -1219,7 +1219,7 @@ CString CColumnTreeCtrl::GetItemText(HTREEITEM hItem, int nColumn)
 	
 	CString szText = m_Tree.GetItemText(hItem);
 	CString szSubItem;
-	AfxExtractSubString(szSubItem,szText,nColumn,'\t');
+	AfxExtractSubString(szSubItem,szText,nColumn,_T('\t'));
 	return szSubItem;
 }
 
@@ -1230,7 +1230,7 @@ void CColumnTreeCtrl::SetItemText(HTREEITEM hItem,int nColumn,LPCTSTR lpszItem)
 	int i;
 	for(i=0;i<m_Header.GetItemCount();i++)
 	{
-		AfxExtractSubString(szSubItem,szText,i,'\t');
+		AfxExtractSubString(szSubItem,szText,i,_T('\t'));
 		if(i!=nColumn) szNewText+=szSubItem+_T("\t");
 		else szNewText+=CString(lpszItem)+_T("\t");
 	}
@@ -1369,7 +1369,7 @@ int CCustomTreeChildCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	
 
 	CRect ClientRect(0, 0, 1000, 1000);
-    if (m_ttip.Create (this, TTS_ALWAYSTIP) && m_ttip.AddTool(this, ""))
+    if (m_ttip.Create (this, TTS_ALWAYSTIP) && m_ttip.AddTool(this, _T("")))
     {
         m_ttip.SendMessage (TTM_SETMAXTIPWIDTH, 0, SHRT_MAX);
         m_ttip.SendMessage (TTM_SETDELAYTIME, TTDT_AUTOPOP, SHRT_MAX);
@@ -1411,9 +1411,9 @@ LRESULT CColumnTreeCtrl::OnCtccGetToolTipText(WPARAM wp, LPARAM lp)
 	m_Tree.GetItemRect (hItem, &rc, TRUE);
 	if (cxText + rc.left + 7 < m_arrColWidths [0])
 		return 0;
-	
+
 	TOOLINFO *pTI = (TOOLINFO*)lp;
-	strncpy (pTI->lpszText, strText, 500-1);
+	_tcsncpy (pTI->lpszText, strText, 500-1);
 	pTI->lpszText [500-1] = 0;
 	m_Tree.GetItemRect (hItem, &pTI->rect, FALSE);
 	return 0;

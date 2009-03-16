@@ -51,7 +51,7 @@ enum fsDownloadMgr_EventDescType
 
 typedef DWORD (*fntDownloadMgrEventFunc)(class fsDownloadMgr *pMgr, fsDownloaderEvent, UINT, LPVOID);
 
-typedef void (*fntEventDescFunc)(fsDownloadMgr *pMgr, fsDownloadMgr_EventDescType enType, LPCSTR pszDesc, LPVOID lp);  
+typedef void (*fntEventDescFunc)(fsDownloadMgr *pMgr, fsDownloadMgr_EventDescType enType, LPCTSTR pszDesc, LPVOID lp);  
 
 #define DFF_NEED_INIT_FILE			1
 #define DFF_USE_PORTABLE_DRIVE		2
@@ -68,8 +68,8 @@ public:
 	
 	fsString get_URL();
 	
-	BOOL MoveToFolder (LPCSTR pszFolder);
-	BOOL MoveFile (LPCSTR pszNewFileName);
+	BOOL MoveToFolder (LPCTSTR pszFolder);
+	BOOL MoveFile (LPCTSTR pszNewFileName);
 	
 	static void set_GlobalOffline(BOOL bOffline);
 	static BOOL is_GlobalOffline();
@@ -117,7 +117,7 @@ public:
 	BOOL IsFileInit();
 	
 	
-	BOOL InitFile (BOOL bCreateOnDisk = FALSE, LPCSTR pszSetExt = NULL);
+	BOOL InitFile (BOOL bCreateOnDisk = FALSE, LPCTSTR pszSetExt = NULL);
 	
 	fsInternetResult GetLastError();
 	
@@ -143,11 +143,11 @@ public:
 	void SetEventDescFunc (fntEventDescFunc pfn, LPVOID lpParam);
 	void SetEventFunc (fntDownloadMgrEventFunc pfnEvents, LPVOID lpParam);
 	
-	void SetOutputFileName (LPCSTR pszName);
+	void SetOutputFileName (LPCTSTR pszName);
 	
 	
 	
-	fsInternetResult CreateByUrl (LPCSTR pszUrl, BOOL bAcceptHTMLPathes = FALSE);
+	fsInternetResult CreateByUrl (LPCTSTR pszUrl, BOOL bAcceptHTMLPathes = FALSE);
 	fsInternetDownloader* GetDownloader();
 	
 	fsDownload_Properties* GetDP();
@@ -219,9 +219,9 @@ protected:
 	BOOL ReserveDiskSpace();
 	
 	
-	BOOL BuildFileName(LPCSTR pszSetExt = NULL);
+	BOOL BuildFileName(LPCTSTR pszSetExt = NULL);
 	
-	void Event (LPCSTR pszEvent, fsDownloadMgr_EventDescType enType = EDT_INQUIRY);
+	void Event (LPCTSTR pszEvent, fsDownloadMgr_EventDescType enType = EDT_INQUIRY);
 	
 	DWORD Event (fsDownloaderEvent ev, UINT uInfo);
 	

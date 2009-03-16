@@ -201,7 +201,7 @@ void fsScheduleMgr::StartTask(fsSchedule *task)
 	
 		case WTS_CHANGE_TUM:
 		{
-			LPCSTR ppszTUM [] = {LS (L_LIGHT), LS (L_MEDIUM), LS (L_HEAVY)};
+			LPCTSTR ppszTUM [] = {LS (L_LIGHT), LS (L_MEDIUM), LS (L_HEAVY)};
 			CString str;
 			str.Format (LS (L_CHANGINGTUM), ppszTUM [task->wts.enTUM]);
 			Event (str);
@@ -431,7 +431,7 @@ CString fsScheduleMgr::WTSToStr(fsSchedule *task)
 	switch (task->wts.enType)
 	{
 		case WTS_PROGRAM:
-			str = LS (L_START); str += ' ';
+			str = LS (L_START); str += _T(' ');
 			str += task->wts.prog.pszName;
 		break;
 	
@@ -452,17 +452,17 @@ CString fsScheduleMgr::WTSToStr(fsSchedule *task)
 		break;
 
 		case WTS_DIAL:
-			str = LS (L_DIAL); str += ' ';
+			str = LS (L_DIAL); str += _T(' ');
 			str += task->wts.dial.pszConnection;
 		break;
 
 		case WTS_HANGUP:
-			str += LS (L_HANGUP); str += ' ';
+			str += LS (L_HANGUP); str += _T(' ');
 			if (task->wts.pszHangupConnection)
 			{
-				str += '"';
+				str += _T('"');
 				str += task->wts.pszHangupConnection;
-				str += '"';
+				str += _T('"');
 			}
 			else
 				str += LS (L_ALLCONNS);
@@ -470,8 +470,8 @@ CString fsScheduleMgr::WTSToStr(fsSchedule *task)
 
 		case WTS_CHANGE_TUM:
 		{
-			LPCSTR pszTum [] = {LS (L_LIGHT), LS (L_MEDIUM), LS (L_HEAVY)};
-			str = LS (L_CHANGETUMTO); str += ' '; str += pszTum [task->wts.enTUM];
+			LPCTSTR pszTum [] = {LS (L_LIGHT), LS (L_MEDIUM), LS (L_HEAVY)};
+			str = LS (L_CHANGETUMTO); str += _T(' '); str += pszTum [task->wts.enTUM];
 		}
 		break;
 
@@ -481,16 +481,16 @@ CString fsScheduleMgr::WTSToStr(fsSchedule *task)
 
 		case WTS_SHUTDOWN:
 		{
-			LPCSTR pszSh [] = {LS (L_SHUTDOWN), LS (L_RESTARTCOMP), LS (L_LOGOFF), LS (L_HIBERNATE), LS (L_STANDBY)};
+			LPCTSTR pszSh [] = {LS (L_SHUTDOWN), LS (L_RESTARTCOMP), LS (L_LOGOFF), LS (L_HIBERNATE), LS (L_STANDBY)};
 			str = pszSh [task->wts.shutdown.enShutdown];
 		}
 		break;
 
 		case WTS_RESTRAINALLDLDS:
 		{
-			LPCSTR psz [] = {LS (L_ENABLE), LS (L_DISABLE), LS (L_SWITCH)};
+			LPCTSTR psz [] = {LS (L_ENABLE), LS (L_DISABLE), LS (L_SWITCH)};
 			str = LS (L_PAUSEALLDOWNLOADS);
-			str += " ("; str += psz [task->wts.enRAD]; str += ')';
+			str += _T(" ("); str += psz [task->wts.enRAD]; str += _T(')');
 		}
 		break;
 
@@ -518,39 +518,39 @@ CString fsScheduleMgr::HTSToStr(fsSchedule *task)
 
 		case HTS_DAILY:
 		{
-			LPCSTR pszDays [] = {LS (L_SUN), LS (L_MON), LS (L_TUE), LS (L_WED), LS (L_THU), LS (L_FRI), LS (L_SAT)};
-			str = LS (L_ONDAYS); str += ' ';
+			LPCTSTR pszDays [] = {LS (L_SUN), LS (L_MON), LS (L_TUE), LS (L_WED), LS (L_THU), LS (L_FRI), LS (L_SAT)};
+			str = LS (L_ONDAYS); str += _T(' ');
 			for (int i = 0; i < 7; i++)
 			{
 				if (task->hts.aWeeklyDays [i])
 				{
-					str += '"';
+					str += _T('"');
 					str += pszDays [i];
-					str += '"';
-					str += ' ';
+					str += _T('"');
+					str += _T(' ');
 				}
 			}
 		}
 		break;
 
 		case HTS_CONTINUOUSLY:
-			str = LS (L_EVERY); str += ' ';
+			str = LS (L_EVERY); str += _T(' ');
 			if (task->hts.interval % (24*60) == 0)
 			{
 				CString s;
-				s.Format ("%d %s", task->hts.interval / 24 / 60, LS (L_DAYS));
+				s.Format (_T("%d %s"), task->hts.interval / 24 / 60, LS (L_DAYS));
 				str += s;
 			}
 			else if (task->hts.interval % 60 == 0)
 			{
 				CString s;
-				s.Format ("%d %s", task->hts.interval / 60, LS (L_HOURS));
+				s.Format (_T("%d %s"), task->hts.interval / 60, LS (L_HOURS));
 				str += s;
 			}
 			else
 			{
 				CString s;
-				s.Format ("%d %s", task->hts.interval, LS (L_MIN_SMALL));
+				s.Format (_T("%d %s"), task->hts.interval, LS (L_MIN_SMALL));
 				str += s;
 			}
 		break;
@@ -575,12 +575,12 @@ CString fsScheduleMgr::HTSToStr(fsSchedule *task)
 		{
 			CString str1;
 			str1.Format (LS (L_WHENSPEEDLESS), task->hts.speedLow.uLowSpeed, task->hts.speedLow.uTimeInterval);
-			str.Format ("%s %s", str1, LS (L_MIN_SMALL));
+			str.Format (_T("%s %s"), str1, LS (L_MIN_SMALL));
 		}
 		break;
 
 		case HTS_NOTHINGRECEIVED:
-			str.Format ("%s %d %s", LS (L_WHENALLDLDSINERR), task->hts.uTimeNothingReceived, LS (L_MIN_SMALL));
+			str.Format (_T("%s %d %s"), LS (L_WHENALLDLDSINERR), task->hts.uTimeNothingReceived, LS (L_MIN_SMALL));
 		break;
 
 		case HTS_WHENDONE:
@@ -619,13 +619,13 @@ CString fsScheduleMgr::NextTimeToStr(fsSchedule *task)
 			SystemTimeToStr (&time, strDate, strTime, FALSE);
 
 			str += strTime;
-			str += " ";
+			str += _T(" ");
 			str += strDate;
 		}
 		break;
 
 		default:
-			str = "";	
+			str = _T("");	
 	}
 
 	return str;
@@ -645,7 +645,7 @@ CString fsScheduleMgr::LastTimeToStr(fsSchedule *task)
 	SystemTimeToStr (&time, strDate, strTime, FALSE);
 
 	str += strTime;
-	str += " ";
+	str += _T(" ");
 	str += strDate;
 
 	return str;
@@ -855,7 +855,7 @@ void fsScheduleMgr::StartDownloads(fsSchedule *task)
 			{	
 				CString str;
 
-				str.Format ("%s \"%s\"", bDone ? LS (L_RESTART) : LS (L_START), dld->pMgr->get_URL ());
+				str.Format (_T("%s \"%s\""), bDone ? LS (L_RESTART) : LS (L_START), dld->pMgr->get_URL ());
 				
 				Event (str);
 
@@ -882,7 +882,7 @@ void fsScheduleMgr::StopDownloads(fsSchedule *task)
 		if (dld != NULL && dld->pMgr->IsRunning ())
 		{		
 			CString str;
-			str.Format ("%s \"%s\"", LS (L_STOP), dld->pMgr->get_URL ());
+			str.Format (_T("%s \"%s\""), LS (L_STOP), dld->pMgr->get_URL ());
 			Event (str);
 
 			vDlds.push_back (dld);
@@ -912,8 +912,8 @@ void fsScheduleMgr::Hangup(fsSchedule *task)
 	for (int i = mgr.GetConnectionCount () - 1; i >= 0; i--)
 	{
 		LPRASCONN conn = mgr.GetConnection (i);
-		char szEv [1000];
-		sprintf (szEv, "%s \"%s\"", LS (L_HANGUP), conn->szEntryName);
+		TCHAR szEv [1000];
+		_stprintf (szEv, _T("%s \"%s\""), LS (L_HANGUP), conn->szEntryName);
 
 		if (task->wts.pszHangupConnection)
 		{
@@ -977,7 +977,7 @@ void fsScheduleMgr::Shutdown(fsSchedule *task)
 	if (task->wts.shutdown.bForce)
 		uFlags |= EWX_FORCE;
 
-	LPCSTR szEv [] = { LS (L_SHUTDOWN), LS (L_RESTARTCOMP), LS (L_LOGOFF), 
+	LPCTSTR szEv [] = { LS (L_SHUTDOWN), LS (L_RESTARTCOMP), LS (L_LOGOFF), 
 		LS (L_HIBERNATE), LS (L_STANDBY) };
 	Event (szEv [task->wts.shutdown.enShutdown]);
 
@@ -991,8 +991,8 @@ DWORD WINAPI fsScheduleMgr::_threadDial(LPVOID lp)
 
 	fsDialInfo dial = task->wts.dial;
 
-	fsnew (dial.pszConnection, char, strlen (task->wts.dial.pszConnection) + 1);
-	strcpy (dial.pszConnection, task->wts.dial.pszConnection);
+	fsnew (dial.pszConnection, TCHAR, _tcslen (task->wts.dial.pszConnection) + 1);
+	_tcscpy (dial.pszConnection, task->wts.dial.pszConnection);
 
 	CDialDlg dlg (NULL);
 
@@ -1000,9 +1000,9 @@ DWORD WINAPI fsScheduleMgr::_threadDial(LPVOID lp)
 
 	fsScheduleMgr *pThis = _pwndScheduler->GetMgr ();
 
-	CString str = LS (L_DIAL); str += " \"";
+	CString str = LS (L_DIAL); str += _T(" \"");
 	str += dial.pszConnection;
-	str += '"';
+	str += _T('"');
 
 	pThis->Event (str, SMET_INPROGRESS);
 
@@ -1033,7 +1033,7 @@ void fsScheduleMgr::SetEventDescFunc(fntScheduleMgrEventDesc pfn, LPVOID lp)
 	m_lpEventDesc = lp;
 }
 
-void fsScheduleMgr::Event(LPCSTR pszEvent, fsScheduleMgrEventType enType)
+void fsScheduleMgr::Event(LPCTSTR pszEvent, fsScheduleMgrEventType enType)
 {
 	if (m_pfnEventDesc)
 		m_pfnEventDesc (pszEvent, enType, m_lpEventDesc);
@@ -1041,15 +1041,15 @@ void fsScheduleMgr::Event(LPCSTR pszEvent, fsScheduleMgrEventType enType)
 
 void fsScheduleMgr::LaunchProgram(fsSchedule *task)
 {
-	DWORD dwRet = (DWORD) ShellExecute (NULL, "open", task->wts.prog.pszName, task->wts.prog.pszArgs, 
+	DWORD dwRet = (DWORD) ShellExecute (NULL, _T("open"), task->wts.prog.pszName, task->wts.prog.pszArgs, 
 										NULL, SW_SHOW);
 	if (dwRet > 32)
 	{
 		
 
-		CString str = '"';
+		CString str = _T('"');
 		str += task->wts.prog.pszName;
-		str += "\" ";
+		str += _T("\" ");
 		str += LS (L_LAUNCHEDSUCC);
 		Event (str);
 	}
@@ -1058,13 +1058,13 @@ void fsScheduleMgr::LaunchProgram(fsSchedule *task)
 		
 
 		CString str;
-		char szErr [200];
+		TCHAR szErr [200];
 		SetLastError (dwRet);
 		if (dwRet)
 			fsErrorToStr (szErr, sizeof (szErr));
 		else
-			strcpy (szErr, LS (L_OUTOFMEMORY));
-		str.Format ("%s %s [%s]", LS (L_CANTLAUNCH), task->wts.prog.pszName, szErr); 
+			_tcscpy (szErr, LS (L_OUTOFMEMORY));
+		str.Format (_T("%s %s [%s]"), LS (L_CANTLAUNCH), task->wts.prog.pszName, szErr); 
 		Event (str, SMET_E);
 	}
 }

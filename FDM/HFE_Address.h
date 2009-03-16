@@ -32,12 +32,12 @@ public:
 	
 	CString PopUrl();
 	
-	void PushUrl (LPCSTR pszUrl);
+	void PushUrl (LPCTSTR pszUrl);
 	
 	void UpdateUrl();
 	void ApplyLanguage();
 	
-	LPCSTR GetUrl();
+	LPCTSTR GetUrl();
 	BOOL Create (CWnd* pParent);
 	virtual ~CHFE_Address();
 

@@ -90,29 +90,29 @@ BOOL CFdmApp::InitInstance()
 	fsIECatchMgr::CleanIEPluginKey ();
 
 	
-	CString strPath = GetProfileString ("", "Path", "");
+	CString strPath = GetProfileString (_T(""), _T("Path"), _T(""));
 	BOOL bNeedLocalRegister = FALSE;
-	if (strPath == "")
+	if (strPath == _T(""))
 	{
 		CRegKey key;
-		if (ERROR_SUCCESS == key.Open (HKEY_CURRENT_USER, "Software\\FreeDownloadManager.ORG\\Free Download Manager", KEY_WRITE))
-			vmsSHCopyKey (HKEY_LOCAL_MACHINE, "Software\\FreeDownloadManager.ORG\\Free Download Manager", key);
-		strPath = GetProfileString ("", "Path", "");
-		bNeedLocalRegister = strPath != "";
+		if (ERROR_SUCCESS == key.Open (HKEY_CURRENT_USER, _T("Software\\FreeDownloadManager.ORG\\Free Download Manager"), KEY_WRITE))
+			vmsSHCopyKey (HKEY_LOCAL_MACHINE, _T("Software\\FreeDownloadManager.ORG\\Free Download Manager"), key);
+		strPath = GetProfileString (_T(""), _T("Path"), _T(""));
+		bNeedLocalRegister = strPath != _T("");
 	}
 
-	if (GetFileAttributes (strPath + "\\fdm.exe") == DWORD (-1))
+	if (GetFileAttributes (strPath + _T("\\fdm.exe")) == DWORD (-1))
 	{
-		strPath = "";
+		strPath = _T("");
 		bNeedLocalRegister = false;
 	}
 
 	
 	
-	if (strPath == "" || !SetCurrentDirectory (strPath))
+	if (strPath == _T("") || !SetCurrentDirectory (strPath))
 		_dwAppState |= APPSTATE_PORTABLE_MODE;
 
-	char szExeDir [MY_MAX_PATH], szExeFile [MY_MAX_PATH];
+	TCHAR szExeDir [MY_MAX_PATH], szExeFile [MY_MAX_PATH];
 	GetModuleFileName (NULL, szExeFile, sizeof (szExeFile));
 	fsGetPath (szExeFile, szExeDir);
 
@@ -125,14 +125,14 @@ BOOL CFdmApp::InitInstance()
 	m_strAppPath = strPath;
 	if (!m_strAppPath.IsEmpty ())
 	{
-		if (m_strAppPath [m_strAppPath.GetLength ()-1] != '\\' &&
-				m_strAppPath [m_strAppPath.GetLength ()-1] != '/')
-			m_strAppPath += '\\';
+		if (m_strAppPath [m_strAppPath.GetLength ()-1] != _T('\\') &&
+				m_strAppPath [m_strAppPath.GetLength ()-1] != _T('/'))
+			m_strAppPath += _T('\\');
 	}
 
 	if (!IS_PORTABLE_MODE)
 	{
-		CString strDataFldr = szExeDir; strDataFldr += "Data";
+		CString strDataFldr = szExeDir; strDataFldr += _T("Data");
 		
 		
 		
@@ -150,7 +150,7 @@ BOOL CFdmApp::InitInstance()
 	{
 		
 		vmsAppSettingsStore* pStgs = _App.get_SettingsStore ();
-		CString strStgsFile = m_strAppPath + "Data\\settings.dat";
+		CString strStgsFile = m_strAppPath + _T("Data\\settings.dat");
 		fsBuildPathToFile (strStgsFile);
 		pStgs->LoadSettingsFromFile (strStgsFile);
 	}
@@ -160,9 +160,9 @@ BOOL CFdmApp::InitInstance()
 	if (FALSE == InitLanguage ())
 		bNoLng = TRUE;
 
-	if (strcmp (m_lpCmdLine, "-suis") == 0 || 
-			strcmp (m_lpCmdLine, "-euis") == 0 ||
-			strcmp (m_lpCmdLine, "-duis") == 0)
+	if (strcmp (m_lpCmdLine, _T("-suis")) == 0 || 
+			_tcscmp (m_lpCmdLine, _T("-euis")) == 0 ||
+			_tcscmp (m_lpCmdLine, _T("-duis")) == 0)
 	{
 		IntegrationSettings ();
 		return FALSE;
@@ -173,10 +173,10 @@ BOOL CFdmApp::InitInstance()
 		
 		
 		
-		char szTmpFile [MY_MAX_PATH];
-		CString str = m_strAppPath; str += "Data";
+		TCHAR szTmpFile [MY_MAX_PATH];
+		CString str = m_strAppPath; str += _T("Data");
 		CreateDirectory (str, NULL);
-		if (0 == GetTempFileName (str, "fdm", 0, szTmpFile))
+		if (0 == GetTempFileName (str, _T("fdm"), 0, szTmpFile))
 			MessageBox (NULL, LS (L_NOWRITEACCESSTODATAFOLDER), vmsFdmAppMgr::getAppName (), MB_ICONWARNING);
 		else
 			DeleteFile (szTmpFile);
@@ -205,7 +205,7 @@ BOOL CFdmApp::InitInstance()
 	{
 		
 		CFileFind f; 
-		BOOL b = f.FindFile (m_strAppPath + "*.sav");
+		BOOL b = f.FindFile (m_strAppPath + _T("*.sav"));
 		std::vector <CString> v;
 		while (b)
 		{
@@ -215,28 +215,28 @@ BOOL CFdmApp::InitInstance()
 		for (size_t i = 0; i < v.size (); i++)
 			MoveFile (m_strAppPath + v [i], fsGetDataFilePath (v [i]));
 	}
-	MoveFile (fsGetDataFilePath ("uploads.sav"), fsGetDataFilePath ("uploads.1.sav"));
+	MoveFile (fsGetDataFilePath (_T("uploads.sav")), fsGetDataFilePath (_T("uploads.1.sav")));
 	
 
 	if (!InitATL())
 		return FALSE;
 
-	if (VistaFx::IsVista () && strncmp (m_lpCmdLine, "-nelvcheck", 10) && stricmp (m_lpCmdLine, "-autorun"))
+	if (VistaFx::IsVista () && _tcsncmp (m_lpCmdLine, _T("-nelvcheck"), 10) && stricmp (m_lpCmdLine, _T("-autorun")))
 	{
 		VistaFx vf;
-		vf.LoadDll (m_strAppPath + "vistafx.dll");
+		vf.LoadDll (m_strAppPath + _T("vistafx.dll"));
 		if (vf.IsProcessElevated ())
 		{
-			char sz [MAX_PATH];
+			TCHAR sz [MAX_PATH];
 			GetModuleFileName (NULL, sz, MAX_PATH);
-			CString str = "-nelvcheck ";
+			CString str = _T("-nelvcheck ");
 			str += m_lpCmdLine;
 			if (m_hAppMutex)
 			{
 				CloseHandle (m_hAppMutex);
 				m_hAppMutex = NULL;
 			}
-			if (vf.RunNonElevatedProcess (sz, str, ""))
+			if (vf.RunNonElevatedProcess (sz, str, _T("")))
 				return FALSE;
 			m_hAppMutex = CreateMutex (NULL, TRUE, _pszAppMutex);
 		}
@@ -287,14 +287,14 @@ BOOL CFdmApp::InitInstance()
 	{
 		fsIEUserAgent ua;
 		ua.SetPP (IE_USERAGENT_ADDITION);
-		ua.RemovePP ("Free Download Manager"); 
+		ua.RemovePP (_T("Free Download Manager")); 
 	}
 
-	if (FALSE == GetProfileInt ("EnvCheck", "848", FALSE))
+	if (FALSE == GetProfileInt (_T("EnvCheck"), _T("848"), FALSE))
 	{
 		if (vmsBtSupport::getBtDllVersion () < 848)
-			MessageBox (NULL, "Please update Bittorrent module.\nSome functions will be disabled until you update it.", "Warning", MB_ICONEXCLAMATION);
-		WriteProfileInt ("EnvCheck", "848", TRUE);
+			MessageBox (NULL, _T("Please update Bittorrent module.\nSome functions will be disabled until you update it."), _T("Warning"), MB_ICONEXCLAMATION);
+		WriteProfileInt (_T("EnvCheck"), _T("848"), TRUE);
 	}
 
 	CMainFrame* pFrame = NULL;
@@ -311,7 +311,7 @@ BOOL CFdmApp::InitInstance()
 	
 	BOOL bHidden = _tcscmp (m_lpCmdLine, _T ("-autorun")) == 0;
 
-	_App.View_ReadWndPlacement (pFrame, "MainFrm", bHidden);
+	_App.View_ReadWndPlacement (pFrame, _T("MainFrm"), bHidden);
 
 	if (!bHidden)
 	{
@@ -350,7 +350,7 @@ BOOL CFdmApp::InitInstance()
 			
 			
 			
-			MessageBox( NULL, (LPCTSTR)lpMsgBuf, "Error", MB_OK | MB_ICONINFORMATION );
+			MessageBox( NULL, (LPCTSTR)lpMsgBuf, _T("Error"), MB_OK | MB_ICONINFORMATION );
 			
 			LocalFree( lpMsgBuf );
 	}
@@ -392,8 +392,8 @@ CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
 {
 	//{{AFX_DATA_INIT(CAboutDlg)
 	//}}AFX_DATA_INIT
-	m_fontRegInfo.CreateFont (10, 0, 0, 0, FW_BOLD, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "MS Sans Serif");
-	m_fontWarn.CreateFont (12, 0, 0, 0, FW_LIGHT, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "Arial");
+	m_fontRegInfo.CreateFont (10, 0, 0, 0, FW_BOLD, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, _T("MS Sans Serif"));
+	m_fontWarn.CreateFont (12, 0, 0, 0, FW_LIGHT, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, _T("Arial"));
 }
 
 void CAboutDlg::DoDataExchange(CDataExchange* pDX)
@@ -459,7 +459,7 @@ BOOL CAboutDlg::OnInitDialog()
 	m_wndDLURL.SetUrl ("http://www.freedownloadmanager.org/download.htm");
 	
 	CString strVer;
-	char szVer [] = "%s %s build %s";
+	TCHAR szVer [] = _T("%s %s build %s");
 	strVer.Format (szVer, LS (L_VERSION), vmsFdmAppMgr::getVersion ()->m_strProductVersion.c_str (), 
 		vmsFdmAppMgr::getBuildNumber ());
 	SetDlgItemText (IDC__VER, strVer);
@@ -488,7 +488,7 @@ BOOL CAboutDlg::OnInitDialog()
 	{
 		CString str;
 		GetDlgItemText (IDC__NAME, str);
-		str += " (Light)";
+		str += _T(" (Light)");
 		SetDlgItemText (IDC__NAME, str);
 	}
 
@@ -518,7 +518,7 @@ void CFdmApp::LoadHistory()
 	_HsMgr.ReadSettings ();
 
 	
-	HANDLE hFile = CreateFile (fsGetDataFilePath ("history.sav"), GENERIC_READ, FILE_SHARE_READ, NULL, 
+	HANDLE hFile = CreateFile (fsGetDataFilePath (_T("history.sav")), GENERIC_READ, FILE_SHARE_READ, NULL, 
 		OPEN_EXISTING, 0, NULL);
 
 	if (hFile == INVALID_HANDLE_VALUE)
@@ -563,7 +563,7 @@ _lErr:
 
 void CFdmApp::SaveHistory()
 {
-	HANDLE hFile = CreateFile (fsGetDataFilePath ("history.sav"), GENERIC_WRITE, 0, NULL, 
+	HANDLE hFile = CreateFile (fsGetDataFilePath (_T("history.sav")), GENERIC_WRITE, 0, NULL, 
 		CREATE_ALWAYS, FILE_ATTRIBUTE_HIDDEN, NULL);
 
 	if (hFile == INVALID_HANDLE_VALUE)
@@ -597,7 +597,7 @@ _lErr:
 	if (hFile != INVALID_HANDLE_VALUE)
 		CloseHandle (hFile);
 	
-		DeleteFile (fsGetDataFilePath ("history.sav"));
+		DeleteFile (fsGetDataFilePath (_T("history.sav")));
 }  
 
 	
@@ -664,7 +664,7 @@ BOOL CFdmApp::InitATL()
 			BOOL bWaitShutdown = FALSE;
 			if (CheckFdmStartedAlready (FALSE))
 			{
-				UINT nMsg = RegisterWindowMessage ("FDM - shutdown");
+				UINT nMsg = RegisterWindowMessage (_T("FDM - shutdown"));
 				if (nMsg)
 				{
 					PostMessage (HWND_BROADCAST, nMsg, 0, 0);
@@ -672,14 +672,14 @@ BOOL CFdmApp::InitATL()
 				}
 				else
 				{
-					MessageBox (NULL, "Unable to shutdown Free Download Manager.\nPlease do that yourself.", "Error", MB_ICONEXCLAMATION);
+					MessageBox (NULL, _T("Unable to shutdown Free Download Manager.\nPlease do that yourself."), _T("Error"), MB_ICONEXCLAMATION);
 				}
 			}
 
-			HANDLE hMxWi = CreateMutex (NULL, FALSE, "FDM - remote control server");
+			HANDLE hMxWi = CreateMutex (NULL, FALSE, _T("FDM - remote control server"));
 			if (GetLastError () == ERROR_ALREADY_EXISTS)
 			{
-				UINT nMsg = RegisterWindowMessage ("FDM - remote control server - shutdown");
+				UINT nMsg = RegisterWindowMessage (_T("FDM - remote control server - shutdown"));
 				if (nMsg)
 					PostMessage (HWND_BROADCAST, nMsg, 0, 0);
 			}
@@ -757,7 +757,7 @@ BOOL CFdmApp::InitLanguage()
 
 BOOL CFdmApp::CheckFdmStartedAlready(BOOL bSetForIfEx)
 {
-	LPCSTR pszMainWnd = "Free Download Manager Main Window";
+	LPCTSTR pszMainWnd = _T("Free Download Manager Main Window");
 
 	m_hAppMutex = CreateMutex (NULL, TRUE, _pszAppMutex);
 	
@@ -810,9 +810,9 @@ LONG CFdmApp::_UEF(_EXCEPTION_POINTERS *info)
 
 	typedef BOOL (WINAPI *FNMDWD)(HANDLE, DWORD, HANDLE, MINIDUMP_TYPE, 
 		PMINIDUMP_EXCEPTION_INFORMATION, PMINIDUMP_USER_STREAM_INFORMATION, PMINIDUMP_CALLBACK_INFORMATION);
-	vmsDLL dll ("dbghelp.dll");
+	vmsDLL dll (_T("dbghelp.dll"));
 	FNMDWD pfnMiniDumpWriteDump;
-	pfnMiniDumpWriteDump = (FNMDWD) dll.GetProcAddress ("MiniDumpWriteDump");
+	pfnMiniDumpWriteDump = (FNMDWD) dll.GetProcAddress (_T("MiniDumpWriteDump"));
 	if (pfnMiniDumpWriteDump == NULL)
 		return EXCEPTION_EXECUTE_HANDLER;
 	
@@ -823,8 +823,8 @@ LONG CFdmApp::_UEF(_EXCEPTION_POINTERS *info)
     eInfo.ExceptionPointers = info;
     eInfo.ClientPointers = FALSE;
 
-	char szFile [MAX_PATH]; char szName [100];
-	wsprintf (szName, "fdm%s.dmp", vmsFdmAppMgr::getBuildNumber ());
+	TCHAR szFile [MAX_PATH]; TCHAR szName [100];
+	wsprintf (szName, _T("fdm%s.dmp"), vmsFdmAppMgr::getBuildNumber ());
 	GetTempPath (MAX_PATH, szFile);
 	_tcscat (szFile, szName);
 	HANDLE hFile = CreateFile (szFile, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS,
@@ -865,7 +865,7 @@ void CFdmApp::CheckLocked()
 
 	do 
 	{
-		HANDLE hMx = CreateMutex (NULL, TRUE, "_mx_FDM_Lock_Start_");
+		HANDLE hMx = CreateMutex (NULL, TRUE, _T("_mx_FDM_Lock_Start_"));
 		dwRes = GetLastError ();
 		CloseHandle (hMx);
 
@@ -878,18 +878,18 @@ void CFdmApp::CheckLocked()
 void CFdmApp::UninstallCustomizations()
 {
 	CRegKey key;
-	key.Open (HKEY_CURRENT_USER, "Software\\FreeDownloadManager.ORG\\Free Download Manager");
+	key.Open (HKEY_CURRENT_USER, _T("Software\\FreeDownloadManager.ORG\\Free Download Manager"));
 
-	char sz [MY_MAX_PATH];
+	TCHAR sz [MY_MAX_PATH];
 	DWORD dw = MY_MAX_PATH;
 	
 	
-	key.QueryValue (sz, "CLSM_File", &dw);
+	key.QueryValue (sz, _T("CLSM_File"), &dw);
 	DeleteFile (sz);
 
 	
 	dw = MY_MAX_PATH;
-	key.QueryValue (sz, "CLFM_File", &dw);
+	key.QueryValue (sz, _T("CLFM_File"), &dw);
 	DeleteFile (sz);
 
 	
@@ -898,43 +898,43 @@ void CFdmApp::UninstallCustomizations()
 
 	
 
-	char szIEOP [10000] = "about:blank";
-	char szIECP [10000] = "about:blank";
+	TCHAR szIEOP [10000] = _T("about:blank");
+	TCHAR szIECP [10000] = _T("about:blank");
 
 	CRegKey fdmkey;
-	fdmkey.Open (HKEY_CURRENT_USER, "Software\\FreeDownloadManager.ORG\\Free Download Manager");
+	fdmkey.Open (HKEY_CURRENT_USER, _T("Software\\FreeDownloadManager.ORG\\Free Download Manager"));
 
 	dw = sizeof (szIECP);
-	fdmkey.QueryValue (szIECP, "CustSite", &dw);
+	fdmkey.QueryValue (szIECP, _T("CustSite"), &dw);
 	dw = sizeof (szIEOP);
-	if (ERROR_SUCCESS == fdmkey.QueryValue (szIEOP, "CIEOP", &dw))
+	if (ERROR_SUCCESS == fdmkey.QueryValue (szIEOP, _T("CIEOP"), &dw))
 	{
-		key.Open (HKEY_CURRENT_USER, "Software\\Microsoft\\Internet Explorer\\Main");
+		key.Open (HKEY_CURRENT_USER, _T("Software\\Microsoft\\Internet Explorer\\Main"));
 
-		char sz2 [10000] = "about:blank";
+		TCHAR sz2 [10000] = _T("about:blank");
 		dw = sizeof (sz2);
-		key.QueryValue (sz2, "Start Page", &dw);
+		key.QueryValue (sz2, _T("Start Page"), &dw);
 
 		if (lstrcmp (sz2, szIECP) == 0)
-			key.SetValue (szIEOP, "Start Page");
+			key.SetValue (szIEOP, _T("Start Page"));
 	}
 }
 
 BOOL CFdmApp::RegisterServer(BOOL bGlobal)
 {
-	LOG ("Registering server (%s)...", bGlobal ? "global" : "local");
+	LOG (_T("Registering server (%s)..."), bGlobal ? _T("global") : _T("local"));
 
 	bool bRegisterForUserOnly = IS_PORTABLE_MODE && !Is9xME;
 
 	if (bRegisterForUserOnly)
 	{
-		LOGsnl ("Portable mode: overriding HKCR...");
+		LOGsnl (_T("Portable mode: overriding HKCR..."));
 		HKEY hKey;
 		LONG lRes;
-		lRes = RegOpenKeyEx (HKEY_CURRENT_USER, "Software\\Classes", 0, KEY_ALL_ACCESS, &hKey);
-		LOGRESULT (" open cu key", lRes);
+		lRes = RegOpenKeyEx (HKEY_CURRENT_USER, _T("Software\\Classes"), 0, KEY_ALL_ACCESS, &hKey);
+		LOGRESULT (_T(" open cu key"), lRes);
 		lRes = vmsNotEverywhereSupportedFunctions::RegOverridePredefKey (HKEY_CLASSES_ROOT, hKey);
-		LOGRESULT (" override HKCR key", lRes);
+		LOGRESULT (_T(" override HKCR key"), lRes);
 		RegCloseKey (hKey);
 	}
 
@@ -942,7 +942,7 @@ BOOL CFdmApp::RegisterServer(BOOL bGlobal)
 	{
 		fsIEUserAgent ua;
 		ua.SetPP (IE_USERAGENT_ADDITION);
-        ua.RemovePP ("Free Download Manager"); 
+        ua.RemovePP (_T("Free Download Manager")); 
 	}
 
 	if (bGlobal)
@@ -951,15 +951,15 @@ BOOL CFdmApp::RegisterServer(BOOL bGlobal)
 		
 		
 		
-		if (ERROR_SUCCESS == key.Open (HKEY_LOCAL_MACHINE, "Software\\FreeDownloadManager.ORG\\Free Download Manager", KEY_WRITE))
-			vmsSHCopyKey (HKEY_CURRENT_USER, "Software\\FreeDownloadManager.ORG\\Free Download Manager", key);
+		if (ERROR_SUCCESS == key.Open (HKEY_LOCAL_MACHINE, _T("Software\\FreeDownloadManager.ORG\\Free Download Manager"), KEY_WRITE))
+			vmsSHCopyKey (HKEY_CURRENT_USER, _T("Software\\FreeDownloadManager.ORG\\Free Download Manager"), key);
 
 		
 		HRESULT hr = _Module.UpdateRegistryFromResource (IDR_FDM, TRUE);
-		LOGRESULT ("UpdateRegistryFromResource", hr);
+		LOGRESULT (_T("UpdateRegistryFromResource"), hr);
 	
 		hr = _Module.RegisterServer (!bRegisterForUserOnly);
-		LOGRESULT ("_Module.RegisterServer", hr);
+		LOGRESULT (_T("_Module.RegisterServer"), hr);
 
 		if (bRegisterForUserOnly)
 		{
@@ -973,13 +973,13 @@ BOOL CFdmApp::RegisterServer(BOOL bGlobal)
 				szDir[AtlGetDirLen(szDir)] = 0;
 			
 				typedef HRESULT (WINAPI *FNRTLFU)(ITypeLib*,OLECHAR*,OLECHAR*);
-				FNRTLFU pfn = (FNRTLFU) GetProcAddress (GetModuleHandle ("oleaut32.dll"), "RegisterTypeLibForUser");
+				FNRTLFU pfn = (FNRTLFU) GetProcAddress (GetModuleHandle (_T("oleaut32.dll")), _T("RegisterTypeLibForUser"));
 				if (pfn)
 					hr = pfn (pTypeLib, bstrPath, szDir);
 				else
 					hr = ::RegisterTypeLib(pTypeLib, bstrPath, szDir);
 			}
-			LOGRESULT ("register typelib", hr);
+			LOGRESULT (_T("register typelib"), hr);
 		}
 		
 		
@@ -988,8 +988,8 @@ BOOL CFdmApp::RegisterServer(BOOL bGlobal)
 		if (SUCCEEDED (hr = LoadTypeLibEx (L"fdm.tlb", REGKIND_REGISTER, &pLib)))
 			pLib->Release ();
 		else
-			MessageBox (0, "Failed to load Free Download Manager type lib","Error",0);
-		LOGRESULT ("register fdm.tlb", hr);
+			MessageBox (0, _T("Failed to load Free Download Manager type lib"),_T("Error"),0);
+		LOGRESULT (_T("register fdm.tlb"), hr);
 
 		if (_AppMgr.IsBtInstalled ())
 		{
@@ -1005,10 +1005,10 @@ BOOL CFdmApp::RegisterServer(BOOL bGlobal)
 		}
 	}
 
-	WriteProfileInt ("", "cverID", 0);
+	WriteProfileInt (_T(""), _T("cverID"), 0);
 
-	if (GetProfileInt ("Settings\\Monitor", "IECMInited", 0) == 0)
-		WriteProfileInt ("Settings\\Monitor", "IECMInited", TRUE);
+	if (GetProfileInt (_T("Settings\\Monitor"), _T("IECMInited"), 0) == 0)
+		WriteProfileInt (_T("Settings\\Monitor"), _T("IECMInited"), TRUE);
 	_IECMM.DeleteIEMenus (); 
 	fsIEContextMenuMgr::DeleteAllFDMsIEMenus ();
 	_IECMM.AddIEMenus ();
@@ -1038,9 +1038,9 @@ BOOL CFdmApp::RegisterServer(BOOL bGlobal)
 		_NOMgr.InstallChromePlugin ();
 
 	CRegKey key;
-	if (ERROR_SUCCESS != key.Create (HKEY_CURRENT_USER, "Software\\FreeDownloadManager.ORG\\Free Upload Manager"))
-		key.Open (HKEY_CURRENT_USER, "Software\\FreeDownloadManager.ORG\\Free Upload Manager");
-	key.SetValue (fsGetAppDataFolder (), "force_data_folder");
+	if (ERROR_SUCCESS != key.Create (HKEY_CURRENT_USER, _T("Software\\FreeDownloadManager.ORG\\Free Upload Manager")))
+		key.Open (HKEY_CURRENT_USER, _T("Software\\FreeDownloadManager.ORG\\Free Upload Manager"));
+	key.SetValue (fsGetAppDataFolder (), _T("force_data_folder"));
 
 	if (bRegisterForUserOnly)
 		vmsNotEverywhereSupportedFunctions::RegOverridePredefKey (HKEY_CLASSES_ROOT, NULL);
@@ -1061,7 +1061,7 @@ void CFdmApp::Install_RegisterServer()
 
 void CFdmApp::Install_UnregisterServer()
 {
-	LOGsnl ("Unregister server...");
+	LOGsnl (_T("Unregister server..."));
 
 	bool bUnregisterForUserOnly = IS_PORTABLE_MODE;
 	
@@ -1069,9 +1069,9 @@ void CFdmApp::Install_UnregisterServer()
 	{
 		HKEY hKeyCurrentUser;
 		LONG l = RegOpenKeyEx (HKEY_CURRENT_USER, _T("Software\\Classes"), 0, KEY_ALL_ACCESS, &hKeyCurrentUser);
-		LOGRESULT ("open cu", l);
+		LOGRESULT (_T("open cu"), l);
 		l = vmsNotEverywhereSupportedFunctions::RegOverridePredefKey (HKEY_CLASSES_ROOT, hKeyCurrentUser);
-		LOGRESULT ("override key", l);
+		LOGRESULT (_T("override key"), l);
 		RegCloseKey (hKeyCurrentUser);
 	}
 
@@ -1084,9 +1084,9 @@ void CFdmApp::Install_UnregisterServer()
 			
 	
 	HRESULT hr = _Module.UpdateRegistryFromResource(IDR_FDM, FALSE);
-	LOGRESULT ("_Module.UpdateRegistryFromResource", hr);
+	LOGRESULT (_T("_Module.UpdateRegistryFromResource"), hr);
 	hr = _Module.UnregisterServer(!bUnregisterForUserOnly); 
-	LOGRESULT ("_Module.UnregisterServer", hr);
+	LOGRESULT (_T("_Module.UnregisterServer"), hr);
 	UnRegisterTypeLib (LIBID_FdmLib, 0, 0, LOCALE_SYSTEM_DEFAULT, SYS_WIN32);
 
 	if (bUnregisterForUserOnly)
@@ -1104,9 +1104,9 @@ void CFdmApp::Install_UnregisterServer()
 				HINSTANCE h = LoadLibrary(_T("oleaut32.dll"));
 				if (h != NULL)
 				{
-					PFNRTL pfn = (PFNRTL) GetProcAddress(h, "UnRegisterTypeLibForUser");
+					PFNRTL pfn = (PFNRTL) GetProcAddress(h, _T("UnRegisterTypeLibForUser"));
 					if (pfn == NULL)
-						pfn = (PFNRTL) GetProcAddress(h, "UnRegisterTypeLib");
+						pfn = (PFNRTL) GetProcAddress(h, _T("UnRegisterTypeLib"));
 					if (pfn != NULL)
 						hr = pfn(ptla->guid, ptla->wMajorVerNum, ptla->wMinorVerNum, ptla->lcid, ptla->syskind);
 					FreeLibrary (h);
@@ -1114,13 +1114,13 @@ void CFdmApp::Install_UnregisterServer()
 				pTypeLib->ReleaseTLibAttr(ptla);
 			}
 		}
-		LOGRESULT ("unregister typelib", hr);
+		LOGRESULT (_T("unregister typelib"), hr);
 	}
 	
 	
 	
 	if (_IECMM.IsIEMenusPresent ())
-		WriteProfileInt ("Settings\\Monitor", "IECMInited", 0);
+		WriteProfileInt (_T("Settings\\Monitor"), _T("IECMInited"), 0);
 
 	fsIEContextMenuMgr::DeleteAllFDMsIEMenus ();
 	
@@ -1147,7 +1147,7 @@ void CFdmApp::SaveSettings()
 	{
 		
 		vmsAppSettingsStore* pStgs = _App.get_SettingsStore ();
-		CString strStgsFile = fsGetDataFilePath ("settings.dat");
+		CString strStgsFile = fsGetDataFilePath (_T("settings.dat"));
 		pStgs->SaveSettingsToFile (strStgsFile);
 	}
 }  
@@ -1159,9 +1159,9 @@ void CFdmApp::IntegrationSettings()
 
 	#ifndef _DEBUG
 	CString strFP = fsGetFumProgramFilesFolder ();
-	hUploadsDll = LoadLibrary (strFP + "fumcore.dll");
+	hUploadsDll = LoadLibrary (strFP + _T("fumcore.dll"));
 	#else
-	hUploadsDll = LoadLibrary ("E:\\VCW\\FDM\\FDM\\Uploader\\CoreDll\\Debug\\fumcore.dll");
+	hUploadsDll = LoadLibrary (_T("E:\\VCW\\FDM\\FDM\\Uploader\\CoreDll\\Debug\\fumcore.dll"));
 	ASSERT (hUploadsDll != NULL);
 	#endif
 
@@ -1169,23 +1169,23 @@ void CFdmApp::IntegrationSettings()
 		return;
 
 	vmsUploadsDll::FNSDC pfnSetCaller = (vmsUploadsDll::FNSDC) GetProcAddress (hUploadsDll, 
-		"_SetDllCaller");
+		_T("_SetDllCaller"));
 	ASSERT (pfnSetCaller != NULL);
 	pfnSetCaller (&udc);
 
-	if (lstrcmpi (m_lpCmdLine, "-suis") == 0)
+	if (lstrcmpi (m_lpCmdLine, _T("-suis")) == 0)
 	{
 		vmsUploadsDll::FNSIS pfnShowIntegrationSettings = (vmsUploadsDll::FNSIS) GetProcAddress (hUploadsDll, 
-			"_ShowIntegrationSettings");
+			_T("_ShowIntegrationSettings"));
 		ASSERT (pfnShowIntegrationSettings != NULL);
 		pfnShowIntegrationSettings (NULL);
 	}
 	else
 	{
 		vmsUploadsDll::FNEI pfnEnableIntegration = (vmsUploadsDll::FNEI) GetProcAddress (hUploadsDll, 
-			"_EnableIntegration");			 
+			_T("_EnableIntegration"));			 
 		ASSERT (pfnEnableIntegration != NULL);
-		pfnEnableIntegration  (lstrcmpi (m_lpCmdLine, "-euis") == 0, 0);
+		pfnEnableIntegration  (lstrcmpi (m_lpCmdLine, _T("-euis")) == 0, 0);
 	}
 
 	FreeLibrary (hUploadsDll);
@@ -1209,33 +1209,33 @@ void CFdmApp::ScheduleExitProcess(DWORD dwSeconds)
 
 void CFdmApp::CheckRegistry()
 {
-	fsString str = "%56%69%63%4D%61%6E%20%53%6F%66%74%77%61%72%65";
+	fsString str = _T("%56%69%63%4D%61%6E%20%53%6F%66%74%77%61%72%65");
 	fsDecodeHtmlUrl (str);
-	CString strOldKey = "Software\\"; strOldKey += str; 
+	CString strOldKey = _T("Software\\"); strOldKey += str; 
 	CString strOldRKey = strOldKey;
-	strOldKey += "\\Free Download Manager";
+	strOldKey += _T("\\Free Download Manager");
 
 	
 	CRegKey key;
 	if (ERROR_SUCCESS == key.Open (HKEY_CURRENT_USER, strOldKey))
 	{
 		CRegKey key2;
-		if (ERROR_SUCCESS != key2.Open (HKEY_CURRENT_USER, "Software\\FreeDownloadManager.ORG\\Free Download Manager\\Settings\\History"))
+		if (ERROR_SUCCESS != key2.Open (HKEY_CURRENT_USER, _T("Software\\FreeDownloadManager.ORG\\Free Download Manager\\Settings\\History")))
 		{
-			LONG lRes = key2.Create (HKEY_CURRENT_USER, "Software\\FreeDownloadManager.ORG");
+			LONG lRes = key2.Create (HKEY_CURRENT_USER, _T("Software\\FreeDownloadManager.ORG"));
 			if (lRes != ERROR_SUCCESS)
-				lRes = key2.Open (HKEY_CURRENT_USER, "Software\\FreeDownloadManager.ORG");
+				lRes = key2.Open (HKEY_CURRENT_USER, _T("Software\\FreeDownloadManager.ORG"));
 
 			if (ERROR_SUCCESS == lRes)
 			{
 				key.Open (HKEY_CURRENT_USER, strOldRKey);
 
-				CString strPath = GetProfileString ("", "Path", "");
-				LONG nRes = fsCopyKey (key, key2, "Free Download Manager", "Free Download Manager");
+				CString strPath = GetProfileString (_T(""), _T("Path"), _T(""));
+				LONG nRes = fsCopyKey (key, key2, _T("Free Download Manager"), _T("Free Download Manager"));
 				nRes; 
-				WriteProfileString ("", "Path", strPath); 
+				WriteProfileString (_T(""), _T("Path"), strPath); 
 				
-				key.RecurseDeleteKey ("Free Download Manager");
+				key.RecurseDeleteKey (_T("Free Download Manager"));
 			}
 		}
 	}

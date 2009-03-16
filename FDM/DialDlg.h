@@ -51,7 +51,7 @@ protected:
 	
 	void SleepInterval();
 	
-	void Log (LPCSTR pszRecord);
+	void Log (LPCTSTR pszRecord);
 	RASDIALPARAMS m_rp;	
 	
 	

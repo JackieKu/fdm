@@ -20,7 +20,7 @@ public:
 	virtual ~fsFDMCmdLineParser();
 
 protected:
-	void AddTorrentFile (LPCSTR pszFile);
+	void AddTorrentFile (LPCTSTR pszFile);
 	BOOL m_bAnotherFDMStarted;	
 	fsCommandLineParser m_parser;	
 	BOOL m_bForceSilent;		

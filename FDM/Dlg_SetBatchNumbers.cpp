@@ -193,32 +193,32 @@ void CDlg_SetBatchNumbers::OnAdd()
 		if (false == CheckSetOfNumbersParameters (from, to, step, wc))
 			return;
 
-		str.Format ("%d-%d", from, to);
-		strU.Format ("%s %d %s %d", LS (L_DLGFROM), from, LS (L_DLGTO), to);
-		strU.Remove (':');
+		str.Format (_T("%d-%d"), from, to);
+		strU.Format (_T("%s %d %s %d"), LS (L_DLGFROM), from, LS (L_DLGTO), to);
+		strU.Remove (_T(':'));
 
 		if (step != 1) {
 			CString str2; 
-			str2.Format ("%c%d", BATCHLIST_STEP_SYMBOL, step);
+			str2.Format (_T("%c%d"), BATCHLIST_STEP_SYMBOL, step);
 			str += str2;
-			str2.Format (" %s %d", LS (L_DLGSTEP), step);
-			str2.Remove (':');
+			str2.Format (_T(" %s %d"), LS (L_DLGSTEP), step);
+			str2.Remove (_T(':'));
 			strU += str2;
 		}
 
 		if (wc != 1) {
 			CString str2;
-			str2.Format ("%c%d", BATCHLIST_WILDCARD_SYMBOL, wc);
+			str2.Format (_T("%c%d"), BATCHLIST_WILDCARD_SYMBOL, wc);
 			str += str2;
-			str2.Format (" %s %d", LS (L_DLGWILDBYTES), wc);
-			str2.Remove (':');
+			str2.Format (_T(" %s %d"), LS (L_DLGWILDBYTES), wc);
+			str2.Remove (_T(':'));
 			strU += str2;
 		}
 	}
 	else
 	{
 		int n = GetDlgItemInt (IDC_NUMBER);
-		str.Format ("%d", n);
+		str.Format (_T("%d"), n);
 		strU = str;
 	}
 
@@ -238,13 +238,13 @@ _l0Err:
 
 void CDlg_SetBatchNumbers::OnOK() 
 {
-	m_strNumbers = "";
+	m_strNumbers = _T("");
 
 	for (int i = 0; i < m_wndSets.GetCount (); i++)
 	{
 		CString* str = (CString*) m_wndSets.GetItemData (i);
 		if (i)
-			m_strNumbers += ", ";
+			m_strNumbers += _T(", ");
 
 		m_strNumbers += *str;
 		delete str;

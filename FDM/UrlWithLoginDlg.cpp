@@ -63,7 +63,7 @@ void CUrlWithLoginDlg::OnOK()
 	}
 	else
 	{
-		m_strUser = m_strPassword = "";
+		m_strUser = m_strPassword = _T("");
 	}
 
 	fsDNP_CloneSettings (&m_dnp, m_dld->pMgr->GetDownloadMgr ()->GetDNP ());
@@ -79,7 +79,7 @@ BOOL CUrlWithLoginDlg::OnInitDialog()
 
 	if (m_strUrl.GetLength () == 0)
 	{
-		LPCSTR pszUrl = _ClipbrdMgr.Text ();
+		LPCTSTR pszUrl = _ClipbrdMgr.Text ();
 		if (pszUrl && *pszUrl)
 		{
 			fsURL url;
@@ -116,7 +116,7 @@ void CUrlWithLoginDlg::ApplyLanguage()
 		fsDlgLngInfo (IDCANCEL, L_CANCEL),
 	};
 
-	CString str = LS (L_COMMENT); str += ':';
+	CString str = LS (L_COMMENT); str += _T(':');
 	SetDlgItemText (IDC__COMMENT, str);
 
 	_LngMgr.ApplyLanguage (this, lnginfo, sizeof (lnginfo) / sizeof (fsDlgLngInfo), m_CaptionLngID);

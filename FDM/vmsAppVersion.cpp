@@ -19,31 +19,31 @@ BOOL vmsAppVersion::FromString(LPCTSTR ptszVersion)
 {
 	clear ();
 
-	while (*ptszVersion == ' ')
+	while (*ptszVersion == _T(' '))
 		ptszVersion++;
 
-	if (*ptszVersion == 'v' || *ptszVersion == 'V')
+	if (*ptszVersion == _T('v') || *ptszVersion == _T('V'))
 		ptszVersion++;
 	
 	while (*ptszVersion)
 	{
-		while (*ptszVersion == ' ')
+		while (*ptszVersion == _T(' '))
 			ptszVersion++;
 		std::string tstrVer;
 		while (_istdigit (*ptszVersion))
 			tstrVer += *ptszVersion++;
 		if (tstrVer.empty ())
 			break;
-		while (*ptszVersion == ' ')
+		while (*ptszVersion == _T(' '))
 			ptszVersion++;
-		if (*ptszVersion == '.' || *ptszVersion == ',')
+		if (*ptszVersion == _T('.') || *ptszVersion == _T(','))
 			ptszVersion++;
 		push_back (vmsAppVersionPart (tstrVer.c_str ()));
 	}
 	
 	if (size () && *ptszVersion)
 	{
-		while (ptszVersion [-1] == ' ')
+		while (ptszVersion [-1] == _T(' '))
 			ptszVersion--;
 		m_strReleaseType = ptszVersion;
 	}

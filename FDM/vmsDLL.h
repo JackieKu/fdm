@@ -13,10 +13,10 @@ class vmsDLL
 {
 public:
 	virtual bool is_Loaded();
-	FARPROC GetProcAddress (LPCSTR pszProcName);
+	FARPROC GetProcAddress (LPCTSTR pszProcName);
 	virtual void Free();
-	virtual bool Load(LPCSTR pszDll);
-	vmsDLL(LPCSTR pszDll = NULL);
+	virtual bool Load(LPCTSTR pszDll);
+	vmsDLL(LPCTSTR pszDll = NULL);
 	virtual ~vmsDLL();
 
 protected:

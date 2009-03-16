@@ -14,7 +14,7 @@ class vmsRegisteredApp
 public:
 	
 	
-	static CString GetFullPath (LPCSTR pszExeName);
+	static CString GetFullPath (LPCTSTR pszExeName);
 
 	vmsRegisteredApp();
 	virtual ~vmsRegisteredApp();

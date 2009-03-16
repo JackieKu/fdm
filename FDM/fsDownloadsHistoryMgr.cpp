@@ -103,7 +103,7 @@ void fsDownloadsHistoryMgr::AddToHistory(vmsDownloadSmartPtr dld)
 	else
 		ZeroMemory (&r.dateDownloaded, sizeof (FILETIME));
 
-	char sz [MY_MAX_PATH];
+	TCHAR sz [MY_MAX_PATH];
 	CDownloads_Tasks::GetFileName (dld, sz);
 	r.strFileName = sz;
 
@@ -126,7 +126,7 @@ int fsDownloadsHistoryMgr::GetRecordCount()
 
 BOOL fsDownloadsHistoryMgr::SaveHistory()
 {
-	HANDLE hFile = CreateFile (fsGetDataFilePath ("downloads.his.sav"), GENERIC_WRITE, 0, NULL,
+	HANDLE hFile = CreateFile (fsGetDataFilePath (_T("downloads.his.sav")), GENERIC_WRITE, 0, NULL,
 		CREATE_ALWAYS, FILE_ATTRIBUTE_HIDDEN, NULL);
 
 	if (hFile == INVALID_HANDLE_VALUE)
@@ -186,10 +186,10 @@ BOOL fsDownloadsHistoryMgr::SaveHistory()
 
 BOOL fsDownloadsHistoryMgr::LoadHistory()
 {
-	if (GetFileAttributes (fsGetDataFilePath ("downloads.his.sav")) == UINT (-1))
+	if (GetFileAttributes (fsGetDataFilePath (_T("downloads.his.sav"))) == UINT (-1))
 		return TRUE;
 
-	HANDLE hFile = CreateFile (fsGetDataFilePath ("downloads.his.sav"), GENERIC_READ, FILE_SHARE_READ, NULL,
+	HANDLE hFile = CreateFile (fsGetDataFilePath (_T("downloads.his.sav")), GENERIC_READ, FILE_SHARE_READ, NULL,
 		OPEN_EXISTING, 0, NULL);
 
 	if (hFile == INVALID_HANDLE_VALUE)
@@ -220,7 +220,7 @@ BOOL fsDownloadsHistoryMgr::LoadHistory()
 	}
 
 	if (hdr.wVer != DLHISTFILE_CURRENT_VERSION ||
-			strnicmp (hdr.szSig, DLHISTFILE_SIG, strlen (DLHISTFILE_SIG)))
+			strnicmp (hdr.szSig, DLHISTFILE_SIG, _tcslen (DLHISTFILE_SIG)))
 	{
 		CloseHandle (hFile);
 		return FALSE;

@@ -15,7 +15,7 @@ static char THIS_FILE[] = __FILE__;
 CDlg_WPD_IL_Add::CDlg_WPD_IL_Add(CWnd* pParent )
 	: CDialog(CDlg_WPD_IL_Add::IDD, pParent)
 {
-	m_strURL = "";
+	m_strURL = _T("");
 	m_bSubfoldersAlso = TRUE;
 	m_bThisOnly = FALSE;
 }  
@@ -42,7 +42,7 @@ BOOL CDlg_WPD_IL_Add::OnInitDialog()
 
 	if (m_strURL.GetLength () == 0)
 	{
-		LPCSTR pszURL = _ClipbrdMgr.Text ();
+		LPCTSTR pszURL = _ClipbrdMgr.Text ();
 		fsURL url;
 		if (pszURL && url.Crack (pszURL) == IR_SUCCESS)
 			m_strURL = pszURL;

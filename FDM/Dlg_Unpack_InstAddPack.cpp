@@ -56,7 +56,7 @@ void CDlg_Unpack_InstAddPack::ApplyLanguage()
 		fsDlgLngInfo (IDCANCEL, L_CANCEL),
 	};
 
-	CString str = LS (L_UNSUPPARCFMT); str += "\n\n";
+	CString str = LS (L_UNSUPPARCFMT); str += _T("\n\n");
 	str += LS (L_ADDPACKCANBEINSTALLED_MSG);
 	SetDlgItemText (IDC__MSG, str);
 

@@ -12,7 +12,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif        
 
-CProgramOptions::CProgramOptions(CWnd* pParent, LPCSTR pszStartPage)
+CProgramOptions::CProgramOptions(CWnd* pParent, LPCTSTR pszStartPage)
 	: CDlg_Options(pParent, pszStartPage)
 {
 	//{{AFX_DATA_INIT(CDlgProgramOptions)

@@ -6,28 +6,28 @@
 #include "downloadproperties.h"
 #include "misc.h"        
 
-void DecodeURLPath (LPSTR pszPath)
+void DecodeURLPath (LPTSTR pszPath)
 {
 	
-	char szURL [10000];
-	strcpy (szURL, "ftp://f.c");
-	if (*pszPath != '/' && *pszPath != '\\')
-		strcat (szURL, "/");
-	strcat (szURL, pszPath);
+	TCHAR szURL [10000];
+	_tcscpy (szURL, "ftp://f.c");
+	if (*pszPath != _T('/') && *pszPath != _T('\\'))
+		_tcscat (szURL, _T("/"));
+	_tcscat (szURL, pszPath);
 
 	
 
 	fsURL url;
 	if (IR_SUCCESS == url.Crack (szURL))
 	{
-		if (*pszPath != '/' && *pszPath != '\\')		
-			strcpy (pszPath, url.GetPath ()+1);
+		if (*pszPath != _T('/') && *pszPath != _T('\\'))		
+			_tcscpy (pszPath, url.GetPath ()+1);
 		else
-			strcpy (pszPath, url.GetPath ());
+			_tcscpy (pszPath, url.GetPath ());
 	}
 }
 
-BOOL fsFilePathFromUrlPath (LPCSTR pszUrl, BOOL bUsingFTP, BOOL bDecode, LPSTR pszBuf, UINT uSize)
+BOOL fsFilePathFromUrlPath (LPCTSTR pszUrl, BOOL bUsingFTP, BOOL bDecode, LPTSTR pszBuf, UINT uSize)
 {
 	*pszBuf = 0;
 
@@ -35,7 +35,7 @@ BOOL fsFilePathFromUrlPath (LPCSTR pszUrl, BOOL bUsingFTP, BOOL bDecode, LPSTR p
 		return TRUE;
 
 	
-	int end = bUsingFTP ? strlen (pszUrl)-1 : strcspn (pszUrl, "?=#") - 1;
+	int end = bUsingFTP ? _tcslen (pszUrl)-1 : _tcscspn (pszUrl, _T("?=#")) - 1;
 
 	if (end >= (int)uSize)
 		return FALSE;
@@ -51,14 +51,14 @@ BOOL fsFilePathFromUrlPath (LPCSTR pszUrl, BOOL bUsingFTP, BOOL bDecode, LPSTR p
 	return TRUE;
 }
 
-BOOL fsPathFromUrlPath (LPCSTR pszUrl, BOOL bUsingFTP, BOOL bDecode, LPSTR pszBuf, UINT uSize)
+BOOL fsPathFromUrlPath (LPCTSTR pszUrl, BOOL bUsingFTP, BOOL bDecode, LPTSTR pszBuf, UINT uSize)
 {
 	*pszBuf = 0;
 
 	if (*pszUrl == 0)
 		return TRUE;
 
-	int end = bUsingFTP ? strlen (pszUrl)-1 : strcspn (pszUrl, "?#") - 1;
+	int end = bUsingFTP ? _tcslen (pszUrl)-1 : _tcscspn (pszUrl, _T("?#")) - 1;
 
 	if (end >= (int)uSize)
 		return FALSE;
@@ -68,7 +68,7 @@ BOOL fsPathFromUrlPath (LPCSTR pszUrl, BOOL bUsingFTP, BOOL bDecode, LPSTR pszBu
 
 	
 
-	LPSTR pszEnd = max (strrchr (pszBuf, '/'), strrchr (pszBuf, '\\'));
+	LPTSTR pszEnd = max (strrchr (pszBuf, _T('/')), _tcsrchr (pszBuf, _T('\\')));
 
 	if (pszEnd == NULL)
 		pszEnd = pszBuf;
@@ -81,7 +81,7 @@ BOOL fsPathFromUrlPath (LPCSTR pszUrl, BOOL bUsingFTP, BOOL bDecode, LPSTR pszBu
 	return TRUE;
 }
 
-BOOL fsIsAnchorInUrl (LPCSTR pszFullUrl, LPSTR* ppszWithoutAnchor, LPCSTR* ppszAnchor = NULL)
+BOOL fsIsAnchorInUrl (LPCTSTR pszFullUrl, LPTSTR* ppszWithoutAnchor, LPCTSTR* ppszAnchor = NULL)
 {
 	fsURL url;
 	if (url.Crack (pszFullUrl) != IR_SUCCESS)
@@ -91,8 +91,8 @@ BOOL fsIsAnchorInUrl (LPCSTR pszFullUrl, LPSTR* ppszWithoutAnchor, LPCSTR* ppszA
 			url.GetInternetScheme () != INTERNET_SCHEME_FTP)
 		return FALSE;
 
-	LPCSTR pszPath = url.GetPath ();
-	LPCSTR pszA = strchr (pszPath, '#');
+	LPCTSTR pszPath = url.GetPath ();
+	LPCTSTR pszA = _tcschr (pszPath, _T('#'));
 
 	if (pszA == NULL)
 		return FALSE;
@@ -100,16 +100,16 @@ BOOL fsIsAnchorInUrl (LPCSTR pszFullUrl, LPSTR* ppszWithoutAnchor, LPCSTR* ppszA
 	
 	int len = pszA - pszPath;
 
-	char szUrl [10000]; DWORD dw = sizeof (szUrl);
+	TCHAR szUrl [10000]; DWORD dw = sizeof (szUrl);
 	fsURL url2;
 	url2.Create (url.GetInternetScheme (), url.GetHostName (), url.GetPort (),
 		url.GetUserName (), url.GetPassword (), url.GetPath (), szUrl, &dw);
 
 	if (ppszWithoutAnchor)
 	{
-		int oldlen = strlen (szUrl);
-		int oldpathlen = strlen (pszPath);
-		fsnew (*ppszWithoutAnchor, char, oldlen - oldpathlen + len + 1);
+		int oldlen = _tcslen (szUrl);
+		int oldpathlen = _tcslen (pszPath);
+		fsnew (*ppszWithoutAnchor, TCHAR, oldlen - oldpathlen + len + 1);
 		CopyMemory (*ppszWithoutAnchor, szUrl, oldlen - oldpathlen + len);
 		(*ppszWithoutAnchor) [oldlen - oldpathlen + len] = 0; 
 
@@ -120,17 +120,17 @@ BOOL fsIsAnchorInUrl (LPCSTR pszFullUrl, LPSTR* ppszWithoutAnchor, LPCSTR* ppszA
 	return TRUE;
 }
 
-BOOL fsFileNameFromUrlPath (LPCSTR pszUrl, BOOL bUsingFTP, BOOL bDecode, LPSTR pszBuf, UINT uSize)
+BOOL fsFileNameFromUrlPath (LPCTSTR pszUrl, BOOL bUsingFTP, BOOL bDecode, LPTSTR pszBuf, UINT uSize)
 {
 	*pszBuf = 0;
 
-	int len = strlen (pszUrl);
+	int len = _tcslen (pszUrl);
 	int pos;
 
 	if (len == 0)
 		return TRUE;
 
-	int end = bUsingFTP ? strlen (pszUrl)-1 : strcspn (pszUrl, "?#") - 1;
+	int end = bUsingFTP ? _tcslen (pszUrl)-1 : _tcscspn (pszUrl, _T("?#")) - 1;
 	
 	if (end < 0)
 		return FALSE; 
@@ -141,26 +141,26 @@ BOOL fsFileNameFromUrlPath (LPCSTR pszUrl, BOOL bUsingFTP, BOOL bDecode, LPSTR p
 	pos = end; 
 
 	
-	while (pos && pszUrl [pos] != '/' && pszUrl [pos] != '\\')
+	while (pos && pszUrl [pos] != _T('/') && pszUrl [pos] != _T('\\'))
 		pos--;
 
-	if (pszUrl [pos] != '/' && pszUrl [pos] != '\\')
+	if (pszUrl [pos] != _T('/') && pszUrl [pos] != _T('\\'))
 		return FALSE; 
 
 	if (UINT(len - pos) > uSize)
 		return FALSE; 
 
-	strcpy (pszBuf, pszUrl + pos + 1);
+	_tcscpy (pszBuf, pszUrl + pos + 1);
 
 	pszBuf [end - pos] = 0; 
 
 	if (bUsingFTP == FALSE && bDecode)
 		DecodeURLPath (pszBuf);
 
-	if (strchr (pszBuf, '\\') || strchr (pszBuf, '/'))
+	if (strchr (pszBuf, _T('\\')) || _tcschr (pszBuf, _T('/')))
 	{
 		
-		char sz [1000] = "";
+		TCHAR sz [1000] = _T("");
 		fsGetFileName (pszBuf, sz);
 		_tcscpy (pszBuf, sz);
 	}
@@ -168,9 +168,9 @@ BOOL fsFileNameFromUrlPath (LPCSTR pszUrl, BOOL bUsingFTP, BOOL bDecode, LPSTR p
 	return TRUE;
 }
 
-BOOL fsIRToStr (fsInternetResult ir, LPSTR pszStr, UINT uMaxSize)
+BOOL fsIRToStr (fsInternetResult ir, LPTSTR pszStr, UINT uMaxSize)
 {
-	LPCSTR pszDesc;
+	LPCTSTR pszDesc;
 
 	switch (ir)
 	{
@@ -258,7 +258,7 @@ BOOL fsIRToStr (fsInternetResult ir, LPSTR pszStr, UINT uMaxSize)
 	if (strlen (pszDesc) >= uMaxSize)
 		return FALSE;
 
-	strcpy (pszStr, pszDesc);
+	_tcscpy (pszStr, pszDesc);
 
 	return TRUE;
 }
@@ -283,7 +283,7 @@ DWORD fsNPToSiteValidFor (fsNetworkProtocol np)
 }
 #endif
 
-ULONG fsGetSiteIp (LPCSTR pszSite)
+ULONG fsGetSiteIp (LPCTSTR pszSite)
 {
 	hostent* he = gethostbyname (pszSite);
 
@@ -295,21 +295,21 @@ ULONG fsGetSiteIp (LPCSTR pszSite)
 	
 }
 
-void vmsMakeWinInetProxy (LPCSTR pszProxy, fsNetworkProtocol npConnection, fsNetworkProtocol npProxy, LPSTR pszWProxy)
+void vmsMakeWinInetProxy (LPCTSTR pszProxy, fsNetworkProtocol npConnection, fsNetworkProtocol npProxy, LPTSTR pszWProxy)
 {
 	switch (npConnection)
 	{
 		case NP_FTP:
-			_tcscpy (pszWProxy, "ftp=");
+			_tcscpy (pszWProxy, _T("ftp="));
 			break;
 
 		case NP_HTTP:
 		case NP_FILE:
-			_tcscpy (pszWProxy, "http=");
+			_tcscpy (pszWProxy, _T("http="));
 			break;
 
 		case NP_HTTPS:
-			_tcscpy (pszWProxy, "https=");
+			_tcscpy (pszWProxy, _T("https="));
 			break;
 
 		default:
@@ -343,11 +343,11 @@ void vmsMakeWinInetProxy (LPCSTR pszProxy, fsNetworkProtocol npConnection, fsNet
 void fsDecodeHtmlText (fsString &str)
 {
 	CString str2 = str;
-	str2.Replace ("&amp;", "&");
-	str2.Replace ("&lt;", "<");
-	str2.Replace ("&gt;", ">");
-	str2.Replace ("&quot;", "\"");
-	str2.Replace ("&nbsp;", " ");
+	str2.Replace (_T("&amp;"), _T("&"));
+	str2.Replace (_T("&lt;"), _T("<"));
+	str2.Replace (_T("&gt;"), _T(">"));
+	str2.Replace (_T("&quot;"), _T("\""));
+	str2.Replace (_T("&nbsp;"), _T(" "));
 	str = str2;
 }
 
@@ -357,44 +357,44 @@ void fsDecodeHtmlUrl (fsString &str)
 	int len = str.GetLength ();
 	for (int i = 0; i < len; )
 	{
-		if (str [i] == '\\' && str [i+1] == 'u' && str.GetLength () - i >= 6)
+		if (str [i] == _T('\\') && str [i+1] == _T('u') && str.GetLength () - i >= 6)
 		{
 			
-			char sz [5];
+			TCHAR sz [5];
 			sz [0] = str [i+2];
 			sz [1] = str [i+3];
 			sz [2] = str [i+4];
 			sz [3] = str [i+5];
 			sz [4] = 0;
 			int c;
-			sscanf (sz, "%x", &c);
+			_stscanf (sz, _T("%x"), &c);
 			if (c < 127)
-				str2 += (char)c; 
+				str2 += (TCHAR)c; 
 			i += 6;
 		}
-		else if (str [i] == '%' && str [i+1] != '%' && str.GetLength () - i >= 3)
+		else if (str [i] == _T('%') && str [i+1] != _T('%') && str.GetLength () - i >= 3)
 		{
 			
-			char sz [3];
+			TCHAR sz [3];
 			sz [0] = str [i+1];
 			sz [1] = str [i+2];
 			sz [2] = 0;
 			int c;
-			sscanf (sz, "%x", &c);
-			str2 += (char)c;
+			_stscanf (sz, _T("%x"), &c);
+			str2 += (TCHAR)c;
 			i += 3;
 		}
-		else if (str [i] == '&' && str [i+1] == '#')
+		else if (str [i] == _T('&') && str [i+1] == _T('#'))
 		{
 			CString strC;
 			int j = i+2;
 			while (isdigit (str [j]))
 				strC += str [j++];
-			if (str [j] == ';')
+			if (str [j] == _T(';'))
 			{
 				
-				int c = atoi (strC);
-				str2 += (char)c;
+				int c = _ttoi (strC);
+				str2 += (TCHAR)c;
 				i = j + 1;
 			}
 			else

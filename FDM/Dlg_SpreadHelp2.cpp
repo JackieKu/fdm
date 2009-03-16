@@ -40,24 +40,24 @@ BOOL CDlg_SpreadHelp2::OnInitDialog()
 	CDialog::OnInitDialog();
 
 	m_wbe.Attach ();
-	m_wb.Navigate ("about:blank", 0, 0, 0, 0);
+	m_wb.Navigate (_T("about:blank"), 0, 0, 0, 0);
 
 	CString strHTML;
 	CString strNewHTML = _App.View_SpreadHelpDialog_LinkToUsText ();
 
-	if (strNewHTML == "")
+	if (strNewHTML == _T(""))
 	{
 		CString str2;
-		str2.Format ("%x", GetSysColor (COLOR_3DFACE));
+		str2.Format (_T("%x"), GetSysColor (COLOR_3DFACE));
 
-		char c0 = str2[0], c1 = str2[1];
+		TCHAR c0 = str2[0], c1 = str2[1];
 		str2.SetAt (0, str2 [4]);
 		str2.SetAt (1, str2 [5]);
 		str2.SetAt (4, c0);
 		str2.SetAt (5, c1);
 
 		CString str5 = LS (L_SHDLG_M5);
-		str5.Replace ("\n", "<br>");
+		str5.Replace (_T("\n"), _T("<br>"));
 
 		UINT nM3 = L_SHDLG_M3;
 		SYSTEMTIME time;
@@ -67,8 +67,8 @@ BOOL CDlg_SpreadHelp2::OnInitDialog()
 
 		CString str;
 		str.Format ("<html><style type=\"text/css\"><!--\nbody {margin-left: 0px;	margin-top: 0px; margin-right: 0px;\
-margin-bottom: 0px; } \n-->\n</style><body bgcolor='#%s'>\
-<font face='ms sans serif' size='-8pt'>%s<br><br>%s<br><br>%s<br><br>%s<br><br>%s<br><br>%s</font></body></html>", 
+margin-bottom: 0px; } \n-->\n</style><body bgcolor=_T('#%s')>\
+<font face=_T('ms sans serif') size=_T('-8pt')>%s<br><br>%s<br><br>%s<br><br>%s<br><br>%s<br><br>%s</font></body></html>", 
 			str2, LS (L_DEARFOLK), LS (L_SHDLG_M1),
 			LS (L_SHDLG_M2), LS (nM3), LS (L_SHDLG_M4), str5);
 
@@ -87,9 +87,9 @@ margin-bottom: 0px; } \n-->\n</style><body bgcolor='#%s'>\
 	else
 	{
 		CString str2;
-		str2.Format ("%x", GetSysColor (COLOR_3DFACE));
+		str2.Format (_T("%x"), GetSysColor (COLOR_3DFACE));
 
-		char c0 = str2[0], c1 = str2[1];
+		TCHAR c0 = str2[0], c1 = str2[1];
 		str2.SetAt (0, str2 [4]);
 		str2.SetAt (1, str2 [5]);
 		str2.SetAt (4, c0);
@@ -97,8 +97,8 @@ margin-bottom: 0px; } \n-->\n</style><body bgcolor='#%s'>\
 
 		CString str;
 		str.Format ("<html><style type=\"text/css\"><!--\nbody {margin-left: 0px;	margin-top: 0px; margin-right: 0px;\
-margin-bottom: 0px; } \n-->\n</style><body bgcolor='#%s'>\
-<font face='ms sans serif' size='-8pt'>%s</font></body></html>", 
+margin-bottom: 0px; } \n-->\n</style><body bgcolor=_T('#%s')>\
+<font face=_T('ms sans serif') size=_T('-8pt')>%s</font></body></html>", 
 			str2, strNewHTML);
 
 		CMainFrame* pFrm = (CMainFrame*) AfxGetApp ()->m_pMainWnd;
@@ -115,10 +115,10 @@ margin-bottom: 0px; } \n-->\n</style><body bgcolor='#%s'>\
 	}
 
 	CStdioFile file;
-	char szTmpPath [MY_MAX_PATH];
-	char szTmpFile [MY_MAX_PATH];
+	TCHAR szTmpPath [MY_MAX_PATH];
+	TCHAR szTmpFile [MY_MAX_PATH];
 	GetTempPath (MY_MAX_PATH, szTmpPath);
-	GetTempFileName (szTmpPath, "fdm", 0, szTmpFile);
+	GetTempFileName (szTmpPath, _T("fdm"), 0, szTmpFile);
 	m_strFile = szTmpFile;
 	file.Open (m_strFile, CFile::modeCreate | CFile::modeWrite);
 	file.WriteString (strHTML);
@@ -161,10 +161,10 @@ void CDlg_SpreadHelp2::ApplyLanguage()
 	_LngMgr.ApplyLanguage (this, lnginfo, sizeof (lnginfo) / sizeof (fsDlgLngInfo), L_PLACELINKTOFDM2);
 
 	CString str = _App.View_SpreadHelpDialog_RadioButton1Text ();
-	if (str != "")
+	if (str != _T(""))
 		SetDlgItemText (IDC_REMIND_IN3DAYS, str);
 	str = _App.View_SpreadHelpDialog_RadioButton2Text ();
-	if (str != "")
+	if (str != _T(""))
 		SetDlgItemText (IDC_DONTSHOWAGAIN, str);
 }
 

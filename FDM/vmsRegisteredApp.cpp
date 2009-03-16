@@ -22,21 +22,21 @@ vmsRegisteredApp::~vmsRegisteredApp()
 
 }
 
-CString vmsRegisteredApp::GetFullPath(LPCSTR pszExeName)
+CString vmsRegisteredApp::GetFullPath(LPCTSTR pszExeName)
 {
 	CRegKey key;
-	CString str = "Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\";
+	CString str = _T("Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\");
 	str += pszExeName;
 	if (ERROR_SUCCESS == key.Open (HKEY_LOCAL_MACHINE, str, KEY_READ))
 	{
-		char szPath [MY_MAX_PATH];
+		TCHAR szPath [MY_MAX_PATH];
 		DWORD dw = sizeof (szPath);
 
-		if (ERROR_SUCCESS == key.QueryValue (szPath, "Path", &dw))
+		if (ERROR_SUCCESS == key.QueryValue (szPath, _T("Path"), &dw))
 		{
 			str = szPath;
-			if (str [str.GetLength () - 1] != '\\' && str [str.GetLength () - 1] != '/')
-				str += '\\';
+			if (str [str.GetLength () - 1] != _T('\\') && str [str.GetLength () - 1] != _T('/'))
+				str += _T('\\');
 			str += pszExeName;
 			return str;
 		}
@@ -44,7 +44,7 @@ CString vmsRegisteredApp::GetFullPath(LPCSTR pszExeName)
 		if (ERROR_SUCCESS == key.QueryValue (szPath, NULL, &dw))
 		{
 			str = szPath;
-			if (str != "" && str [0] == '"')
+			if (str != _T("") && str [0] == _T('"'))
 			{
 				str.Delete (0);
 				str.Delete (str.GetLength () - 1);
@@ -53,5 +53,5 @@ CString vmsRegisteredApp::GetFullPath(LPCSTR pszExeName)
 		}
 	}
 
-	return "";
+	return _T("");
 }

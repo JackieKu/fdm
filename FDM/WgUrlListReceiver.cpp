@@ -68,7 +68,7 @@ STDMETHODIMP CWgUrlListReceiver::AddUrlToList()
 {
 	USES_CONVERSION;
 
-	LPCSTR pszUrl = W2A (m_bstrUrl);
+	LPCTSTR pszUrl = W2A (m_bstrUrl);
 
 	if (pszUrl == NULL)
 		return E_INVALIDARG;
@@ -113,7 +113,7 @@ STDMETHODIMP CWgUrlListReceiver::GetUrlListFromDocumentSelection(IDispatch *pDis
 
 	sel->get_type (&str);
 
-	if (stricmp (W2A (str), "none") == 0)
+	if (stricmp (W2A (str), _T("none")) == 0)
 		return S_FALSE;
 
 	IDispatch *pDisp = NULL;
@@ -134,7 +134,7 @@ STDMETHODIMP CWgUrlListReceiver::GetUrlListFromDocumentSelection(IDispatch *pDis
 	fsHTMLParser parser;
 
 	parser.SetKillDupes (TRUE);
-	parser.ParseHTML ((LPSTR) W2A (htmlText));
+	parser.ParseHTML ((LPTSTR) W2A (htmlText));
 
 	m_bstrComment = m_bstrReferer = L"";
 
@@ -143,17 +143,17 @@ STDMETHODIMP CWgUrlListReceiver::GetUrlListFromDocumentSelection(IDispatch *pDis
 	if (FAILED (doc->get_URL (&bstrRootURL)))
 		return E_FAIL;
 
-	LPCSTR pszRootURL = W2A (bstrRootURL);
+	LPCTSTR pszRootURL = W2A (bstrRootURL);
 
 	for (int i = 0; i < parser.GetUrlCount (); i ++)
 	{
-		LPCSTR pszUrl = parser.GetUrl (i);
+		LPCTSTR pszUrl = parser.GetUrl (i);
 
 		
-		if (*pszUrl == '#')
+		if (*pszUrl == _T('#'))
 			continue;	
 
-		LPSTR pszFullUrl;
+		LPTSTR pszFullUrl;
 		
 		fsUrlToFullUrl (pszRootURL, pszUrl, &pszFullUrl);
 		if (pszFullUrl == NULL)

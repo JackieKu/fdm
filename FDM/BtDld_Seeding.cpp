@@ -64,12 +64,12 @@ BOOL CBtDld_Seeding::OnInitDialog()
 	else
 		CheckDlgButton (IDC_ENABLE_SEEDING, iEnableSeeding ? BST_CHECKED : BST_UNCHECKED);
 
-	m_wndRatio.AddString ("100 %"); m_wndRatio.SetItemData (m_wndRatio.GetCount () - 1, 100);
-	m_wndRatio.AddString ("150 %"); m_wndRatio.SetItemData (m_wndRatio.GetCount () - 1, 150);
-	m_wndRatio.AddString ("200 %"); m_wndRatio.SetItemData (m_wndRatio.GetCount () - 1, 200);
-	m_wndRatio.AddString ("300 %"); m_wndRatio.SetItemData (m_wndRatio.GetCount () - 1, 300);
-	m_wndRatio.AddString ("500 %"); m_wndRatio.SetItemData (m_wndRatio.GetCount () - 1, 500);
-	m_wndRatio.AddString ("1000 %"); m_wndRatio.SetItemData (m_wndRatio.GetCount () - 1, 1000);
+	m_wndRatio.AddString (_T("100 %")); m_wndRatio.SetItemData (m_wndRatio.GetCount () - 1, 100);
+	m_wndRatio.AddString (_T("150 %")); m_wndRatio.SetItemData (m_wndRatio.GetCount () - 1, 150);
+	m_wndRatio.AddString (_T("200 %")); m_wndRatio.SetItemData (m_wndRatio.GetCount () - 1, 200);
+	m_wndRatio.AddString (_T("300 %")); m_wndRatio.SetItemData (m_wndRatio.GetCount () - 1, 300);
+	m_wndRatio.AddString (_T("500 %")); m_wndRatio.SetItemData (m_wndRatio.GetCount () - 1, 500);
+	m_wndRatio.AddString (_T("1000 %")); m_wndRatio.SetItemData (m_wndRatio.GetCount () - 1, 1000);
 
 	m_wndRatio.SetCurSel (1);
 

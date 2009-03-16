@@ -53,9 +53,9 @@ protected:
 	DECLARE_MESSAGE_MAP()
 };    
 
-inline UINT MyMessageBox (CWnd* pwndParent, LPCSTR pszText, LPCSTR pszTitle,
-	LPCSTR pszCheckbox, LPCSTR pszSysIcon = NULL, LPCSTR pszBtn1Text = "OK", LPCSTR pszBtn2Text = NULL, 
-	LPCSTR pszBtn3Text = NULL)
+inline UINT MyMessageBox (CWnd* pwndParent, LPCTSTR pszText, LPCTSTR pszTitle,
+	LPCTSTR pszCheckbox, LPCTSTR pszSysIcon = NULL, LPCTSTR pszBtn1Text = _T("OK"), LPCTSTR pszBtn2Text = NULL, 
+	LPCTSTR pszBtn3Text = NULL)
 {
 	CMyMessageBox mb (pwndParent);
 

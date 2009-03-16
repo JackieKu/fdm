@@ -22,15 +22,15 @@ vmsImage::~vmsImage()
 	Free ();
 }
 
-HRESULT vmsImage::Load(LPCSTR pszFile)
+HRESULT vmsImage::Load(LPCTSTR pszFile)
 {
 	Free ();
 
-	char szFile [10000];
-	if (pszFile [1] != ':')
+	TCHAR szFile [10000];
+	if (pszFile [1] != _T(':'))
 	{
 		GetCurrentDirectory (sizeof (szFile), szFile);
-		_tcscat (szFile, "\\");
+		_tcscat (szFile, _T("\\"));
 		_tcscat (szFile, pszFile);
 		pszFile = szFile;
 	}
@@ -40,14 +40,14 @@ HRESULT vmsImage::Load(LPCSTR pszFile)
 	{
 		
 
-		char szTemp [MY_MAX_PATH];	
-		strcpy (szTemp, pszFile);
+		TCHAR szTemp [MY_MAX_PATH];	
+		_tcscpy (szTemp, pszFile);
 		int l = lstrlen (szTemp) - 4 - 1;
-		strcpy (szTemp + l,  "(%d).gif"); 
+		_tcscpy (szTemp + l,  _T("(%d).gif")); 
 		int cFrames = gif.SaveGIFFrames (szTemp);
 		for (int i = 0; i < cFrames; i++)
 		{
-			char sz [MY_MAX_PATH];
+			TCHAR sz [MY_MAX_PATH];
 			wsprintf (sz, szTemp, i);
 			m_vFrames.push_back (LoadImage (sz));
 			m_vFrameDelays.push_back (gif.get_FrameInfo (i)->m_nDelay);
@@ -108,7 +108,7 @@ BOOL vmsImage::is_Loaded()
 	return (dw & IMGLOAD_COMPLETE) != 0;
 }
 
-IImgCtx* vmsImage::LoadImage(LPCSTR pszFile)
+IImgCtx* vmsImage::LoadImage(LPCTSTR pszFile)
 {
 	IImgCtx* pImage = NULL;
 
@@ -117,14 +117,14 @@ IImgCtx* vmsImage::LoadImage(LPCSTR pszFile)
 	if (FAILED (hr))
 		return NULL;
 
-	char szPath [MY_MAX_PATH];
-	strcpy (szPath, "file://");
-	strcat (szPath, pszFile);
-	LPSTR psz = szPath;
+	TCHAR szPath [MY_MAX_PATH];
+	_tcscpy (szPath, "file://");
+	_tcscat (szPath, pszFile);
+	LPTSTR psz = szPath;
 	while (*psz)
 	{
-		if (*psz == '\\')
-			*psz = '/';
+		if (*psz == _T('\\'))
+			*psz = _T('/');
 		psz++;
 	}
 

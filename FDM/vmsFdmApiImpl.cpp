@@ -32,7 +32,7 @@ vmsFdmApiImpl& vmsFdmApiImpl::o()
 
 UINT vmsFdmApiImpl::getFdmBuildNumber()
 {
-	return atoi (vmsFdmAppMgr::getBuildNumber ());
+	return _ttoi (vmsFdmAppMgr::getBuildNumber ());
 }
 
 void vmsFdmApiImpl::ShutdownFdm()

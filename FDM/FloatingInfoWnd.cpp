@@ -65,16 +65,16 @@ int CFloatingInfoWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	m_wndList.SetExtendedStyle (LVS_EX_FULLROWSELECT|LVS_EX_INFOTIP);
 
-	m_wndList.InsertColumn (0, "", LVCFMT_LEFT, 100, 0);
-	m_wndList.InsertColumn (1, "", LVCFMT_RIGHT, 50, 0);
-	m_wndList.InsertColumn (2, "", LVCFMT_RIGHT, 50, 0);
+	m_wndList.InsertColumn (0, _T(""), LVCFMT_LEFT, 100, 0);
+	m_wndList.InsertColumn (1, _T(""), LVCFMT_RIGHT, 50, 0);
+	m_wndList.InsertColumn (2, _T(""), LVCFMT_RIGHT, 50, 0);
 
 	m_wndList.Initialize ();
 
 	m_wndList.ShowWindow (SW_SHOW);
 
-	m_cxPercent = m_wndList.GetStringWidth ("100%") + 5;
-	m_cxSpeed = m_wndList.GetStringWidth ("9999.9 KB/s") + 5;
+	m_cxPercent = m_wndList.GetStringWidth (_T("100%")) + 5;
+	m_cxSpeed = m_wndList.GetStringWidth (_T("9999.9 KB/s")) + 5;
 
 	SetTimer (1, 1000, NULL);
 	SetTimer (2, 500, NULL);
@@ -104,7 +104,7 @@ BOOL CFloatingInfoWnd::Create()
 
 	
 
-	_App.View_ReadWndPlacement (this, "FloatingInfoWnd",  TRUE);
+	_App.View_ReadWndPlacement (this, _T("FloatingInfoWnd"),  TRUE);
 
 	
 
@@ -120,8 +120,8 @@ void CFloatingInfoWnd::OnSize(UINT , int cx, int cy)
 {
 	m_wndList.MoveWindow (0, 0, cx, cy);
 
-	m_cxPercent = m_wndList.GetStringWidth ("100%") + 5;
-	m_cxSpeed = m_wndList.GetStringWidth ("9999.9 KB/s") + 5;
+	m_cxPercent = m_wndList.GetStringWidth (_T("100%")) + 5;
+	m_cxSpeed = m_wndList.GetStringWidth (_T("9999.9 KB/s")) + 5;
 	
 	m_wndList.SetColumnWidth (0, cx - m_cxPercent - m_cxSpeed );
 	m_wndList.SetColumnWidth (1, m_cxPercent);
@@ -180,7 +180,7 @@ void CFloatingInfoWnd::RebuildList()
 
 void CFloatingInfoWnd::AddDownloadToList(vmsDownloadSmartPtr dld, bool bUploadInfo)
 {
-	char szFile [MY_MAX_PATH];
+	TCHAR szFile [MY_MAX_PATH];
 	CDownloads_Tasks::GetFileName (dld, szFile);
 
 	m_mxList.Lock ();
@@ -203,7 +203,7 @@ try{
 	CString str;
 	bool bUpload = m_wndList.GetItemImage (nItem) == 1;
 	if (bUpload == false)
-		str.Format ("%d%%", (int)((fsDownload*) m_wndList.GetItemData (nItem))->pMgr->GetPercentDone ());
+		str.Format (_T("%d%%"), (int)((fsDownload*) m_wndList.GetItemData (nItem))->pMgr->GetPercentDone ());
 	m_wndList.SetItemText (nItem, 1, str);
 }catch (...){}
 }
@@ -258,7 +258,7 @@ void CFloatingInfoWnd::OnTimer(UINT nIDEvent)
 
 void CFloatingInfoWnd::SaveState()
 {
-	_App.View_SaveWndPlacement (this, "FloatingInfoWnd");
+	_App.View_SaveWndPlacement (this, _T("FloatingInfoWnd"));
 }
 
 void CFloatingInfoWnd::NeedToShow(BOOL b)
@@ -284,7 +284,7 @@ try{
 
 	BytesToXBytes (bUpload ? dld->pMgr->GetBtDownloadMgr ()->GetUploadSpeed () : 
 		dld->pMgr->GetSpeed (), &val, szDim);
-	str.Format ("%.*g %s/s", val > 999 ? 4 : 3, val, szDim);
+	str.Format (_T("%.*g %s/s"), val > 999 ? 4 : 3, val, szDim);
 	m_wndList.SetItemText (nItem, 2, str);
 }catch (...){}
 }

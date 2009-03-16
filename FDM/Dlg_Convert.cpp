@@ -54,16 +54,16 @@ UINT _anQualityNames [] = {
 	L_VERYHIGH_2,
 };
 
-LPCSTR _apszFormats [] = {
+LPCTSTR _apszFormats [] = {
 	
-	NULL,						"avi", "avi",			"msmpeg4v2", "mp3",
-	NULL,						"avi", "avi",			"xvid", "mp3",
-	"FLV (*.flv)",				"flv", "flv",			"", "",
-	"WMV (*.wmv)" ,				"wmv", "asf",			"wmv2", "mp3",
-	"MPEG1 (*.mpg)",			"mpg", "mpegvideo",		"", "",
-	"MPEG2 (*.mpg)",			"mpg", "mpegts",		"", "",
-	NULL,						"mp4", "mp4",			"mpeg4", "aac",
-	"MP3 (*.mp3)",				"mp3", "mp3",			"none", "mp3",
+	NULL,						_T("avi"), _T("avi"),			_T("msmpeg4v2"), _T("mp3"),
+	NULL,						_T("avi"), _T("avi"),			_T("xvid"), _T("mp3"),
+	_T("FLV (*.flv)"),				_T("flv"), _T("flv"),			_T(""), _T(""),
+	_T("WMV (*.wmv)") ,				_T("wmv"), _T("asf"),			_T("wmv2"), _T("mp3"),
+	_T("MPEG1 (*.mpg)"),			_T("mpg"), _T("mpegvideo"),		_T(""), _T(""),
+	_T("MPEG2 (*.mpg)"),			_T("mpg"), _T("mpegts"),		_T(""), _T(""),
+	NULL,						_T("mp4"), _T("mp4"),			_T("mpeg4"), _T("aac"),
+	_T("MP3 (*.mp3)"),				_T("mp3"), _T("mp3"),			_T("none"), _T("mp3"),
 };
 
 SIZE _aVideoSizes [] = {
@@ -85,7 +85,7 @@ BOOL CDlg_Convert::OnInitDialog()
 	_apszFormats [1*5] = LS (L_AVI_USING_XVID);
 	_apszFormats [6*5] = LS (L_MP4_FORMAT);
 
-	for (int i = 0; i < sizeof (_apszFormats) / sizeof (LPCSTR) / 5; i++)
+	for (int i = 0; i < sizeof (_apszFormats) / sizeof (LPCTSTR) / 5; i++)
 	{
 		m_wndFormat.AddString (_apszFormats [i * 5]);
 		if (m_stgs->strFormat == _apszFormats [i * 5 + 2] && 
@@ -104,7 +104,7 @@ BOOL CDlg_Convert::OnInitDialog()
 		else
 		{
 			CString str;
-			str.Format ("%d x %d", _aVideoSizes [i].cx, _aVideoSizes [i].cy);
+			str.Format (_T("%d x %d"), _aVideoSizes [i].cx, _aVideoSizes [i].cy);
 			m_wndVideoSize.AddString (str);
 		}
 		if (m_stgs->sizeVideo == _aVideoSizes [i])
@@ -122,8 +122,8 @@ BOOL CDlg_Convert::OnInitDialog()
 		int k = m - lstrlen (LS (_anQualityNames [i]));
 		k = (int)(k * 1.6);
 		while (k--)
-			str2 += ' '; 
-		str.Format ("%s %s (%s: %dkbps; %s: %dkbps)", LS (_anQualityNames [i]), str2,
+			str2 += _T(' '); 
+		str.Format (_T("%s %s (%s: %dkbps; %s: %dkbps)"), LS (_anQualityNames [i]), str2,
 			LS (L_VIDEO_BITRATE), _aQualityRates [i].cx, 
 			LS (L_AUDIO_BITRATE), _aQualityRates [i].cy);
 		m_wndQuality.AddString (str);

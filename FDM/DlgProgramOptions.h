@@ -29,7 +29,7 @@ class CProgramOptions : public CDlg_Options
 {
 
 public:
-	CProgramOptions(CWnd* pParent = NULL, LPCSTR pszStartPage = NULL);     
+	CProgramOptions(CWnd* pParent = NULL, LPCTSTR pszStartPage = NULL);     
 
 	//{{AFX_DATA(CDlgProgramOptions)
 	enum { IDD = IDD_OPTIONS };

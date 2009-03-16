@@ -48,7 +48,7 @@ STDMETHODIMP CFDMUploader::GetUploadTargetUrl(long lId, BSTR *pbstrUrl)
 		return E_FAIL;
 
 	USES_CONVERSION;
-	char szUrl [10000]; DWORD dw = sizeof (szUrl);
+	TCHAR szUrl [10000]; DWORD dw = sizeof (szUrl);
 	
 	if (false == _pwndUploads->m_pwndUploads->GetUploadUrl (lId, szUrl, &dw))
 		return E_FAIL;
@@ -67,7 +67,7 @@ STDMETHODIMP CFDMUploader::GetUploadPackageName(long lId, BSTR *pbstrName)
 		return E_FAIL;
 
 	USES_CONVERSION;
-	char szName [10000];
+	TCHAR szName [10000];
 	if (false == _pwndUploads->m_pwndUploads->GetUploadPackageName (lId, szName, sizeof (szName)))
 		return E_FAIL;
 	

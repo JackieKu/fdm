@@ -13,10 +13,10 @@
 class vmsMediaConverter  
 {
 public:
-	static BOOL ConvertMedia(LPCSTR pszSrcFile, LPCSTR pszDstFile, LPCSTR pszDstFormat,
-						  LPCSTR pszAudioCodec, int nAudioChannels, int nAudioBitrate, 
+	static BOOL ConvertMedia(LPCTSTR pszSrcFile, LPCTSTR pszDstFile, LPCTSTR pszDstFormat,
+						  LPCTSTR pszAudioCodec, int nAudioChannels, int nAudioBitrate, 
 						  int nAudioRate,
-						  LPCSTR pszVideoCodec, int nVideoBitrate, int nVideoFrameRate,
+						  LPCTSTR pszVideoCodec, int nVideoBitrate, int nVideoFrameRate,
 						  int nVideoFrameWidth, int nVideoFrameHeight,
 						  int* pnProgress, BOOL *pbCancel);
 	vmsMediaConverter();

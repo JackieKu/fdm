@@ -42,11 +42,11 @@ extern DWORD fsSysGetOsMajorVersion ();
 
 extern void fsSetForegroundWindow (HWND hWnd);
 
-extern void fsOpenUrlInBrowser (LPCSTR pszUrl);
+extern void fsOpenUrlInBrowser (LPCTSTR pszUrl);
 
-extern int fsStrCmpNC (LPCSTR psz1, LPCSTR psz2);
+extern int fsStrCmpNC (LPCTSTR psz1, LPCTSTR psz2);
 
-extern int fsStrNCmpNC (LPCSTR psz1, LPCSTR psz2, int nCount);  
+extern int fsStrNCmpNC (LPCTSTR psz1, LPCTSTR psz2, int nCount);  
 
 #define WS_EX_LAYERED           0x00080000
 #define LWA_ALPHA				0x00000002  
@@ -71,13 +71,13 @@ extern BOOL fsIsSystemInFullScreenMode ();
 
 extern BOOL vmsSetSuspendState (BOOL bHibernate, BOOL bForce, BOOL bDisableWakeEvent);    
 
-extern DWORD vmsSHCopyKey (HKEY, LPCSTR, HKEY);
+extern DWORD vmsSHCopyKey (HKEY, LPCTSTR, HKEY);
 extern LONG fsCopyKey(HKEY hSrcParent, HKEY hTargParent, LPCTSTR szSrcKey, LPCTSTR szTargKey);  
 
-extern BOOL vmsDeleteFileAtWinBoot (LPCSTR pszFile);
+extern BOOL vmsDeleteFileAtWinBoot (LPCTSTR pszFile);
 
-extern char vmsGetExeDriveLetter ();
+extern TCHAR vmsGetExeDriveLetter ();
 
-extern void vmsCopyFiles (LPCSTR pszSrcFolder, LPCSTR pszDstFolder, LPCSTR pszFileMask);
+extern void vmsCopyFiles (LPCTSTR pszSrcFolder, LPCTSTR pszDstFolder, LPCTSTR pszFileMask);
 
 #endif

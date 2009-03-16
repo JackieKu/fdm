@@ -16,16 +16,16 @@ public:
 	
 	int get_Count () const;
 	
-	LPCSTR get_FilePathName(int nIndex) const;
+	LPCTSTR get_FilePathName(int nIndex) const;
 	
-	LPCSTR get_FileDispName (int nIndex) const;
+	LPCTSTR get_FileDispName (int nIndex) const;
 	
 	void Clear();
 	
 	BOOL Load (HANDLE hFile);
 	BOOL Save (HANDLE hFile);
 	
-	void Add (LPCSTR pszFileDispName, LPCSTR pszFilePathName);
+	void Add (LPCTSTR pszFileDispName, LPCTSTR pszFilePathName);
 
 	vmsFileRecentList();
 	virtual ~vmsFileRecentList();

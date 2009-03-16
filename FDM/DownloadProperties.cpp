@@ -6,12 +6,12 @@
 #include "DownloadProperties.h"
 #include "Hash\vmsHash.h"              
 
-BOOL fsFillBuffer (LPSTR *ppszBuffer, UINT* pnSize, LPCSTR pszFrom, BOOL bAllocate)
+BOOL fsFillBuffer (LPTSTR *ppszBuffer, UINT* pnSize, LPCTSTR pszFrom, BOOL bAllocate)
 {
 	if (pszFrom == NULL)
 		return FALSE;
 
-	UINT len = strlen (pszFrom);
+	UINT len = _tcslen (pszFrom);
 
 	
 	if (len >= *pnSize && !bAllocate)
@@ -23,7 +23,7 @@ BOOL fsFillBuffer (LPSTR *ppszBuffer, UINT* pnSize, LPCSTR pszFrom, BOOL bAlloca
 		fsnew (*ppszBuffer, CHAR, len+1);
 
 	if (*ppszBuffer)
-		strcpy (*ppszBuffer, pszFrom);
+		_tcscpy (*ppszBuffer, pszFrom);
 
 	return TRUE;
 }          
@@ -54,8 +54,8 @@ BOOL fsDNP_GetDefaults (fsDownload_NetworkProperties *pDNP, fsDNP_BuffersInfo* p
 	bResult &= fsFillBuffer (&pDNP->pszReferer, &pBuffs->nRefferSize, _App.Referer (), bAllocate);
 	bResult &= fsFillBuffer (&pDNP->pszUserName, &pBuffs->nUserNameSize, _App.UserName (), bAllocate);
 	bResult &= fsFillBuffer (&pDNP->pszASCIIExts, &pBuffs->nTransferTypeExtsSize, _App.ASCIIExts (), bAllocate);
-	bResult &= fsFillBuffer (&pDNP->pszCookies, &pBuffs->nCookiesSize, "", bAllocate);
-	bResult &= fsFillBuffer (&pDNP->pszPostData, &pBuffs->nPostDataSize, "", bAllocate);
+	bResult &= fsFillBuffer (&pDNP->pszCookies, &pBuffs->nCookiesSize, _T(""), bAllocate);
+	bResult &= fsFillBuffer (&pDNP->pszPostData, &pBuffs->nPostDataSize, _T(""), bAllocate);
 	
 #else
 	pDNP->wRollBackSize = 3500;
@@ -68,13 +68,13 @@ BOOL fsDNP_GetDefaults (fsDownload_NetworkProperties *pDNP, fsDNP_BuffersInfo* p
 	pDNP->wLowSpeed_Duration = 1;
 	pDNP->wLowSpeed_Factor = 3;
 
-	bResult &= fsFillBuffer (&pDNP->pszAgent, &pBuffs->nAgentSize, "FDMuiless", bAllocate);
-	bResult &= fsFillBuffer (&pDNP->pszPassword, &pBuffs->nPasswordSize, "", bAllocate);
-	bResult &= fsFillBuffer (&pDNP->pszReferer, &pBuffs->nRefferSize, "", bAllocate);
-	bResult &= fsFillBuffer (&pDNP->pszUserName, &pBuffs->nUserNameSize, "", bAllocate);
-	bResult &= fsFillBuffer (&pDNP->pszASCIIExts, &pBuffs->nTransferTypeExtsSize, "", bAllocate);
-	bResult &= fsFillBuffer (&pDNP->pszCookies, &pBuffs->nCookiesSize, "", bAllocate);
-	bResult &= fsFillBuffer (&pDNP->pszPostData, &pBuffs->nPostDataSize, "", bAllocate);
+	bResult &= fsFillBuffer (&pDNP->pszAgent, &pBuffs->nAgentSize, _T("FDMuiless"), bAllocate);
+	bResult &= fsFillBuffer (&pDNP->pszPassword, &pBuffs->nPasswordSize, _T(""), bAllocate);
+	bResult &= fsFillBuffer (&pDNP->pszReferer, &pBuffs->nRefferSize, _T(""), bAllocate);
+	bResult &= fsFillBuffer (&pDNP->pszUserName, &pBuffs->nUserNameSize, _T(""), bAllocate);
+	bResult &= fsFillBuffer (&pDNP->pszASCIIExts, &pBuffs->nTransferTypeExtsSize, _T(""), bAllocate);
+	bResult &= fsFillBuffer (&pDNP->pszCookies, &pBuffs->nCookiesSize, _T(""), bAllocate);
+	bResult &= fsFillBuffer (&pDNP->pszPostData, &pBuffs->nPostDataSize, _T(""), bAllocate);
 #endif
 
 	if (!bResult)
@@ -138,7 +138,7 @@ BOOL fsDP_GetDefaults (fsDownload_Properties *pDP, fsDP_BuffersInfo* pBuffs, BOO
 	pDP->bCheckIntegrityWhenDone = _App.Download_CheckIntegrityWhenDone ();
 	pDP->dwIntegrityCheckAlgorithm = HA_MD5;
 	pDP->enICFR = (vmsIntegrityCheckFailedReaction)_App.Download_IntegrityCheckFailedReaction ();
-	pDP->pszCheckSum = new char [1]; *pDP->pszCheckSum = 0;
+	pDP->pszCheckSum = new TCHAR [1]; *pDP->pszCheckSum = 0;
 
 #else
 	pDP->bIgnoreRestrictions = FALSE;
@@ -160,11 +160,11 @@ BOOL fsDP_GetDefaults (fsDownload_Properties *pDP, fsDP_BuffersInfo* pBuffs, BOO
 	pDP->dwFlags = 0;
 
 	pDP->bCheckIntegrityWhenDone = FALSE;
-	pDP->pszCheckSum = new char [1]; *pDP->pszCheckSum = 0;
+	pDP->pszCheckSum = new TCHAR [1]; *pDP->pszCheckSum = 0;
 #endif
 
 	if (bAllocate)
-		pDP->pszCheckSum = new char [1];
+		pDP->pszCheckSum = new TCHAR [1];
 	*pDP->pszCheckSum = 0;
 
 	BOOL bResult = TRUE;
@@ -173,14 +173,14 @@ BOOL fsDP_GetDefaults (fsDownload_Properties *pDP, fsDP_BuffersInfo* pBuffs, BOO
 	bResult &= fsFillBuffer (&pDP->pszAdditionalExt, &pBuffs->nAdditionalExtSize, _App.AdditionalExtension (), bAllocate);
 	bResult &= fsFillBuffer (&pDP->pszCreateExt, &pBuffs->nAdditionalExtSize, _App.Download_CreateExt (), bAllocate);
 #else
-	bResult &= fsFillBuffer (&pDP->pszAdditionalExt, &pBuffs->nAdditionalExtSize, "", bAllocate);
-	bResult &= fsFillBuffer (&pDP->pszCreateExt, &pBuffs->nAdditionalExtSize, "", bAllocate);
+	bResult &= fsFillBuffer (&pDP->pszAdditionalExt, &pBuffs->nAdditionalExtSize, _T(""), bAllocate);
+	bResult &= fsFillBuffer (&pDP->pszCreateExt, &pBuffs->nAdditionalExtSize, _T(""), bAllocate);
 #endif
 
 	return bResult ? IR_SUCCESS : IR_ERROR;
 }  
 
-fsInternetResult fsDNP_GetByUrl (fsDownload_NetworkProperties *pDNP, fsDNP_BuffersInfo* pBuffs, BOOL bAllocate, LPCSTR pszUrl)
+fsInternetResult fsDNP_GetByUrl (fsDownload_NetworkProperties *pDNP, fsDNP_BuffersInfo* pBuffs, BOOL bAllocate, LPCTSTR pszUrl)
 {
 	
 	if (!fsDNP_GetDefaults (pDNP, pBuffs, bAllocate))
@@ -206,8 +206,8 @@ fsInternetResult fsDNP_GetByUrl (fsDownload_NetworkProperties *pDNP, fsDNP_Buffe
 	bOk &= fsFillBuffer (&pDNP->pszServerName, &pBuffs->nServerNameSize, url.GetHostName (), bAllocate);
 	bOk &= fsFillBuffer (&pDNP->pszPathName, &pBuffs->nPathNameSize, url.GetPath (), bAllocate);
 
-	LPCSTR pszUser = url.GetUserName ();
-	LPCSTR pszPass = url.GetPassword ();
+	LPCTSTR pszUser = url.GetUserName ();
+	LPCTSTR pszPass = url.GetPassword ();
 
 	if (*pszUser)
 	{
@@ -228,19 +228,19 @@ fsInternetResult fsDNP_GetByUrl (fsDownload_NetworkProperties *pDNP, fsDNP_Buffe
 	return IR_SUCCESS;
 }
 
-void fsDNP_SetAuth (fsDownload_NetworkProperties* dnp, LPCSTR pszUser, LPCSTR pszPassword)
+void fsDNP_SetAuth (fsDownload_NetworkProperties* dnp, LPCTSTR pszUser, LPCTSTR pszPassword)
 {
 	SAFE_DELETE_ARRAY (dnp->pszUserName);
 	SAFE_DELETE_ARRAY (dnp->pszPassword);
 
-	dnp->pszUserName = new char [strlen (pszUser) + 1];
-	strcpy (dnp->pszUserName, pszUser);
+	dnp->pszUserName = new TCHAR [_tcslen (pszUser) + 1];
+	_tcscpy (dnp->pszUserName, pszUser);
 
-	dnp->pszPassword = new char [strlen (pszPassword) + 1];
-	strcpy (dnp->pszPassword, pszPassword);
+	dnp->pszPassword = new TCHAR [_tcslen (pszPassword) + 1];
+	_tcscpy (dnp->pszPassword, pszPassword);
 }    
 
-fsInternetResult fsDNP_ApplyUrl (fsDownload_NetworkProperties *dnp, LPCSTR pszUrl)
+fsInternetResult fsDNP_ApplyUrl (fsDownload_NetworkProperties *dnp, LPCTSTR pszUrl)
 {
 	fsURL url;
 	fsInternetResult ir;
@@ -267,22 +267,22 @@ fsInternetResult fsDNP_ApplyUrl (fsDownload_NetworkProperties *dnp, LPCSTR pszUr
 	dnp->uServerPort = url.GetPort ();
 
 	SAFE_DELETE_ARRAY (dnp->pszPathName);
-	fsnew (dnp->pszPathName, char, strlen (url.GetPath ()) + 1);
-	strcpy (dnp->pszPathName, url.GetPath ());
+	fsnew (dnp->pszPathName, TCHAR, _tcslen (url.GetPath ()) + 1);
+	_tcscpy (dnp->pszPathName, url.GetPath ());
 
 	SAFE_DELETE_ARRAY (dnp->pszServerName);
-	fsnew (dnp->pszServerName, char, strlen (url.GetHostName ()) + 1);
-	strcpy (dnp->pszServerName, url.GetHostName ());
+	fsnew (dnp->pszServerName, TCHAR, _tcslen (url.GetHostName ()) + 1);
+	_tcscpy (dnp->pszServerName, url.GetHostName ());
 
 	if (*url.GetUserName ())
 	{
 		SAFE_DELETE_ARRAY (dnp->pszUserName);
-		fsnew (dnp->pszUserName, char, strlen (url.GetUserName ()) + 1);
-		strcpy (dnp->pszUserName, url.GetUserName ());
+		fsnew (dnp->pszUserName, TCHAR, _tcslen (url.GetUserName ()) + 1);
+		_tcscpy (dnp->pszUserName, url.GetUserName ());
 
 		SAFE_DELETE_ARRAY (dnp->pszPassword);
-		fsnew (dnp->pszPassword, char, strlen (url.GetPassword ()) + 1);
-		strcpy (dnp->pszPassword, url.GetPassword ());
+		fsnew (dnp->pszPassword, TCHAR, _tcslen (url.GetPassword ()) + 1);
+		_tcscpy (dnp->pszPassword, url.GetPassword ());
 	}
 	else
 	{
@@ -355,9 +355,9 @@ fsInternetResult fsGetProxyByNP (fsDownload_NetworkProperties *pDNP, fsDNP_Buffe
 			bOk &= fsFillBuffer (&pDNP->pszProxyPassword, &pBuffs->nProxyPasswordSize, _App.FtpProxy_Password (), bAllocate);
 			bOk &= fsFillBuffer (&pDNP->pszProxyUserName, &pBuffs->nProxyUserNameSize, _App.FtpProxy_UserName (), bAllocate);
 #else
-			bOk &= fsFillBuffer (&pDNP->pszProxyName, &pBuffs->nProxyNameSize, "", bAllocate);
-			bOk &= fsFillBuffer (&pDNP->pszProxyPassword, &pBuffs->nProxyPasswordSize, "", bAllocate);
-			bOk &= fsFillBuffer (&pDNP->pszProxyUserName, &pBuffs->nProxyUserNameSize, "", bAllocate);
+			bOk &= fsFillBuffer (&pDNP->pszProxyName, &pBuffs->nProxyNameSize, _T(""), bAllocate);
+			bOk &= fsFillBuffer (&pDNP->pszProxyPassword, &pBuffs->nProxyPasswordSize, _T(""), bAllocate);
+			bOk &= fsFillBuffer (&pDNP->pszProxyUserName, &pBuffs->nProxyUserNameSize, _T(""), bAllocate);
 #endif
 			break;
 			
@@ -367,9 +367,9 @@ fsInternetResult fsGetProxyByNP (fsDownload_NetworkProperties *pDNP, fsDNP_Buffe
 			bOk &= fsFillBuffer (&pDNP->pszProxyPassword, &pBuffs->nProxyPasswordSize, _App.HttpProxy_Password (), bAllocate);
 			bOk &= fsFillBuffer (&pDNP->pszProxyUserName, &pBuffs->nProxyUserNameSize, _App.HttpProxy_UserName (), bAllocate);
 #else
-			bOk &= fsFillBuffer (&pDNP->pszProxyName, &pBuffs->nProxyNameSize, "", bAllocate);
-			bOk &= fsFillBuffer (&pDNP->pszProxyPassword, &pBuffs->nProxyPasswordSize, "", bAllocate);
-			bOk &= fsFillBuffer (&pDNP->pszProxyUserName, &pBuffs->nProxyUserNameSize, "", bAllocate);
+			bOk &= fsFillBuffer (&pDNP->pszProxyName, &pBuffs->nProxyNameSize, _T(""), bAllocate);
+			bOk &= fsFillBuffer (&pDNP->pszProxyPassword, &pBuffs->nProxyPasswordSize, _T(""), bAllocate);
+			bOk &= fsFillBuffer (&pDNP->pszProxyUserName, &pBuffs->nProxyUserNameSize, _T(""), bAllocate);
 #endif
 			break;
 
@@ -379,16 +379,16 @@ fsInternetResult fsGetProxyByNP (fsDownload_NetworkProperties *pDNP, fsDNP_Buffe
 			bOk &= fsFillBuffer (&pDNP->pszProxyPassword, &pBuffs->nProxyPasswordSize, _App.HttpsProxy_Password (), bAllocate);
 			bOk &= fsFillBuffer (&pDNP->pszProxyUserName, &pBuffs->nProxyUserNameSize, _App.HttpsProxy_UserName (), bAllocate);
 #else
-			bOk &= fsFillBuffer (&pDNP->pszProxyName, &pBuffs->nProxyNameSize, "", bAllocate);
-			bOk &= fsFillBuffer (&pDNP->pszProxyPassword, &pBuffs->nProxyPasswordSize, "", bAllocate);
-			bOk &= fsFillBuffer (&pDNP->pszProxyUserName, &pBuffs->nProxyUserNameSize, "", bAllocate);
+			bOk &= fsFillBuffer (&pDNP->pszProxyName, &pBuffs->nProxyNameSize, _T(""), bAllocate);
+			bOk &= fsFillBuffer (&pDNP->pszProxyPassword, &pBuffs->nProxyPasswordSize, _T(""), bAllocate);
+			bOk &= fsFillBuffer (&pDNP->pszProxyUserName, &pBuffs->nProxyUserNameSize, _T(""), bAllocate);
 #endif
 			break;
 
 		case NP_FILE:
-			bOk &= fsFillBuffer (&pDNP->pszProxyName, &pBuffs->nProxyNameSize, "", bAllocate);
-			bOk &= fsFillBuffer (&pDNP->pszProxyPassword, &pBuffs->nProxyPasswordSize, "", bAllocate);
-			bOk &= fsFillBuffer (&pDNP->pszProxyUserName, &pBuffs->nProxyUserNameSize, "", bAllocate);
+			bOk &= fsFillBuffer (&pDNP->pszProxyName, &pBuffs->nProxyNameSize, _T(""), bAllocate);
+			bOk &= fsFillBuffer (&pDNP->pszProxyPassword, &pBuffs->nProxyPasswordSize, _T(""), bAllocate);
+			bOk &= fsFillBuffer (&pDNP->pszProxyUserName, &pBuffs->nProxyUserNameSize, _T(""), bAllocate);
 			break;
 
 		default:
@@ -408,9 +408,9 @@ BOOL fsGetProxy (fsNetworkProtocol np, CString& strProxy, CString& strUser, CStr
 			strUser = _App.HttpProxy_UserName ();
 			strPassword = _App.HttpProxy_Password ();
 #else
-			strProxy = "";
-			strUser = "";
-			strPassword = "";
+			strProxy = _T("");
+			strUser = _T("");
+			strPassword = _T("");
 #endif
 		break;
 
@@ -420,9 +420,9 @@ BOOL fsGetProxy (fsNetworkProtocol np, CString& strProxy, CString& strUser, CStr
 			strUser = _App.HttpsProxy_UserName ();
 			strPassword = _App.HttpsProxy_Password ();
 #else
-			strProxy = "";
-			strUser = "";
-			strPassword = "";
+			strProxy = _T("");
+			strUser = _T("");
+			strPassword = _T("");
 #endif
 		break;
 
@@ -432,16 +432,16 @@ BOOL fsGetProxy (fsNetworkProtocol np, CString& strProxy, CString& strUser, CStr
 			strUser = _App.FtpProxy_UserName ();
 			strPassword = _App.FtpProxy_Password ();
 #else
-			strProxy = "";
-			strUser = "";
-			strPassword = "";
+			strProxy = _T("");
+			strUser = _T("");
+			strPassword = _T("");
 #endif
 		break;
 
 		case NP_FILE:
-            strProxy = "";
-			strUser = "";
-			strPassword = "";
+            strProxy = _T("");
+			strUser = _T("");
+			strPassword = _T("");
 		break;
 
 		default:
@@ -490,7 +490,7 @@ BOOL fsDNP_CloneSettings (fsDownload_NetworkProperties *dst, fsDownload_NetworkP
 	return TRUE;
 }
 
-void fsDNP_GetURL (fsDownload_NetworkProperties* dnp, LPSTR pszURL)
+void fsDNP_GetURL (fsDownload_NetworkProperties* dnp, LPTSTR pszURL)
 {
 	DWORD dw = 10000;
 	fsURL url;

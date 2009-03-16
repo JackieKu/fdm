@@ -58,16 +58,16 @@ protected:
 	
 	#define MCMGRFILE_CURRENT_VERSION	(1)
 	
-	#define MCMGRFILE_SIG "FDM Media Convert Tasks"
+	#define MCMGRFILE_SIG _T("FDM Media Convert Tasks")
 	
 	struct fsMcMgrFileHdr
 	{
-		char szSig [sizeof (MCMGRFILE_SIG) + 1];
+		TCHAR szSig [sizeof (MCMGRFILE_SIG) + 1];
 		WORD wVer;
 
 		fsMcMgrFileHdr ()
 		{
-			strcpy (szSig, MCMGRFILE_SIG);
+			_tcscpy (szSig, MCMGRFILE_SIG);
 			wVer = MCMGRFILE_CURRENT_VERSION;
 		}
 	};

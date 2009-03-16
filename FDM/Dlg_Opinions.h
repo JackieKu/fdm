@@ -27,7 +27,7 @@ public:
 	//}}AFX_DATA
 
 	
-	LPCSTR m_pszUrl;  
+	LPCTSTR m_pszUrl;  
 
 	
 	//{{AFX_VIRTUAL(CDlg_Opinions)

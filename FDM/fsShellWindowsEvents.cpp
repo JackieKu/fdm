@@ -33,8 +33,8 @@ BEGIN_MESSAGE_MAP(fsShellWindowsEvents, CCmdTarget)
 END_MESSAGE_MAP()
 
 BEGIN_DISPATCH_MAP(fsShellWindowsEvents, CCmdTarget)
-	DISP_FUNCTION_ID(fsShellWindowsEvents, "WindowRegistered",DISPID_WINDOWREGISTERED,OnWindowRegistered,VT_EMPTY,VTS_I4)
-	DISP_FUNCTION_ID(fsShellWindowsEvents, "WindowRevoked",DISPID_WINDOWREVOKED,OnWindowRevoked,VT_EMPTY,VTS_I4)
+	DISP_FUNCTION_ID(fsShellWindowsEvents, _T("WindowRegistered"),DISPID_WINDOWREGISTERED,OnWindowRegistered,VT_EMPTY,VTS_I4)
+	DISP_FUNCTION_ID(fsShellWindowsEvents, _T("WindowRevoked"),DISPID_WINDOWREVOKED,OnWindowRevoked,VT_EMPTY,VTS_I4)
 END_DISPATCH_MAP()      
 
 HRESULT fsShellWindowsEvents::Attach(SHDocVw::IShellWindowsPtr& spSHWnds)

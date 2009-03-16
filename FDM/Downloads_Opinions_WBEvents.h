@@ -30,7 +30,7 @@ public:
 
 protected:
 	void OnNavigateError (LPDISPATCH pDisp, VARIANT* URL, VARIANT *TargetFrameName, VARIANT *StatusCode, BOOL *pbCancel);
-	CString GetFormInputElementText (IHTMLFormElement* pForm, LPCSTR pszElementName, bool& bFound);
+	CString GetFormInputElementText (IHTMLFormElement* pForm, LPCTSTR pszElementName, bool& bFound);
 	void RetrieveLinkToUsText (IDispatch* pdDoc);
 	vmsDocHostUIHandler m_wbUIHandler;
 	IConnectionPointPtr m_spCP;

@@ -121,7 +121,7 @@ public:
 	int DeleteDownloads(DLDS_LIST_REF v, BOOL bByUser, BOOL bDontConfirmFileDeleting);
 	void ShowDownloads (DLDS_LIST_REF v);
 	
-	BOOL CreateBtDownloadFromFile (LPCSTR pszFile, LPCSTR pszTorrentUrl, BOOL bSilent = FALSE, BOOL bSeedOnly = FALSE, LPCSTR pszOutputOrSrcForSeedFolder = NULL);
+	BOOL CreateBtDownloadFromFile (LPCTSTR pszFile, LPCTSTR pszTorrentUrl, BOOL bSilent = FALSE, BOOL bSeedOnly = FALSE, LPCTSTR pszOutputOrSrcForSeedFolder = NULL);
 	
 	void OnBtDownloadProperties(DLDS_LIST &vDlds, CWnd* pwndParent = NULL);
 	
@@ -173,7 +173,7 @@ public:
 	CDownloads_History m_wndHistory;	
 	
 	
-	BOOL CreateDownloadWithDefSettings (vmsDownloadSmartPtr dld, LPCSTR pszUrl);
+	BOOL CreateDownloadWithDefSettings (vmsDownloadSmartPtr dld, LPCTSTR pszUrl);
 	
 	BOOL IsSizesInBytes();
 	
@@ -185,7 +185,7 @@ public:
 	
 	
 	static void Plugin_SetLanguage (wgLanguage, HMENU hMenuMain, HMENU);
-	static void Plugin_GetPluginNames (LPCSTR* ppszLong, LPCSTR* ppszShort);
+	static void Plugin_GetPluginNames (LPCTSTR* ppszLong, LPCTSTR* ppszShort);
 	static void Plugin_GetMenuViewItems (wgMenuViewItem** ppItems, int* cItems);
 	static void Plugin_GetMenuImages (fsSetImage** ppImages, int* pcImages);
 	static void Plugin_GetToolBarInfo (wgTButtonInfo** ppButtons, int* pcButtons);
@@ -238,7 +238,7 @@ public:
 	
 	
 	
-	UINT CreateDownload (LPCSTR pszStartUrl, BOOL bReqTopMostDialog = FALSE, LPCSTR pszComment = NULL, LPCSTR pszReferer = NULL, BOOL bSilent = FALSE, DWORD dwForceAutoLaunch = DWCD_NOFORCEAUTOLAUNCH, BOOL* pbAutoStart = NULL, vmsDWCD_AdditionalParameters* pParams = NULL, UINT* pRes = NULL);
+	UINT CreateDownload (LPCTSTR pszStartUrl, BOOL bReqTopMostDialog = FALSE, LPCTSTR pszComment = NULL, LPCTSTR pszReferer = NULL, BOOL bSilent = FALSE, DWORD dwForceAutoLaunch = DWCD_NOFORCEAUTOLAUNCH, BOOL* pbAutoStart = NULL, vmsDWCD_AdditionalParameters* pParams = NULL, UINT* pRes = NULL);
 	
 	afx_msg void OnDownloadCreate();
 	

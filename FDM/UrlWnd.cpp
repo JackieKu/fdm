@@ -34,13 +34,13 @@ void CUrlWnd::Init()
 
 void CUrlWnd::OnLButtonDown(UINT , CPoint )
 {
-	if (strnicmp (m_strUrl, "mailto:", 7))
+	if (strnicmp (m_strUrl, _T("mailto:"), 7))
 		fsOpenUrlInBrowser (m_strUrl);
 	else
-		ShellExecute (::GetDesktopWindow (), "open", m_strUrl, NULL, NULL, SW_SHOW);
+		ShellExecute (::GetDesktopWindow (), _T("open"), m_strUrl, NULL, NULL, SW_SHOW);
 }
 
-void CUrlWnd::SetUrl(LPCSTR pszUrl)
+void CUrlWnd::SetUrl(LPCTSTR pszUrl)
 {
 	m_strUrl = pszUrl;
 }

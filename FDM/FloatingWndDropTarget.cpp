@@ -41,7 +41,7 @@ DROPEFFECT CFloatingWndDropTarget::OnDragOver(CWnd*, COleDataObject* pData, DWOR
 		HGLOBAL hMem = pData->GetGlobalData (CF_TEXT);
 		if (hMem)
 		{
-			LPCSTR psz = (LPCSTR) GlobalLock (hMem);
+			LPCTSTR psz = (LPCTSTR) GlobalLock (hMem);
 			fsURL url;
 			BOOL bOk = url.Crack (psz) == IR_SUCCESS;
 			GlobalUnlock (hMem);
@@ -76,7 +76,7 @@ BOOL CFloatingWndDropTarget::OnDrop(CWnd*, COleDataObject *pData, DROPEFFECT, CP
 
 		if (cf == CF_TEXT)
 		{
-			LPCSTR pszUrl = (LPCSTR) pvLock;
+			LPCTSTR pszUrl = (LPCTSTR) pvLock;
 			fsURL url;
 			if (url.Crack (pszUrl) == IR_SUCCESS)
 				vUrls.push_back (pszUrl);
@@ -87,7 +87,7 @@ BOOL CFloatingWndDropTarget::OnDrop(CWnd*, COleDataObject *pData, DROPEFFECT, CP
 			int cFiles = DragQueryFile (hDrop, 0xFFFFFFFF, NULL, 0);
 			for (int i = 0; i < cFiles; i++)
 			{
-				char szFile [MY_MAX_PATH];
+				TCHAR szFile [MY_MAX_PATH];
 				DragQueryFile (hDrop, i, szFile, sizeof (szFile));
 				fsString strUrl = "file://";
 				strUrl += szFile;
@@ -101,10 +101,10 @@ BOOL CFloatingWndDropTarget::OnDrop(CWnd*, COleDataObject *pData, DROPEFFECT, CP
 
 			for (size_t i = 0; i < vUrls.size (); i++)
 			{
-				LPCSTR pszUrl = vUrls [i];
+				LPCTSTR pszUrl = vUrls [i];
 				BOOL bAdded = UINT_MAX != _pwndDownloads->CreateDownload (pszUrl, TRUE, NULL, NULL, bSilent);
 				if (bAdded && bSilent)
-					CMainFrame::ShowTimeoutBalloon (pszUrl, "Download added", NIIF_INFO, TRUE);
+					CMainFrame::ShowTimeoutBalloon (pszUrl, _T("Download added"), NIIF_INFO, TRUE);
 			}
 		}
 

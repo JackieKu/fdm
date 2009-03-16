@@ -15,7 +15,7 @@
 #define _WIN32_IE 0x501
 #define _WIN32_WINNT 0x0500  
 
-const char* const IE_USERAGENT_ADDITION	= "FDM";      
+#define IE_USERAGENT_ADDITION		"FDM"
 
 #ifdef SCL_ENABLE
 #pragma message ("============== WARNING: SCL_ENABLE is defined ==============")
@@ -78,18 +78,20 @@ extern CFdmModule _Module;
 
 #define MY_MAX_PATH		10000
 
-#ifdef _UNICODE
-#define tstring wstring
-#else
-#define tstring string
-#endif
-
 #pragma warning (push, 3)
 #include <vector>
 #include <list>
 #include <string>
 #include <xlocale>
 #pragma warning (pop)
+
+namespace std {
+	#ifdef _UNICODE
+		typedef wstring tstring;
+	#else
+		#define string tstring;
+	#endif
+}
 
 //{{AFX_INSERT_LOCATION}//}}
 
@@ -166,7 +168,7 @@ extern DWORD _dwAppState;
 #define IS_PORTABLE_MODE	((_dwAppState & APPSTATE_PORTABLE_MODE) != 0)
 //#else
 //#define IS_PORTABLE_MODE	FALSE	
-#endif
+//#endif
 
 #include "lngphrases.h"  
 

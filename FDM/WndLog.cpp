@@ -53,9 +53,9 @@ BOOL CWndLog::Create(CWnd *pParent)
 	m_images.Add (&bmp, RGB (255, 0, 255));
 	SetImageList (&m_images, LVSIL_SMALL);
 
-	InsertColumn (0, "Time", LVCFMT_LEFT, 80, 0);
-	InsertColumn (1, "Date", LVCFMT_LEFT, 100, 0);
-	InsertColumn (2, "Information", LVCFMT_LEFT, 400, 0);
+	InsertColumn (0, _T("Time"), LVCFMT_LEFT, 80, 0);
+	InsertColumn (1, _T("Date"), LVCFMT_LEFT, 100, 0);
+	InsertColumn (2, _T("Information"), LVCFMT_LEFT, 400, 0);
 
 	ShowWindow (SW_SHOW);
 
@@ -208,10 +208,10 @@ void CWndLog::OnCopyToCb()
 		FileTimeToSystemTime (&event->timeEvent, &time);
 		SystemTimeToStr (&time, strDate, strTime);
 
-		strText += strTime; strText += ' '; 
-		strText += strDate; strText += ' ';
+		strText += strTime; strText += _T(' '); 
+		strText += strDate; strText += _T(' ');
 		strText += event->pszEvent;
-		strText += "\r\n";
+		strText += _T("\r\n");
 	}
 
 	_ClipbrdMgr.Text (strText);

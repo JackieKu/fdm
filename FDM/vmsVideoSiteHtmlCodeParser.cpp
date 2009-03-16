@@ -27,7 +27,7 @@ vmsVideoSiteHtmlCodeParser::~vmsVideoSiteHtmlCodeParser()
 	CoUninitialize ();
 }
 
-BOOL vmsVideoSiteHtmlCodeParser::Parse(LPCSTR pszSite, LPCSTR pszHtml)
+BOOL vmsVideoSiteHtmlCodeParser::Parse(LPCTSTR pszSite, LPCTSTR pszHtml)
 {
 	switch (GetSupportedSiteIndex (pszSite))
 	{
@@ -60,22 +60,22 @@ BOOL vmsVideoSiteHtmlCodeParser::Parse(LPCSTR pszSite, LPCSTR pszHtml)
 	}
 }
 
-BOOL vmsVideoSiteHtmlCodeParser::Parse_Youtube(LPCSTR pszHtml)
+BOOL vmsVideoSiteHtmlCodeParser::Parse_Youtube(LPCTSTR pszHtml)
 {
 	fsString strTitle, strUrl; 
 
-	LPSTR psz = (LPSTR) strstr (pszHtml, "<meta name=\"title\"");
+	LPTSTR psz = (LPTSTR) _tcsstr (pszHtml, _T("<meta name=\"title\""));
 
 	if (psz)
 	{
-		psz = strstr (psz, "content=");
+		psz = _tcsstr (psz, _T("content="));
 		if (psz)
 		{
-			psz += lstrlen ("content=");
-			if (*psz == '"')
+			psz += lstrlen (_T("content="));
+			if (*psz == _T('"'))
 			{
 				psz++;
-				while (*psz && *psz != '"')
+				while (*psz && *psz != _T('"'))
 				{
 					if (is_valid_char (*psz))
 						strTitle += *psz++;
@@ -86,10 +86,10 @@ BOOL vmsVideoSiteHtmlCodeParser::Parse_Youtube(LPCSTR pszHtml)
 		}
 	}
 
-	psz = (LPSTR) strstr (pszHtml, "swfArgs =");
+	psz = (LPTSTR) _tcsstr (pszHtml, _T("swfArgs ="));
 	if (psz == NULL)
 		return FALSE;
-	psz = strchr (psz, '{');
+	psz = _tcschr (psz, _T('{'));
 	if (psz == NULL)
 		return FALSE;
 	psz++;
@@ -97,18 +97,18 @@ BOOL vmsVideoSiteHtmlCodeParser::Parse_Youtube(LPCSTR pszHtml)
 	fsString strBase = "http://youtube.com/"; 
 	fsString strParams;
 	
-	while (*psz != '}')
+	while (*psz != _T('}'))
 	{
-		while (*psz == ' ' || *psz == ',')
+		while (*psz == _T(' ') || *psz == _T(','))
 			psz++;
 
 		fsString str;
 	
-		while (*psz && *psz != ':')
+		while (*psz && *psz != _T(':'))
 		{
-			if (*psz == ' ')
+			if (*psz == _T(' '))
 			{
-				str = "";
+				str = _T("");
 				break;
 			}
 			str += *psz++;
@@ -117,32 +117,32 @@ BOOL vmsVideoSiteHtmlCodeParser::Parse_Youtube(LPCSTR pszHtml)
 		if (str.IsEmpty ())
 			break;
 
-		if (*psz == ':')
+		if (*psz == _T(':'))
 			psz++;
-		while (*psz == ' ')
+		while (*psz == _T(' '))
 			psz++;
 
-		if (str.Length () > 2 && str [0] == '"' && str [str.Length () - 1] == '"')
+		if (str.Length () > 2 && str [0] == _T('"') && str [str.Length () - 1] == _T('"'))
 		{
 			_tcscpy (str, str.pszString+1);
 			str [str.Length () - 1] = 0;
 		}
 
-		if (lstrcmpi (str, "BASE_YT_URL") == 0)
+		if (lstrcmpi (str, _T("BASE_YT_URL")) == 0)
 		{
 			strBase = ExtractValue (psz);
 		}
 		else
 		{
 			if (strParams.IsEmpty () == FALSE)
-				strParams += '&';
+				strParams += _T('&');
 
-			strParams += str; strParams += "="; strParams += ExtractValue (psz);
+			strParams += str; strParams += _T("="); strParams += ExtractValue (psz);
 		}
 	}
 
 	strUrl = strBase;
-	strUrl += "get_video?";
+	strUrl += _T("get_video?");
 	strUrl += strParams;
 
 	
@@ -151,70 +151,70 @@ BOOL vmsVideoSiteHtmlCodeParser::Parse_Youtube(LPCSTR pszHtml)
 
 	m_strVideoTitle = strTitle;
 	m_strVideoUrl   = strUrl;
-	m_strVideoType  = "flv";
+	m_strVideoType  = _T("flv");
 	m_bDirectLink   = TRUE;
 
 	return TRUE;
 }
 
-LPCSTR vmsVideoSiteHtmlCodeParser::get_VideoTitle()
+LPCTSTR vmsVideoSiteHtmlCodeParser::get_VideoTitle()
 {
 	return m_strVideoTitle;
 }
 
-LPCSTR vmsVideoSiteHtmlCodeParser::get_VideoUrl()
+LPCTSTR vmsVideoSiteHtmlCodeParser::get_VideoUrl()
 {
 	return m_strVideoUrl;
 }
 
-LPCSTR vmsVideoSiteHtmlCodeParser::get_VideoType()
+LPCTSTR vmsVideoSiteHtmlCodeParser::get_VideoType()
 {
 	return m_strVideoType;
 }
 
-BOOL vmsVideoSiteHtmlCodeParser::IsSiteSupported(LPCSTR pszHost)
+BOOL vmsVideoSiteHtmlCodeParser::IsSiteSupported(LPCTSTR pszHost)
 {
 	return GetSupportedSiteIndex (pszHost) != -1;
 }
 
-BOOL vmsVideoSiteHtmlCodeParser::Parse_GoogleVideo(LPCSTR pszHtml)
+BOOL vmsVideoSiteHtmlCodeParser::Parse_GoogleVideo(LPCTSTR pszHtml)
 {
-	LPCSTR psz = strstr (pszHtml, "/googleplayer.swf?");
+	LPCTSTR psz = _tcsstr (pszHtml, _T("/googleplayer.swf?"));
 	if (psz == NULL)
 		return FALSE;
-	psz = strstr (psz, "videoUrl");
+	psz = _tcsstr (psz, _T("videoUrl"));
 	if (psz == NULL)
 		return FALSE;
-	psz = strstr (psz, "http");
+	psz = _tcsstr (psz, _T("http"));
 	if (psz == NULL)
 		return FALSE;
 
 	fsString strUrl;
-	while (*psz && *psz != '"')
+	while (*psz && *psz != _T('"'))
 		strUrl += *psz++;
-	if (strUrl [strUrl.GetLength () - 1] == '\\')
+	if (strUrl [strUrl.GetLength () - 1] == _T('\\'))
 		strUrl [strUrl.GetLength () - 1] = 0;
 	fsDecodeHtmlUrl (strUrl);  
 
 	fsString strTitle;
-	psz = strstr (pszHtml, "pvprogtitle");
+	psz = _tcsstr (pszHtml, _T("pvprogtitle"));
 	if (psz)
 	{
-		while (*psz && *psz != '>')
+		while (*psz && *psz != _T('>'))
 			psz++;
 		if (*psz)
 		{
 			psz++;
-			while (*psz == ' ')
+			while (*psz == _T(' '))
 				psz++;
-			while (*psz && *psz != '<')
+			while (*psz && *psz != _T('<'))
 			{
 				if (is_valid_char (*psz))
 					strTitle += *psz++;
 				else 
 					psz++;
 			}
-			while (strTitle.GetLength () && strTitle [strTitle.GetLength () - 1] == ' ')
+			while (strTitle.GetLength () && strTitle [strTitle.GetLength () - 1] == _T(' '))
 				strTitle [strTitle.GetLength () - 1] = 0;
 			fsDecodeHtmlText (strTitle);
 		}
@@ -222,21 +222,21 @@ BOOL vmsVideoSiteHtmlCodeParser::Parse_GoogleVideo(LPCSTR pszHtml)
 
 	m_strVideoTitle = strTitle;
 	m_strVideoUrl   = strUrl;
-	m_strVideoType  = "flv";
+	m_strVideoType  = _T("flv");
 	m_bDirectLink   = TRUE;
 
 	return TRUE;
 }
 
-BOOL vmsVideoSiteHtmlCodeParser::Parse_Youtube_RootPage(LPCSTR pszHtml)
+BOOL vmsVideoSiteHtmlCodeParser::Parse_Youtube_RootPage(LPCTSTR pszHtml)
 {
 	fsString strUrl; 
 
-	LPCSTR psz = strstr (pszHtml, "/admp.swf");
+	LPCTSTR psz = _tcsstr (pszHtml, _T("/admp.swf"));
 	if (psz == NULL)
 		return FALSE;
 
-	while (*psz && *psz != '=')
+	while (*psz && *psz != _T('='))
 		psz++;
 	if (*psz == 0)
 		return FALSE;
@@ -244,15 +244,15 @@ BOOL vmsVideoSiteHtmlCodeParser::Parse_Youtube_RootPage(LPCSTR pszHtml)
 
 	fsString strId;
 
-	while (*psz && *psz != '&')
+	while (*psz && *psz != _T('&'))
 		strId += *psz++;
 
 	strUrl = "http://www.youtube.com/watch?v=";
 	strUrl += strId;
 
-	m_strVideoTitle = "";
+	m_strVideoTitle = _T("");
 	m_strVideoUrl   = strUrl;
-	m_strVideoType  = "";
+	m_strVideoType  = _T("");
 	m_bDirectLink = FALSE;
 
 	return TRUE;
@@ -263,18 +263,18 @@ BOOL vmsVideoSiteHtmlCodeParser::get_IsVideoUrlDirectLink()
 	return m_bDirectLink;
 }
 
-BOOL vmsVideoSiteHtmlCodeParser::Parse_LiveDigital(LPCSTR pszHtml)
+BOOL vmsVideoSiteHtmlCodeParser::Parse_LiveDigital(LPCTSTR pszHtml)
 {
-	LPCSTR psz = strstr (pszHtml, "flashvars");
+	LPCTSTR psz = _tcsstr (pszHtml, _T("flashvars"));
 	if (psz == NULL)
-		psz = strstr (pszHtml, "flashVars");
+		psz = _tcsstr (pszHtml, _T("flashVars"));
 	
 	fsString strC, strH;
 
 	if (psz)
 	{
-		LPCSTR pszC = strstr (psz, "c="), 
-			pszH = strstr (psz, "h=");
+		LPCTSTR pszC = _tcsstr (psz, _T("c=")), 
+			pszH = _tcsstr (psz, _T("h="));
 
 		if (pszC == NULL || pszH == NULL)
 			return FALSE;
@@ -282,29 +282,29 @@ BOOL vmsVideoSiteHtmlCodeParser::Parse_LiveDigital(LPCSTR pszHtml)
 		pszC += 2;
 		pszH += 2;
 
-		while (*pszC && *pszC != '&' && *pszC != '"')
+		while (*pszC && *pszC != _T('&') && *pszC != _T('"'))
 			strC += *pszC++;
 
-		while (*pszH && *pszH != '&' && *pszH != '"')
+		while (*pszH && *pszH != _T('&') && *pszH != _T('"'))
 			strH += *pszH++;
 	}
 	else
 	{
 		
-		psz = strstr (pszHtml, "content_id/");
+		psz = _tcsstr (pszHtml, _T("content_id/"));
 		if (psz)
 		{
-			psz += lstrlen ("content_id/");
+			psz += lstrlen (_T("content_id/"));
 			while (isdigit (*psz))
 				strC += *psz++;
 		}
 
 		if (strC.IsEmpty ())
 		{
-			psz = strstr (pszHtml, "/content/");
+			psz = _tcsstr (pszHtml, _T("/content/"));
 			if (psz)
 			{
-				psz += lstrlen ("/content/");
+				psz += lstrlen (_T("/content/"));
 				while (isdigit (*psz))
 					strC += *psz++;
 				if (strC.IsEmpty ())
@@ -312,23 +312,23 @@ BOOL vmsVideoSiteHtmlCodeParser::Parse_LiveDigital(LPCSTR pszHtml)
 			}
 		}
 
-		strH = "livedigital.com";
+		strH = _T("livedigital.com");
 	}
 
 	fsString strUrl = "http://";
 	strUrl += strH;
-	strUrl += "/content/flash_load_content/";
+	strUrl += _T("/content/flash_load_content/");
 	strUrl += strC;
 
-	m_strVideoTitle = "";
+	m_strVideoTitle = _T("");
 	m_strVideoUrl   = strUrl;
-	m_strVideoType  = "";
+	m_strVideoType  = _T("");
 	m_bDirectLink = FALSE;
 
 	return TRUE;
 }
 
-BOOL vmsVideoSiteHtmlCodeParser::Parse_Further(LPCSTR pszSite, LPCSTR pszHtml)
+BOOL vmsVideoSiteHtmlCodeParser::Parse_Further(LPCTSTR pszSite, LPCTSTR pszHtml)
 {
 	switch (GetSupportedSiteIndex (pszSite))
 	{
@@ -343,26 +343,26 @@ BOOL vmsVideoSiteHtmlCodeParser::Parse_Further(LPCSTR pszSite, LPCSTR pszHtml)
 	}
 }
 
-BOOL vmsVideoSiteHtmlCodeParser::Parse_Further_LiveDigital(LPCSTR pszTxt)
+BOOL vmsVideoSiteHtmlCodeParser::Parse_Further_LiveDigital(LPCTSTR pszTxt)
 {
-	LPCSTR psz = strstr (pszTxt, "content_url=");
+	LPCTSTR psz = _tcsstr (pszTxt, _T("content_url="));
 	if (psz == NULL)
 		return FALSE;
 
 	fsString strUrl;
-	psz += lstrlen ("content_url=");
-	while (*psz && *psz != '&')
+	psz += lstrlen (_T("content_url="));
+	while (*psz && *psz != _T('&'))
 		strUrl += *psz++;
 
 	fsDecodeHtmlUrl (strUrl);
 
 	fsString strTitle;
 
-	psz = strstr (pszTxt, "title=");
+	psz = _tcsstr (pszTxt, _T("title="));
 	if (psz)
 	{
-		psz += lstrlen ("title=");
-		while (*psz && *psz != '&')
+		psz += lstrlen (_T("title="));
+		while (*psz && *psz != _T('&'))
 		{
 			if (is_valid_char (*psz))
 				strTitle += *psz++;
@@ -374,42 +374,42 @@ BOOL vmsVideoSiteHtmlCodeParser::Parse_Further_LiveDigital(LPCSTR pszTxt)
 
 	m_strVideoTitle = strTitle;
 	m_strVideoUrl   = strUrl;
-	m_strVideoType  = (LPCSTR)strUrl + strUrl.GetLength () - 3;
+	m_strVideoType  = (LPCTSTR)strUrl + strUrl.GetLength () - 3;
 	m_bDirectLink   = TRUE;
 
 	return TRUE;
 }
 
-BOOL vmsVideoSiteHtmlCodeParser::Parse_MySpace(LPCSTR pszHtml)
+BOOL vmsVideoSiteHtmlCodeParser::Parse_MySpace(LPCTSTR pszHtml)
 {
 	CString str; 
 
-	LPCSTR psz = strstr (pszHtml, "flashvars=");
+	LPCTSTR psz = _tcsstr (pszHtml, _T("flashvars="));
 	if (psz == NULL)
-		psz = strstr (pszHtml, "flashVars=");
+		psz = _tcsstr (pszHtml, _T("flashVars="));
 	if (psz != NULL)
 	{
 		psz += 10;
 
-		if (*psz == '"')
+		if (*psz == _T('"'))
 			psz++;
-		else if (strnicmp (psz, "&quot;", 6) == 0)
+		else if (strnicmp (psz, _T("&quot;"), 6) == 0)
 			psz += 6;
 		else
 			return FALSE;
 
-		while (*psz && *psz != '"' && strnicmp (psz, "&quot;", 6))
+		while (*psz && *psz != _T('"') && strnicmp (psz, _T("&quot;"), 6))
 			str += *psz++;
 		if (str.IsEmpty ())
 			return FALSE;
-		str.Replace ("m=", "mediaID=");
+		str.Replace (_T("m="), _T("mediaID="));
 	}
 	else
 	{
-		psz = strstr (pszHtml, "videoID =");
+		psz = _tcsstr (pszHtml, _T("videoID ="));
 		if (!psz)
 		{
-			psz = strstr (pszHtml, "videoid=");
+			psz = _tcsstr (pszHtml, _T("videoid="));
 			if (!psz)
 				return FALSE;
 			else 
@@ -419,9 +419,9 @@ BOOL vmsVideoSiteHtmlCodeParser::Parse_MySpace(LPCSTR pszHtml)
 		{
 			psz += 9;
 		}
-		while (*psz == ' ')
+		while (*psz == _T(' '))
 			psz++;
-		str = "videoID=";
+		str = _T("videoID=");
 		while (isdigit (*psz))
 			str += *psz++;
 	}
@@ -430,21 +430,21 @@ BOOL vmsVideoSiteHtmlCodeParser::Parse_MySpace(LPCSTR pszHtml)
 	strUrl = "http://"; strUrl += "mediaservices.myspace.com/services/rss.ashx?";
 	strUrl += str;
 
-	m_strVideoTitle = "";
+	m_strVideoTitle = _T("");
 	m_strVideoUrl   = strUrl;
-	m_strVideoType  = "";
+	m_strVideoType  = _T("");
 	m_bDirectLink = FALSE;
 
 	return TRUE;
 }
 
-BOOL vmsVideoSiteHtmlCodeParser::Parse_Further_MySpace(LPCSTR pszHtml)
+BOOL vmsVideoSiteHtmlCodeParser::Parse_Further_MySpace(LPCTSTR pszHtml)
 {
 	USES_CONVERSION;
 	IXMLDOMDocumentPtr spXML;
 	IXMLDOMNodePtr spNode, spNode2;
 
-	while (*pszHtml && *pszHtml != '<')
+	while (*pszHtml && *pszHtml != _T('<'))
 		pszHtml++;
 
 	spXML.CreateInstance (__uuidof (DOMDocument));
@@ -501,26 +501,26 @@ BOOL vmsVideoSiteHtmlCodeParser::Parse_Further_MySpace(LPCSTR pszHtml)
 	m_strVideoTitle = W2A (bstrTitle);
 	fsDecodeHtmlText (m_strVideoTitle);
 	m_strVideoUrl   = W2A (vtUrl.bstrVal);
-	m_strVideoType  = (LPCSTR)m_strVideoUrl + m_strVideoUrl.GetLength () - 3;
+	m_strVideoType  = (LPCTSTR)m_strVideoUrl + m_strVideoUrl.GetLength () - 3;
 	m_bDirectLink	= TRUE;
 
 	return TRUE;
 }
 
-BOOL vmsVideoSiteHtmlCodeParser::Parse_Sharkle(LPCSTR pszHtml)
+BOOL vmsVideoSiteHtmlCodeParser::Parse_Sharkle(LPCTSTR pszHtml)
 {
-	LPCSTR psz = strstr (pszHtml, "splayer.swf?");
+	LPCTSTR psz = _tcsstr (pszHtml, _T("splayer.swf?"));
 	if (psz == NULL)
 		return FALSE;
 
-	psz = strstr (psz, "rnd=");
+	psz = _tcsstr (psz, _T("rnd="));
 	if (psz == NULL)
 		return FALSE;
 
 	fsString strRnd;
 
 	psz += 4;
-	while (*psz && *psz != '&')
+	while (*psz && *psz != _T('&'))
 		strRnd += *psz++;
 	if (strRnd.IsEmpty ())
 		return FALSE;
@@ -528,28 +528,28 @@ BOOL vmsVideoSiteHtmlCodeParser::Parse_Sharkle(LPCSTR pszHtml)
 	fsString strUrl;
 	strUrl = "http://sharkle.com/inc/misc/about.php?rnd=";
 	strUrl += strRnd;
-	strUrl += "&ssd=ZeleninGalaburda";
+	strUrl += _T("&ssd=ZeleninGalaburda");
 
 	fsString strTitle;
 
-	psz = strstr (pszHtml, "blog_header");
+	psz = _tcsstr (pszHtml, _T("blog_header"));
 	if (psz != NULL)
 	{
-		while (*psz && *psz != '>')
+		while (*psz && *psz != _T('>'))
 			psz++;
 		if (*psz != 0)
 		{
 			psz++;
-			while (*psz == ' ' || is_valid_char (*psz) == FALSE)
+			while (*psz == _T(' ') || is_valid_char (*psz) == FALSE)
 				psz++;
-			while (*psz && *psz != '<')
+			while (*psz && *psz != _T('<'))
 			{
 				if (is_valid_char (*psz))
 					strTitle += *psz++;
 				else
 					psz++;
 			}
-			while (strTitle.GetLength () && strTitle [strTitle.GetLength () - 1] == ' ')
+			while (strTitle.GetLength () && strTitle [strTitle.GetLength () - 1] == _T(' '))
 				strTitle [strTitle.GetLength () - 1] = 0;
 		}
 	}
@@ -558,44 +558,44 @@ BOOL vmsVideoSiteHtmlCodeParser::Parse_Sharkle(LPCSTR pszHtml)
 
 	m_strVideoTitle = strTitle;
 	m_strVideoUrl   = strUrl;
-	m_strVideoType  = "flv";
+	m_strVideoType  = _T("flv");
 	m_bDirectLink	= TRUE;
 
 	return TRUE;
 }
 
-BOOL vmsVideoSiteHtmlCodeParser::Parse_Blennus(LPCSTR pszHtml)
+BOOL vmsVideoSiteHtmlCodeParser::Parse_Blennus(LPCTSTR pszHtml)
 {
-	LPCSTR psz = strstr (pszHtml, "embed");
+	LPCTSTR psz = _tcsstr (pszHtml, _T("embed"));
 	if (psz == NULL)
-		psz = strstr (pszHtml, "EMBED");
+		psz = _tcsstr (pszHtml, _T("EMBED"));
 	if (psz == NULL)
 		return FALSE;
 
-	psz = strstr (psz, "src=");
+	psz = _tcsstr (psz, _T("src="));
 	if (psz == NULL)
 		return FALSE;
 	psz += 4;
-	if (*psz++ != '"')
+	if (*psz++ != _T('"'))
 		return FALSE;
 	fsString strUrl;
-	while (*psz && *psz != '"')
+	while (*psz && *psz != _T('"'))
 		strUrl += *psz++;
 	if (strUrl.IsEmpty ())
 		return FALSE;
 
 	fsString strTitle;
-	psz = strstr (pszHtml, "contentheading");
+	psz = _tcsstr (pszHtml, _T("contentheading"));
 	if (psz != NULL)
 	{
-		while (*psz && *psz != '>')
+		while (*psz && *psz != _T('>'))
 			psz++;
 		if (*psz != 0)
 		{
 			psz++;
-			while (*psz == ' ' || is_valid_char (*psz) == FALSE)
+			while (*psz == _T(' ') || is_valid_char (*psz) == FALSE)
 				psz++;
-			while (*psz && *psz != '<')
+			while (*psz && *psz != _T('<'))
 			{
 				if (is_valid_char (*psz))
 					strTitle += *psz++;
@@ -603,7 +603,7 @@ BOOL vmsVideoSiteHtmlCodeParser::Parse_Blennus(LPCSTR pszHtml)
 					psz++;
 			}
 			fsDecodeHtmlText (strTitle);
-			while (strTitle.GetLength () && strTitle [strTitle.GetLength () - 1] == ' ')
+			while (strTitle.GetLength () && strTitle [strTitle.GetLength () - 1] == _T(' '))
 				strTitle [strTitle.GetLength () - 1] = 0;
 		}
 	}
@@ -612,47 +612,47 @@ BOOL vmsVideoSiteHtmlCodeParser::Parse_Blennus(LPCSTR pszHtml)
 
 	m_strVideoTitle = strTitle;
 	m_strVideoUrl   = strUrl;
-	m_strVideoType  = "wmv";
+	m_strVideoType  = _T("wmv");
 	m_bDirectLink	= TRUE;
 
 	return TRUE;
 }
 
-BOOL vmsVideoSiteHtmlCodeParser::Parse_DailyMotion(LPCSTR pszHtml)
+BOOL vmsVideoSiteHtmlCodeParser::Parse_DailyMotion(LPCTSTR pszHtml)
 {
-	LPCSTR psz = strstr (pszHtml, "flashvars=");
+	LPCTSTR psz = _tcsstr (pszHtml, _T("flashvars="));
 	if (psz == NULL)
-		psz = strstr (pszHtml, "flashVars=");
+		psz = _tcsstr (pszHtml, _T("flashVars="));
 	if (psz == NULL)
 		return FALSE;
 	
 _lSearchUrl:
-	psz = strstr (psz, "url=");
+	psz = _tcsstr (psz, _T("url="));
 	if (psz == NULL)
 		return FALSE;
 	psz += 4;
-	if (strncmp (psz, "rev=", 4) == 0)
+	if (strncmp (psz, _T("rev="), 4) == 0)
 		goto _lSearchUrl;
 
 	fsString strUrl;
-	while (*psz && *psz != '&')
+	while (*psz && *psz != _T('&'))
 		strUrl += *psz++;
 	fsDecodeHtmlUrl (strUrl);
 
 	fsString strTitle;
-	psz = strstr (pszHtml, "<h1");
+	psz = _tcsstr (pszHtml, _T("<h1"));
 	if (psz == NULL)
-		psz = strstr (pszHtml, "<H1");
+		psz = _tcsstr (pszHtml, _T("<H1"));
 	if (psz != NULL)
 	{
-		while (*psz && *psz != '>')
+		while (*psz && *psz != _T('>'))
 			psz++;
 		if (*psz != 0)
 		{
 			psz++;
-			while (*psz == ' ' || is_valid_char (*psz) == FALSE)
+			while (*psz == _T(' ') || is_valid_char (*psz) == FALSE)
 				psz++;
-			while (*psz && *psz != '<')
+			while (*psz && *psz != _T('<'))
 			{
 				if (is_valid_char (*psz))
 					strTitle += *psz++;
@@ -660,44 +660,44 @@ _lSearchUrl:
 					psz++;
 			}
 			fsDecodeHtmlText (strTitle);
-			while (strTitle.GetLength () && strTitle [strTitle.GetLength () - 1] == ' ')
+			while (strTitle.GetLength () && strTitle [strTitle.GetLength () - 1] == _T(' '))
 				strTitle [strTitle.GetLength () - 1] = 0;
 		}
 	}
 
 	m_strVideoTitle = strTitle;
 	m_strVideoUrl   = strUrl;
-	m_strVideoType  = "flv";
+	m_strVideoType  = _T("flv");
 	m_bDirectLink	= TRUE;
 
 	return TRUE;
 }
 
-BOOL vmsVideoSiteHtmlCodeParser::Parse_Grouper(LPCSTR pszHtml)
+BOOL vmsVideoSiteHtmlCodeParser::Parse_Grouper(LPCTSTR pszHtml)
 {
-	LPCSTR psz = strstr (pszHtml, "flvURL=");
+	LPCTSTR psz = _tcsstr (pszHtml, _T("flvURL="));
 	if (psz == NULL)
 		return FALSE;
 	psz += 7;
 
 	fsString strUrl;
-	while (*psz && *psz != '&')
+	while (*psz && *psz != _T('&'))
 		strUrl += *psz++;
 
 	fsString strTitle;
-	psz = strstr (pszHtml, "<h1");
+	psz = _tcsstr (pszHtml, _T("<h1"));
 	if (psz == NULL)
-		psz = strstr (pszHtml, "<H1");
+		psz = _tcsstr (pszHtml, _T("<H1"));
 	if (psz != NULL)
 	{
-		while (*psz && *psz != '>')
+		while (*psz && *psz != _T('>'))
 			psz++;
 		if (*psz != 0)
 		{
 			psz++;
-			while (*psz == ' ' || is_valid_char (*psz) == FALSE)
+			while (*psz == _T(' ') || is_valid_char (*psz) == FALSE)
 				psz++;
-			while (*psz && *psz != '<')
+			while (*psz && *psz != _T('<'))
 			{
 				if (is_valid_char (*psz))
 					strTitle += *psz++;
@@ -705,36 +705,36 @@ BOOL vmsVideoSiteHtmlCodeParser::Parse_Grouper(LPCSTR pszHtml)
 					psz++;
 			}
 			fsDecodeHtmlText (strTitle);
-			while (strTitle.GetLength () && strTitle [strTitle.GetLength () - 1] == ' ')
+			while (strTitle.GetLength () && strTitle [strTitle.GetLength () - 1] == _T(' '))
 				strTitle [strTitle.GetLength () - 1] = 0;
 		}
 	}
 
 	m_strVideoTitle = strTitle;
 	m_strVideoUrl   = strUrl;
-	m_strVideoType  = "flv";
+	m_strVideoType  = _T("flv");
 	m_bDirectLink	= TRUE;	
 
 	return TRUE;
 }  
 
-fsString vmsVideoSiteHtmlCodeParser::ExtractValue(LPSTR &psz)
+fsString vmsVideoSiteHtmlCodeParser::ExtractValue(LPTSTR &psz)
 {
-	char c;
-	while (*psz == ' ')
+	TCHAR c;
+	while (*psz == _T(' '))
 		psz++;
-	if (*psz == '"' || *psz == '\'')
+	if (*psz == _T('"') || *psz == _T('\''))
 		c = *psz++;
 	else 
-		c = ',';
+		c = _T(',');
 	fsString strRes;
 	while (*psz && *psz != c)
 	{
-		if (*psz == '}' && c == ',')
+		if (*psz == _T('}') && c == _T(','))
 			break;
 		strRes += *psz++;
 	}
-	if (*psz != '}')
+	if (*psz != _T('}'))
 		psz++;
 	return strRes;
 }

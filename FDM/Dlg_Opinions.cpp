@@ -50,7 +50,7 @@ BOOL CDlg_Opinions::OnInitDialog()
 	str.Format ("http://fdm.freedownloadmanager.org/fromfdm/showopinions.html?url=%s",
 		vmsMaliciousDownloadChecker::EncodeUrl (m_pszUrl));
 	CString strLoading;
-	strLoading.Format ("about:%s...", LS (L_LOADING));
+	strLoading.Format (_T("about:%s..."), LS (L_LOADING));
 
 	m_wndWB.Navigate (strLoading, 0, 0, 0, 0);
 	m_wndWB.Navigate (str, NULL, NULL, NULL, NULL);

@@ -164,7 +164,7 @@ BOOL CWPDS_GeneralPage::WriteAuthorization()
 	{
 		CString str;
 		GetDlgItemText (IDC_USER, str);
-		if (str == "")
+		if (str == _T(""))
 		{
 			MessageBox (LS (L_ENTERUSER), LS (L_INPERR), MB_ICONEXCLAMATION);
 			CEdit *pE = (CEdit*) GetDlgItem (IDC_USER);
@@ -180,8 +180,8 @@ BOOL CWPDS_GeneralPage::WriteAuthorization()
 	}
 	else
 	{
-		m_wpds->strUserName = "";
-		m_wpds->strPassword = "";
+		m_wpds->strUserName = _T("");
+		m_wpds->strPassword = _T("");
 	}
 
 	return TRUE;

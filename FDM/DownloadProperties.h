@@ -32,27 +32,27 @@ struct fsDownload_NetworkProperties
 	WORD wRollBackSize;		
 
 	
-	LPSTR pszAgent;	
+	LPTSTR pszAgent;	
 
 	
 	fsInternetAccessTypeEx enAccType;	
-	LPSTR pszProxyName;		
-	LPSTR pszProxyUserName;	
-	LPSTR pszProxyPassword;	
+	LPTSTR pszProxyName;		
+	LPTSTR pszProxyUserName;	
+	LPTSTR pszProxyPassword;	
 
 	
 	fsNetworkProtocol enProtocol;	
-	LPSTR pszServerName;	
+	LPTSTR pszServerName;	
 	INTERNET_PORT  uServerPort;	
-	LPSTR pszUserName;	
-	LPSTR pszPassword;
+	LPTSTR pszUserName;	
+	LPTSTR pszPassword;
 
 	
-	LPSTR pszPathName;	
+	LPTSTR pszPathName;	
 
 	
 	BOOL  bUseHttp11;	
-	LPSTR pszReferer;	
+	LPTSTR pszReferer;	
 	BOOL  bUseCookie;	
 
 	
@@ -60,11 +60,11 @@ struct fsDownload_NetworkProperties
 	fsFtpTransferType enFtpTransferType;	
 	
 	
-	LPSTR pszASCIIExts;
+	LPTSTR pszASCIIExts;
 
 	
-	LPSTR pszCookies;	
-	LPSTR pszPostData; 
+	LPTSTR pszCookies;	
+	LPTSTR pszPostData; 
 
 	
 	DWORD dwFlags;				
@@ -165,7 +165,7 @@ struct fsDownload_Properties
 	BOOL  bRestartSpeedLow;		
 
 	
-	LPSTR pszFileName;			
+	LPTSTR pszFileName;			
 	BOOL  bReserveDiskSpace;	
 	
 	
@@ -175,14 +175,14 @@ struct fsDownload_Properties
 	fsDownloadFileErrorProcessing aEP [DFE_UNKNOWN];
 	fsAlreadyExistReaction enAER;	
 	fsSizeChangeReaction enSCR;	
-	LPSTR pszAdditionalExt;		
+	LPTSTR pszAdditionalExt;		
 	DWORD dwFlags;	
-	LPSTR pszCreateExt;			
+	LPTSTR pszCreateExt;			
 
 	
 	BOOL bCheckIntegrityWhenDone;	
 	vmsIntegrityCheckFailedReaction enICFR;	
-	LPSTR pszCheckSum;		
+	LPTSTR pszCheckSum;		
 	
 	
 	
@@ -195,17 +195,17 @@ struct fsDP_BuffersInfo
 	UINT nAdditionalExtSize;	
 };  
 
-extern void fsDNP_SetAuth (fsDownload_NetworkProperties* dnp, LPCSTR pszUser, LPCSTR pszPassword);
+extern void fsDNP_SetAuth (fsDownload_NetworkProperties* dnp, LPCTSTR pszUser, LPCTSTR pszPassword);
 
 extern BOOL fsDNP_GetDefaults (fsDownload_NetworkProperties *pDNP, fsDNP_BuffersInfo* pBuffs, BOOL bAllocate);
 
 extern void fsDNP_GetDefaults_Free (fsDownload_NetworkProperties *pDNP);
 
-extern fsInternetResult fsDNP_ApplyUrl (fsDownload_NetworkProperties *dnp, LPCSTR pszUrl);
+extern fsInternetResult fsDNP_ApplyUrl (fsDownload_NetworkProperties *dnp, LPCTSTR pszUrl);
 
 extern BOOL fsDP_GetDefaults (fsDownload_Properties *pDP, fsDP_BuffersInfo* pBuffs, BOOL bAllocate);
 
-extern fsInternetResult fsDNP_GetByUrl (fsDownload_NetworkProperties *pDNP, fsDNP_BuffersInfo* pBuffs, BOOL bAllocate, LPCSTR pszUrl);
+extern fsInternetResult fsDNP_GetByUrl (fsDownload_NetworkProperties *pDNP, fsDNP_BuffersInfo* pBuffs, BOOL bAllocate, LPCTSTR pszUrl);
 
 extern void fsDNP_GetByUrl_Free (fsDownload_NetworkProperties *pDNP);  
 
@@ -218,6 +218,6 @@ extern BOOL fsGetProxy (fsNetworkProtocol np, CString& strProxy, CString& strUse
 
 extern BOOL fsDNP_CloneSettings (fsDownload_NetworkProperties *dst, fsDownload_NetworkProperties *src);  
 
-extern void fsDNP_GetURL (fsDownload_NetworkProperties* dnp, LPSTR pszURL);
+extern void fsDNP_GetURL (fsDownload_NetworkProperties* dnp, LPTSTR pszURL);
 
 #endif

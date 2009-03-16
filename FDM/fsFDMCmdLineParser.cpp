@@ -42,27 +42,27 @@ void fsFDMCmdLineParser::Parse()
 
 	for (int i = 0; i < m_parser.Get_ParameterCount (); i++)
 	{
-		LPCSTR pszParam = m_parser.Get_Parameter (i);
-		LPCSTR pszValue = m_parser.Get_ParameterValue (i);
+		LPCTSTR pszParam = m_parser.Get_Parameter (i);
+		LPCTSTR pszValue = m_parser.Get_ParameterValue (i);
 
-		if (strcmp (pszParam, "?") == 0)
+		if (strcmp (pszParam, _T("?")) == 0)
 		{
 			MessageBox (0, "fdm.exe [-fs] [-url=]url1 [-url=]url2 ...\n\n-fs - force silent mode.\nIf url contains spaces it should be in quotes.\n\nExample:\nfdm.exe -fs \"http://site.com/read me.txt\"", "Command line usage", 0);
 		}
-		else if (stricmp (pszParam, "fs") == 0)
+		else if (stricmp (pszParam, _T("fs")) == 0)
 		{
 			m_bForceSilent = TRUE;
 		}
-		else if (stricmp (pszParam, "URL") == 0 || *pszParam == 0)
+		else if (stricmp (pszParam, _T("URL")) == 0 || *pszParam == 0)
 		{
 			fsURL url;
-			BOOL bUrl = IR_SUCCESS == url.Crack (pszValue) && pszValue [1] != ':';
+			BOOL bUrl = IR_SUCCESS == url.Crack (pszValue) && pszValue [1] != _T(':');
 			BOOL bTorrent = FALSE;
 
 			if (bUrl == FALSE)
 			{
-				bTorrent = strlen (pszValue) > 10 && 
-					0 == stricmp (pszValue + strlen (pszValue) - 8, ".torrent");
+				bTorrent = _tcslen (pszValue) > 10 && 
+					0 == stricmp (pszValue + _tcslen (pszValue) - 8, _T(".torrent"));
 			}
 
 			if (bUrl == FALSE && bTorrent == FALSE)
@@ -108,7 +108,7 @@ BOOL fsFDMCmdLineParser::is_ForceSilentSpecified()
 	return m_bForceSilent;
 }
 
-void fsFDMCmdLineParser::AddTorrentFile(LPCSTR pszFile)
+void fsFDMCmdLineParser::AddTorrentFile(LPCTSTR pszFile)
 {
 	if (m_bAnotherFDMStarted)
 	{

@@ -19,7 +19,7 @@ class vms7zipArchiveExtractCallback : public IArchiveExtractCallback
 {
 public:
 	
-	LPCSTR get_FurtherExtractFile ();
+	LPCTSTR get_FurtherExtractFile ();
 	
 	bool is_AbortedByUser();
 
@@ -38,7 +38,7 @@ public:
 	STDMETHOD(SetTotal )(UInt64 total);
 
 	
-	vms7zipArchiveExtractCallback(IInArchive* pArc, LPCSTR pszOutFolder, vmsArchiveCallback* pAC, LPCSTR pszSrcArcFileName);
+	vms7zipArchiveExtractCallback(IInArchive* pArc, LPCTSTR pszOutFolder, vmsArchiveCallback* pAC, LPCTSTR pszSrcArcFileName);
 	virtual ~vms7zipArchiveExtractCallback();
 
 protected:

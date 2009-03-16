@@ -22,7 +22,7 @@ vmsStringList::~vmsStringList()
 
 }
 
-void vmsStringList::Add(LPCSTR psz)
+void vmsStringList::Add(LPCTSTR psz)
 {
 	m_vList.add (psz);
 }
@@ -37,7 +37,7 @@ void vmsStringList::Del(int nIndex)
 	m_vList.del (nIndex);
 }
 
-LPCSTR vmsStringList::get_String(int nIndex) const
+LPCTSTR vmsStringList::get_String(int nIndex) const
 {
 	const fs::list <fsString>* pv = &m_vList;
 	return ((fs::list <fsString>*)pv)->at (nIndex);
@@ -73,7 +73,7 @@ BOOL vmsStringList::Load(HANDLE hFile)
 
 	for (int i = 0; i < c; i++)
 	{
-		LPSTR psz;
+		LPTSTR psz;
 
 		if (FALSE == fsReadStrFromFile (&psz, hFile))
 			return FALSE;

@@ -104,14 +104,14 @@ BOOL CDlg_Options_General_Misc_Advanced::Apply()
 		_App.DataFolder (str);
 		
 		CRegKey key;
-		if (ERROR_SUCCESS != key.Create (HKEY_CURRENT_USER, "Software\\FreeDownloadManager.ORG\\Free Upload Manager"))
-			key.Open (HKEY_CURRENT_USER, "Software\\FreeDownloadManager.ORG\\Free Upload Manager");
+		if (ERROR_SUCCESS != key.Create (HKEY_CURRENT_USER, _T("Software\\FreeDownloadManager.ORG\\Free Upload Manager")))
+			key.Open (HKEY_CURRENT_USER, _T("Software\\FreeDownloadManager.ORG\\Free Upload Manager"));
 		
-		key.SetValue (fsGetAppDataFolder (), "force_data_folder");
+		key.SetValue (fsGetAppDataFolder (), _T("force_data_folder"));
 		
 		if (IDYES == MessageBox (LS (L_COPYDATAFILESNOW), NULL, MB_YESNO))
 		{
-			vmsCopyFiles (fsGetAppDataFolder (), _App.DataFolder (), "*.sav");
+			vmsCopyFiles (fsGetAppDataFolder (), _App.DataFolder (), _T("*.sav"));
 			extern bool _bNeedRecalcAppDataFolder;
 			_bNeedRecalcAppDataFolder = true;
 		}
@@ -176,7 +176,7 @@ void CDlg_Options_General_Misc_Advanced::OnBrowse()
 	CString str;
 	GetDlgItemText (IDC_FOLDER, str);
 	
-	if (str.GetLength () > 3 && (str [str.GetLength () - 1] == '\\' || str [str.GetLength () - 1] == '/'))
+	if (str.GetLength () > 3 && (str [str.GetLength () - 1] == _T('\\') || str [str.GetLength () - 1] == _T('/')))
 		str.GetBuffer (0) [str.GetLength () - 1] = 0;
 	
 	CFolderBrowser *fb = CFolderBrowser::Create (LS (L_CHOOSEOUTFOLDER), str, NULL, this);

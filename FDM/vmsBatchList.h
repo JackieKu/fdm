@@ -11,8 +11,8 @@
 
 #include "list.h"
 
-#define BATCHLIST_STEP_SYMBOL	's'
-#define BATCHLIST_WILDCARD_SYMBOL	'w'
+#define BATCHLIST_STEP_SYMBOL	_T('s')
+#define BATCHLIST_WILDCARD_SYMBOL	_T('w')
 
 class vmsBatchList  
 {
@@ -40,17 +40,17 @@ public:
 	
 	
 	
-	bool Create (LPCSTR pszTemplate, LPCSTR pszNumbers, char chStart = 0, char chEnd = 0);
+	bool Create (LPCTSTR pszTemplate, LPCTSTR pszNumbers, TCHAR chStart = 0, TCHAR chEnd = 0);
 
 	int get_ResultCount();
-	LPCSTR get_Result (int nIndex);
+	LPCTSTR get_Result (int nIndex);
 	
 	vmsBatchList();
 	virtual ~vmsBatchList();
 
 protected:
 	
-	bool CreateAZBatch (LPCSTR pszTemplate, char chStart, char chEnd);
+	bool CreateAZBatch (LPCTSTR pszTemplate, TCHAR chStart, TCHAR chEnd);
 	fs::list <CString> m_v; 
 
 };

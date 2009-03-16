@@ -6,7 +6,7 @@
 #include "vmsFileUtil.h"
 #include <shlobj.h>        
 
-void vmsFileUtil::WriteString(vmsFile &file, LPCSTR psz)
+void vmsFileUtil::WriteString(vmsFile &file, LPCTSTR psz)
 {
 	int l = lstrlen (psz);
 	file.Write (&l, sizeof (l));
@@ -21,7 +21,7 @@ void vmsFileUtil::ReadString(vmsFile &file, fsString &str)
 	if (l > 100 * 1024 * 1024)	
 		throw ERROR_BAD_FORMAT;
 
-	char* psz = new char [l+1];
+	TCHAR* psz = new TCHAR [l+1];
 	try {
 		file.Read (psz, l);
 		psz [l] = 0;
@@ -34,7 +34,7 @@ void vmsFileUtil::ReadString(vmsFile &file, fsString &str)
 	delete [] psz;
 }
 
-void vmsFileUtil::WriteHeader(vmsFile& file, LPCSTR pszDesc, WORD wVersion)
+void vmsFileUtil::WriteHeader(vmsFile& file, LPCTSTR pszDesc, WORD wVersion)
 {
 	WriteString (file, pszDesc);
 	file.Write (&wVersion, sizeof (WORD));
@@ -46,24 +46,24 @@ void vmsFileUtil::ReadHeader(vmsFile& file, fsString& strDesc, WORD &wVersion)
 	file.Read (&wVersion, sizeof (WORD));
 }
 
-void vmsFileUtil::MakePathOK(LPSTR szPath, bool bNeedBackslashAtEnd)
+void vmsFileUtil::MakePathOK(LPTSTR szPath, bool bNeedBackslashAtEnd)
 {
-	LPSTR psz = szPath;
+	LPTSTR psz = szPath;
 	while (*psz)
 	{
-		if (*psz == '/')
-			*psz = '\\';
+		if (*psz == _T('/'))
+			*psz = _T('\\');
 		psz++;
 	}
 
-	if (bNeedBackslashAtEnd && psz [-1] != '\\')
+	if (bNeedBackslashAtEnd && psz [-1] != _T('\\'))
 	{
-		psz [0] = '\\';
+		psz [0] = _T('\\');
 		psz [1] = 0;
 	}
 }
 
-void vmsFileUtil::GetAppDataPath(LPCSTR pszAppName, LPSTR szPath)
+void vmsFileUtil::GetAppDataPath(LPCTSTR pszAppName, LPTSTR szPath)
 {
 	LPITEMIDLIST pidl = NULL;
 	SHGetSpecialFolderLocation (NULL, CSIDL_APPDATA, &pidl);
@@ -71,39 +71,39 @@ void vmsFileUtil::GetAppDataPath(LPCSTR pszAppName, LPSTR szPath)
 
 	vmsFileUtil::MakePathOK (szPath);
 	_tcscat (szPath, pszAppName);
-	_tcscat (szPath, "\\");
+	_tcscat (szPath, _T("\\"));
 }
 
-void vmsFileUtil::BuildPathToFile(LPCSTR pszPathName)
+void vmsFileUtil::BuildPathToFile(LPCTSTR pszPathName)
 {
 	BuildPath (GetPathFromPathName (pszPathName));
 }
 
-fsString vmsFileUtil::GetPathFromPathName(LPCSTR pszPathName)
+fsString vmsFileUtil::GetPathFromPathName(LPCTSTR pszPathName)
 {
-	char szPath [MY_MAX_PATH];
+	TCHAR szPath [MY_MAX_PATH];
 	_tcscpy (szPath, pszPathName);
 	MakePathOK (szPath, false);
-	LPSTR psz = strrchr (szPath, '\\');
+	LPTSTR psz = _tcsrchr (szPath, _T('\\'));
 	if (psz == NULL)
-		return "";
+		return _T("");
 	*psz = 0;
 	return szPath;
 }
 
-void vmsFileUtil::BuildPath(LPCSTR pszPath)
+void vmsFileUtil::BuildPath(LPCTSTR pszPath)
 {
-	char szPath [MY_MAX_PATH];
+	TCHAR szPath [MY_MAX_PATH];
 	_tcscpy (szPath, pszPath);
 	MakePathOK (szPath, true);
-	LPSTR psz = szPath;
-	if (psz [1] == ':')
+	LPTSTR psz = szPath;
+	if (psz [1] == _T(':'))
 		psz += 3;
 
 	while (*psz)
 	{
-		char szPathNow [MY_MAX_PATH];
-		psz = strchr (psz, '\\') + 1;
+		TCHAR szPathNow [MY_MAX_PATH];
+		psz = _tcschr (psz, _T('\\')) + 1;
 		_tcsncpy (szPathNow, szPath, psz - szPath);
 		if (FALSE == CreateDirectory (szPathNow, NULL) && 
 				ERROR_ALREADY_EXISTS != GetLastError ())

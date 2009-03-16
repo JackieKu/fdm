@@ -45,7 +45,7 @@ typedef interface IUploader IUploader;
 #include "ocidl.h"
 
 #ifdef __cplusplus
-extern "C"{
+extern _T("C"){
 #endif 
 
 void * __RPC_USER MIDL_user_allocate(size_t);
@@ -60,7 +60,7 @@ EXTERN_C const IID IID_IUploadPackage;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    MIDL_INTERFACE("D650F6EB-68C1-4ac9-A6F5-8BF7D469815A")
+    MIDL_INTERFACE(_T("D650F6EB-68C1-4ac9-A6F5-8BF7D469815A"))
     IUploadPackage : public IDispatch
     {
     public:
@@ -263,7 +263,7 @@ EXTERN_C const IID IID_IUploader;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
-    MIDL_INTERFACE("17462C30-17BA-4e40-B722-6E803A0618BB")
+    MIDL_INTERFACE(_T("17462C30-17BA-4e40-B722-6E803A0618BB"))
     IUploader : public IDispatch
     {
     public:

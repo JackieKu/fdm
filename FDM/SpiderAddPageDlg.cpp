@@ -110,7 +110,7 @@ BOOL CSpiderAddPageDlg::OnInitDialog()
 
 	if (m_strStartUrl.GetLength () == 0)
 	{
-		LPCSTR pszUrl = _ClipbrdMgr.Text ();
+		LPCTSTR pszUrl = _ClipbrdMgr.Text ();
 		if (pszUrl)
 		{
 			fsURL url;
@@ -197,10 +197,10 @@ void CSpiderAddPageDlg::OnCreategroup()
 
 void CSpiderAddPageDlg::OnChoosefolder() 
 {
-	CString str = "";
+	CString str = _T("");
 	GetDlgItemText (IDC_OUTFOLDER, str);
 
-	if (str.GetLength () > 3 && (str [str.GetLength () - 1] == '\\' || str [str.GetLength () - 1] == '/'))
+	if (str.GetLength () > 3 && (str [str.GetLength () - 1] == _T('\\') || str [str.GetLength () - 1] == _T('/')))
 		str.GetBuffer (0) [str.GetLength () - 1] = 0;
 
 	CFolderBrowser *fb = CFolderBrowser::Create (LS (L_CHOOSEOUTFOLDER), str, NULL, this);
@@ -315,7 +315,7 @@ void CSpiderAddPageDlg::OnOK()
 	}
 
 	if (bAddSlash)
-		m_strUrl += '/';
+		m_strUrl += _T('/');
 
 	CString strOutFolder;
 
@@ -324,7 +324,7 @@ void CSpiderAddPageDlg::OnOK()
 	if (FALSE == CCreateDownloadDlg::_CheckFolderName (this, IDC_OUTFOLDER))
 		return;
 
-	fsPathToGoodPath ((LPSTR)(LPCSTR)strOutFolder);
+	fsPathToGoodPath ((LPTSTR)(LPCTSTR)strOutFolder);
 
 	if (strOutFolder.GetLength () == 0)
 	{
@@ -336,9 +336,9 @@ void CSpiderAddPageDlg::OnOK()
 	_LastFolders.AddRecord (strOutFolder);
 	_LastUrlFiles.AddRecord (m_strUrl);
 
-	if (strOutFolder [strOutFolder.GetLength () - 1] != '\\' && 
-		strOutFolder [strOutFolder.GetLength () - 1] != '/')
-		strOutFolder += '\\';
+	if (strOutFolder [strOutFolder.GetLength () - 1] != _T('\\') && 
+		strOutFolder [strOutFolder.GetLength () - 1] != _T('/'))
+		strOutFolder += _T('\\');
 
         if (_App.NewGrp_SelectWay () == NGSW_USE_ALWAYS_SAME_GROUP_WITH_OUTFOLDER_AUTO_UPDATE)
 	{
@@ -457,7 +457,7 @@ void CSpiderAddPageDlg::ReadAutostart()
 	}
 }
 
-BOOL CSpiderAddPageDlg::IsOkUrl(LPCSTR pszUrl, LPCSTR , BOOL *pbMustAddSlash)
+BOOL CSpiderAddPageDlg::IsOkUrl(LPCTSTR pszUrl, LPCTSTR , BOOL *pbMustAddSlash)
 {
 	if (pbMustAddSlash)
 		*pbMustAddSlash = FALSE;
@@ -498,7 +498,7 @@ BOOL CSpiderAddPageDlg::WriteAuthorization()
 	{
 		CString str;
 		GetDlgItemText (IDC_USER, str);
-		if (str == "")
+		if (str == _T(""))
 		{
 			MessageBox (LS (L_ENTERUSER), LS (L_INPERR), MB_ICONEXCLAMATION);
 			CEdit *pE = (CEdit*) GetDlgItem (IDC_USER);
@@ -607,7 +607,7 @@ void CSpiderAddPageDlg::BuildOutFolder()
 
 	CString str = m_strBaseFolder;
 	str += url.GetHostName ();
-	str += '\\';
+	str += _T('\\');
 	
 	SetDlgItemText (IDC_OUTFOLDER, str);
 }

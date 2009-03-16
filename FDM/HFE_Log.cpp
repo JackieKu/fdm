@@ -40,7 +40,7 @@ BOOL CHFE_Log::Create(CWnd *pParent)
 	if (!CWndLog::Create (pParent))
 		return FALSE;
 
-	ReadState ("HFELog");
+	ReadState (_T("HFELog"));
 
 	return TRUE;
 }

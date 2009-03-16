@@ -49,7 +49,7 @@ public:
 	fsInternetResult RestartDownloading();
 	BOOL IsCantStart();
 	BOOL IsStoppedByUser();
-	BOOL MoveToFolder (LPCSTR pszPath);
+	BOOL MoveToFolder (LPCTSTR pszPath);
 	UINT GetSpeed();
 	UINT64 GetBytesLeft();
 	void StopSection();

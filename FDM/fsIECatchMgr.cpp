@@ -48,12 +48,12 @@ HRESULT fsIECatchMgr::Initialize()
 	
 }
 
-BOOL fsIECatchMgr::OnBeforeNavigate(LPCSTR pszUrl, BOOL bCheckALT)
+BOOL fsIECatchMgr::OnBeforeNavigate(LPCTSTR pszUrl, BOOL bCheckALT)
 {
 	try {
 
-	CHAR szFile [MY_MAX_PATH] = "";
-	LPCSTR pszExt;
+	CHAR szFile [MY_MAX_PATH] = _T("");
+	LPCTSTR pszExt;
 	fsURL url;
 
 	if (bCheckALT)
@@ -75,7 +75,7 @@ BOOL fsIECatchMgr::OnBeforeNavigate(LPCSTR pszUrl, BOOL bCheckALT)
 
 	
 
-	pszExt = strrchr (szFile, '.');
+	pszExt = _tcsrchr (szFile, _T('.'));
 	if (pszExt) 
 		pszExt++;
 	else
@@ -153,14 +153,14 @@ BOOL fsIECatchMgr::ActivateIE2(BOOL bActivate)
 	GetIEVersion (&dw1, &dw2, &dw3, &dw4);
 
 	
-	HMODULE hLib = LoadLibrary ("iefdm.dll");
+	HMODULE hLib = LoadLibrary (_T("iefdm.dll"));
 	if (hLib == NULL)
 		return FALSE;
 
 	if (bActivate && dw1 < 6)
-		pfnDll = (fntDllRegUnregServer) GetProcAddress (hLib, "DllRegisterServer");
+		pfnDll = (fntDllRegUnregServer) GetProcAddress (hLib, _T("DllRegisterServer"));
 	else
-		pfnDll = (fntDllRegUnregServer) GetProcAddress (hLib, "DllUnregisterServer");
+		pfnDll = (fntDllRegUnregServer) GetProcAddress (hLib, _T("DllUnregisterServer"));
 
 	if (pfnDll == NULL)
 	{
@@ -177,14 +177,14 @@ BOOL fsIECatchMgr::ActivateIE2(BOOL bActivate)
 	FreeLibrary (hLib);
 
 	
-	hLib = LoadLibrary ("iefdmdm.dll");
+	hLib = LoadLibrary (_T("iefdmdm.dll"));
 	if (hLib == NULL)
 		return FALSE;
 
 	if (bActivate && dw1 >= 6)
-		pfnDll = (fntDllRegUnregServer) GetProcAddress (hLib, "DllRegisterServer");
+		pfnDll = (fntDllRegUnregServer) GetProcAddress (hLib, _T("DllRegisterServer"));
 	else
-		pfnDll = (fntDllRegUnregServer) GetProcAddress (hLib, "DllUnregisterServer");
+		pfnDll = (fntDllRegUnregServer) GetProcAddress (hLib, _T("DllUnregisterServer"));
 
 	if (pfnDll == NULL)
 	{
@@ -201,14 +201,14 @@ BOOL fsIECatchMgr::ActivateIE2(BOOL bActivate)
 	FreeLibrary (hLib);
 
 	
-	hLib = LoadLibrary ("iefdm2.dll");
+	hLib = LoadLibrary (_T("iefdm2.dll"));
 	if (hLib == NULL)
 		return FALSE;
 
 	if (bActivate && dw1 >= 6)
-		pfnDll = (fntDllRegUnregServer) GetProcAddress (hLib, "DllRegisterServer");
+		pfnDll = (fntDllRegUnregServer) GetProcAddress (hLib, _T("DllRegisterServer"));
 	else
-		pfnDll = (fntDllRegUnregServer) GetProcAddress (hLib, "DllUnregisterServer");
+		pfnDll = (fntDllRegUnregServer) GetProcAddress (hLib, _T("DllUnregisterServer"));
 
 	if (pfnDll == NULL)
 	{
@@ -232,23 +232,23 @@ void fsIECatchMgr::CleanIEPluginKey()
 	CRegKey key;
 
 	if (ERROR_SUCCESS != key.Open (HKEY_LOCAL_MACHINE, 
-			"Software\\Microsoft\\Internet Explorer\\Plugins\\Extension"))
+			_T("Software\\Microsoft\\Internet Explorer\\Plugins\\Extension")))
 		return;
 
 	int i = 0;
-	char szKey [1000];
+	TCHAR szKey [1000];
 	fs::list <fsString> vKeys;
 	while (RegEnumKey (key, i++, szKey, sizeof (szKey)) == ERROR_SUCCESS)
 	{
 		CRegKey key2;
 		key2.Open (key, szKey);
 
-		char szValue [1000]; DWORD dw = sizeof (szValue);
+		TCHAR szValue [1000]; DWORD dw = sizeof (szValue);
 		key2.QueryValue (szValue, NULL, &dw);
 		
 		key2.Close ();
 
-		if (strnicmp (szValue, "Free Download Manager", strlen ("Free Download Manager")) == 0)
+		if (strnicmp (szValue, _T("Free Download Manager"), _tcslen (_T("Free Download Manager"))) == 0)
 			vKeys.add (szKey);
 	}
 

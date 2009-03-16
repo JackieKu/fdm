@@ -14,7 +14,7 @@ class vmsImage_CtxFree
 {
 public:
 	
-	HRESULT Load (LPCSTR pszFile);
+	HRESULT Load (LPCTSTR pszFile);
 	
 	int get_FrameCount();
 	

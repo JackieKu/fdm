@@ -12,7 +12,7 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif        
 
-vmsUnRARDLL::vmsUnRARDLL(LPCSTR pszDll) :
+vmsUnRARDLL::vmsUnRARDLL(LPCTSTR pszDll) :
 	vmsDLL (pszDll)
 {
 	m_pfnRAROpenArchiveEx = NULL;
@@ -27,16 +27,16 @@ vmsUnRARDLL::~vmsUnRARDLL()
 
 }
 
-bool vmsUnRARDLL::Load(LPCSTR pszDll)
+bool vmsUnRARDLL::Load(LPCTSTR pszDll)
 {
 	if (false == vmsDLL::Load (pszDll))
 		return false;
 
-	m_pfnRAROpenArchiveEx = (FNRAROAEX) GetProcAddress ("RAROpenArchiveEx");
-	m_pfnRARSetCallback = (FNRARSC) GetProcAddress ("RARSetCallback");
-	m_pfnRARReadHeader = (FNRARRH) GetProcAddress ("RARReadHeader");
-	m_pfnRARProcessFile = (FNRARPF) GetProcAddress ("RARProcessFile");
-	m_pfnRARCloseArchive = (FNRARCA) GetProcAddress ("RARCloseArchive");
+	m_pfnRAROpenArchiveEx = (FNRAROAEX) GetProcAddress (_T("RAROpenArchiveEx"));
+	m_pfnRARSetCallback = (FNRARSC) GetProcAddress (_T("RARSetCallback"));
+	m_pfnRARReadHeader = (FNRARRH) GetProcAddress (_T("RARReadHeader"));
+	m_pfnRARProcessFile = (FNRARPF) GetProcAddress (_T("RARProcessFile"));
+	m_pfnRARCloseArchive = (FNRARCA) GetProcAddress (_T("RARCloseArchive"));
 
 	return true;
 }
@@ -75,7 +75,7 @@ int vmsUnRARDLL::RARReadHeader(HANDLE hArcData, RARHeaderData *HeaderData)
 	return m_pfnRARReadHeader (hArcData, HeaderData);
 }
 
-int vmsUnRARDLL::RARProcessFile(HANDLE hArcData, int Operation, char *DestPath, char *DestName)
+int vmsUnRARDLL::RARProcessFile(HANDLE hArcData, int Operation, TCHAR *DestPath, TCHAR *DestName)
 {
 	if (m_pfnRARProcessFile == NULL)
 		return 0;

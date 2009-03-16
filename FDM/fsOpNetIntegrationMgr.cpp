@@ -27,51 +27,51 @@ void fsOpNetIntegrationMgr::Initialize()
 {
 	CRegKey key;
 	
-	CString strOpKey = "Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\Opera.exe";
+	CString strOpKey = _T("Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\Opera.exe");
 	
-	CString strNetKey1 = "Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\Netscp.exe";
-	CString strNetKey2 = "Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\Netscp6.exe";
-	CString strNetKey3 = "Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\Netscape.exe";
-	CString strNetKey4 = "Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\navigator.exe";
+	CString strNetKey1 = _T("Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\Netscp.exe");
+	CString strNetKey2 = _T("Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\Netscp6.exe");
+	CString strNetKey3 = _T("Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\Netscape.exe");
+	CString strNetKey4 = _T("Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\navigator.exe");
 	
-	CString strFfKey = "Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\Firefox.exe";
+	CString strFfKey = _T("Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\Firefox.exe");
 	
-	CString strMozSKey1 = "Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\SeaMonkey.exe";
-	CString strMozSKey2 = "Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\mozilla.exe";
+	CString strMozSKey1 = _T("Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\SeaMonkey.exe");
+	CString strMozSKey2 = _T("Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\mozilla.exe");
 
-	if (ERROR_SUCCESS == key.Open (HKEY_CURRENT_USER, "Software\\Opera Software", KEY_READ))
+	if (ERROR_SUCCESS == key.Open (HKEY_CURRENT_USER, _T("Software\\Opera Software"), KEY_READ))
 	{
-		char szPath [MY_MAX_PATH] = "";
+		TCHAR szPath [MY_MAX_PATH] = _T("");
 		DWORD dw = sizeof (szPath);
-		if (ERROR_SUCCESS == key.QueryValue (szPath, "Plugin Path", &dw))
+		if (ERROR_SUCCESS == key.QueryValue (szPath, _T("Plugin Path"), &dw))
 		{
 			if (*szPath)
 			{
 				m_strOpPath = szPath;
-				if (m_strOpPath [m_strOpPath.GetLength () - 1] != '\\' || m_strOpPath [m_strOpPath.GetLength () - 1] != '/')
-					m_strOpPath += '\\';
+				if (m_strOpPath [m_strOpPath.GetLength () - 1] != _T('\\') || m_strOpPath [m_strOpPath.GetLength () - 1] != _T('/'))
+					m_strOpPath += _T('\\');
 			}
 		}
 	}
 
-	if (m_strOpPath == "" && ERROR_SUCCESS == key.Open (HKEY_LOCAL_MACHINE, strOpKey, KEY_READ))
+	if (m_strOpPath == _T("") && ERROR_SUCCESS == key.Open (HKEY_LOCAL_MACHINE, strOpKey, KEY_READ))
 	{
 		
 
-		char szPath [MY_MAX_PATH];
+		TCHAR szPath [MY_MAX_PATH];
 		DWORD dw = sizeof (szPath);
-		key.QueryValue (szPath, "Path", &dw);
+		key.QueryValue (szPath, _T("Path"), &dw);
 		m_strOpPath = szPath;
-		if (m_strOpPath [m_strOpPath.GetLength () - 1] != '\\' || m_strOpPath [m_strOpPath.GetLength () - 1] != '/')
-			m_strOpPath += '\\';
-		if (GetFileAttributes (m_strOpPath + "program\\plugins") != DWORD (-1))
-			m_strOpPath += "program\\plugins\\";	
+		if (m_strOpPath [m_strOpPath.GetLength () - 1] != _T('\\') || m_strOpPath [m_strOpPath.GetLength () - 1] != _T('/'))
+			m_strOpPath += _T('\\');
+		if (GetFileAttributes (m_strOpPath + _T("program\\plugins")) != DWORD (-1))
+			m_strOpPath += _T("program\\plugins\\");	
 		else
-			m_strOpPath += "Plugins\\";
+			m_strOpPath += _T("Plugins\\");
 		key.Close ();
 	}
 	
-	if (m_strOpPath == "")
+	if (m_strOpPath == _T(""))
 	{
 		
 		
@@ -87,13 +87,13 @@ void fsOpNetIntegrationMgr::Initialize()
 		 ERROR_SUCCESS == key.Open (HKEY_LOCAL_MACHINE, strNetKey3, KEY_READ) ||
 		 ERROR_SUCCESS == key.Open (HKEY_LOCAL_MACHINE, strNetKey4, KEY_READ))
 	{
-		char szPath [MY_MAX_PATH];
+		TCHAR szPath [MY_MAX_PATH];
 		DWORD dw = sizeof (szPath);
-		key.QueryValue (szPath, "Path", &dw);
+		key.QueryValue (szPath, _T("Path"), &dw);
 		m_strNetPath = szPath;
-		if (m_strNetPath [m_strNetPath.GetLength () - 1] != '\\' || m_strNetPath [m_strNetPath.GetLength () - 1] != '/')
-			m_strNetPath += '\\';
-		m_strNetPath += "Plugins\\";
+		if (m_strNetPath [m_strNetPath.GetLength () - 1] != _T('\\') || m_strNetPath [m_strNetPath.GetLength () - 1] != _T('/'))
+			m_strNetPath += _T('\\');
+		m_strNetPath += _T("Plugins\\");
 		key.Close ();
 
 		if (m_strNetPath == m_strOpPath)
@@ -108,13 +108,13 @@ void fsOpNetIntegrationMgr::Initialize()
 	{
 		
 
-		char szPath [MY_MAX_PATH];
+		TCHAR szPath [MY_MAX_PATH];
 		DWORD dw = sizeof (szPath);
-		key.QueryValue (szPath, "Path", &dw);
+		key.QueryValue (szPath, _T("Path"), &dw);
 		m_strFfPath = szPath;
-		if (m_strFfPath [m_strFfPath.GetLength () - 1] != '\\' || m_strFfPath [m_strFfPath.GetLength () - 1] != '/')
-			m_strFfPath += '\\';
-		m_strFfPath += "Plugins\\";
+		if (m_strFfPath [m_strFfPath.GetLength () - 1] != _T('\\') || m_strFfPath [m_strFfPath.GetLength () - 1] != _T('/'))
+			m_strFfPath += _T('\\');
+		m_strFfPath += _T("Plugins\\");
 		key.Close ();
 	}
 	else
@@ -127,13 +127,13 @@ void fsOpNetIntegrationMgr::Initialize()
 	{
 		
 
-		char szPath [MY_MAX_PATH];
+		TCHAR szPath [MY_MAX_PATH];
 		DWORD dw = sizeof (szPath);
-		key.QueryValue (szPath, "Path", &dw);
+		key.QueryValue (szPath, _T("Path"), &dw);
 		m_strMozSPath = szPath;
-		if (m_strMozSPath [m_strMozSPath.GetLength () - 1] != '\\' || m_strMozSPath [m_strMozSPath.GetLength () - 1] != '/')
-			m_strMozSPath += '\\';
-		m_strMozSPath += "Plugins\\";
+		if (m_strMozSPath [m_strMozSPath.GetLength () - 1] != _T('\\') || m_strMozSPath [m_strMozSPath.GetLength () - 1] != _T('/'))
+			m_strMozSPath += _T('\\');
+		m_strMozSPath += _T("Plugins\\");
 		key.Close ();
 	}
 	else
@@ -141,29 +141,29 @@ void fsOpNetIntegrationMgr::Initialize()
 
 	
 
-	if (ERROR_SUCCESS == key.Open (HKEY_LOCAL_MACHINE, "Software\\Clients\\StartMenuInternet\\Safari.exe\\shell\\open\\command", KEY_READ))
+	if (ERROR_SUCCESS == key.Open (HKEY_LOCAL_MACHINE, _T("Software\\Clients\\StartMenuInternet\\Safari.exe\\shell\\open\\command"), KEY_READ))
 	{
-		char szCmd [MY_MAX_PATH] = "";
+		TCHAR szCmd [MY_MAX_PATH] = _T("");
 		DWORD dw = sizeof (szCmd);
 		key.QueryValue (szCmd, NULL, &dw);
-		LPSTR psz = szCmd;
-		if (*psz == '"')
+		LPTSTR psz = szCmd;
+		if (*psz == _T('"'))
 		{
-			LPSTR psz2 = strchr (psz+1, '"');
+			LPTSTR psz2 = _tcschr (psz+1, _T('"'));
 			if (psz2)
 				*psz2 = 0;
 			psz++;
 		}
 		else
 		{
-			LPSTR psz2 = strchr (psz, ' ');
+			LPTSTR psz2 = _tcschr (psz, _T(' '));
 			if (psz2)
 				*psz2 = 0;
 		}
-		LPSTR psz3 = strrchr (psz, '\\');
+		LPTSTR psz3 = _tcsrchr (psz, _T('\\'));
 		if (psz3)
 			psz3 [1] = 0;
-		strcat (psz, "Plugins\\");
+		_tcscat (psz, _T("Plugins\\"));
 		m_strSafariPath = psz;
 	}
 	else
@@ -171,29 +171,29 @@ void fsOpNetIntegrationMgr::Initialize()
 
 	
 
-	if (ERROR_SUCCESS == key.Open (HKEY_LOCAL_MACHINE, "Software\\Clients\\StartMenuInternet\\chrome.exe\\shell\\open\\command", KEY_READ))
+	if (ERROR_SUCCESS == key.Open (HKEY_LOCAL_MACHINE, _T("Software\\Clients\\StartMenuInternet\\chrome.exe\\shell\\open\\command"), KEY_READ))
 	{
-		char szCmd [MY_MAX_PATH] = "";
+		TCHAR szCmd [MY_MAX_PATH] = _T("");
 		DWORD dw = sizeof (szCmd);
 		key.QueryValue (szCmd, NULL, &dw);
-		LPSTR psz = szCmd;
-		if (*psz == '"')
+		LPTSTR psz = szCmd;
+		if (*psz == _T('"'))
 		{
-			LPSTR psz2 = strchr (psz+1, '"');
+			LPTSTR psz2 = _tcschr (psz+1, _T('"'));
 			if (psz2)
 				*psz2 = 0;
 			psz++;
 		}
 		else
 		{
-			LPSTR psz2 = strchr (psz, ' ');
+			LPTSTR psz2 = _tcschr (psz, _T(' '));
 			if (psz2)
 				*psz2 = 0;
 		}
-		LPSTR psz3 = strrchr (psz, '\\');
+		LPTSTR psz3 = _tcsrchr (psz, _T('\\'));
 		if (psz3)
 			psz3 [1] = 0;
-		strcat (psz, "Plugins\\");
+		_tcscat (psz, _T("Plugins\\"));
 		m_strChromePath = psz;
 	}
 	else
@@ -202,7 +202,7 @@ void fsOpNetIntegrationMgr::Initialize()
 
 BOOL fsOpNetIntegrationMgr::IsOperaPluginInstalled(BOOL bQueryPluginDirIfUnknown)
 {
-	if (m_strOpPath == "")
+	if (m_strOpPath == _T(""))
 	{
 		Initialize ();
 		if (m_strOpPath.GetLength ())
@@ -220,22 +220,22 @@ BOOL fsOpNetIntegrationMgr::IsOperaPluginInstalled(BOOL bQueryPluginDirIfUnknown
 
 		m_strOpPath = fb->GetPath ();
 
-		if (m_strOpPath [m_strOpPath.GetLength () - 1] != '\\' || m_strOpPath [m_strOpPath.GetLength () - 1] != '/')
-			m_strOpPath += '\\';
+		if (m_strOpPath [m_strOpPath.GetLength () - 1] != _T('\\') || m_strOpPath [m_strOpPath.GetLength () - 1] != _T('/'))
+			m_strOpPath += _T('\\');
 
 		
 		
-		if (strnicmp (LPCSTR (m_strOpPath) + m_strOpPath.GetLength () - 8, "Plugins\\", 8))
+		if (strnicmp (LPCTSTR (m_strOpPath) + m_strOpPath.GetLength () - 8, _T("Plugins\\"), 8))
 		{
-			if (GetFileAttributes (m_strOpPath + "program\\plugins") != DWORD (-1))
-				m_strOpPath += "program\\plugins\\";	
+			if (GetFileAttributes (m_strOpPath + _T("program\\plugins")) != DWORD (-1))
+				m_strOpPath += _T("program\\plugins\\");	
 			else
-				m_strOpPath += "Plugins\\";
+				m_strOpPath += _T("Plugins\\");
 		}
 	}
 
 	CString str = m_strOpPath;
-	str += "npfdm.dll";
+	str += _T("npfdm.dll");
 	if (GetFileAttributes (str) == DWORD (-1))
 		return FALSE;
 	else
@@ -244,13 +244,13 @@ BOOL fsOpNetIntegrationMgr::IsOperaPluginInstalled(BOOL bQueryPluginDirIfUnknown
 
 BOOL fsOpNetIntegrationMgr::InstallOperaPlugin()
 {
-	if (m_strOpPath == "")
+	if (m_strOpPath == _T(""))
 		return FALSE;
 
 	CString str = m_strOpPath;
-	str += "npfdm.dll";
+	str += _T("npfdm.dll");
 	fsBuildPathToFile (str);
-	if (CopyFile ("npfdm.dll", str, FALSE))
+	if (CopyFile (_T("npfdm.dll"), str, FALSE))
 	{
 		
 		_App.Monitor_OperaPDInstalledTo (m_strOpPath);
@@ -262,22 +262,22 @@ BOOL fsOpNetIntegrationMgr::InstallOperaPlugin()
 
 BOOL fsOpNetIntegrationMgr::DeinstallOperaPlugin()
 {
-	if (m_strOpPath == "")
+	if (m_strOpPath == _T(""))
 		return FALSE;
 
-	_App.Monitor_OperaPDInstalledTo ("");
+	_App.Monitor_OperaPDInstalledTo (_T(""));
 
 	CString str = m_strOpPath;
-	str += "npfdm.dll";
+	str += _T("npfdm.dll");
 
-	m_strOpPath = "";
+	m_strOpPath = _T("");
 
 	return DeleteFile (str);
 }
 
 BOOL fsOpNetIntegrationMgr::IsNetscapePluginInstalled(BOOL bQueryPluginDirIfUnknown)
 {
-	if (m_strNetPath == "")
+	if (m_strNetPath == _T(""))
 	{
 		Initialize ();
 		if (m_strNetPath.GetLength ())
@@ -294,14 +294,14 @@ BOOL fsOpNetIntegrationMgr::IsNetscapePluginInstalled(BOOL bQueryPluginDirIfUnkn
 			return FALSE;
 
 		m_strNetPath = fb->GetPath ();
-		if (m_strNetPath [m_strNetPath.GetLength () - 1] != '\\' || m_strNetPath [m_strNetPath.GetLength () - 1] != '/')
-			m_strNetPath += '\\';
-		if (strnicmp (LPCSTR (m_strNetPath)  + m_strNetPath.GetLength () - 8, "Plugins\\", 8))
-			m_strNetPath += "Plugins\\";
+		if (m_strNetPath [m_strNetPath.GetLength () - 1] != _T('\\') || m_strNetPath [m_strNetPath.GetLength () - 1] != _T('/'))
+			m_strNetPath += _T('\\');
+		if (strnicmp (LPCTSTR (m_strNetPath)  + m_strNetPath.GetLength () - 8, _T("Plugins\\"), 8))
+			m_strNetPath += _T("Plugins\\");
 	}
 
 	CString str = m_strNetPath;
-	str += "npfdm.dll";
+	str += _T("npfdm.dll");
 	if (GetFileAttributes (str) == DWORD (-1))
 		return FALSE;
 	else
@@ -310,13 +310,13 @@ BOOL fsOpNetIntegrationMgr::IsNetscapePluginInstalled(BOOL bQueryPluginDirIfUnkn
 
 BOOL fsOpNetIntegrationMgr::InstallNetscapePlugin()
 {
-	if (m_strNetPath == "")
+	if (m_strNetPath == _T(""))
 		return FALSE;
 
 	CString str = m_strNetPath;
-	str += "npfdm.dll";
+	str += _T("npfdm.dll");
 	fsBuildPathToFile (str);
-	if (CopyFile ("npfdm.dll", str, FALSE))
+	if (CopyFile (_T("npfdm.dll"), str, FALSE))
 	{
 		_App.Monitor_NetscapePDInstalledTo (m_strNetPath);
 		return TRUE;
@@ -327,22 +327,22 @@ BOOL fsOpNetIntegrationMgr::InstallNetscapePlugin()
 
 BOOL fsOpNetIntegrationMgr::DeinstallNetscapePlugin()
 {
-	if (m_strNetPath == "")
+	if (m_strNetPath == _T(""))
 		return FALSE;
 
-	_App.Monitor_NetscapePDInstalledTo ("");
+	_App.Monitor_NetscapePDInstalledTo (_T(""));
 
 	CString str = m_strNetPath;
-	str += "npfdm.dll";
+	str += _T("npfdm.dll");
 
-	m_strNetPath = "";
+	m_strNetPath = _T("");
 
 	return DeleteFile (str);
 }
 
 BOOL fsOpNetIntegrationMgr::IsFirefoxPluginInstalled(BOOL bQueryPluginDirIfUnknown)
 {
-	if (m_strFfPath == "")
+	if (m_strFfPath == _T(""))
 	{
 		Initialize ();
 		if (m_strFfPath.GetLength ())
@@ -360,17 +360,17 @@ BOOL fsOpNetIntegrationMgr::IsFirefoxPluginInstalled(BOOL bQueryPluginDirIfUnkno
 
 		m_strFfPath = fb->GetPath ();
 
-		if (m_strFfPath [m_strFfPath.GetLength () - 1] != '\\' || m_strFfPath [m_strFfPath.GetLength () - 1] != '/')
-			m_strFfPath += '\\';
+		if (m_strFfPath [m_strFfPath.GetLength () - 1] != _T('\\') || m_strFfPath [m_strFfPath.GetLength () - 1] != _T('/'))
+			m_strFfPath += _T('\\');
 
 		
 		
-		if (strnicmp (LPCSTR (m_strFfPath) + m_strFfPath.GetLength () - 8, "Plugins\\", 8))
-			m_strFfPath += "Plugins\\";
+		if (strnicmp (LPCTSTR (m_strFfPath) + m_strFfPath.GetLength () - 8, _T("Plugins\\"), 8))
+			m_strFfPath += _T("Plugins\\");
 	}
 
 	CString str = m_strFfPath;
-	str += "npfdm.dll";
+	str += _T("npfdm.dll");
 	if (GetFileAttributes (str) == DWORD (-1))
 		return FALSE;
 	else
@@ -379,13 +379,13 @@ BOOL fsOpNetIntegrationMgr::IsFirefoxPluginInstalled(BOOL bQueryPluginDirIfUnkno
 
 BOOL fsOpNetIntegrationMgr::InstallFirefoxPlugin()
 {
-	if (m_strFfPath == "")
+	if (m_strFfPath == _T(""))
 		return FALSE;
 
 	CString str = m_strFfPath;
-	str += "npfdm.dll";
+	str += _T("npfdm.dll");
 	fsBuildPathToFile (str);
-	if (CopyFile ("npfdm.dll", str, FALSE))
+	if (CopyFile (_T("npfdm.dll"), str, FALSE))
 	{
 		
 		_App.Monitor_FirefoxPDInstalledTo (m_strFfPath);
@@ -397,22 +397,22 @@ BOOL fsOpNetIntegrationMgr::InstallFirefoxPlugin()
 
 BOOL fsOpNetIntegrationMgr::DeinstallFirefoxPlugin()
 {
-	if (m_strFfPath == "")
+	if (m_strFfPath == _T(""))
 		return FALSE;
 
-	_App.Monitor_FirefoxPDInstalledTo ("");
+	_App.Monitor_FirefoxPDInstalledTo (_T(""));
 
 	CString str = m_strFfPath;
-	str += "npfdm.dll";
+	str += _T("npfdm.dll");
 
-	m_strFfPath = "";
+	m_strFfPath = _T("");
 
 	return DeleteFile (str);
 }
 
 BOOL fsOpNetIntegrationMgr::IsMozillaSuitePluginInstalled(BOOL bQueryPluginDirIfUnknown)
 {
-	if (m_strMozSPath == "")
+	if (m_strMozSPath == _T(""))
 	{
 		Initialize ();
 		if (m_strMozSPath.GetLength ())
@@ -421,7 +421,7 @@ BOOL fsOpNetIntegrationMgr::IsMozillaSuitePluginInstalled(BOOL bQueryPluginDirIf
 	}
 
 	CString str = m_strMozSPath;
-	str += "npfdm.dll";
+	str += _T("npfdm.dll");
 	if (GetFileAttributes (str) == DWORD (-1))
 		return FALSE;
 	else
@@ -430,13 +430,13 @@ BOOL fsOpNetIntegrationMgr::IsMozillaSuitePluginInstalled(BOOL bQueryPluginDirIf
 
 BOOL fsOpNetIntegrationMgr::InstallMozillaSuitePlugin()
 {
-	if (m_strMozSPath == "")
+	if (m_strMozSPath == _T(""))
 		return FALSE;
 
 	CString str = m_strMozSPath;
-	str += "npfdm.dll";
+	str += _T("npfdm.dll");
 	fsBuildPathToFile (str);
-	if (CopyFile ("npfdm.dll", str, FALSE))
+	if (CopyFile (_T("npfdm.dll"), str, FALSE))
 	{
 		
 		_App.Monitor_MozillaSuitePDInstalledTo (m_strMozSPath);
@@ -448,22 +448,22 @@ BOOL fsOpNetIntegrationMgr::InstallMozillaSuitePlugin()
 
 BOOL fsOpNetIntegrationMgr::DeinstallMozillaSuitePlugin()
 {
-	if (m_strMozSPath == "")
+	if (m_strMozSPath == _T(""))
 		return FALSE;
 
-	_App.Monitor_MozillaSuitePDInstalledTo ("");
+	_App.Monitor_MozillaSuitePDInstalledTo (_T(""));
 
 	CString str = m_strMozSPath;
-	str += "npfdm.dll";
+	str += _T("npfdm.dll");
 
-	m_strMozSPath = "";
+	m_strMozSPath = _T("");
 
 	return DeleteFile (str);
 }
 
 BOOL fsOpNetIntegrationMgr::IsSafariPluginInstalled(BOOL bQueryPluginDirIfUnknown)
 {
-	if (m_strSafariPath == "")
+	if (m_strSafariPath == _T(""))
 	{
 		Initialize ();
 		if (m_strSafariPath.GetLength ())
@@ -481,17 +481,17 @@ BOOL fsOpNetIntegrationMgr::IsSafariPluginInstalled(BOOL bQueryPluginDirIfUnknow
 		
 		m_strSafariPath = fb->GetPath ();
 		
-		if (m_strSafariPath [m_strSafariPath.GetLength () - 1] != '\\' || m_strSafariPath [m_strSafariPath.GetLength () - 1] != '/')
-			m_strSafariPath += '\\';
+		if (m_strSafariPath [m_strSafariPath.GetLength () - 1] != _T('\\') || m_strSafariPath [m_strSafariPath.GetLength () - 1] != _T('/'))
+			m_strSafariPath += _T('\\');
 		
 		
 		
-		if (strnicmp (LPCSTR (m_strSafariPath) + m_strSafariPath.GetLength () - 8, "Plugins\\", 8))
-				m_strSafariPath += "Plugins\\";
+		if (strnicmp (LPCTSTR (m_strSafariPath) + m_strSafariPath.GetLength () - 8, _T("Plugins\\"), 8))
+				m_strSafariPath += _T("Plugins\\");
 	}
 	
 	CString str = m_strSafariPath;
-	str += "npfdm.dll";
+	str += _T("npfdm.dll");
 	if (GetFileAttributes (str) == DWORD (-1))
 		return FALSE;
 	else
@@ -500,13 +500,13 @@ BOOL fsOpNetIntegrationMgr::IsSafariPluginInstalled(BOOL bQueryPluginDirIfUnknow
 
 BOOL fsOpNetIntegrationMgr::InstallSafariPlugin()
 {
-	if (m_strSafariPath == "")
+	if (m_strSafariPath == _T(""))
 		return FALSE;
 	
 	CString str = m_strSafariPath;
-	str += "npfdm.dll";
+	str += _T("npfdm.dll");
 	fsBuildPathToFile (str);
-	if (CopyFile ("npfdm.dll", str, FALSE))
+	if (CopyFile (_T("npfdm.dll"), str, FALSE))
 	{
 		_App.Monitor_SafariPDInstalledTo (m_strSafariPath);
 		return TRUE;
@@ -517,22 +517,22 @@ BOOL fsOpNetIntegrationMgr::InstallSafariPlugin()
 
 BOOL fsOpNetIntegrationMgr::DeinstallSafariPlugin()
 {
-	if (m_strSafariPath == "")
+	if (m_strSafariPath == _T(""))
 		return FALSE;
 	
-	_App.Monitor_SafariPDInstalledTo ("");
+	_App.Monitor_SafariPDInstalledTo (_T(""));
 	
 	CString str = m_strSafariPath;
-	str += "npfdm.dll";
+	str += _T("npfdm.dll");
 	
-	m_strSafariPath = "";
+	m_strSafariPath = _T("");
 	
 	return DeleteFile (str);
 }
 
 BOOL fsOpNetIntegrationMgr::IsChromePluginInstalled(BOOL bQueryPluginDirIfUnknown)
 {
-	if (m_strChromePath == "")
+	if (m_strChromePath == _T(""))
 	{
 		Initialize ();
 		if (m_strChromePath.GetLength ())
@@ -550,17 +550,17 @@ BOOL fsOpNetIntegrationMgr::IsChromePluginInstalled(BOOL bQueryPluginDirIfUnknow
 		
 		m_strChromePath = fb->GetPath ();
 		
-		if (m_strChromePath [m_strChromePath.GetLength () - 1] != '\\' || m_strChromePath [m_strChromePath.GetLength () - 1] != '/')
-			m_strChromePath += '\\';
+		if (m_strChromePath [m_strChromePath.GetLength () - 1] != _T('\\') || m_strChromePath [m_strChromePath.GetLength () - 1] != _T('/'))
+			m_strChromePath += _T('\\');
 		
 		
 		
-		if (strnicmp (LPCSTR (m_strChromePath) + m_strChromePath.GetLength () - 8, "Plugins\\", 8))
-			m_strChromePath += "Plugins\\";
+		if (strnicmp (LPCTSTR (m_strChromePath) + m_strChromePath.GetLength () - 8, _T("Plugins\\"), 8))
+			m_strChromePath += _T("Plugins\\");
 	}
 	
 	CString str = m_strChromePath;
-	str += "npfdm.dll";
+	str += _T("npfdm.dll");
 	if (GetFileAttributes (str) == DWORD (-1))
 		return FALSE;
 	else
@@ -569,13 +569,13 @@ BOOL fsOpNetIntegrationMgr::IsChromePluginInstalled(BOOL bQueryPluginDirIfUnknow
 
 BOOL fsOpNetIntegrationMgr::InstallChromePlugin()
 {
-	if (m_strChromePath == "")
+	if (m_strChromePath == _T(""))
 		return FALSE;
 	
 	CString str = m_strChromePath;
-	str += "npfdm.dll";
+	str += _T("npfdm.dll");
 	fsBuildPathToFile (str);
-	if (CopyFile ("npfdm.dll", str, FALSE))
+	if (CopyFile (_T("npfdm.dll"), str, FALSE))
 	{
 		_App.Monitor_ChromePDInstalledTo (m_strChromePath);
 		return TRUE;
@@ -586,15 +586,15 @@ BOOL fsOpNetIntegrationMgr::InstallChromePlugin()
 
 BOOL fsOpNetIntegrationMgr::DeinstallChromePlugin()
 {
-	if (m_strChromePath == "")
+	if (m_strChromePath == _T(""))
 		return FALSE;
 	
-	_App.Monitor_ChromePDInstalledTo ("");
+	_App.Monitor_ChromePDInstalledTo (_T(""));
 	
 	CString str = m_strChromePath;
-	str += "npfdm.dll";
+	str += _T("npfdm.dll");
 	
-	m_strChromePath = "";
+	m_strChromePath = _T("");
 	
 	return DeleteFile (str);
 }

@@ -20,7 +20,7 @@ CPlugFrame::CPlugFrame()
 	m_clrBkCaption = RGB (170, 170, 170);
 	m_clrCaptionText = RGB (255, 255, 255);
 
-	m_font.CreateFont (20, 0, 0, 0, FW_BOLD, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "Arial");
+	m_font.CreateFont (20, 0, 0, 0, FW_BOLD, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, _T("Arial"));
 }
 
 CPlugFrame::~CPlugFrame()

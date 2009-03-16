@@ -11,7 +11,7 @@
 #pragma once
 #endif 
 
-const char* const nl = "\r\n";
+const TCHAR* const nl = _T("\r\n");
 
 class fsProgramLogMgr  
 {
@@ -21,10 +21,10 @@ public:
 	fsProgramLogMgr& fsProgramLogMgr::operator <<(DWORD dw);
 	fsProgramLogMgr& fsProgramLogMgr::operator <<(long i) {return operator << (int (i));};
 	fsProgramLogMgr& fsProgramLogMgr::operator <<(int i);
-	fsProgramLogMgr& fsProgramLogMgr::operator <<(LPCSTR psz);
-	void AddStringToLog (LPCSTR psz);
+	fsProgramLogMgr& fsProgramLogMgr::operator <<(LPCTSTR psz);
+	void AddStringToLog (LPCTSTR psz);
 	BOOL EraseLog();
-	BOOL Initialize (LPCSTR pszLogFileName);
+	BOOL Initialize (LPCTSTR pszLogFileName);
 	
 	void Set_DoLog (BOOL bDo = TRUE);
 

@@ -17,14 +17,14 @@ class vmsFirefoxUtil
 {
 public:
 	
-	static bool GetDefaultProfilePath (LPSTR pszPath);
+	static bool GetDefaultProfilePath (LPTSTR pszPath);
 	
 	
 	static bool GetProfilesPathes (FU_STRINGLIST& v, int& nDefaultProfile);
 	
-	static void GetDataPath (LPSTR pszPath);
+	static void GetDataPath (LPTSTR pszPath);
 	
-	static void GetProfilesPath (LPSTR pszPath);
+	static void GetProfilesPath (LPTSTR pszPath);
 
 	vmsFirefoxUtil();
 	virtual ~vmsFirefoxUtil();

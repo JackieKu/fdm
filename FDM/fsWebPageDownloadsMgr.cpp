@@ -68,7 +68,7 @@ void fsWebPageDownloadsMgr::Delete(fsWebPageDownloader *wpd)
 
 BOOL fsWebPageDownloadsMgr::Save()
 {
-	HANDLE hFile = CreateFile (fsGetDataFilePath ("spider.sav"), GENERIC_WRITE, FILE_SHARE_READ, NULL,
+	HANDLE hFile = CreateFile (fsGetDataFilePath (_T("spider.sav")), GENERIC_WRITE, FILE_SHARE_READ, NULL,
 		CREATE_ALWAYS, FILE_ATTRIBUTE_HIDDEN, NULL);
 
 	if (hFile == INVALID_HANDLE_VALUE)
@@ -114,7 +114,7 @@ BOOL fsWebPageDownloadsMgr::Load()
 
 	m_vWPDs.clear ();
 
-	HANDLE hFile = CreateFile (fsGetDataFilePath ("spider.sav"), GENERIC_READ, FILE_SHARE_READ, NULL,
+	HANDLE hFile = CreateFile (fsGetDataFilePath (_T("spider.sav")), GENERIC_READ, FILE_SHARE_READ, NULL,
 		OPEN_ALWAYS, FILE_ATTRIBUTE_HIDDEN, NULL);
 
 	if (hFile == INVALID_HANDLE_VALUE)

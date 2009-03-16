@@ -64,12 +64,12 @@ void fsClipboardCatchMgr::Enable(BOOL bEnable)
 
 void fsClipboardCatchMgr::OnDrawClipboard() 
 {
-	LPCSTR pszUrl = _ClipbrdMgr.Text ();
+	LPCTSTR pszUrl = _ClipbrdMgr.Text ();
 
 	if (pszUrl)
 	{
 		
-		if (lstrlen (pszUrl) > 3 && pszUrl [1] != ':' && pszUrl [2] != ':')
+		if (lstrlen (pszUrl) > 3 && pszUrl [1] != _T(':') && pszUrl [2] != _T(':'))
 		if (m_strLastUrl != pszUrl)
 		{
 			m_strLastUrl = pszUrl;

@@ -11,7 +11,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif        
 
-CDlg_Options::CDlg_Options(CWnd* pParent , LPCSTR pszStartPage)
+CDlg_Options::CDlg_Options(CWnd* pParent , LPCTSTR pszStartPage)
 	: CDialog(CDlg_Options::IDD, pParent)
 {
 	m_fntCaption.CreateFont (15, 0, 0, 0, FW_BOLD, 0, 0, 0, DEFAULT_CHARSET,

@@ -22,7 +22,7 @@ fsMirrorURLsMgr::~fsMirrorURLsMgr()
 
 }  
 
-void fsMirrorURLsMgr::Initialize(LPCSTR pszFileName, UINT64 uSize, LPCSTR pszBaseServer, fsInternetSession* pSession)
+void fsMirrorURLsMgr::Initialize(LPCTSTR pszFileName, UINT64 uSize, LPCTSTR pszBaseServer, fsInternetSession* pSession)
 {
 	m_strFile = pszFileName;
 	m_uSize = uSize;
@@ -30,7 +30,7 @@ void fsMirrorURLsMgr::Initialize(LPCSTR pszFileName, UINT64 uSize, LPCSTR pszBas
 	m_dldr.Initialize (pSession);
 }  
 
-void fsMirrorURLsMgr::Set_SearchURL(LPCSTR pszUrl)
+void fsMirrorURLsMgr::Set_SearchURL(LPCTSTR pszUrl)
 {
 	m_strSearchURL = pszUrl;
 }
@@ -40,7 +40,7 @@ int fsMirrorURLsMgr::Get_MirrorURLCount()
 	return m_vMirrorURLs.size ();
 }
 
-LPCSTR fsMirrorURLsMgr::Get_MirrorURL(int iIndex)
+LPCTSTR fsMirrorURLsMgr::Get_MirrorURL(int iIndex)
 {
 	return m_vMirrorURLs [iIndex];
 }
@@ -51,16 +51,16 @@ fsInternetResult fsMirrorURLsMgr::SearchForMirrors()
 
 	CString strURL = m_strSearchURL;
 
-	strURL.Replace ("%file%", m_strFile);
+	strURL.Replace (_T("%file%"), m_strFile);
 
 	if (m_uSize != _UI64_MAX)
 	{
 		CString strSize;
-		strSize.Format ("%I64u", m_uSize);
-		strURL.Replace ("%size%", strSize);
+		strSize.Format (_T("%I64u"), m_uSize);
+		strURL.Replace (_T("%size%"), strSize);
 	}
 	else
-		strURL.Replace ("%size%", "");
+		strURL.Replace (_T("%size%"), _T(""));
 
 	m_bAbort = FALSE;
 
@@ -104,14 +104,14 @@ fsInternetResult fsMirrorURLsMgr::OnSearchScriptResultsReceived()
 	fsHTMLParser parser;
 
 	parser.SetKillDupes (TRUE);
-	parser.ParseHTML (LPSTR (m_dldr.Get_FileBuffer ()));
+	parser.ParseHTML (LPTSTR (m_dldr.Get_FileBuffer ()));
 
 	m_vMirrorURLs.clear ();
 
 	for (int i = 0; i < parser.GetUrlCount () && m_bAbort == FALSE; i++)
 	{
 		fsURL url;
-		LPCSTR pszUrl = parser.GetUrl (i);
+		LPCTSTR pszUrl = parser.GetUrl (i);
 
 		if (IR_SUCCESS != url.Crack (pszUrl))
 			continue;
@@ -120,7 +120,7 @@ fsInternetResult fsMirrorURLsMgr::OnSearchScriptResultsReceived()
 			fsIsServersEqual (m_strBaseServer, url.GetHostName (), TRUE)    )
 			continue;
 
-		char szFileName [10000];
+		TCHAR szFileName [10000];
 		fsFileNameFromUrlPath (url.GetPath (), url.GetInternetScheme () == INTERNET_SCHEME_FTP,
 			TRUE, szFileName, sizeof (szFileName));
 
@@ -144,7 +144,7 @@ fsInternetResult fsMirrorURLsMgr::OnSearchScriptResultsReceived()
 	return IR_SUCCESS;
 }
 
-BOOL fsMirrorURLsMgr::IsMirrorURLGood(LPCSTR )
+BOOL fsMirrorURLsMgr::IsMirrorURLGood(LPCTSTR )
 {
 	return TRUE;
 }
@@ -167,11 +167,11 @@ fsMirrorURLsMgr_FileMirrorsDotCom::~fsMirrorURLsMgr_FileMirrorsDotCom()
 
 void fsMirrorURLsMgr_FileMirrorsDotCom::Set_SearchURL(int nURL)
 {
-	static LPCSTR _ppszURLs [] = {
+	static LPCTSTR _ppszURLs [] = {
 		"http://www.filesearching.com/cgi-bin/s?q=%file%&w=a&t=f&e=on&m=20&o=n&s1=%size%&s2=%size%&d=&p=&p2=&x=28&y=14",
 		"http://findfiles.com/list.php?string=%file%&db=Mirrors&size=%size%",
 	};
 
-	if (nURL < sizeof (_ppszURLs) / sizeof (LPCSTR))
+	if (nURL < sizeof (_ppszURLs) / sizeof (LPCTSTR))
 		fsMirrorURLsMgr::Set_SearchURL (_ppszURLs [nURL]);
 }

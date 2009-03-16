@@ -31,10 +31,10 @@ STDMETHODIMP CFDMFlashVideoDownloads::ProcessIeDocument(IDispatch *pDispatch)
 		return E_FAIL;
 	SysFreeString (bstrHost);
 
-	char szPath [MY_MAX_PATH];
+	TCHAR szPath [MY_MAX_PATH];
 	GetTempPath (sizeof (szPath), szPath);
-	char szFile [MY_MAX_PATH];
-	GetTempFileName (szPath, "fdm", 0, szFile);
+	TCHAR szFile [MY_MAX_PATH];
+	GetTempFileName (szPath, _T("fdm"), 0, szFile);
 
 	COleVariant vaFile (szFile);
 	if (FAILED (spFile->Save (vaFile.bstrVal, FALSE)))
@@ -46,7 +46,7 @@ STDMETHODIMP CFDMFlashVideoDownloads::ProcessIeDocument(IDispatch *pDispatch)
 
 	DWORD dw = GetFileSize (hFile, NULL);
 
-	LPSTR pszHtml = new char [dw + 1];
+	LPTSTR pszHtml = new TCHAR [dw + 1];
 	ReadFile (hFile, pszHtml, dw, &dw, NULL);
 	pszHtml [dw] = 0;
 
@@ -66,7 +66,7 @@ STDMETHODIMP CFDMFlashVideoDownloads::ProcessHtml(BSTR bstrHost, BSTR bstrHtml)
 	return S_OK;
 }
 
-void CFDMFlashVideoDownloads::ProcessHtml(LPCSTR pszHost, LPCSTR pszHtml)
+void CFDMFlashVideoDownloads::ProcessHtml(LPCTSTR pszHost, LPCTSTR pszHtml)
 {
 	vmsVideoSiteHtmlCodeParser vshcp;
 	if (FALSE == vshcp.Parse (pszHost, pszHtml))
@@ -81,7 +81,7 @@ void CFDMFlashVideoDownloads::ProcessHtml(LPCSTR pszHost, LPCSTR pszHtml)
 	if (vshcp.get_IsVideoUrlDirectLink ())
 	{
 		CString str = vshcp.get_VideoTitle ();
-		str += "."; str += vshcp.get_VideoType ();
+		str += _T("."); str += vshcp.get_VideoType ();
 		spRcvr->put_FileName (A2W (str));
 
 		spRcvr->put_Comment (A2W (vshcp.get_VideoTitle ()));

@@ -56,7 +56,7 @@ BOOL CDlg_Options_General::OnInitDialog()
 	for (int i = 0; i < _SkinMgr.get_Count (); i++)
 	{
 		CString str = _SkinMgr.get_Skin (i)->strName;
-		if (str.CompareNoCase ("Old Style") == 0)
+		if (str.CompareNoCase (_T("Old Style")) == 0)
 			str = LS (L_OLDSTYLE);
 		m_wndSkins.AddString (str);
 	}
@@ -115,9 +115,9 @@ BOOL CDlg_Options_General::Apply()
 	m_wndSkins.GetLBText (m_wndSkins.GetCurSel (), str);
 	
 	if (str == LS (L_OLDSTYLE))
-		str = "Old Style";
+		str = _T("Old Style");
 	else if (str == LS (L_NEWSTYLE))
-		str = "";
+		str = _T("");
 	
 	_App.Skin_Current (str);
 	

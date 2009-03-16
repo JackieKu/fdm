@@ -237,74 +237,74 @@ void CDownloaderProperties_ListPage::OnVircheck()
 	UpdateEnabled ();
 }  
 
-LPCSTR _ppszAvirs2 [] = {
+LPCTSTR _ppszAvirs2 [] = {
 	
-	"avgw.exe",
-	"avscan.exe",
-	"kav.exe",
-	"avp32.exe",
-	"drweb32w.exe",
-	"wfindv32.exe",
-	"clamwin.exe",
-	"f-prot.exe",
-	"ibmasn.exe",
-	"ibmavsp.exe",
-	"im.exe",
-	"scan95.exe",
-	"scan32.exe",
-	"scan.exe",
-	"nod32.exe",
-	"navw32.exe",
-	"n32scan.exe",
-	"n32scanw.exe",
-	"navwnt.exe",
-	"stop.exe",
+	_T("avgw.exe"),
+	_T("avscan.exe"),
+	_T("kav.exe"),
+	_T("avp32.exe"),
+	_T("drweb32w.exe"),
+	_T("wfindv32.exe"),
+	_T("clamwin.exe"),
+	_T("f-prot.exe"),
+	_T("ibmasn.exe"),
+	_T("ibmavsp.exe"),
+	_T("im.exe"),
+	_T("scan95.exe"),
+	_T("scan32.exe"),
+	_T("scan.exe"),
+	_T("nod32.exe"),
+	_T("navw32.exe"),
+	_T("n32scan.exe"),
+	_T("n32scanw.exe"),
+	_T("navwnt.exe"),
+	_T("stop.exe"),
 };  
 
-LPCSTR _ppszAvirArgs2 [] = {
-	"/SE %file%",
-	"/GUIMODE=1 /PATH=%file%",
-	"%file% /silent /wait /minimize",
-	"%file% /s /n /q",
-	"%file% /AR /UP /QU /FM /HA",
-	"%file%",
-	"--mode=scanner --path=%file% --close",
-	"/NOBOOT /NOMEM /LIST %file%",
-	"-nlog -nmbr %file%",
-	"-nlog -nmbr %file%",
-	"/N /UN /B /VL /CF=%file%",
-	"%file% /autoscan /nosplash",
-	"%file% /autoscan /nosplash",
-	"/nomem /all %file%",
-	"%file% /quit+ /arch+ /pack+ /adware /prompt",
-	"%file% /s",
-	"%file% /s",
-	"%file% /s",
-	"%file% /s",
-	"/NOAUTO /UPDATE /QUITAFTERSCAN %file%",
+LPCTSTR _ppszAvirArgs2 [] = {
+	_T("/SE %file%"),
+	_T("/GUIMODE=1 /PATH=%file%"),
+	_T("%file% /silent /wait /minimize"),
+	_T("%file% /s /n /q"),
+	_T("%file% /AR /UP /QU /FM /HA"),
+	_T("%file%"),
+	_T("--mode=scanner --path=%file% --close"),
+	_T("/NOBOOT /NOMEM /LIST %file%"),
+	_T("-nlog -nmbr %file%"),
+	_T("-nlog -nmbr %file%"),
+	_T("/N /UN /B /VL /CF=%file%"),
+	_T("%file% /autoscan /nosplash"),
+	_T("%file% /autoscan /nosplash"),
+	_T("/nomem /all %file%"),
+	_T("%file% /quit+ /arch+ /pack+ /adware /prompt"),
+	_T("%file% /s"),
+	_T("%file% /s"),
+	_T("%file% /s"),
+	_T("%file% /s"),
+	_T("/NOAUTO /UPDATE /QUITAFTERSCAN %file%"),
 };  
 
-LPCSTR _ppszAvirNames2 [] = {
-		"AVG Free Antivirus",
-		"Avira",
-		"AVP, Kapersky Antivirus (\"kav.exe\")",
-		"AVP, Kapersky Antivirus (\"avp32.exe\")",
-		"DrWeb for Windows",
-		"Dr. Solomon's FindVirus",
-		"Clamwin",
-		"F-secure",
-		"IBM Antivirus (\"ibmasn.exe\")",
-		"IBM Antivirus (\"ibmavsp.exe\")",
-		"Integrity Master",
-		"McAfee Virus Scan (\"scan95.exe\")",
-		"McAfee Virus Scan (\"scan32.exe\")",
-		"McAfee Virus Scan (\"scan.exe\")",
-		"NOD32",
-		"Norton Antivirus (\"navw32.exe\")",
-		"Norton Antivirus (\"n32scan.exe\")",
-		"Norton Antivirus (\"n32scanw.exe\")",
-		"Norton Antivirus (\"navwnt.exe\")",
-		"Stop!",
+LPCTSTR _ppszAvirNames2 [] = {
+		_T("AVG Free Antivirus"),
+		_T("Avira"),
+		_T("AVP, Kapersky Antivirus (\"kav.exe\")"),
+		_T("AVP, Kapersky Antivirus (\"avp32.exe\")"),
+		_T("DrWeb for Windows"),
+		_T("Dr. Solomon's FindVirus"),
+		_T("Clamwin"),
+		_T("F-secure"),
+		_T("IBM Antivirus (\"ibmasn.exe\")"),
+		_T("IBM Antivirus (\"ibmavsp.exe\")"),
+		_T("Integrity Master"),
+		_T("McAfee Virus Scan (\"scan95.exe\")"),
+		_T("McAfee Virus Scan (\"scan32.exe\")"),
+		_T("McAfee Virus Scan (\"scan.exe\")"),
+		_T("NOD32"),
+		_T("Norton Antivirus (\"navw32.exe\")"),
+		_T("Norton Antivirus (\"n32scan.exe\")"),
+		_T("Norton Antivirus (\"n32scanw.exe\")"),
+		_T("Norton Antivirus (\"navwnt.exe\")"),
+		_T("Stop!"),
 };
 
 void CDownloaderProperties_ListPage::OnSelchangeVirname() 
@@ -349,12 +349,12 @@ void CDownloaderProperties_ListPage::AvirToDlg()
 	CString strVirName = _DldsMgr.m_strVirName;
 
 	
-	for (int i = 0; i < sizeof (_ppszAvirNames2) / sizeof (LPCSTR); i++)
+	for (int i = 0; i < sizeof (_ppszAvirNames2) / sizeof (LPCTSTR); i++)
 		m_wndVirName.AddString (_ppszAvirNames2 [i]);
 
 	m_wndVirName.SetWindowText (_DldsMgr.m_strVirName);	
 	
-	for (i = 0; i < sizeof (_ppszAvirs2) / sizeof (LPCSTR); i++)
+	for (i = 0; i < sizeof (_ppszAvirs2) / sizeof (LPCTSTR); i++)
 	{
 		if (strVirName.CompareNoCase (_ppszAvirs2 [i]) == 0)
 		{
@@ -374,7 +374,7 @@ BOOL CDownloaderProperties_ListPage::DlgToVir()
 
 	BOOL bVirCheck = IsDlgButtonChecked (IDC_VIRCHECK) == BST_CHECKED;
 
-	if (strVir == "")
+	if (strVir == _T(""))
 	{
 		if (bVirCheck)
 		{
@@ -384,14 +384,14 @@ BOOL CDownloaderProperties_ListPage::DlgToVir()
 		}
 
 		_DldsMgr.m_bVirCheck = FALSE;
-		_DldsMgr.m_strVirName = "";
+		_DldsMgr.m_strVirName = _T("");
 		return TRUE;
 	}
 
 	BOOL bPredefined = FALSE;
 
 	
-	for (int i = 0; i < sizeof (_ppszAvirNames2) / sizeof (LPCSTR); i++)
+	for (int i = 0; i < sizeof (_ppszAvirNames2) / sizeof (LPCTSTR); i++)
 	{
 		if (strVir.CompareNoCase (_ppszAvirNames2 [i]) == 0)
 		{
@@ -427,10 +427,10 @@ BOOL CDownloaderProperties_ListPage::DlgToVir()
 	GetDlgItemText (IDC_ARGS, strArgs);
 	GetDlgItemText (IDC_VIREXTS, strExts);
 
-	if (strArgs.Find ("%file%", 0) == -1)
+	if (strArgs.Find (_T("%file%"), 0) == -1)
 	{
 		CString str = LS (L_ARGSHAVNTFILEMACRO);
-		str += "\n\n"; str += LS (L_CONTINUEANYWAY);
+		str += _T("\n\n"); str += LS (L_CONTINUEANYWAY);
 		if (IDNO == MessageBox (str, LS (L_WARNING), MB_ICONEXCLAMATION | MB_YESNO))
 		{
 			GetDlgItem (IDC_ARGS)->SetFocus ();
@@ -438,7 +438,7 @@ BOOL CDownloaderProperties_ListPage::DlgToVir()
 		}
 	}
 
-	if (strExts == "" && bVirCheck)
+	if (strExts == _T("") && bVirCheck)
 	{
 		MessageBox (LS (L_ENTEREXTS), LS (L_INPERR), MB_ICONEXCLAMATION);
 		GetDlgItem (IDC_VIREXTS)->SetFocus ();
@@ -458,9 +458,9 @@ BOOL CDownloaderProperties_ListPage::DlgToVir()
 void CDownloaderProperties_ListPage::OnChoosevir() 
 {
 	CString strFilter;
-        strFilter.Format ("%s (*.exe, *.com)|*.exe;*.com||", LS (L_APPLICATIONS));
+        strFilter.Format (_T("%s (*.exe, *.com)|*.exe;*.com||"), LS (L_APPLICATIONS));
 
-	CFileDialog dlg (TRUE, "exe", NULL, OFN_HIDEREADONLY|OFN_NOCHANGEDIR, strFilter, this);
+	CFileDialog dlg (TRUE, _T("exe"), NULL, OFN_HIDEREADONLY|OFN_NOCHANGEDIR, strFilter, this);
 	if (_DlgMgr.DoModal (&dlg) != IDOK)
 		return;
 	m_wndVirName.SetWindowText (dlg.GetPathName ());

@@ -6,14 +6,14 @@
 #define __MFC_HELP_H_  
 
 extern void ConvertBmp32WithAlphaToBmp32WithoutAlpha (CBitmap& bmp, COLORREF clrBk);
-extern LPCSTR fsGetAppDataFolder ();
+extern LPCTSTR fsGetAppDataFolder ();
 
-extern CString fsGetDataFilePath (LPCSTR pszFile);    
+extern CString fsGetDataFilePath (LPCTSTR pszFile);    
 
 extern CString vmsGetAppFolder (); 
 
 extern void mfcSetForegroundWindow (CWnd *pwnd);
 
-extern LPCSTR fsGetFumProgramFilesFolder ();
+extern LPCTSTR fsGetFumProgramFilesFolder ();
 
 #endif

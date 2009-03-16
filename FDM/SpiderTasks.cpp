@@ -77,7 +77,7 @@ BOOL CSpiderTasks::Create(CWnd *pParent)
 	InsertColumn (1, LS (L_PROGRESS), LVCFMT_LEFT, 150, 0);
 	InsertColumn (2, LS (L_FILES), LVCFMT_LEFT, 150, 0);
 
-	ReadState ("SpiderTasks");
+	ReadState (_T("SpiderTasks"));
 
 	ShowWindow (SW_SHOW);
 
@@ -232,10 +232,10 @@ void CSpiderTasks::UpdateWebPage(int iItem)
 	SetItemText (iItem, 0, wpd->GetStartURL ());
 	
 	CString str;
-	str.Format ("%d%%", (int) wpd->GetPercentDone ());
+	str.Format (_T("%d%%"), (int) wpd->GetPercentDone ());
 	SetItemText (iItem, 1, str);
 	
-	str.Format ("%d/%d", wpd->GetDoneFileCount (), wpd->GetFileCount ());
+	str.Format (_T("%d/%d"), wpd->GetDoneFileCount (), wpd->GetFileCount ());
 	SetItemText (iItem, 2, str);
 
 	SetItemImage (iItem, GetWebPageImage (wpd));
@@ -451,7 +451,7 @@ void CSpiderTasks::OnSpiderOpenfolder()
 	if (pos)
 	{
 		fsWebPageDownloader *wpd = (fsWebPageDownloader*) GetItemData (GetNextSelectedItem (pos));
-		ShellExecute (m_hWnd, "explore", wpd->GetWDPS ()->strFolderSaveTo, NULL, NULL, SW_SHOW);
+		ShellExecute (m_hWnd, _T("explore"), wpd->GetWDPS ()->strFolderSaveTo, NULL, NULL, SW_SHOW);
 	}
 }
 
@@ -597,10 +597,10 @@ void CSpiderTasks::ApplyLanguageToMenu(CMenu *menu)
 {
 	menu->ModifyMenu (0, MF_BYPOSITION|MF_STRING, 0, LS (L_HTMLSPIDER));
 	
-	CString str = LS (L_DLWEBPAGE); str += "\tCtrl+L";
+	CString str = LS (L_DLWEBPAGE); str += _T("\tCtrl+L");
 	menu->ModifyMenu (ID_SPIDER_DL, MF_BYCOMMAND|MF_STRING, ID_SPIDER_DL, str);
 
-	str = LS (L_PROPOFDL); str += "\tEnter";
+	str = LS (L_PROPOFDL); str += _T("\tEnter");
 	menu->ModifyMenu (ID_SPIDER_SETTINGS, MF_BYCOMMAND|MF_STRING, ID_SPIDER_SETTINGS, str);
 
 	menu->ModifyMenu (ID_SPIDER_STARTDL, MF_BYCOMMAND|MF_STRING, ID_SPIDER_STARTDL, LS (L_STARTDL));
@@ -609,7 +609,7 @@ void CSpiderTasks::ApplyLanguageToMenu(CMenu *menu)
 
 	menu->ModifyMenu (ID_SPIDER_SCHEDULE, MF_BYCOMMAND|MF_STRING, ID_SPIDER_SCHEDULE, LS (L_SCHEDULEDL));
 
-	str = LS (L_DELETE); str += "\tDel";
+	str = LS (L_DELETE); str += _T("\tDel");
 	menu->ModifyMenu (ID_SPIDER_DELETE, MF_BYCOMMAND|MF_STRING, ID_SPIDER_DELETE, str);
 
 	menu->ModifyMenu (ID_SPIDER_OPENFOLDER, MF_BYCOMMAND|MF_STRING, ID_SPIDER_OPENFOLDER, LS (L_OPENFOLDER));
@@ -627,8 +627,8 @@ void CSpiderTasks::OnSpiderOpenpage()
 		fsWebPageDownloader *wpd = (fsWebPageDownloader*) GetItemData (GetNextSelectedItem (pos));
 		
 		fsDLWebPage* wp = &wpd->GetRootPage ()->GetData ();
-		LPCSTR pszFile = wp->dld ? wp->dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName : wp->strFile;
-		ShellExecute (m_hWnd, "open", pszFile, NULL, NULL, SW_SHOW);
+		LPCTSTR pszFile = wp->dld ? wp->dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName : wp->strFile;
+		ShellExecute (m_hWnd, _T("open"), pszFile, NULL, NULL, SW_SHOW);
 	}
 }
 
@@ -699,7 +699,7 @@ void CSpiderTasks::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 	switch (nChar)
 	{
-		case 'S':
+		case _T('S'):
 			if (bShift)
 			{
 				OnSpiderStartdl ();
@@ -707,7 +707,7 @@ void CSpiderTasks::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 			}
 			break;
 
-		case 'O':
+		case _T('O'):
 			if (bShift)
 			{
 				OnSpiderStopdl ();
@@ -715,7 +715,7 @@ void CSpiderTasks::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 			}
 			break;
 
-		case 'A':
+		case _T('A'):
 			if (bCtrl)
 			{
 				int cItems = GetItemCount ();

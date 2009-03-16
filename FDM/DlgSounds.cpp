@@ -121,7 +121,7 @@ void CDlgSounds::ApplyLanguage()
 
 void CDlgSounds::PrepareCHMgr(CPoint point)
 {
-	LPCSTR pszSoundsHere = LS (L_SNDEVENTSHERE);
+	LPCTSTR pszSoundsHere = LS (L_SNDEVENTSHERE);
 
 	CPoint pt = point;
 	m_wndSnds.ScreenToClient (&pt);
@@ -169,7 +169,7 @@ void CDlgSounds::PrepareCHMgr(CPoint point)
 
 CString CDlgSounds::SndFile(CString strSndFile)
 {
-	if (strSndFile == "")
+	if (strSndFile == _T(""))
 		strSndFile = LS (L_NOSOUND);
 	return strSndFile;
 }
@@ -217,11 +217,11 @@ void CDlgSounds::OnDblclkSounds(NMHDR* , LRESULT* pResult)
 void CDlgSounds::OnSetsound() 
 {
 	CString strFilter;
-	strFilter.Format ("%s (*.wav)|*.wav||", LS (L_SOUNDFILES));
+	strFilter.Format (_T("%s (*.wav)|*.wav||"), LS (L_SOUNDFILES));
 
 	CString strFile = GetSndFile (GetCurSelSnd ());
 
-	CFileDialog dlg (TRUE, "wav", strFile, OFN_HIDEREADONLY|OFN_NOCHANGEDIR, strFilter, this);
+	CFileDialog dlg (TRUE, _T("wav"), strFile, OFN_HIDEREADONLY|OFN_NOCHANGEDIR, strFilter, this);
 
 	if (_DlgMgr.DoModal (&dlg) == IDCANCEL)
 		return;
@@ -265,11 +265,11 @@ void CDlgSounds::OnOK()
 CString CDlgSounds::GetSndFile(int iItem)
 {
 	if (iItem == -1)
-		return "";
+		return _T("");
 
 	CString str = m_wndSnds.GetItemText (iItem, 1);
 	if (str == LS (L_NOSOUND))
-		str = "";
+		str = _T("");
 
 	return str;
 }

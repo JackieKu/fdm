@@ -86,7 +86,7 @@ void CDlg_TUMChanged::ApplyLanguage()
 		fsDlgLngInfo (IDC_DONTSHOW, L_DONTSHOWTHISWINDOWAGAIN),
 	};
 
-	CString str = LS (L_TUMCHANGED_TOP); str.Replace ("\\n", "\n");
+	CString str = LS (L_TUMCHANGED_TOP); str.Replace (_T("\\n"), _T("\n"));
 	SetDlgItemText (IDC__TOPMSG, str);
 
 	_LngMgr.ApplyLanguage (this, lnginfo, sizeof (lnginfo) / sizeof (fsDlgLngInfo), L_TUMCHANGED);

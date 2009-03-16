@@ -83,17 +83,17 @@ BOOL CTorrents_Tasks::Create(CWnd *pwndParent)
 	m_selimages.Add (&bmp2, RGB (255, 0, 255));
 	SetSelectedImages (&m_selimages);
 	
-	InsertColumn (0, "", LVCFMT_LEFT, 200, 0);
-	InsertColumn (1, "", LVCFMT_LEFT, 50, 0);
-	InsertColumn (2, "", LVCFMT_LEFT, 100, 0);
-	InsertColumn (3, "", LVCFMT_LEFT, 60, 0);
-	InsertColumn (4, "", LVCFMT_LEFT, 50, 0);
-	InsertColumn (5, "", LVCFMT_LEFT, 58, 0);
-	InsertColumn (6, "", LVCFMT_LEFT, 70, 0);
-	InsertColumn (7, "", LVCFMT_LEFT, 200, 0);
-	InsertColumn (8, "", LVCFMT_LEFT, 120, 0);
+	InsertColumn (0, _T(""), LVCFMT_LEFT, 200, 0);
+	InsertColumn (1, _T(""), LVCFMT_LEFT, 50, 0);
+	InsertColumn (2, _T(""), LVCFMT_LEFT, 100, 0);
+	InsertColumn (3, _T(""), LVCFMT_LEFT, 60, 0);
+	InsertColumn (4, _T(""), LVCFMT_LEFT, 50, 0);
+	InsertColumn (5, _T(""), LVCFMT_LEFT, 58, 0);
+	InsertColumn (6, _T(""), LVCFMT_LEFT, 70, 0);
+	InsertColumn (7, _T(""), LVCFMT_LEFT, 200, 0);
+	InsertColumn (8, _T(""), LVCFMT_LEFT, 120, 0);
 	
-	ReadState ("TorrentsTasks");
+	ReadState (_T("TorrentsTasks"));
 	
 	
 	ShowWindow (SW_SHOW);
@@ -152,7 +152,7 @@ void CTorrents_Tasks::OnGetdispinfo(NMHDR *pNMHDR, LRESULT *pResult)
 				else
 				{
 					
-					CString str; str.Format ("%.*g", 4, 
+					CString str; str.Format (_T("%.*g"), 4, 
 						(float)dld->pMgr->GetBtDownloadMgr ()->getRatio ());
 					_tcscpy (pItem->pszText, str);
 				}
@@ -305,7 +305,7 @@ void CTorrents_Tasks::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	
 	switch (nChar)
 	{
-	case 'S':
+	case _T('S'):
 		if (bShift)
 		{
 			OnBtdldStart ();
@@ -313,7 +313,7 @@ void CTorrents_Tasks::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		}
 		break;
 		
-	case 'O':
+	case _T('O'):
 		if (bShift)
 		{
 			OnBtdldStop ();
@@ -321,7 +321,7 @@ void CTorrents_Tasks::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		}
 		break;
 		
-	case 'A':
+	case _T('A'):
 		if (bCtrl)
 		{
 			int cItems = GetItemCount ();
@@ -520,8 +520,8 @@ void CTorrents_Tasks::UpdateMenu(CMenu *pPopup)
 
 void CTorrents_Tasks::OnBtdldAddfromfile() 
 {
-	CString str; str.Format ("%s (*.torrent)|*.torrent||", LS (L_TORRENT_FILES));
-	CFileDialog dlg (TRUE, "torrent", NULL, OFN_HIDEREADONLY|OFN_NOCHANGEDIR, str, this);
+	CString str; str.Format (_T("%s (*.torrent)|*.torrent||"), LS (L_TORRENT_FILES));
+	CFileDialog dlg (TRUE, _T("torrent"), NULL, OFN_HIDEREADONLY|OFN_NOCHANGEDIR, str, this);
 	if (dlg.DoModal () != IDOK)
 		return;
 	CString strUrl = "file://"; strUrl += dlg.GetPathName ();
@@ -653,27 +653,27 @@ void CTorrents_Tasks::ApplyLanguageToMenu(CMenu *menu)
 	
 	menu->ModifyMenu (0, MF_BYPOSITION|MF_STRING, 0, LS (L_TORRENTS));
 	
-	str = LS (L_BTDLD_ADDFROMURL); str += "\tIns";
+	str = LS (L_BTDLD_ADDFROMURL); str += _T("\tIns");
 	menu->ModifyMenu (ID_BTDLD_ADDFROMURL, MF_BYCOMMAND|MF_STRING, ID_BTDLD_ADDFROMURL, str);
 	str = LS (L_BTDLD_ADDFROMFILE); 
 	menu->ModifyMenu (ID_BTDLD_ADDFROMFILE, MF_BYCOMMAND|MF_STRING, ID_BTDLD_ADDFROMFILE, str);
 	str = LS (L_BTDLD_CREATENEWTORRENT); 
 	menu->ModifyMenu (ID_BTDLD_CREATENEWTORRENT, MF_BYCOMMAND|MF_STRING, ID_BTDLD_CREATENEWTORRENT, str);
 	
-	str = LS (L_STARTDLDS); str += "\tShift+S";
+	str = LS (L_STARTDLDS); str += _T("\tShift+S");
 	menu->ModifyMenu (ID_BTDLD_START, MF_BYCOMMAND|MF_STRING, ID_BTDLD_START, str);
-	str = LS (L_STOPDLDS); str += "\tShift+O";
+	str = LS (L_STOPDLDS); str += _T("\tShift+O");
 	menu->ModifyMenu (ID_BTDLD_STOP, MF_BYCOMMAND|MF_STRING, ID_BTDLD_STOP, str);
-	str = LS (L_DELETEDLD); str += "\tDel (Shift+Del)";
+	str = LS (L_DELETEDLD); str += _T("\tDel (Shift+Del)");
 	menu->ModifyMenu (ID_BTDLD_DELETE, MF_BYCOMMAND|MF_STRING, ID_BTDLD_DELETE, str);
 	menu->ModifyMenu (ID_BTDLD_LAUNCH, MF_BYCOMMAND|MF_STRING, ID_BTDLD_LAUNCH, LS (L_LAUNCHFILE));
 	menu->ModifyMenu (ID_BTDLD_OPENFOLDER, MF_BYCOMMAND|MF_STRING, ID_BTDLD_OPENFOLDER, LS (L_OPENFOLDER));
 	menu->ModifyMenu (ID_BTDLD_PASSTODLDS, MF_BYCOMMAND|MF_STRING, ID_BTDLD_PASSTODLDS, LS (L_PASSTODLDS));
 	
-	str = LS (L_AUTOSTARTDLD); str += '\t';
+	str = LS (L_AUTOSTARTDLD); str += _T('\t');
 	menu->ModifyMenu (ID_BTDLD_AUTOSTART, MF_BYCOMMAND|MF_STRING, ID_BTDLD_AUTOSTART, str);
 	
-	str = LS (L_DLDPROP); str += "\tAlt+Enter";
+	str = LS (L_DLDPROP); str += _T("\tAlt+Enter");
 	menu->ModifyMenu (ID_BTDLD_PROPERTIES, MF_BYCOMMAND|MF_STRING, ID_BTDLD_PROPERTIES, str);	
 }
 
@@ -703,7 +703,7 @@ void CTorrents_Tasks::OnLButtonDblClk(UINT nFlags, CPoint point)
 
 void CTorrents_Tasks::SaveState()
 {
-	CListCtrlEx::SaveState ("TorrentsTasks");
+	CListCtrlEx::SaveState (_T("TorrentsTasks"));
 }
 
 int CTorrents_Tasks::OnUpdateToolBar(UINT nID)

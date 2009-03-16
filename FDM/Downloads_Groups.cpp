@@ -81,7 +81,7 @@ BOOL CDownloads_Groups::Create(CWnd *pParent)
 	m_images.Add (&bmpg, RGB (255, 0, 255));
 	SetImageList (&m_images, TVSIL_NORMAL);
 
-	m_hAllGroups = InsertItem (TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_STATE | TVIF_TEXT, "", 0, 0,
+	m_hAllGroups = InsertItem (TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_STATE | TVIF_TEXT, _T(""), 0, 0,
 		TVIS_BOLD | TVIS_EXPANDED, TVIS_BOLD | TVIS_EXPANDED, 0, TVI_ROOT, TVI_LAST);
 
 	
@@ -307,9 +307,9 @@ void CDownloads_Groups::OnOpengroupfolder()
 	fsDldGroupFilter *filter = (fsDldGroupFilter*) GetItemData (GetSelectedItem ());
 
 	CString str = filter->GetGroup ()->strOutFolder;
-	str.Replace ("%sdrive%", CString (vmsGetExeDriveLetter ()) + ":");
+	str.Replace (_T("%sdrive%"), CString (vmsGetExeDriveLetter ()) + _T(":"));
 
-	char sz [MY_MAX_PATH];
+	TCHAR sz [MY_MAX_PATH];
 	_tcscpy (sz, str);
 
 	
@@ -321,7 +321,7 @@ void CDownloads_Groups::OnOpengroupfolder()
 	
 	while (sz [2] != 0 && GetFileAttributes (sz) == DWORD (-1))
 	{
-		LPSTR psz = strrchr (sz, '\\');
+		LPTSTR psz = _tcsrchr (sz, _T('\\'));
 		if (psz)
 			*psz = 0;
 		else
@@ -329,7 +329,7 @@ void CDownloads_Groups::OnOpengroupfolder()
 	}
 
 	if (sz [2] != 0)
-		ShellExecute (::GetDesktopWindow (), "explore", sz, NULL, NULL, SW_SHOW);
+		ShellExecute (::GetDesktopWindow (), _T("explore"), sz, NULL, NULL, SW_SHOW);
 }
 
 void CDownloads_Groups::InsertFilters()
@@ -429,14 +429,14 @@ void CDownloads_Groups::ApplyLanguage()
 {
 	CString str;
 	if (m_cTotalDownloads)
-		str.Format ("%s (%d)", LS (L_ALLDLDS), m_cTotalDownloads);
+		str.Format (_T("%s (%d)"), LS (L_ALLDLDS), m_cTotalDownloads);
 	else
 		str = LS (L_ALLDLDS);
 	SetItemText (m_hAllGroups, str);
 
 	vmsDownloadsGroupSmartPtr pGroup = _DldsGrps.FindGroup (GRP_OTHER_ID);
 	if (pGroup->cDownloads)
-		str.Format ("%s (%d)", LS (L_OTHER), pGroup->cDownloads);
+		str.Format (_T("%s (%d)"), LS (L_OTHER), pGroup->cDownloads);
 	else
 		str = LS (L_OTHER);
 	SetItemText (m_hOther, str);
@@ -462,7 +462,7 @@ void CDownloads_Groups::ApplyLanguageToMenu(CMenu *menu)
 {
 	menu->ModifyMenu (ID_GRPCREATE, MF_BYCOMMAND|MF_STRING, ID_GRPCREATE, LS (L_CREATEGRP));
 	
-	CString str = LS (L_DELGRP); str += "\tDel";
+	CString str = LS (L_DELGRP); str += _T("\tDel");
 	menu->ModifyMenu (ID_GRPDELETE, MF_BYCOMMAND|MF_STRING, ID_GRPDELETE, str);
 
 	menu->ModifyMenu (ID_GRPSTARTALL, MF_BYCOMMAND|MF_STRING, ID_GRPSTARTALL, LS (L_STARTALLDLDS));
@@ -472,7 +472,7 @@ void CDownloads_Groups::ApplyLanguageToMenu(CMenu *menu)
 	menu->ModifyMenu (ID_GRPDELETEALLDEADDLDS, MF_BYCOMMAND|MF_STRING, ID_GRPDELETEALLDEADDLDS, LS (L_DELDEADDLDS));
 	menu->ModifyMenu (ID_OPENGROUPFOLDER, MF_BYCOMMAND|MF_STRING, ID_OPENGROUPFOLDER, LS (L_OPENGRPFOLDER));
 
-	str = LS (L_GRPPROP); str += "\tEnter";
+	str = LS (L_GRPPROP); str += _T("\tEnter");
 	menu->ModifyMenu (ID_GRPPROPERTIES, MF_BYCOMMAND|MF_STRING, ID_GRPPROPERTIES, str);
 }
 
@@ -754,7 +754,7 @@ void CDownloads_Groups::ApplyLanguageToMenu_Deleted(CMenu *menu)
 {
 	menu->ModifyMenu (ID_DELETED_PROPERTIES, MF_BYCOMMAND|MF_STRING, ID_DELETED_PROPERTIES, LS (L_PROPERTIES));
 	
-	CString str = LS (L_CLEARDELETED); str += "\tDel";
+	CString str = LS (L_CLEARDELETED); str += _T("\tDel");
 	menu->ModifyMenu (ID_DELETED_CLEAR, MF_BYCOMMAND|MF_STRING, ID_DELETED_CLEAR, str);
 }
 
@@ -794,7 +794,7 @@ void CDownloads_Groups::ApplyLanguageToMenu_History(CMenu *menu)
 {
 	menu->ModifyMenu (ID_HISTORY_SETTINGS, MF_BYCOMMAND|MF_STRING, ID_HISTORY_SETTINGS, LS (L_SETTINGS));
 	
-	CString str = LS (L_CLEARHISTORY2); str += "\tDel";
+	CString str = LS (L_CLEARHISTORY2); str += _T("\tDel");
 	menu->ModifyMenu (ID_HISTORY_CLEAR, MF_BYCOMMAND|MF_STRING, ID_HISTORY_CLEAR, str);
 }
 
@@ -961,7 +961,7 @@ void CDownloads_Groups::OnGroupNameChanged(vmsDownloadsGroupSmartPtr pGroup)
 	HTREEITEM hGroup = m_vGroups [nIndex].hGroup;
 	CString str;
 	if (pGroup->cDownloads)
-		str.Format ("%s (%d)", pGroup->strName, pGroup->cDownloads);
+		str.Format (_T("%s (%d)"), pGroup->strName, pGroup->cDownloads);
 	else
 		str = pGroup->strName;
 	SetItemText (hGroup, str);
@@ -986,7 +986,7 @@ HTREEITEM CDownloads_Groups::InsertGroup(vmsDownloadsGroupSmartPtr pGroup, HTREE
 	{
 		CString str;
 		if (pGroup->cDownloads)
-			str.Format ("%s (%d)", LS (L_OTHER), pGroup->cDownloads);
+			str.Format (_T("%s (%d)"), LS (L_OTHER), pGroup->cDownloads);
 		else
 			str = LS (L_OTHER);
 		
@@ -998,7 +998,7 @@ HTREEITEM CDownloads_Groups::InsertGroup(vmsDownloadsGroupSmartPtr pGroup, HTREE
 	{
 		CString str;
 		if (pGroup->cDownloads)
-			str.Format ("%s (%d)", pGroup->strName, pGroup->cDownloads);
+			str.Format (_T("%s (%d)"), pGroup->strName, pGroup->cDownloads);
 		else
 			str = pGroup->strName;
 		
@@ -1053,14 +1053,14 @@ void CDownloads_Groups::UpdateNumbersOfDownloadsInGroups()
 		cTotalDownloads += m_vGroups [i].pGroupFilter->GetGroup ()->cDownloads;
 		if (m_vGroups [i].cDownloads != m_vGroups [i].pGroupFilter->GetGroup ()->cDownloads)
 		{
-			LPCSTR pszName = m_vGroups [i].pGroupFilter->GetGroup ()->nId == GRP_OTHER_ID ?
+			LPCTSTR pszName = m_vGroups [i].pGroupFilter->GetGroup ()->nId == GRP_OTHER_ID ?
 				LS (L_OTHER) : m_vGroups [i].pGroupFilter->GetGroup ()->strName;
 
 			m_vGroups [i].cDownloads = m_vGroups [i].pGroupFilter->GetGroup ()->cDownloads;
 
 			CString str;
 			if (m_vGroups [i].cDownloads)
-				str.Format ("%s (%d)", pszName, m_vGroups [i].cDownloads);
+				str.Format (_T("%s (%d)"), pszName, m_vGroups [i].cDownloads);
 			else
 				str = pszName;
 
@@ -1073,7 +1073,7 @@ void CDownloads_Groups::UpdateNumbersOfDownloadsInGroups()
 		m_cTotalDownloads = cTotalDownloads;
 		CString str;
 		if (m_cTotalDownloads)
-			str.Format ("%s (%d)", LS (L_ALLDLDS), m_cTotalDownloads);
+			str.Format (_T("%s (%d)"), LS (L_ALLDLDS), m_cTotalDownloads);
 		else
 			str = LS (L_ALLDLDS);
 		SetItemText (m_hAllGroups, str);

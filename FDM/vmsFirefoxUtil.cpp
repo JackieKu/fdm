@@ -16,30 +16,30 @@ vmsFirefoxUtil::~vmsFirefoxUtil()
 
 }
 
-void vmsFirefoxUtil::GetProfilesPath(LPSTR pszPath)
+void vmsFirefoxUtil::GetProfilesPath(LPTSTR pszPath)
 {
 	vmsFirefoxUtil::GetDataPath (pszPath);
-	_tcscat (pszPath, "Profiles\\");
+	_tcscat (pszPath, _T("Profiles\\"));
 }
 
-void vmsFirefoxUtil::GetDataPath(LPSTR pszPath)
+void vmsFirefoxUtil::GetDataPath(LPTSTR pszPath)
 {
-	vmsFileUtil::GetAppDataPath ("Mozilla", pszPath);
+	vmsFileUtil::GetAppDataPath (_T("Mozilla"), pszPath);
 	vmsFileUtil::MakePathOK (pszPath, true);
-	_tcscat (pszPath, "Firefox\\");
+	_tcscat (pszPath, _T("Firefox\\"));
 }
 
 bool vmsFirefoxUtil::GetProfilesPathes(FU_STRINGLIST &v, int &nDefaultProfile)
 {
 try {
-	char szPath [MY_MAX_PATH];
+	TCHAR szPath [MY_MAX_PATH];
 	GetDataPath (szPath);
 
 	
 
-	char szProfilesIni [MY_MAX_PATH];
+	TCHAR szProfilesIni [MY_MAX_PATH];
 	_tcscpy (szProfilesIni, szPath);
-	_tcscat (szProfilesIni, "profiles.ini");
+	_tcscat (szProfilesIni, _T("profiles.ini"));
 
 	if (GetFileAttributes (szProfilesIni) != DWORD (-1))
 	{
@@ -47,32 +47,32 @@ try {
 
 		for (int i = 0;; i++)
 		{
-			char sz [100], szPP [MY_MAX_PATH] = ""; 
-			sprintf (sz, "Profile%d", i);
-			GetPrivateProfileString (sz, "Path", "", szPP, sizeof (szPP), szProfilesIni);
+			TCHAR sz [100], szPP [MY_MAX_PATH] = _T(""); 
+			_stprintf (sz, _T("Profile%d"), i);
+			GetPrivateProfileString (sz, _T("Path"), _T(""), szPP, sizeof (szPP), szProfilesIni);
 			if (*szPP == 0)
 				break; 
-			LPSTR psz = szPP;
+			LPTSTR psz = szPP;
 			while (*psz) {
-				if (*psz == '/')
-					*psz = '\\';
+				if (*psz == _T('/'))
+					*psz = _T('\\');
 				psz++;
 			}
-			if (szPP [1] == ':') 
+			if (szPP [1] == _T(':')) 
 			{
 				v.add (szPP);
 			}
 			else
 			{
 				
-				char sz [MY_MAX_PATH];
+				TCHAR sz [MY_MAX_PATH];
 				_tcscpy (sz, szPath);
 				_tcscat (sz, szPP);
 				v.add (sz);
 			}
 
 			if (nDefaultProfile == -1 &&
-					GetPrivateProfileInt (sz, "Default", 0, szProfilesIni))
+					GetPrivateProfileInt (sz, _T("Default"), 0, szProfilesIni))
 				nDefaultProfile = i; 
 		}
 	}
@@ -83,9 +83,9 @@ try {
 
 		
 
-		char szProfiles [MY_MAX_PATH];
+		TCHAR szProfiles [MY_MAX_PATH];
 		vmsFirefoxUtil::GetProfilesPath (szProfiles);
-		_tcscat (szProfiles, "*");
+		_tcscat (szProfiles, _T("*"));
 
 		WIN32_FIND_DATA wfd;
 		HANDLE hFind = FindFirstFile (szProfiles, &wfd);
@@ -94,19 +94,19 @@ try {
 
 		do
 		{
-			if (0 == lstrcmp (wfd.cFileName, ".") || 0 == lstrcmp (wfd.cFileName, ".."))
+			if (0 == lstrcmp (wfd.cFileName, _T(".")) || 0 == lstrcmp (wfd.cFileName, _T("..")))
 				continue;
 
-			char sz [MY_MAX_PATH];
+			TCHAR sz [MY_MAX_PATH];
 			_tcscpy (sz, szPath);
 			_tcscat (sz, wfd.cFileName);
 
 			DWORD dw = GetFileAttributes (sz);
 			if (dw != DWORD (-1) && (dw & FILE_ATTRIBUTE_DIRECTORY))
 			{
-				char sz2 [MY_MAX_PATH];
+				TCHAR sz2 [MY_MAX_PATH];
 				_tcscpy (sz2, sz);
-				_tcscat (sz2, "\\extensions\\");
+				_tcscat (sz2, _T("\\extensions\\"));
 				
 				DWORD dw = GetFileAttributes (sz2);
 				if (dw != DWORD (-1) && (dw & FILE_ATTRIBUTE_DIRECTORY))
@@ -123,7 +123,7 @@ try {
 }catch (...) {return false;}
 }
 
-bool vmsFirefoxUtil::GetDefaultProfilePath(LPSTR pszPath)
+bool vmsFirefoxUtil::GetDefaultProfilePath(LPTSTR pszPath)
 {
 	FU_STRINGLIST v; int nDefaultProfile;
 

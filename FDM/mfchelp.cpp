@@ -76,17 +76,17 @@ void ConvertBmp32WithAlphaToBmp32WithoutAlpha (CBitmap& bmp, COLORREF clrBk)
 	delete [] pdwBmp32;
 }
 
-char _szAppDataFolder [MY_MAX_PATH] = "";
+TCHAR _szAppDataFolder [MY_MAX_PATH] = _T("");
 bool _bNeedRecalcAppDataFolder = false;
 
-void fsGetSystemAppDataFolder (LPSTR pszRes)
+void fsGetSystemAppDataFolder (LPTSTR pszRes)
 {
 	LPITEMIDLIST pidl = NULL;
 	if (SUCCEEDED (SHGetSpecialFolderLocation (NULL, CSIDL_APPDATA, &pidl)))
 	{
 		SHGetPathFromIDList (pidl, pszRes);
-		if (pszRes [lstrlen (pszRes)-1] != '\\')
-			_tcscat (pszRes, "\\");
+		if (pszRes [lstrlen (pszRes)-1] != _T('\\'))
+			_tcscat (pszRes, _T("\\"));
 		IMallocPtr spMalloc;
 		SHGetMalloc (&spMalloc);
 		spMalloc->Free (pidl);
@@ -95,12 +95,12 @@ void fsGetSystemAppDataFolder (LPSTR pszRes)
 	{
 		GetWindowsDirectory (pszRes, MAX_PATH);
 		if (pszRes [3] != 0)
-			_tcscat (pszRes, "\\");
-		_tcscat (pszRes, "Application Data\\");
+			_tcscat (pszRes, _T("\\"));
+		_tcscat (pszRes, _T("Application Data\\"));
 	}
 }
 
-LPCSTR fsGetAppDataFolder ()
+LPCTSTR fsGetAppDataFolder ()
 {
 	if (_bNeedRecalcAppDataFolder) 
 	{
@@ -115,24 +115,24 @@ LPCSTR fsGetAppDataFolder ()
 	if (str.IsEmpty () == FALSE)
 	{
 		_tcscpy (_szAppDataFolder, str);
-		if (_szAppDataFolder [lstrlen (_szAppDataFolder)-1] != '\\')
-			_tcscat (_szAppDataFolder, "\\");
+		if (_szAppDataFolder [lstrlen (_szAppDataFolder)-1] != _T('\\'))
+			_tcscat (_szAppDataFolder, _T("\\"));
 		return _szAppDataFolder;
 	}
 
 	if (IS_PORTABLE_MODE)
 	{
 		_tcscpy (_szAppDataFolder, ((CFdmApp*)AfxGetApp ())->m_strAppPath);
-		_tcscat (_szAppDataFolder, "Data\\");
+		_tcscat (_szAppDataFolder, _T("Data\\"));
 		return _szAppDataFolder;
 	}
 
 	fsGetSystemAppDataFolder (_szAppDataFolder);
-	_tcscat (_szAppDataFolder, "Free Download Manager\\");
+	_tcscat (_szAppDataFolder, _T("Free Download Manager\\"));
 	return _szAppDataFolder;
 }
 
-CString fsGetDataFilePath (LPCSTR pszFile)
+CString fsGetDataFilePath (LPCTSTR pszFile)
 {
 	fsGetAppDataFolder ();
 
@@ -153,20 +153,20 @@ CString fsGetDataFilePath (LPCSTR pszFile)
 
 extern CFdmApp theApp;
 
-LPCSTR fsGetFumProgramFilesFolder ()
+LPCTSTR fsGetFumProgramFilesFolder ()
 {
-	static char _szPath [MAX_PATH] = "";
+	static TCHAR _szPath [MAX_PATH] = _T("");
 	if (*_szPath == 0)
 	{
 		CRegKey key;
 		DWORD dw = MAX_PATH;
-		if (ERROR_SUCCESS == key.Open (HKEY_CURRENT_USER, "Software\\FreeDownloadManager.ORG\\Free Upload Manager"))
-			key.QueryValue (_szPath, "Path", &dw);
+		if (ERROR_SUCCESS == key.Open (HKEY_CURRENT_USER, _T("Software\\FreeDownloadManager.ORG\\Free Upload Manager")))
+			key.QueryValue (_szPath, _T("Path"), &dw);
 		
 		if (*_szPath != 0)
 		{
 			CString str = _szPath;
-			str += "fum.exe";
+			str += _T("fum.exe");
 			if (GetFileAttributes (str) == DWORD (-1))
 				*_szPath = 0;
 		}
@@ -174,7 +174,7 @@ LPCSTR fsGetFumProgramFilesFolder ()
 		if (*_szPath == 0)
 		{
 			_tcscpy (_szPath, theApp.m_strAppPath);
-			_tcscat (_szPath, "fum\\");
+			_tcscat (_szPath, _T("fum\\"));
 		}
 	}
 	return _szPath;

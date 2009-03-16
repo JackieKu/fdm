@@ -26,11 +26,11 @@ public:
 	static BOOL _CheckFileName (CDialog* pdlg, UINT nIdCtrl);
 	
 	
-	static BOOL _SetDownloadOutputFolderAsDefault (CWnd* pwndParent, LPCSTR pszFolder, vmsDownloadsGroupSmartPtr pGroup);
+	static BOOL _SetDownloadOutputFolderAsDefault (CWnd* pwndParent, LPCTSTR pszFolder, vmsDownloadsGroupSmartPtr pGroup);
 	
-	LPCSTR m_pszPostData;
+	LPCTSTR m_pszPostData;
 	
-	LPCSTR m_pszCookies;
+	LPCTSTR m_pszCookies;
 	
 	bool m_bPlaceAtTop;
 	
@@ -40,7 +40,7 @@ public:
 	
 	static fsSiteInfo* _SavePassword (vmsDownloadSmartPtr dld);
 	
-	static fsSiteInfo* _SavePassword(LPCSTR pszServer, fsNetworkProtocol np, LPCSTR pszUser, LPCSTR pszPwd);
+	static fsSiteInfo* _SavePassword(LPCTSTR pszServer, fsNetworkProtocol np, LPCTSTR pszUser, LPCTSTR pszPwd);
 	
 	
 	
@@ -52,7 +52,7 @@ public:
 	BOOL m_bAuthorization;		
 	CString m_strUrl;			
 
-	CCreateDownloadDlg(vmsDownloadSmartPtr dld, LPCSTR pszStartUrl, LPCSTR pszComment, LPCSTR pszReferer, CWnd* pParent = NULL);    
+	CCreateDownloadDlg(vmsDownloadSmartPtr dld, LPCTSTR pszStartUrl, LPCTSTR pszComment, LPCTSTR pszReferer, CWnd* pParent = NULL);    
 
 	//{{AFX_DATA(CCreateDownloadDlg)
 	enum { IDD = IDD_CREATEDOWNLOAD };

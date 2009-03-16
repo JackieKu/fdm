@@ -8,7 +8,7 @@
 
 #ifdef _DEBUG
 #undef THIS_FILE
-static TCHAR THIS_FILE[]=__FILE__;
+static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif        
 

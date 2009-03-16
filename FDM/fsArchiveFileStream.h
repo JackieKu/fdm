@@ -24,7 +24,7 @@ public:
 	
 	void Close();
 	
-	DWORD Open (LPCSTR pszFile, DWORD dwGenFlags);
+	DWORD Open (LPCTSTR pszFile, DWORD dwGenFlags);
 	
 	BOOL Seek (UINT64 dist, fsSeekType met);
 	

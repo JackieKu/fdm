@@ -25,7 +25,7 @@ public:
 
 public:
 	
-	void SetUrl (LPCSTR pszUrl);
+	void SetUrl (LPCTSTR pszUrl);
 	
 	void Init();
 	

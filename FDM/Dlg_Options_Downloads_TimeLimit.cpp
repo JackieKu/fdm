@@ -96,7 +96,7 @@ BOOL CDlg_Options_Downloads_TimeLimit::Apply()
 
 void CDlg_Options_Downloads_TimeLimit::FillTimes(CComboBox *pbox)
 {
-	char sz [100]; SYSTEMTIME st; ZeroMemory (&st, sizeof (st)); 
+	TCHAR sz [100]; SYSTEMTIME st; ZeroMemory (&st, sizeof (st)); 
 
 	pbox->ResetContent ();
 
@@ -105,7 +105,7 @@ void CDlg_Options_Downloads_TimeLimit::FillTimes(CComboBox *pbox)
 		st.wHour = i;
 		GetTimeFormat (LOCALE_USER_DEFAULT, TIME_NOSECONDS, &st, NULL, sz, 100);
 		if (strlen (sz) <= 2)
-			strcat (sz, LS (L_HR));
+			_tcscat (sz, LS (L_HR));
 		pbox->AddString (sz);
 	}
 }

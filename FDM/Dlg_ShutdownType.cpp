@@ -54,7 +54,7 @@ BOOL CDlg_ShutdownType::OnInitDialog()
 	SetDlgItemText (IDCANCEL, LS (L_CANCEL));
 
 	CString str = LS (L_SHUTDOWNTYPE);
-	if (str [str.GetLength () - 1] == ':')
+	if (str [str.GetLength () - 1] == _T(':'))
 		str.Delete (str.GetLength () - 1, 1);
 	SetWindowText (str);
 	

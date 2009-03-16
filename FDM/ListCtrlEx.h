@@ -67,9 +67,9 @@ public:
 	
 	BOOL IsColumnShown (int iCol);
 	
-	void SetItemText (int iItem, int iSubItem, LPCSTR pszText);
+	void SetItemText (int iItem, int iSubItem, LPCTSTR pszText);
 	
-	void SetColumnText (int iCol, LPCSTR pszText);
+	void SetColumnText (int iCol, LPCTSTR pszText);
 	
 	
 	void Initialize ();
@@ -81,13 +81,13 @@ public:
 	void SetItemColor (int iItem, COLORREF clr, BOOL bUpdate = TRUE);
 	
 	
-	void ReadState (LPCSTR pszName);
+	void ReadState (LPCTSTR pszName);
 	
-	void SaveState (LPCSTR pszName);
+	void SaveState (LPCTSTR pszName);
 	
 	void UseGrid (BOOL bUse = TRUE);
 	
-	int AddItem (LPCSTR pszItem, COLORREF clrBg = GetSysColor (COLOR_WINDOW), COLORREF clrText = GetSysColor (COLOR_WINDOWTEXT), int iImage = 0, BOOL bAddToBeginning = FALSE);
+	int AddItem (LPCTSTR pszItem, COLORREF clrBg = GetSysColor (COLOR_WINDOW), COLORREF clrText = GetSysColor (COLOR_WINDOWTEXT), int iImage = 0, BOOL bAddToBeginning = FALSE);
 	int GetItemImage(int iItem);
 	virtual ~CListCtrlEx();
 
@@ -116,7 +116,7 @@ protected:
 	
 	int m_aIndex [LISTEX_MAXCOLUMNS];
 	
-	LPCSTR m_appszCols [LISTEX_MAXCOLUMNS];
+	LPCTSTR m_appszCols [LISTEX_MAXCOLUMNS];
 	
 	void SetItemImage (int iItem, int iImage);
 	

@@ -21,14 +21,14 @@ protected:
 		CString strJustCaption; 
 
 		OptionsTreeItem (CDlg_Options_Page* p) {page = p;}
-		OptionsTreeItem (LPCSTR psz) {page = NULL; strJustCaption = psz;}
+		OptionsTreeItem (LPCTSTR psz) {page = NULL; strJustCaption = psz;}
 		OptionsTreeItem () {page = NULL;}
 	};
 	typedef fs::ListTree <OptionsTreeItem> OPTIONS_PAGES_TREE;  
 
 public:
 	void set_CurPage (OPTIONS_PAGES_TREE* ptPage);
-	CDlg_Options(CWnd* pParent = NULL, LPCSTR pszStartPage = NULL);     
+	CDlg_Options(CWnd* pParent = NULL, LPCTSTR pszStartPage = NULL);     
 
 	//{{AFX_DATA(CDlg_Options)
 	enum { IDD = IDD_OPTIONS };

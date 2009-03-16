@@ -67,9 +67,9 @@ BOOL CDownloaderProperties_BtPage::OnInitDialog()
 	m_iOldMode = 0;
 
 	CString str;
-	str.Format ("%s/%s", LS (L_B), LS (L_S)); m_wndLimitDim.AddString (str);
-	str.Format ("%s/%s", LS (L_KB), LS (L_S)); m_wndLimitDim.AddString (str);
-	str.Format ("%s/%s", LS (L_MB), LS (L_S)); m_wndLimitDim.AddString (str);
+	str.Format (_T("%s/%s"), LS (L_B), LS (L_S)); m_wndLimitDim.AddString (str);
+	str.Format (_T("%s/%s"), LS (L_KB), LS (L_S)); m_wndLimitDim.AddString (str);
+	str.Format (_T("%s/%s"), LS (L_MB), LS (L_S)); m_wndLimitDim.AddString (str);
 	m_wndLimitDim.SetCurSel (0);
 
 	UINT aSpinIds [] = {

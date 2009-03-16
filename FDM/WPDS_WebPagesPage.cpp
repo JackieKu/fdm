@@ -41,7 +41,7 @@ void CWPDS_WebPagesPage::DoDataExchange(CDataExchange* pDX)
 
 	DDX_Text (pDX, IDC_HTMLEXTS, strHTMLExts);
 
-	if (strHTMLExts == "")
+	if (strHTMLExts == _T(""))
 	{
 		MessageBox (LS (L_ENTEREXTS), LS (L_INPERR), MB_ICONEXCLAMATION);
 		GetDlgItem (IDC_HTMLEXTS)->SetFocus ();

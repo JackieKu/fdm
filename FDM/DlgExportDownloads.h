@@ -15,9 +15,9 @@ class CDlgExportDownloads : public CDialog
 public:
 	
 	
-	static BOOL ExportDownloads_ToURLListFile (LPCSTR pszFile, DLDS_LIST* pvpDlds, BOOL bAppend);
+	static BOOL ExportDownloads_ToURLListFile (LPCTSTR pszFile, DLDS_LIST* pvpDlds, BOOL bAppend);
 	
-	static BOOL ExportDownloads_ToDLInfoListFile (LPCSTR pszFile, DLDS_LIST* pvpDlds, BOOL bAppend);
+	static BOOL ExportDownloads_ToDLInfoListFile (LPCTSTR pszFile, DLDS_LIST* pvpDlds, BOOL bAppend);
 	
 	
 	

@@ -13,7 +13,7 @@ static char THIS_FILE[] = __FILE__;
 #endif      
 
 BEGIN_DISPATCH_MAP(vmsWebBrowserEvents, CCmdTarget)
-	DISP_FUNCTION_ID(vmsWebBrowserEvents, "DocumentComplete", DISPID_DOCUMENTCOMPLETE, OnDocumentComplete, VT_EMPTY, VTS_DISPATCH VTS_PVARIANT)
+	DISP_FUNCTION_ID(vmsWebBrowserEvents, _T("DocumentComplete"), DISPID_DOCUMENTCOMPLETE, OnDocumentComplete, VT_EMPTY, VTS_DISPATCH VTS_PVARIANT)
 END_DISPATCH_MAP()
 
 vmsWebBrowserEvents::vmsWebBrowserEvents(CWebBrowser2 *pWB, IDocHostUIHandler *pUIHandler)

@@ -13,7 +13,7 @@
 
 struct fsDescEvent
 {
-	LPSTR pszEvent;			
+	LPTSTR pszEvent;			
 	COLORREF clrBg;			
 	COLORREF clrText;		
 	FILETIME timeEvent;		

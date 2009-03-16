@@ -79,9 +79,9 @@ void CFlashVideoDownloadsWnd::Plugin_GetToolBarInfo(wgTButtonInfo **ppButtons, i
 {
 	static wgTButtonInfo btns [] = 
 	{
-		wgTButtonInfo (ID_FVDLD_CREATE, TBSTYLE_BUTTON, ""),
-		wgTButtonInfo (ID_FVDLD_START, TBSTYLE_BUTTON, ""),
-		wgTButtonInfo (ID_FVDLD_STOP, TBSTYLE_BUTTON, ""),
+		wgTButtonInfo (ID_FVDLD_CREATE, TBSTYLE_BUTTON, _T("")),
+		wgTButtonInfo (ID_FVDLD_START, TBSTYLE_BUTTON, _T("")),
+		wgTButtonInfo (ID_FVDLD_STOP, TBSTYLE_BUTTON, _T("")),
 	};
 
 	btns [0].pszToolTip = LS (L_NEWDLD);
@@ -112,7 +112,7 @@ void CFlashVideoDownloadsWnd::Plugin_GetMenuViewItems(wgMenuViewItem **ppItems, 
 	*ppItems = NULL;
 }
 
-void CFlashVideoDownloadsWnd::Plugin_GetPluginNames(LPCSTR *ppszLong, LPCSTR *ppszShort)
+void CFlashVideoDownloadsWnd::Plugin_GetPluginNames(LPCTSTR *ppszLong, LPCTSTR *ppszShort)
 {
 	static CString strName;
 	strName = LSNP (L_FVDOWNLOADS);
@@ -140,7 +140,7 @@ int CFlashVideoDownloadsWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_splitter.SetWnd1 (m_wndTasks.m_hWnd);
 	m_splitter.SetWnd2 (m_wndPreview.m_hWnd);
 	m_splitter.SetMinDimensions (50, 50);
-	float fRatio = _App.View_SplitterRatio ("FVDownloads_DL_PREVIEW");
+	float fRatio = _App.View_SplitterRatio (_T("FVDownloads_DL_PREVIEW"));
 	if (fRatio < 0.1f)
 		fRatio = 0.1f;
 	m_splitter.SetRatio (fRatio);
@@ -234,7 +234,7 @@ void CFlashVideoDownloadsWnd::ApplyLanguageToMenuView(CMenu *menu)
 
 	UINT aCmds [] = {ID_DLLIST_1, ID_DLLIST_2, ID_DLLIST_3, ID_DLLIST_4, ID_DLLIST_5, 
 		ID_DLLIST_6, ID_DLLIST_7, ID_DLLIST_8 };
-	LPCSTR apszCmds [] = {LS (L_FILENAME), LS (L_SIZE), LS (L_DOWNLOADED),
+	LPCTSTR apszCmds [] = {LS (L_FILENAME), LS (L_SIZE), LS (L_DOWNLOADED),
 		LS (L_TIMELEFT), LS (L_SECTIONS), LS (L_SPEED), LS (L_COMMENT), LS (L_ADDED) };
 	
 	for (int i = 0; i < sizeof (aCmds) / sizeof (UINT); i++)
@@ -292,7 +292,7 @@ void CFlashVideoDownloadsWnd::SaveAll()
 	ASSERT (::IsWindow (m_hWnd));
 
 	m_wndTasks.SaveState ();
-	_App.View_SplitterRatio ("FVDownloads_DL_PREVIEW", m_splitter.GetRatio ());
+	_App.View_SplitterRatio (_T("FVDownloads_DL_PREVIEW"), m_splitter.GetRatio ());
 }
 
 void CFlashVideoDownloadsWnd::SetActiveDownload(vmsDownloadSmartPtr dld)
@@ -315,7 +315,7 @@ HMENU CFlashVideoDownloadsWnd::Plugin_GetViewMenu()
 	return LoadMenu (AfxGetInstanceHandle (), MAKEINTRESOURCE (IDM_FVDOWNLOADS_VIEW));
 }
 
-BOOL CFlashVideoDownloadsWnd::CreateDownload(LPCSTR pszUrl)
+BOOL CFlashVideoDownloadsWnd::CreateDownload(LPCTSTR pszUrl)
 {
 	CDlg_CreateFVDownload dlg;
 	if (pszUrl)

@@ -46,13 +46,13 @@ BOOL CDlg_CheckFileIntegrity_Result::OnInitDialog()
 	else
 		GetDlgItem (IDC_RESTARTDOWNLOAD)->ShowWindow (SW_HIDE);
 
-	CString str = "URL: "; str += m_strUrl; str += "\r\n";
-	str += LS (L_FILENAME); str += ": "; str += m_strFileName; str += "\r\n";
+	CString str = _T("URL: "); str += m_strUrl; str += _T("\r\n");
+	str += LS (L_FILENAME); str += _T(": "); str += m_strFileName; str += _T("\r\n");
 	
 	if (m_bResultOK == false)
 	{
-		str += LS (L_VALIDCHECKSUM); str += ": "; str += m_strValidHash; str += "\r\n";
-		str += LS (L_RESULTCHECKSUM); str += ": "; str += m_strResultHash;
+		str += LS (L_VALIDCHECKSUM); str += _T(": "); str += m_strValidHash; str += _T("\r\n");
+		str += LS (L_RESULTCHECKSUM); str += _T(": "); str += m_strResultHash;
 	}
 	SetDlgItemText (IDC_FILEINFO, str);
 		

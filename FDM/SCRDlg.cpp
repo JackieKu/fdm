@@ -70,7 +70,7 @@ BOOL CSCRDlg::OnInitDialog()
 	((CStatic*) GetDlgItem (IDC_DLGICON))->SetIcon (LoadIcon (NULL, IDI_QUESTION));
 
 	CString str;
-	char szUrl [10000];
+	TCHAR szUrl [10000];
 	DWORD dwLen = 10000;
 	fsURL url;
 

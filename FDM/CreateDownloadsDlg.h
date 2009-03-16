@@ -57,12 +57,12 @@ protected:
 	
 	
 	
-	void CreateDownloads (HTREEITEM hTree, LPCSTR pszRootDir, BOOL bCreate);
+	void CreateDownloads (HTREEITEM hTree, LPCTSTR pszRootDir, BOOL bCreate);
 	void UpdateEnabled();
 	
 	
 	
-	void BuildDownloads (fs::tree <fsFileInfo*>* pTree, LPCSTR pszRootUrl);
+	void BuildDownloads (fs::tree <fsFileInfo*>* pTree, LPCTSTR pszRootUrl);
 	DLDS_LIST m_vpDlds;	
 	DLDS_LIST m_vpDldsToStart;	
 	CImageList m_checks;

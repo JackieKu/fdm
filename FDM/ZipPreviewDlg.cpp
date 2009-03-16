@@ -70,9 +70,9 @@ void CZipPreviewDlg::BuildTreeOfFiles()
 		AddToTree (m_ar->GetFileName (i), i, &m_tFiles);
 }
 
-void CZipPreviewDlg::AddToTree(LPCSTR pszFile, int iIndex, fs::ListTree <fsFile>* root)
+void CZipPreviewDlg::AddToTree(LPCTSTR pszFile, int iIndex, fs::ListTree <fsFile>* root)
 {
-	LPCSTR pszNextDir = strpbrk (pszFile, "/\\");
+	LPCTSTR pszNextDir = _tcspbrk (pszFile, _T("/\\"));
 
 	if (pszNextDir)
 		pszNextDir++;

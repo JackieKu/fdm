@@ -30,18 +30,18 @@ public:
 	
 	fsInternetResult SearchForMirrors();
 	
-	LPCSTR Get_MirrorURL (int iIndex);
+	LPCTSTR Get_MirrorURL (int iIndex);
 	
 	int Get_MirrorURLCount();
 	
 	
 	
-	void Set_SearchURL (LPCSTR pszUrl);
+	void Set_SearchURL (LPCTSTR pszUrl);
 	
 	
 	
 	
-	void Initialize (LPCSTR pszFileName, UINT64 uSize, LPCSTR pszBaseServer, fsInternetSession* pSession);
+	void Initialize (LPCTSTR pszFileName, UINT64 uSize, LPCTSTR pszBaseServer, fsInternetSession* pSession);
 	fsMirrorURLsMgr();
 	virtual ~fsMirrorURLsMgr();
 
@@ -50,7 +50,7 @@ protected:
 	BOOL m_bAbort;
 	
 	
-	virtual BOOL IsMirrorURLGood (LPCSTR pszURL);
+	virtual BOOL IsMirrorURLGood (LPCTSTR pszURL);
 	
 	virtual fsInternetResult OnSearchScriptResultsReceived();
 	

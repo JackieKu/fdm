@@ -22,7 +22,7 @@ vmsSimpleFileDownloader::~vmsSimpleFileDownloader()
 	SAFE_DELETE (m_dldr);
 }
 
-fsInternetResult vmsSimpleFileDownloader::Download(LPCSTR pszUrl, LPCSTR pszFileName)
+fsInternetResult vmsSimpleFileDownloader::Download(LPCTSTR pszUrl, LPCTSTR pszFileName)
 {
 	if (IsRunning ())
 		return IR_S_FALSE;
@@ -36,8 +36,8 @@ fsInternetResult vmsSimpleFileDownloader::Download(LPCSTR pszUrl, LPCSTR pszFile
 	fsDownload_Properties *dp = m_dldr->GetDP ();
 
 	SAFE_DELETE_ARRAY (dp->pszFileName);
-	fsnew (dp->pszFileName, char, lstrlen (pszFileName) + 1);
-	strcpy (dp->pszFileName, pszFileName);
+	fsnew (dp->pszFileName, TCHAR, lstrlen (pszFileName) + 1);
+	_tcscpy (dp->pszFileName, pszFileName);
 	dp->uMaxSections = 1;
 	dp->uMaxAttempts = 1;
 	dp->dwFlags |= DPF_DONTRESTARTIFNORESUME;
@@ -52,7 +52,7 @@ fsInternetResult vmsSimpleFileDownloader::Download(LPCSTR pszUrl, LPCSTR pszFile
 	return IR_SUCCESS;
 }
 
-void vmsSimpleFileDownloader::_DownloadMgrDescEvents(fsDownloadMgr *, fsDownloadMgr_EventDescType, LPCSTR pszDesc, LPVOID lp)
+void vmsSimpleFileDownloader::_DownloadMgrDescEvents(fsDownloadMgr *, fsDownloadMgr_EventDescType, LPCTSTR pszDesc, LPVOID lp)
 {
 
 }

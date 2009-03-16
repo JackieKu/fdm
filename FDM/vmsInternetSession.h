@@ -14,7 +14,7 @@
 class vmsInternetSession : public fsInternetSession
 {
 public:
-	fsInternetResult Create (LPCSTR pszAgent, fsInternetAccessTypeEx enAT, LPCSTR pszProxyName, fsNetworkProtocol enProtocol);
+	fsInternetResult Create (LPCTSTR pszAgent, fsInternetAccessTypeEx enAT, LPCTSTR pszProxyName, fsNetworkProtocol enProtocol);
 
 	vmsInternetSession();
 	virtual ~vmsInternetSession();

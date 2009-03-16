@@ -33,8 +33,8 @@ BEGIN_MESSAGE_MAP(CDownloads_Opinions_WBEvents, CCmdTarget)
 END_MESSAGE_MAP()
 
 BEGIN_DISPATCH_MAP(CDownloads_Opinions_WBEvents, CCmdTarget)
-	DISP_FUNCTION_ID(CDownloads_Opinions_WBEvents, "DocumentComplete", DISPID_DOCUMENTCOMPLETE, OnDocumentComplete, VT_EMPTY, VTS_DISPATCH VTS_PVARIANT)
-	DISP_FUNCTION_ID(CDownloads_Opinions_WBEvents, "NavigateError", DISPID_NAVIGATEERROR, OnNavigateError, VT_EMPTY, VTS_DISPATCH VTS_PVARIANT VTS_PVARIANT VTS_PVARIANT VTS_PBOOL)
+	DISP_FUNCTION_ID(CDownloads_Opinions_WBEvents, _T("DocumentComplete"), DISPID_DOCUMENTCOMPLETE, OnDocumentComplete, VT_EMPTY, VTS_DISPATCH VTS_PVARIANT)
+	DISP_FUNCTION_ID(CDownloads_Opinions_WBEvents, _T("NavigateError"), DISPID_NAVIGATEERROR, OnNavigateError, VT_EMPTY, VTS_DISPATCH VTS_PVARIANT VTS_PVARIANT VTS_PVARIANT VTS_PBOOL)
 END_DISPATCH_MAP()      
 
 void CDownloads_Opinions_WBEvents::OnDocumentComplete(LPDISPATCH pdWB, VARIANT *URL)
@@ -91,28 +91,28 @@ void CDownloads_Opinions_WBEvents::OnDocumentComplete(LPDISPATCH pdWB, VARIANT *
 
 	CString strVersion;
 	CMainFrame* pFrm = (CMainFrame*)AfxGetApp ()->m_pMainWnd;
-	strVersion.Format ("%s_%d", vmsFdmAppMgr::getBuildNumber (), pFrm->m_Customizations.get_AffiliateID ());
+	strVersion.Format (_T("%s_%d"), vmsFdmAppMgr::getBuildNumber (), pFrm->m_Customizations.get_AffiliateID ());
 
 	CString strState;
 	if (m_pwndOpinions->m_dld->pMgr->IsDone ())
-		strState = "Downloaded";
+		strState = _T("Downloaded");
 	else if (m_pwndOpinions->m_dld->pMgr->IsRunning ())
-		strState = "Downloading";
+		strState = _T("Downloading");
 	else
-		strState = "Paused";
+		strState = _T("Paused");
 	CString strSize;
 	UINT64 u = m_pwndOpinions->m_dld->pMgr->GetSSFileSize ();
 	if (u != _UI64_MAX) {
-		char sz [100];
-		_i64toa ((__int64)u, sz, 10);
+		TCHAR sz [100];
+		_i64tot ((__int64)u, sz, 10);
 		strSize = sz;
 	}
 	else
-		strSize = "Unknown";
+		strSize = _T("Unknown");
 	CString strComment = m_pwndOpinions->m_dld->strComment;
-	strComment.Replace ("\r\n", " ");
-	strComment.Replace ("\r", " ");
-	strComment.Replace ("\n", " ");
+	strComment.Replace (_T("\r\n"), _T(" "));
+	strComment.Replace (_T("\r"), _T(" "));
+	strComment.Replace (_T("\n"), _T(" "));
 
 	
 
@@ -185,29 +185,29 @@ void CDownloads_Opinions_WBEvents::RetrieveLinkToUsText(IDispatch *pdDoc)
 
 		bool bFound;
 		
-		CString str = GetFormInputElementText (spForm, "LINKTOUSTEXT", bFound);
+		CString str = GetFormInputElementText (spForm, _T("LINKTOUSTEXT"), bFound);
 		if (bFound)
 			_App.View_SpreadHelpDialog_LinkToUsText (str); 
 		
-		str = GetFormInputElementText (spForm, "RADIOBUTTON1TEXT", bFound);
+		str = GetFormInputElementText (spForm, _T("RADIOBUTTON1TEXT"), bFound);
 		if (bFound)
 			_App.View_SpreadHelpDialog_RadioButton1Text (str);
-		str = GetFormInputElementText (spForm, "RADIOBUTTON2TEXT", bFound);
+		str = GetFormInputElementText (spForm, _T("RADIOBUTTON2TEXT"), bFound);
 		if (bFound)
 			_App.View_SpreadHelpDialog_RadioButton2Text (str);
 	}
 }
 
-CString CDownloads_Opinions_WBEvents::GetFormInputElementText(IHTMLFormElement *pForm, LPCSTR pszElementName, bool& bFound)
+CString CDownloads_Opinions_WBEvents::GetFormInputElementText(IHTMLFormElement *pForm, LPCTSTR pszElementName, bool& bFound)
 {
 	bFound = false;
 	IDispatchPtr spdelInp;
 	pForm->item (COleVariant (pszElementName), COleVariant ((long)0), &spdelInp);
 	if (spdelInp == NULL)
-		return "";
+		return _T("");
 	IHTMLInputElementPtr spelInp (spdelInp);
 	if (spelInp == NULL)
-		return "";
+		return _T("");
 	BSTR bstr;
 	spelInp->get_defaultValue (&bstr);
 	CString strEl = bstr;

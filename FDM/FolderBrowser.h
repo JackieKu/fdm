@@ -18,8 +18,8 @@ protected:
 public:  
 
 public:
-	LPCSTR GetPath();
-	static CFolderBrowser* Create (LPCSTR pszTitle, LPCSTR pszPath, LPCSTR pszRoot, CWnd* pWndParent);  
+	LPCTSTR GetPath();
+	static CFolderBrowser* Create (LPCTSTR pszTitle, LPCTSTR pszPath, LPCTSTR pszRoot, CWnd* pWndParent);  
 
 	
 	//{{AFX_VIRTUAL(CFolderBrowser)
@@ -31,9 +31,9 @@ public:
 protected:
 	CString m_strResPath;
 	BOOL m_bResult;
-	LPCSTR m_pszPath;
-	LPCSTR m_pszTitle;
-	LPCSTR m_pszRoot;
+	LPCTSTR m_pszPath;
+	LPCTSTR m_pszTitle;
+	LPCTSTR m_pszRoot;
 	HWND m_hWndParent;
 
 	virtual ~CFolderBrowser();

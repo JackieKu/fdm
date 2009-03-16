@@ -318,7 +318,7 @@ BOOL CDownloadProperties_MiscPage::OnApply()
 		}
 	}
 	else if (uChecked == BST_UNCHECKED)
-		DP_SET (pszAdditionalExt, TRUE, "");
+		DP_SET (pszAdditionalExt, TRUE, _T(""));
 
 	uChecked = IsDlgButtonChecked (IDC_USECREATEEXT);
 	if (uChecked == BST_CHECKED)
@@ -338,7 +338,7 @@ BOOL CDownloadProperties_MiscPage::OnApply()
 		}
 	}
 	else if (uChecked == BST_UNCHECKED)
-		DP_SET (pszCreateExt, TRUE, "");
+		DP_SET (pszCreateExt, TRUE, _T(""));
 
 	uChecked = IsDlgButtonChecked (IDC_USEHIDDENFLAG);
 	if (uChecked != BST_INDETERMINATE)
@@ -346,7 +346,7 @@ BOOL CDownloadProperties_MiscPage::OnApply()
 		for (size_t i = 0; i < m_pvDlds->size (); i++)
 		{
 			vmsDownloadSmartPtr dld = m_pvDlds->at (i);
-			LPCSTR pszFile = dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName;
+			LPCTSTR pszFile = dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName;
 			DWORD dw = DWORD (-1);
 			if (pszFile)
 				dw = GetFileAttributes (pszFile);
@@ -472,9 +472,9 @@ void CDownloadProperties_MiscPage::ApplyLanguage()
 		fsDlgLngInfo (IDC_GENERATEINFOFILE, L_GENERATEDESCFILE),
 	};
 
-	CString str = '"'; str += LS (L_FILENOTFOUND); str += '"';
+	CString str = _T('"'); str += LS (L_FILENOTFOUND); str += _T('"');
 	SetDlgItemText (IDC_FILENOTFOUND, str);
-	str = '"'; str += LS (L_ACCDENIED); str += '"';
+	str = _T('"'); str += LS (L_ACCDENIED); str += _T('"');
 	SetDlgItemText (IDC_ACCDENIED, str);
 
 	_LngMgr.ApplyLanguage (this, lnginfo, sizeof (lnginfo) / sizeof (fsDlgLngInfo), 0);

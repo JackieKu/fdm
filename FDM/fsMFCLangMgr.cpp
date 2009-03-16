@@ -33,7 +33,7 @@ void fsMFCLangMgr::ApplyLanguage(CDialog *dlg, fsDlgLngInfo *lnginfo, int cInfo,
 		else
 		{
 			CString str = LS (lnginfo [cInfo].nIDStr);
-			str += ':';
+			str += _T(':');
 			dlg->SetDlgItemText (lnginfo [cInfo].nCtrlID, str);
 		}
 	}

@@ -7,21 +7,21 @@
 
 #include "downloadproperties.h"  
 
-extern BOOL fsFileNameFromUrlPath (LPCSTR pszUrl, BOOL bUsingFTP, BOOL bDecode, LPSTR pszBuf, UINT uSize);
+extern BOOL fsFileNameFromUrlPath (LPCTSTR pszUrl, BOOL bUsingFTP, BOOL bDecode, LPTSTR pszBuf, UINT uSize);
 
-extern BOOL fsIRToStr (fsInternetResult ir, LPSTR pszStr, UINT uMaxSize);
+extern BOOL fsIRToStr (fsInternetResult ir, LPTSTR pszStr, UINT uMaxSize);
 
-extern BOOL fsFilePathFromUrlPath (LPCSTR pszUrl, BOOL bUsingFTP, BOOL bDecode, LPSTR pszBuf, UINT uSize);
+extern BOOL fsFilePathFromUrlPath (LPCTSTR pszUrl, BOOL bUsingFTP, BOOL bDecode, LPTSTR pszBuf, UINT uSize);
 
-extern BOOL fsPathFromUrlPath (LPCSTR pszUrl, BOOL bUsingFTP, BOOL bDecode, LPSTR pszBuf, UINT uSize);      
+extern BOOL fsPathFromUrlPath (LPCTSTR pszUrl, BOOL bUsingFTP, BOOL bDecode, LPTSTR pszBuf, UINT uSize);      
 
-extern BOOL fsIsAnchorInUrl (LPCSTR pszFullUrl, LPSTR* ppszWithoutAnchor, LPCSTR* ppszAnchor = NULL);
+extern BOOL fsIsAnchorInUrl (LPCTSTR pszFullUrl, LPTSTR* ppszWithoutAnchor, LPCTSTR* ppszAnchor = NULL);
 
 extern DWORD fsNPToSiteValidFor (fsNetworkProtocol np);
 
-extern void vmsMakeWinInetProxy (LPCSTR pszProxy, fsNetworkProtocol npConnection, fsNetworkProtocol npProxy, LPSTR pszWProxy);  
+extern void vmsMakeWinInetProxy (LPCTSTR pszProxy, fsNetworkProtocol npConnection, fsNetworkProtocol npProxy, LPTSTR pszWProxy);  
 
-extern ULONG fsGetSiteIp (LPCSTR pszSite);  
+extern ULONG fsGetSiteIp (LPCTSTR pszSite);  
 
 extern void fsDecodeHtmlUrl (fsString &str);
 extern void fsDecodeHtmlText (fsString &str);

@@ -13,7 +13,7 @@ class vmsTorrentExtension
 {
 public:
 	
-	static BOOL AssociateWith (LPCSTR pszCmdLine);
+	static BOOL AssociateWith (LPCTSTR pszCmdLine);
 	static fsString GetCurrentAssociation();
 	static BOOL IsAssociatedWithUs();
 	

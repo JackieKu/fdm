@@ -32,7 +32,7 @@ public:
 
 protected:
 	static CString TimeToStr (FILETIME& time);
-	static BOOL ExportHistory (LPCSTR pszFile, fs::list <fsDLHistoryRecord*> &vpHist, BOOL bAppend);
+	static BOOL ExportHistory (LPCTSTR pszFile, fs::list <fsDLHistoryRecord*> &vpHist, BOOL bAppend);
 	void ApplyLanguage();
 
 	

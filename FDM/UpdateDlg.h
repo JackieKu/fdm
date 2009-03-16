@@ -40,7 +40,7 @@ protected:
 	
 	void ShowGroup (BOOL bFirstGroup);
 	
-	static void _UpdateMgrDescEvents (LPCSTR pszEvent, LPVOID lp);
+	static void _UpdateMgrDescEvents (LPCTSTR pszEvent, LPVOID lp);
 	static void _UpdateMgrEvents (fsUpdateMgrEvent ev, LPVOID lp);
 	
 	void ShowUpdateInfo ();

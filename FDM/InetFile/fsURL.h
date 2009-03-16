@@ -19,17 +19,7 @@
 class fsURL  
 {
 public:
-	
-	
 	fsInternetResult Crack (LPCSTR pszUrl, BOOL bCheckScheme = TRUE);
-	
-	
-	
-	
-	
-	
-	
-	
 	fsInternetResult Create (INTERNET_SCHEME nScheme, LPCTSTR lpszHostName, INTERNET_PORT nPort, LPCTSTR lpszUserName, LPCTSTR lpszPassword, LPCTSTR lpszUrlPath, LPSTR lpszUrl, DWORD* pdwUrlLength);
 	
 	INTERNET_PORT GetPort();
@@ -39,19 +29,12 @@ public:
 	LPCSTR GetScheme();
 	LPCSTR GetHostName();
 	LPCSTR GetPath();
-	
-	
-	
-	
 	void FixWinInetBug();
 		
 	fsURL();
 	virtual ~fsURL();
 
 protected:
-	
-	
-	
 	static void Encode (LPCSTR psz, LPSTR sz);
 	URL_COMPONENTS m_url;
 	CHAR m_szScheme [URL_SCHEME_SIZE];	

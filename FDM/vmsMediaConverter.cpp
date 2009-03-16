@@ -25,23 +25,23 @@ vmsMediaConverter::~vmsMediaConverter()
 
 }
 
-BOOL vmsMediaConverter::ConvertMedia(LPCSTR pszSrcFile, LPCSTR pszDstFile, LPCSTR pszDstFormat,
-						  LPCSTR pszAudioCodec, int nAudioChannels, int nAudioBitrate, 
+BOOL vmsMediaConverter::ConvertMedia(LPCTSTR pszSrcFile, LPCTSTR pszDstFile, LPCTSTR pszDstFormat,
+						  LPCTSTR pszAudioCodec, int nAudioChannels, int nAudioBitrate, 
 						  int nAudioRate,
-						  LPCSTR pszVideoCodec, int nVideoBitrate, int nVideoFrameRate,
+						  LPCTSTR pszVideoCodec, int nVideoBitrate, int nVideoFrameRate,
 						  int nVideoFrameWidth, int nVideoFrameHeight,
 						  int* pnProgress, BOOL *pbCancel)
 {
 	Initialize ();
 	
-	typedef BOOL (*FNCM)(LPCSTR pszSrcFile, LPCSTR pszDstFile, LPCSTR pszDstFormat,
-						  LPCSTR pszAudioCodec, int nAudioChannels, int nAudioBitrate, 
+	typedef BOOL (*FNCM)(LPCTSTR pszSrcFile, LPCTSTR pszDstFile, LPCTSTR pszDstFormat,
+						  LPCTSTR pszAudioCodec, int nAudioChannels, int nAudioBitrate, 
 						  int nAudioRate,
-						  LPCSTR pszVideoCodec, int nVideoBitrate, int nVideoFrameRate,
+						  LPCTSTR pszVideoCodec, int nVideoBitrate, int nVideoFrameRate,
 						  int nVideoFrameWidth, int nVideoFrameHeight,
 						  int* pnProgress, BOOL *pbCancel);
 
-	FNCM pfn = (FNCM) m_dll.GetProcAddress ("ConvertMediaFile");
+	FNCM pfn = (FNCM) m_dll.GetProcAddress (_T("ConvertMediaFile"));
 
 	BOOL bRes = FALSE;
 
@@ -63,9 +63,9 @@ void vmsMediaConverter::Initialize()
 
 	if (m_dll.is_Loaded () == false)
 	{
-		m_dll.Load ("mediaconverter.dll");
+		m_dll.Load (_T("mediaconverter.dll"));
 		typedef void (*FNI)();
-		FNI pfn = (FNI) m_dll.GetProcAddress ("Initialize");
+		FNI pfn = (FNI) m_dll.GetProcAddress (_T("Initialize"));
 		if (pfn)
 			pfn ();
 	}
@@ -78,7 +78,7 @@ void vmsMediaConverter::Shutdown()
 	if (m_cDllRefs == 0)
 	{
 		typedef void (*FNS)();
-		FNS pfn = (FNS) m_dll.GetProcAddress ("Shutdown");
+		FNS pfn = (FNS) m_dll.GetProcAddress (_T("Shutdown"));
 		if (pfn)
 			pfn ();
 		m_dll.Free ();

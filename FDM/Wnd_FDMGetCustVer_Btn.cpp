@@ -14,20 +14,20 @@ static char THIS_FILE[] = __FILE__;
 
 CWnd_FDMGetCustVer_Btn::CWnd_FDMGetCustVer_Btn()
 {
-	LPCSTR ppszTexts [] = {
+	LPCTSTR ppszTexts [] = {
 		
-		"Promote your site with Free Download Manager!",
-		"Customize Free Download Manager for your site",
-		"Promote your site for free",
+		_T("Promote your site with Free Download Manager!"),
+		_T("Customize Free Download Manager for your site"),
+		_T("Promote your site for free"),
 
 		
-		"Downloading solutions for enterprise",
-		"Professional services",
-		"Custom solutions based on our engine",
+		_T("Downloading solutions for enterprise"),
+		_T("Professional services"),
+		_T("Custom solutions based on our engine"),
 	};
 
 	
-	LPCSTR ppszURLs [] = {
+	LPCTSTR ppszURLs [] = {
 		"http://www.freedownloadmanager.org/custom.php?id=%d",
 		"http://www.freedownloadmanager.org/custom.php?id=%d",
 		"http://www.freedownloadmanager.org/custom.php?id=%d",
@@ -37,7 +37,7 @@ CWnd_FDMGetCustVer_Btn::CWnd_FDMGetCustVer_Btn()
 		"http://www.freedownloadmanager.org/solutions.htm",
 	};
 
-	int cTexts = sizeof (ppszTexts) / sizeof (LPCSTR);
+	int cTexts = sizeof (ppszTexts) / sizeof (LPCTSTR);
 	int iText = GetTickCount () % (int)(cTexts * 1.333);
 	iText %= cTexts;
 	
@@ -72,15 +72,15 @@ BOOL CWnd_FDMGetCustVer_Btn::Create(CWnd *pwndParent)
 		AfxRegisterWndClass (0, LoadCursor (AfxGetInstanceHandle (), 
 					MAKEINTRESOURCE (IDC_HAND_)),
 				(HBRUSH)(COLOR_3DFACE+1), NULL), 
-			"", WS_CHILD|WS_VISIBLE,
+			_T(""), WS_CHILD|WS_VISIBLE,
 			CRect (0, 0, 130, _TB_SIZE_Y > GCVB_MIN_HEIGHT ? _TB_SIZE_Y : GCVB_MIN_HEIGHT), pwndParent, 0);
 
 	m_bmBtn.LoadBitmap (IDB_FDM_GETCVER_BTN);
 
-	m_fntText.CreateFont (12, 0, 0, 0, FW_BOLD, 0, 0, 0, 0, 0, 0, 0, 0, "Tahoma");
+	m_fntText.CreateFont (12, 0, 0, 0, FW_BOLD, 0, 0, 0, 0, 0, 0, 0, 0, _T("Tahoma"));
 
 	if (is_BtnCanBeMultiline () == FALSE)
-		m_strBtnText.Remove ('\n');
+		m_strBtnText.Remove (_T('\n'));
 
 	CalculateTextRect ();
 
@@ -148,23 +148,23 @@ void CWnd_FDMGetCustVer_Btn::CalculateTextRect()
 			
 			for (int i = 0; i < mp; i++)
 			{
-				if (m_strBtnText [mp+i] == ' ')
+				if (m_strBtnText [mp+i] == _T(' '))
 					mp += i;
-				else if (m_strBtnText [mp-i] == ' ')
+				else if (m_strBtnText [mp-i] == _T(' '))
 					mp -= i;
 
-				if (m_strBtnText [mp] == ' ')
+				if (m_strBtnText [mp] == _T(' '))
 					break;
 			}
 
-			if (m_strBtnText [mp] == ' ')
+			if (m_strBtnText [mp] == _T(' '))
 			{
 				
 				
 
 				CString str;
 				str = m_strBtnText.Left (mp+1);
-				str += "\n";
+				str += _T("\n");
 				str += m_strBtnText.Right (m_strBtnText.GetLength ()-mp-1);
 				m_strBtnText = str;
 			}
@@ -184,10 +184,10 @@ void CWnd_FDMGetCustVer_Btn::CalculateTextRect()
 	else
 	{
 		int cxMax = 0;
-		cxMax = dc->GetTextExtent (m_strBtnText.Left (m_strBtnText.Find ('\n'))).cx;
+		cxMax = dc->GetTextExtent (m_strBtnText.Left (m_strBtnText.Find (_T('\n')))).cx;
 		cxMax = max (cxMax,
 			dc->GetTextExtent (m_strBtnText.Right (
-					m_strBtnText.GetLength () - m_strBtnText.Find ('\n') - 1)).cx
+					m_strBtnText.GetLength () - m_strBtnText.Find (_T('\n')) - 1)).cx
 				);
 
 		cxMax += 10;
@@ -198,7 +198,7 @@ void CWnd_FDMGetCustVer_Btn::CalculateTextRect()
 		if (cxMax > 120)
 			m_rcText.right = cxMax + 8;
 
-		int cy = dc->GetTextExtent (m_strBtnText.Left (m_strBtnText.Find ('\n'))).cy;
+		int cy = dc->GetTextExtent (m_strBtnText.Left (m_strBtnText.Find (_T('\n')))).cy;
 		cy *= 2;
 		if (m_rcText.Height () > cy)
 		{
@@ -213,7 +213,7 @@ void CWnd_FDMGetCustVer_Btn::CalculateTextRect()
 
 BOOL CWnd_FDMGetCustVer_Btn::is_TextMultiline()
 {
-	return m_strBtnText.Find ('\n') != -1;
+	return m_strBtnText.Find (_T('\n')) != -1;
 }
 
 void CWnd_FDMGetCustVer_Btn::set_AffiliateID(DWORD dwID)

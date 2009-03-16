@@ -126,7 +126,7 @@ UINT fsDownloadsMgr::Add(vmsDownloadSmartPtr dld, BOOL bKeepIDAsIs, bool bPlaceT
 	return dld->nID;
 }
 
-void fsDownloadsMgr::_DownloadMgrEventDesc(fsDownloadMgr *pMgr, fsDownloadMgr_EventDescType enType, LPCSTR pszEvent, LPVOID lp)
+void fsDownloadsMgr::_DownloadMgrEventDesc(fsDownloadMgr *pMgr, fsDownloadMgr_EventDescType enType, LPCTSTR pszEvent, LPVOID lp)
 {
 	try {
 
@@ -318,7 +318,7 @@ void fsDownloadsMgr::ProcessDownloads()
 		BOOL bAccept = FALSE;	
 		
 		fsDownloadMgr *pMgr = dld->pMgr->GetDownloadMgr (); 
-		LPCSTR pszSiteName = pMgr ? pMgr->GetDNP ()->pszServerName : NULL;
+		LPCTSTR pszSiteName = pMgr ? pMgr->GetDNP ()->pszServerName : NULL;
 		fsNetworkProtocol enNP = pMgr ? pMgr->GetDNP ()->enProtocol : (fsNetworkProtocol)-1;
 
 		if (cDlds && cConns)	
@@ -509,13 +509,13 @@ vmsDownloadSmartPtr fsDownloadsMgr::GetDownload(size_t iIndex)
 
 BOOL fsDownloadsMgr::LoadDownloads()
 {
-	if (!m_saver.Load (&m_vDownloads, "downloads", FALSE))
+	if (!m_saver.Load (&m_vDownloads, _T("downloads"), FALSE))
 		return FALSE;
 
 	BOOL bFailIfLarge = _App.CheckRecycleBinSize ();
 	for (int j = 0; j < 2; j++)
 	{
-		fsDLLoadResult res = m_saver.Load (&m_vDeletedDownloads, "downloads.del", j == 0 && bFailIfLarge);
+		fsDLLoadResult res = m_saver.Load (&m_vDeletedDownloads, _T("downloads.del"), j == 0 && bFailIfLarge);
 		if (res == DLLR_TOOLARGESIZE)
 		{
 			CWaitForConfirmationDlg dlg;
@@ -593,8 +593,8 @@ BOOL fsDownloadsMgr::Save()
 	BOOL b = FALSE;
 
 	try {
-		b = m_saver.Save (&m_vDownloads, "downloads");
-		if (FALSE == m_saver.Save (&m_vDeletedDownloads, "downloads.del"))
+		b = m_saver.Save (&m_vDownloads, _T("downloads"));
+		if (FALSE == m_saver.Save (&m_vDeletedDownloads, _T("downloads.del")))
 			b = FALSE;
 		if (FALSE == m_histmgr.SaveHistory ())
 			b = FALSE;
@@ -834,7 +834,7 @@ void fsDownloadsMgr::RebuildServerList(BOOL bUpdateSiteList)
 
 			fsDownload_NetworkProperties *dnp = pMgr->GetDownloader ()->DNP (uSect);
 
-			LPCSTR pszServer = dnp->pszServerName;
+			LPCTSTR pszServer = dnp->pszServerName;
 			fsNetworkProtocol np = dnp->enProtocol;
 			
 			fsSiteInfo *site = _SitesMgr.FindSite2 (pszServer, fsNPToSiteValidFor (np));
@@ -933,7 +933,7 @@ BOOL fsDownloadsMgr::OnQueryNewSection(vmsDownloadSmartPtr dld, UINT nUsingMirro
 	return b;
 }
 
-void fsDownloadsMgr::Event(vmsDownloadSmartPtr dld, LPCSTR pszEvent, fsDownloadMgr_EventDescType enType)
+void fsDownloadsMgr::Event(vmsDownloadSmartPtr dld, LPCTSTR pszEvent, fsDownloadMgr_EventDescType enType)
 {
 	OnDownloadDescEventRcvd (dld, enType, pszEvent);
 }
@@ -1411,7 +1411,7 @@ void fsDownloadsMgr::InitTUM()
 	ApplyConnectionType (enCT);
 }
 
-BOOL fsDownloadsMgr::IsServerFilled(LPCSTR pszServer, DWORD dwReqProtocols)
+BOOL fsDownloadsMgr::IsServerFilled(LPCTSTR pszServer, DWORD dwReqProtocols)
 {
 	fsSiteInfo *site = _SitesMgr.FindSite2 (pszServer, dwReqProtocols);
 
@@ -1770,7 +1770,7 @@ void fsDownloadsMgr::Download_CloneSettings(vmsDownloadSmartPtr dst, vmsDownload
 
 BOOL fsDownloadsMgr::PerformVirusCheck(vmsDownloadSmartPtr dld, BOOL bCheckExtReqs, BOOL bWaitDone)
 {
-	if (m_strVirName == "")
+	if (m_strVirName == _T(""))
 		return TRUE;
 
 	bool bMultiTorrent = dld->pMgr->GetBtDownloadMgr () != NULL && 
@@ -1784,7 +1784,7 @@ BOOL fsDownloadsMgr::PerformVirusCheck(vmsDownloadSmartPtr dld, BOOL bCheckExtRe
 
 	for (int i = 0; i < nFiles; i++)
 	{
-		char szFile [MY_MAX_PATH];
+		TCHAR szFile [MY_MAX_PATH];
 		
 		if (bMultiTorrentCheck)
 			strFile = dld->pMgr->GetBtDownloadMgr ()->get_OutputFilePathName (i);
@@ -1795,7 +1795,7 @@ BOOL fsDownloadsMgr::PerformVirusCheck(vmsDownloadSmartPtr dld, BOOL bCheckExtRe
 
 		if (bCheckExtReqs)
 		{
-			const char *pszExt = strrchr (strFile, '.');
+			const TCHAR *pszExt = _tcsrchr (strFile, _T('.'));
 
 			
 			if (pszExt && IsExtInExtsStr (m_strVirExts, pszExt+1))
@@ -1813,12 +1813,12 @@ BOOL fsDownloadsMgr::PerformVirusCheck(vmsDownloadSmartPtr dld, BOOL bCheckExtRe
 	Event (dld, LS (L_LAUNCHAVIR), EDT_INQUIRY);
 	
 	CString strArgs = m_strVirArgs;
-	CString str = '"'; str += strFile; str += '"';
-	strArgs.Replace ("%file%", str);
+	CString str = _T('"'); str += strFile; str += _T('"');
+	strArgs.Replace (_T("%file%"), str);
 
 	if (bWaitDone == FALSE)
 	{
-		DWORD dwErr = (DWORD) ShellExecute (HWND_DESKTOP, "open", m_strVirName, strArgs, NULL, SW_SHOW);
+		DWORD dwErr = (DWORD) ShellExecute (HWND_DESKTOP, _T("open"), m_strVirName, strArgs, NULL, SW_SHOW);
 		if (dwErr <= 32)
 		{
 			SetLastError (dwErr);
@@ -1835,13 +1835,13 @@ BOOL fsDownloadsMgr::PerformVirusCheck(vmsDownloadSmartPtr dld, BOOL bCheckExtRe
 		ZeroMemory (&pi, sizeof (pi));
 
 		fsString str = m_strVirName;
-		if (strchr (str, '\\') == NULL && strchr (str, '/') == NULL)
+		if (strchr (str, _T('\\')) == NULL && _tcschr (str, _T('/')) == NULL)
 			str = vmsRegisteredApp::GetFullPath (str);
 
 		CString strCmdLine; 
-		strCmdLine.Format ("\"%s\" %s", (LPCSTR)str, (LPCSTR)strArgs);
+		strCmdLine.Format (_T("\"%s\" %s"), (LPCTSTR)str, (LPCTSTR)strArgs);
 
-		if (FALSE == CreateProcess (NULL, (LPSTR)(LPCSTR)strCmdLine, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi))
+		if (FALSE == CreateProcess (NULL, (LPTSTR)(LPCTSTR)strCmdLine, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi))
 			goto _lErr;
 
 		WaitForSingleObject (pi.hProcess, INFINITE);
@@ -1905,9 +1905,9 @@ DWORD fsDownloadsMgr::OnBeforeDownload(vmsDownloadSmartPtr dld)
 
 	if (dld->dwFlags & DLD_CTREQ_HTML)
 	{
-		LPCSTR pszType = dld->pMgr->GetDownloadMgr ()->GetDownloader ()->GetContentType ();
+		LPCTSTR pszType = dld->pMgr->GetDownloadMgr ()->GetDownloader ()->GetContentType ();
 
-		if(strstr (pszType, "html") == NULL)
+		if(strstr (pszType, _T("html")) == NULL)
 			bOK = FALSE;
 	}
 
@@ -2486,16 +2486,16 @@ void fsDownloadsMgr::LaunchDownload(vmsDownloadSmartPtr dld, UINT nWaitForConfir
 	if (nWaitForConfirmation != 0)
 	{
 		CWaitForConfirmationDlg dlg;
-		char szFile [MY_MAX_PATH];
+		TCHAR szFile [MY_MAX_PATH];
 		if (dld->pMgr->GetDownloadMgr ())
 			fsGetFileName (dld->pMgr->get_OutputFilePathName (), szFile);
 		else if (dld->pMgr->GetBtDownloadMgr ())
 			_tcscpy (szFile, dld->pMgr->GetBtDownloadMgr ()->get_TorrentName ());
-		CString strMsg = "\""; strMsg += szFile; strMsg += "\" ";
-		if (dld->strComment != "") {
-			strMsg += '('; strMsg += dld->strComment; strMsg += ") ";
+		CString strMsg = _T("\""); strMsg += szFile; strMsg += _T("\" ");
+		if (dld->strComment != _T("")) {
+			strMsg += _T('('); strMsg += dld->strComment; strMsg += _T(") ");
 		}
-		strMsg += LS (L_WASSCHEDULEDTOLAUNCH); strMsg += "\n";
+		strMsg += LS (L_WASSCHEDULEDTOLAUNCH); strMsg += _T("\n");
 		strMsg += LS (L_DOYOUWANTTOLAUNCHIT);
 		dlg.Init (strMsg, nWaitForConfirmation);
 		if (IDCANCEL == dlg.DoModal ())
@@ -2506,7 +2506,7 @@ void fsDownloadsMgr::LaunchDownload(vmsDownloadSmartPtr dld, UINT nWaitForConfir
 	if (dld->pMgr->IsBittorrent ())
 		strFileName += dld->pMgr->GetBtDownloadMgr ()->get_RootFolderName ();
 
-	ShellExecute (::GetDesktopWindow (), "open", strFileName, NULL, NULL, SW_SHOW);
+	ShellExecute (::GetDesktopWindow (), _T("open"), strFileName, NULL, NULL, SW_SHOW);
 }
 
 void fsDownloadsMgr::Shutdown()
@@ -2545,9 +2545,9 @@ BOOL fsDownloadsMgr::GenerateDescriptionFile(vmsDownloadSmartPtr dld)
 		return FALSE;
 
 	CString str = dld->strComment;
-	str.Replace ("\r", "");
+	str.Replace (_T("\r"), _T(""));
 
-	str += "\n\n"; str += LS (L_THISFILEWASDLDEDFROM); str += ":\n";
+	str += _T("\n\n"); str += LS (L_THISFILEWASDLDEDFROM); str += _T(":\n");
 	if (dld->pMgr->GetDownloadMgr ())
 	{
 		str += dld->pMgr->get_URL ();
@@ -2555,31 +2555,31 @@ BOOL fsDownloadsMgr::GenerateDescriptionFile(vmsDownloadSmartPtr dld)
 	else if (dld->pMgr->GetBtDownloadMgr ())
 	{
 		str += dld->pMgr->GetBtDownloadMgr ()->get_TorrentName ();
-		str += " (";
+		str += _T(" (");
 		str += dld->pMgr->get_URL ();
-		str += ")";
+		str += _T(")");
 	}
 
-	str += "\n\n"; str += LS (L_DATE); str += ": ";
+	str += _T("\n\n"); str += LS (L_DATE); str += _T(": ");
 	
 	FILETIME time;
 	SYSTEMTIME systime;
 	GetLocalTime (&systime);
 	SystemTimeToFileTime (&systime, &time);
 
-	char szDate [1000], szTime [1000];
+	TCHAR szDate [1000], szTime [1000];
 	FileTimeToStr (&time, szDate, szTime, FALSE);
-	str += szDate; str += ", "; str += szTime;
+	str += szDate; str += _T(", "); str += szTime;
 
 	CStdioFile file;
 	CString strName = dld->pMgr->get_OutputFilePathName ();
 	if (dld->pMgr->GetBtDownloadMgr () != NULL && 
 			dld->pMgr->GetBtDownloadMgr ()->get_FileCount () != 1)
 	{
-		strName += "\\"; 
+		strName += _T("\\"); 
 		strName += dld->pMgr->GetBtDownloadMgr ()->get_TorrentName ();
 	}
-	strName += ".dsc.txt";
+	strName += _T(".dsc.txt");
 
 	file.Open (strName, CFile::typeText | CFile::modeCreate | CFile::modeWrite);
 	file.WriteString (str);
@@ -2590,7 +2590,7 @@ BOOL fsDownloadsMgr::GenerateDescriptionFile(vmsDownloadSmartPtr dld)
 
 BOOL fsDownloadsMgr::LoadStateInformation()
 {
-	CString strFileName = fsGetDataFilePath ("dlmgrsi.sav");
+	CString strFileName = fsGetDataFilePath (_T("dlmgrsi.sav"));
 
 	if (GetFileAttributes (strFileName) == DWORD (-1))
 		return TRUE;
@@ -2640,7 +2640,7 @@ BOOL fsDownloadsMgr::LoadStateInformation()
 
 		for (int i = 0; i < vFilePathes.get_Count (); i++)
 		{
-			char sz [MY_MAX_PATH] = "";
+			TCHAR sz [MY_MAX_PATH] = _T("");
 			fsGetFileName (vFilePathes.get_String (i), sz);
 			m_LastFilesDownloaded.Add (sz, vFilePathes.get_String (i));
 		}
@@ -2661,7 +2661,7 @@ BOOL fsDownloadsMgr::LoadStateInformation()
 
 BOOL fsDownloadsMgr::SaveStateInformation()
 {
-	CString strFileName = fsGetDataFilePath ("dlmgrsi.sav");
+	CString strFileName = fsGetDataFilePath (_T("dlmgrsi.sav"));
 
 	HANDLE hFile = CreateFile (strFileName, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS,
 		FILE_ATTRIBUTE_HIDDEN, NULL);
@@ -2845,7 +2845,7 @@ DWORD WINAPI fsDownloadsMgr::_threadIntegrityCheckAndVirCheckAndLaunch(LPVOID lp
 			{
 				CDlg_CheckFileIntegrity_Result dlg;
 				dlg.m_bResultOK = FALSE;
-				char sz [MY_MAX_PATH];
+				TCHAR sz [MY_MAX_PATH];
 				fsGetFileName (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, sz);
 				dlg.m_strFileName = sz;
 				dlg.m_strUrl = dld->pMgr->get_URL ();
@@ -2922,7 +2922,7 @@ BOOL fsDownloadsMgr::OnDldDone_CheckDownloadIsMetaLink(vmsDownloadSmartPtr dld)
 		return FALSE;
 
 	fsString strFile = dld->pMgr->get_OutputFilePathName ();
-	if (lstrlen (strFile) > 10 && lstrcmpi (strFile + lstrlen (strFile) - 9, ".metalink") != 0)
+	if (lstrlen (strFile) > 10 && lstrcmpi (strFile + lstrlen (strFile) - 9, _T(".metalink")) != 0)
 		return FALSE; 
 
 	vmsMetalinkFile mf;
@@ -2939,7 +2939,7 @@ BOOL fsDownloadsMgr::OnDldDone_CheckDownloadIsMetaLink(vmsDownloadSmartPtr dld)
 		vmsMetalinkFile_File *file = mf.get_File (iFile);
 
 		
-		if (file->strOS.GetLength () && strstr (file->strOS, "Windows") == NULL)
+		if (file->strOS.GetLength () && _tcsstr (file->strOS, _T("Windows")) == NULL)
 			continue;
 
 		viFiles.push_back (iFile);
@@ -2977,10 +2977,10 @@ BOOL fsDownloadsMgr::OnDldDone_CheckDownloadIsMetaLink(vmsDownloadSmartPtr dld)
 		{
 			vmsMetalinkFile_File_Url *url = &file->vMirrors [i];
 
-			if (strcmpi (url->strProtocol, "http") && strcmpi (url->strProtocol, "https") &&
-					strcmpi (url->strProtocol, "ftp"))
+			if (strcmpi (url->strProtocol, _T("http")) && strcmpi (url->strProtocol, _T("https")) &&
+					strcmpi (url->strProtocol, _T("ftp")))
 			{
-				if (strcmpi (url->strProtocol, "bittorrent") == 0)
+				if (strcmpi (url->strProtocol, _T("bittorrent")) == 0)
 					strBtUrl = url->strUrl;
 				continue;
 			}
@@ -3026,11 +3026,11 @@ BOOL fsDownloadsMgr::OnDldDone_CheckDownloadIsMetaLink(vmsDownloadSmartPtr dld)
 			if (hash->strChecksum.GetLength () == 0)
 				continue;
 		
-			if (lstrcmpi (hash->strAlgorithm, "md5") == 0)
+			if (lstrcmpi (hash->strAlgorithm, _T("md5")) == 0)
 				dwAlg = HA_MD5;
 
-			else if (lstrcmpi (hash->strAlgorithm, "sha1") == 0 || 
-					lstrcmpi (hash->strAlgorithm, "sha-1") == 0)
+			else if (lstrcmpi (hash->strAlgorithm, _T("sha1")) == 0 || 
+					lstrcmpi (hash->strAlgorithm, _T("sha-1")) == 0)
 				dwAlg = HA_SHA1;
 
 			else
@@ -3039,29 +3039,29 @@ BOOL fsDownloadsMgr::OnDldDone_CheckDownloadIsMetaLink(vmsDownloadSmartPtr dld)
 			
 			dld->pMgr->GetDownloadMgr ()->GetDP ()->dwIntegrityCheckAlgorithm = dwAlg;
 			SAFE_DELETE_ARRAY (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszCheckSum);
-			dld->pMgr->GetDownloadMgr ()->GetDP ()->pszCheckSum = new char [hash->strChecksum.GetLength () + 1];
+			dld->pMgr->GetDownloadMgr ()->GetDP ()->pszCheckSum = new TCHAR [hash->strChecksum.GetLength () + 1];
 			_tcscpy (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszCheckSum, hash->strChecksum);
 		}
 
 		if (iFile == 0)
 			DeleteFile (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName);
-		LPSTR psz = strrchr (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, '\\');
+		LPTSTR psz = _tcsrchr (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, _T('\\'));
 		if (psz == NULL)
-			psz = strrchr (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, '/');
+			psz = _tcsrchr (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, _T('/'));
 		if (psz)
 			*psz = 0;
 
-		char szNewFile [MY_MAX_PATH];
+		TCHAR szNewFile [MY_MAX_PATH];
 		_tcscpy (szNewFile, dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName);
-		_tcscat (szNewFile, "\\");
+		_tcscat (szNewFile, _T("\\"));
 		if (file->strName.pszString != NULL)
 			_tcscat (szNewFile, file->strName);
 		SAFE_DELETE_ARRAY (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName);
-		dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName = new char [lstrlen (szNewFile) + 1];
+		dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName = new TCHAR [lstrlen (szNewFile) + 1];
 		_tcscpy (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, szNewFile);
 
 		if (dld->strComment.GetLength () != 0)
-			dld->strComment += "\r\n";
+			dld->strComment += _T("\r\n");
 		dld->strComment += mf.get_Description ();
 
 		if (iFile == 0)
@@ -3211,7 +3211,7 @@ BOOL fsDownloadsMgr::OnDldDone_CheckDownloadIsBittorrent(vmsDownloadSmartPtr dld
 
 	if ((dld->dwFlags & DLD_TORRENT_DOWNLOAD) == 0)
 	{
-		if (lstrlen (strFile) > 10 && lstrcmpi (strFile + lstrlen (strFile) - 8, ".torrent") != 0)
+		if (lstrlen (strFile) > 10 && lstrcmpi (strFile + lstrlen (strFile) - 8, _T(".torrent")) != 0)
 			return FALSE; 
 	}
 
@@ -3248,7 +3248,7 @@ BOOL fsDownloadsMgr::OnDldDone_CheckDownloadIsBittorrent(vmsDownloadSmartPtr dld
 		return FALSE;
 	}
 
-	char szPath [MY_MAX_PATH];
+	TCHAR szPath [MY_MAX_PATH];
 	fsGetPath (strFile, szPath);
 
 	dld->pMgr->GetDownloadMgr ()->CloseFile ();
@@ -3282,7 +3282,7 @@ BOOL fsDownloadsMgr::OnDldDone_CheckDownloadIsBittorrent(vmsDownloadSmartPtr dld
 	if (strComment.IsEmpty () == FALSE)
 	{
 		if (dld->strComment.IsEmpty () == FALSE)
-			dld->strComment += "\r\n";
+			dld->strComment += _T("\r\n");
 		dld->strComment += strComment;
 	}
 
@@ -3356,23 +3356,23 @@ void fsDownloadsMgr::_BtSessionEventsHandler(vmsBtSession *, vmsBtSessionEvent *
 		pthis->Event (dld, LS (L_BT_TRACKER_ERROR), EDT_RESPONSE_E);
 		if (ev->pszMsg)
 		{
-			LPCSTR pszMsg = strchr (ev->pszMsg, '"');
+			LPCTSTR pszMsg = _tcschr (ev->pszMsg, _T('"'));
 			if (pszMsg)
-				pszMsg = strchr (pszMsg+1, '"');
+				pszMsg = _tcschr (pszMsg+1, _T('"'));
 			if (pszMsg)
 				pszMsg += 2;
 			if (pszMsg == NULL)
 				pszMsg = ev->pszMsg;
 			pthis->EventEx (dld, pszMsg, EDT_RESPONSE_E, 70);
 			dld->pMgr->GetBtDownloadMgr ()->m_strTrackerStatus = LS (L_FAILED); 
-			dld->pMgr->GetBtDownloadMgr ()->m_strTrackerStatus += ": ";
+			dld->pMgr->GetBtDownloadMgr ()->m_strTrackerStatus += _T(": ");
 			dld->pMgr->GetBtDownloadMgr ()->m_strTrackerStatus += pszMsg;
 		}
-		char sz [1000];
+		TCHAR sz [1000];
 		int nNext; nNext = dld->pMgr->GetBtDownloadMgr ()->get_NextAnnounceInterval ();
 		if (nNext)
 		{
-			sprintf (sz, LS (L_NEXT_CONNECT_WITH_TRACKER_IN), nNext);
+			_stprintf (sz, LS (L_NEXT_CONNECT_WITH_TRACKER_IN), nNext);
 			pthis->Event (dld, sz, EDT_INQUIRY);
 		}
 		break;
@@ -3380,7 +3380,7 @@ void fsDownloadsMgr::_BtSessionEventsHandler(vmsBtSession *, vmsBtSessionEvent *
 	case BTSET_TRACKER_REPLY:
 		if (dld->pMgr->IsRunning () == FALSE && dld->pMgr->GetBtDownloadMgr ()->isSeeding () == FALSE)
 			return;
-		dld->pMgr->GetBtDownloadMgr ()->m_strTrackerStatus = "OK"; 
+		dld->pMgr->GetBtDownloadMgr ()->m_strTrackerStatus = _T("OK"); 
 		pthis->Event (dld, LS (L_BT_TRACKER_OK_RESPONSE), EDT_RESPONSE_S);
 		break;
 
@@ -3525,7 +3525,7 @@ BOOL fsDownloadsMgr::OnDownloadStoppedOrDone(vmsDownloadSmartPtr dld)
 			else
 			{
 				fsString strPath = dld->pMgr->get_OutputFilePathName ();
-				char sz [MY_MAX_PATH] = "";
+				TCHAR sz [MY_MAX_PATH] = _T("");
 				fsGetFileName (strPath, sz);
 				m_LastFilesDownloaded.Add (sz, strPath);
 			}
@@ -3581,7 +3581,7 @@ BOOL fsDownloadsMgr::OnDownloadStoppedOrDone(vmsDownloadSmartPtr dld)
 	return TRUE;
 }
 
-void fsDownloadsMgr::OnDownloadDescEventRcvd(vmsDownloadSmartPtr dld, fsDownloadMgr_EventDescType enType, LPCSTR pszEvent)
+void fsDownloadsMgr::OnDownloadDescEventRcvd(vmsDownloadSmartPtr dld, fsDownloadMgr_EventDescType enType, LPCTSTR pszEvent)
 {
 	try {
 
@@ -3841,7 +3841,7 @@ BOOL fsDownloadsMgr::OnDldDone_CheckDownloadIsHtmlPageWithVideo(vmsDownloadSmart
 	fsDownloadMgr *pMgr = dld->pMgr->GetDownloadMgr ();
 
 	if ((dld->dwFlags & DLD_NEED_ONDONE_FOR_FLASH_VIDEO) == 0 &&
-			strstr (pMgr->GetDownloader ()->GetContentType (), "html")  == NULL)
+			_tcsstr (pMgr->GetDownloader ()->GetContentType (), _T("html"))  == NULL)
 		return FALSE;
 	
 	if (pMgr->GetDownloader ()->GetLDFileSize () > 500000)
@@ -3854,7 +3854,7 @@ BOOL fsDownloadsMgr::OnDldDone_CheckDownloadIsHtmlPageWithVideo(vmsDownloadSmart
 
 	DWORD dw = GetFileSize (hFile, NULL);
 
-	LPSTR pszHtml = new char [dw + 1];
+	LPTSTR pszHtml = new TCHAR [dw + 1];
 	ReadFile (hFile, pszHtml, dw, &dw, NULL);
 	pszHtml [dw] = 0;
 
@@ -3897,29 +3897,29 @@ BOOL fsDownloadsMgr::OnDldDone_CheckDownloadIsHtmlPageWithVideo(vmsDownloadSmart
 	}
 
 	DeleteFile (pMgr->GetDP ()->pszFileName);
-	LPSTR psz = strrchr (pMgr->GetDP ()->pszFileName, '\\');
+	LPTSTR psz = _tcsrchr (pMgr->GetDP ()->pszFileName, _T('\\'));
 	if (psz == NULL)
-		psz = strrchr (pMgr->GetDP ()->pszFileName, '/');
+		psz = _tcsrchr (pMgr->GetDP ()->pszFileName, _T('/'));
 	if (psz)
 		psz [1] = 0;
 
-	char szNewFile [MY_MAX_PATH];
+	TCHAR szNewFile [MY_MAX_PATH];
 	_tcscpy (szNewFile, pMgr->GetDP ()->pszFileName);
 	fsString strFile;
 	if (vshcp.get_VideoTitle () != NULL && *vshcp.get_VideoTitle ())
 	{
 		strFile = vshcp.get_VideoTitle ();
-		LPCTSTR pszInvChars = "\\/:*?\"<>|";
+		LPCTSTR pszInvChars = _T("\\/:*?\"<>|");
 		LPTSTR psz = (LPTSTR)(LPCTSTR) strFile;
 		while (*psz)
 		{
 			if (strchr (pszInvChars, *psz) != NULL)
-				*psz = ' ';
+				*psz = _T(' ');
 			psz++;
 		}
 
 		if (dld->strComment.GetLength () != 0)
-			dld->strComment += "\r\n";
+			dld->strComment += _T("\r\n");
 		dld->strComment += vshcp.get_VideoTitle ();
 	}
 	else
@@ -3927,11 +3927,11 @@ BOOL fsDownloadsMgr::OnDldDone_CheckDownloadIsHtmlPageWithVideo(vmsDownloadSmart
 		strFile = LS (L_UNKNOWN);
 	}
 	_tcscat (szNewFile, strFile);
-	_tcscat (szNewFile, ".");
+	_tcscat (szNewFile, _T("."));
 	_tcscat (szNewFile, vshcp.get_VideoType ());
 
 	SAFE_DELETE_ARRAY (pMgr->GetDP ()->pszFileName);
-	pMgr->GetDP ()->pszFileName = new char [lstrlen (szNewFile) + 1];
+	pMgr->GetDP ()->pszFileName = new TCHAR [lstrlen (szNewFile) + 1];
 	_tcscpy (pMgr->GetDP ()->pszFileName, szNewFile);
 
 	dld->pMgr->StartDownloading ();	
@@ -3944,32 +3944,32 @@ void fsDownloadsMgr::DownloadStateChanged(vmsDownloadSmartPtr dld)
 	Event (dld, DME_DOWNLOAD_STATE_CHANGED);
 }
 
-void fsDownloadsMgr::AddEvent(vmsDownloadSmartPtr dld, LPCSTR pszEvent, fsDownloadMgr_EventDescType enType)
+void fsDownloadsMgr::AddEvent(vmsDownloadSmartPtr dld, LPCTSTR pszEvent, fsDownloadMgr_EventDescType enType)
 {
 	Event (dld, pszEvent, enType);
 }
 
-void fsDownloadsMgr::EventEx(vmsDownloadSmartPtr dld, LPCSTR pszEvent, fsDownloadMgr_EventDescType enType, int nMaxCharsPerLine)
+void fsDownloadsMgr::EventEx(vmsDownloadSmartPtr dld, LPCTSTR pszEvent, fsDownloadMgr_EventDescType enType, int nMaxCharsPerLine)
 {
 	fsString strEvent;
 	int n = 0;
 
 	while (*pszEvent)
 	{
-		if (*pszEvent == ' ' && n >= nMaxCharsPerLine)
+		if (*pszEvent == _T(' ') && n >= nMaxCharsPerLine)
 		{
 			Event (dld, strEvent, enType);
-			strEvent = "";
+			strEvent = _T("");
 			n = 0;
 			pszEvent++;
 		}
 		else
 		{
 			strEvent += *pszEvent++;
-			if (*pszEvent == '\n' || *pszEvent == '\r')
+			if (*pszEvent == _T('\n') || *pszEvent == _T('\r'))
 			{
 				n = nMaxCharsPerLine;
-				while (*pszEvent == '\n' || *pszEvent == '\r')
+				while (*pszEvent == _T('\n') || *pszEvent == _T('\r'))
 					pszEvent++;
 				continue;
 			}

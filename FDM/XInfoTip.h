@@ -62,7 +62,7 @@ public:
 	void AddTool(CWnd *pWnd, LPCTSTR szTooltipText, HICON hIcon = NULL);
 	void RemoveTool(CWnd *pWnd);
 
-	void Show(LPCSTR pszCaption, CString szText, BOOL bAutoHide = TRUE, CPoint *pt = NULL);
+	void Show(LPCTSTR pszCaption, CString szText, BOOL bAutoHide = TRUE, CPoint *pt = NULL);
 	void Hide() { 
 		ShowWindow(SW_HIDE); 
 		if (m_nTimer == timerShowNAH)

@@ -28,7 +28,7 @@ struct TFrame
 	
 	
 	
-	int SaveGIFFrames (LPCSTR pszFileTemplate);
+	int SaveGIFFrames (LPCTSTR pszFileTemplate);
 
 #pragma pack(1)   
 
@@ -68,9 +68,9 @@ enum IDPackedValues
 
 struct TGIFHeader       
 {
-	char m_cSignature[3]; 
+	TCHAR m_cSignature[3]; 
 						  
-	char m_cVersion[3];	
+	TCHAR m_cVersion[3];	
 						
 };
 
@@ -91,8 +91,8 @@ struct TGIFAppExtension
 	unsigned char m_cExtIntroducer; 
 	unsigned char m_cExtLabel; 
 	unsigned char m_cBlockSize; 
-	char m_cAppIdentifier[8];   
-	char m_cAppAuth[3];  
+	TCHAR m_cAppIdentifier[8];   
+	TCHAR m_cAppAuth[3];  
 };
 
 struct TGIFControlExt 
@@ -144,7 +144,7 @@ struct TGIFImageDescriptor
 
 	
 	
-	BOOL Load (LPCSTR pszFile);
+	BOOL Load (LPCTSTR pszFile);
 	
 	BOOL Load(HGLOBAL hGlobal, DWORD dwSize);
 
@@ -155,7 +155,7 @@ protected:
 	
 	std::vector <TFrame> m_vFramesInfo;
 	
-	BOOL WriteDataOnDisk (LPCSTR pszFile, HGLOBAL hData, DWORD dwSize);
+	BOOL WriteDataOnDisk (LPCTSTR pszFile, HGLOBAL hData, DWORD dwSize);
 	
 	BOOL Load();
 	HGLOBAL m_hGIF;	

@@ -13,15 +13,15 @@ static char THIS_FILE[]=__FILE__;
 
 vmsTheme::vmsTheme()
 {
-	m_hThemeDLL = LoadLibrary ("UxTheme.dll");
+	m_hThemeDLL = LoadLibrary (_T("UxTheme.dll"));
 	
 	if (m_hThemeDLL)
 	{
-		m_pfnOpenThemeData = (fntOpenThemeData)GetProcAddress (m_hThemeDLL, "OpenThemeData");
-		m_pfnDrawThemeBackground = (fntDrawThemeBackground)GetProcAddress (m_hThemeDLL, "DrawThemeBackground");
-		m_pfnCloseThemeData = (fntCloseThemeData)GetProcAddress (m_hThemeDLL, "CloseThemeData");
-		m_pfnIsThemeActive = (fntIsThemeActive)GetProcAddress (m_hThemeDLL, "IsThemeActive");
-		m_pfnSetWindowTheme = (fntSetWindowTheme)GetProcAddress (m_hThemeDLL, "SetWindowTheme");
+		m_pfnOpenThemeData = (fntOpenThemeData)GetProcAddress (m_hThemeDLL, _T("OpenThemeData"));
+		m_pfnDrawThemeBackground = (fntDrawThemeBackground)GetProcAddress (m_hThemeDLL, _T("DrawThemeBackground"));
+		m_pfnCloseThemeData = (fntCloseThemeData)GetProcAddress (m_hThemeDLL, _T("CloseThemeData"));
+		m_pfnIsThemeActive = (fntIsThemeActive)GetProcAddress (m_hThemeDLL, _T("IsThemeActive"));
+		m_pfnSetWindowTheme = (fntSetWindowTheme)GetProcAddress (m_hThemeDLL, _T("SetWindowTheme"));
 	}
 	else
 	{

@@ -61,7 +61,7 @@ protected:
 	};	
 
 	void TreeToDlg (HTREEITEM hRoot, fs::ListTree <fsFile>* root);
-	void AddToTree (LPCSTR pszFile, int iIndex, fs::ListTree <fsFile>* root);
+	void AddToTree (LPCTSTR pszFile, int iIndex, fs::ListTree <fsFile>* root);
 	void BuildTreeOfFiles();
 	CImageList m_checks;
 	

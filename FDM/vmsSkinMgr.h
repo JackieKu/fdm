@@ -64,13 +64,13 @@ public:
 protected:
 	DWORD m_dwFlags;	
 	
-	HICON icon_x(UINT nID, LPCSTR pszName, int cx = 0, int cy = 0);
+	HICON icon_x(UINT nID, LPCTSTR pszName, int cx = 0, int cy = 0);
 	
-	HBITMAP bmp_x (UINT nID, LPCSTR pszName);
+	HBITMAP bmp_x (UINT nID, LPCTSTR pszName);
 	HINSTANCE m_hInst;	
 	int m_nCurrSkin;	
 	
-	void Scan_TryFolder (LPCSTR pszFolder);
+	void Scan_TryFolder (LPCTSTR pszFolder);
 	
 	fs::list <vmsSkinInfo> m_vList;
 

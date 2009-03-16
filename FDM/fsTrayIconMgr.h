@@ -18,7 +18,7 @@ public:
 	
 	
 	
-	BOOL Create (HWND hWnd, UINT *pIcons, UINT cIcons, LPCSTR pszTooltip, UINT uCallbackMsg);
+	BOOL Create (HWND hWnd, UINT *pIcons, UINT cIcons, LPCTSTR pszTooltip, UINT uCallbackMsg);
 	
 	void TestIcon();
 	
@@ -29,7 +29,7 @@ public:
 	
 	
 	
-	BOOL ShowBalloon (LPCSTR pszInfo, LPCSTR pszInfoTitle, DWORD dwNiifIcon = NIIF_INFO);
+	BOOL ShowBalloon (LPCTSTR pszInfo, LPCTSTR pszInfoTitle, DWORD dwNiifIcon = NIIF_INFO);
 
 	fsTrayIconMgr();
 	virtual ~fsTrayIconMgr();

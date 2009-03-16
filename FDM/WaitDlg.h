@@ -30,7 +30,7 @@ public:
 	
 	
 	
-	UINT StartWaiting (LPCSTR pszMessage, LPTHREAD_START_ROUTINE procWait, BOOL bEnableCancel, LPVOID lpParam1 = NULL, LPVOID lpParam2 = NULL, LPVOID lpParam3 = NULL, LPVOID lpParam4 = NULL, LPVOID lpParam5 = NULL, BOOL bModal = TRUE);
+	UINT StartWaiting (LPCTSTR pszMessage, LPTHREAD_START_ROUTINE procWait, BOOL bEnableCancel, LPVOID lpParam1 = NULL, LPVOID lpParam2 = NULL, LPVOID lpParam3 = NULL, LPVOID lpParam4 = NULL, LPVOID lpParam5 = NULL, BOOL bModal = TRUE);
 
 	CWaitDlg(CWnd* pParent = NULL);     
 

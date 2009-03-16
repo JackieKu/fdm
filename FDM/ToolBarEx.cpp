@@ -88,7 +88,7 @@ BOOL CToolBarEx::InsertGroup(wgTButtonInfo *pButtons, CBitmap *pBitmap, CBitmap 
 		if (pButtons [i].pszName)
 		{
 			CString str;
-			str.Format("%s\0", pButtons [i].pszName);
+			str.Format(_T("%s\0"), pButtons [i].pszName);
 			GetToolBarCtrl().AddStrings(str);
 			tb.iName = m_cNames++;
 		}
@@ -176,7 +176,7 @@ BOOL CToolBarEx::OnNotify(LPNMHDR nm)
 		case TBN_GETINFOTIPA:
 		{
 			LPNMTBGETINFOTIPA inf = (LPNMTBGETINFOTIPA) nm;
-			strcpy (inf->pszText, tb->strToolTip);
+			_tcscpy (inf->pszText, tb->strToolTip);
 		}
 		break;
 
@@ -222,7 +222,7 @@ CToolBarEx::fsTBInfo* CToolBarEx::FindButton(UINT nID)
 	return NULL;
 }
 
-void CToolBarEx::UpdateGroupToolTips(int iGrp, LPCSTR *ppszTips, UINT uSize)
+void CToolBarEx::UpdateGroupToolTips(int iGrp, LPCTSTR *ppszTips, UINT uSize)
 {
 	int cTips = min ((int)uSize, m_vGroups [iGrp].size ());
 	for (int i = 0; i < cTips; i++)

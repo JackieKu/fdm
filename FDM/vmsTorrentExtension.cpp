@@ -30,11 +30,11 @@ BOOL vmsTorrentExtension::Associate()
 
 fsString vmsTorrentExtension::get_ShellOpenCommandLine()
 {
-	fsString str = "\"";
+	fsString str = _T("\"");
 	str += ((CFdmApp*)AfxGetApp ())->m_strAppPath;
-	if (str [str.GetLength () - 1] != '\\')
-		str += '\\';
-	str += "fdm.exe\" \"%1\"";
+	if (str [str.GetLength () - 1] != _T('\\'))
+		str += _T('\\');
+	str += _T("fdm.exe\" \"%1\"");
 	return str;
 }
 
@@ -45,27 +45,27 @@ BOOL vmsTorrentExtension::IsAssociationExist()
 
 BOOL vmsTorrentExtension::IsAssociatedWithUs()
 {
-	return stricmp (vmsFileExtensionInOs::GetAssociation ("torrent", "open"),
+	return stricmp (vmsFileExtensionInOs::GetAssociation (_T("torrent"), _T("open")),
 		get_ShellOpenCommandLine ()) == 0;
 }
 
 fsString vmsTorrentExtension::GetCurrentAssociation()
 {
-	return vmsFileExtensionInOs::GetAssociation ("torrent", "open");
+	return vmsFileExtensionInOs::GetAssociation (_T("torrent"), _T("open"));
 }
 
-BOOL vmsTorrentExtension::AssociateWith(LPCSTR pszCmdLine)
+BOOL vmsTorrentExtension::AssociateWith(LPCTSTR pszCmdLine)
 {
 	if (pszCmdLine && *pszCmdLine)
 	{
-		return vmsFileExtensionInOs::SetAssociation ("torrent", "open", pszCmdLine);
+		return vmsFileExtensionInOs::SetAssociation (_T("torrent"), _T("open"), pszCmdLine);
 	}
 	else
 	{
 		CRegKey key;
-		if (ERROR_SUCCESS != key.Open (HKEY_CLASSES_ROOT, ""))
+		if (ERROR_SUCCESS != key.Open (HKEY_CLASSES_ROOT, _T("")))
 			return FALSE;
-		return ERROR_SUCCESS == key.RecurseDeleteKey (".torrent");
+		return ERROR_SUCCESS == key.RecurseDeleteKey (_T(".torrent"));
 	}
 }
 

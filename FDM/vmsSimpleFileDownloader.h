@@ -13,7 +13,7 @@
 class vmsSimpleFileDownloader  
 {
 public:
-	fsInternetResult Download (LPCSTR pszUrl, LPCSTR pszFileName);
+	fsInternetResult Download (LPCTSTR pszUrl, LPCTSTR pszFileName);
 	
 	void Stop();
 	
@@ -26,7 +26,7 @@ public:
 protected:
 	void CreateDownloader();
 	static DWORD _DownloadMgrEvents(fsDownloadMgr* pMgr, fsDownloaderEvent ev, UINT uInfo, LPVOID lp);
-	static void _DownloadMgrDescEvents(fsDownloadMgr* , fsDownloadMgr_EventDescType , LPCSTR pszDesc, LPVOID lp);
+	static void _DownloadMgrDescEvents(fsDownloadMgr* , fsDownloadMgr_EventDescType , LPCTSTR pszDesc, LPVOID lp);
 	fsDownloadMgr *m_dldr;
 };
 

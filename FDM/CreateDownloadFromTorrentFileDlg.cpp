@@ -88,7 +88,7 @@ BOOL CCreateDownloadFromTorrentFileDlg::OnInitDialog()
 
 	if (FALSE == m_wndGroups.SelectGroupById (_App.NewDL_GroupId ()))
 	{
-		vmsDownloadsGroupSmartPtr pGrp = _DldsGrps.FindGroupByExt ("torrent");
+		vmsDownloadsGroupSmartPtr pGrp = _DldsGrps.FindGroupByExt (_T("torrent"));
 		if (pGrp != NULL)
 			m_wndGroups.SelectGroup (pGrp);
 		else
@@ -161,10 +161,10 @@ void CCreateDownloadFromTorrentFileDlg::OnCreategroup()
 
 void CCreateDownloadFromTorrentFileDlg::OnChoosefolder() 
 {
-	CString str = "";
+	CString str = _T("");
 	GetDlgItemText (IDC_OUTFOLDER, str);
 
-	if (str.GetLength () > 3 && (str [str.GetLength () - 1] == '\\' || str [str.GetLength () - 1] == '/'))
+	if (str.GetLength () > 3 && (str [str.GetLength () - 1] == _T('\\') || str [str.GetLength () - 1] == _T('/')))
 		str.GetBuffer (0) [str.GetLength () - 1] = 0;
 
 	CFolderBrowser *fb = CFolderBrowser::Create (LS (L_CHOOSEOUTFOLDER), str, NULL, this);
@@ -220,7 +220,7 @@ void CCreateDownloadFromTorrentFileDlg::OnOK()
 
 	CString strOutFolder;
 	GetDlgItemText (IDC_OUTFOLDER, strOutFolder);
-	fsPathToGoodPath ((LPSTR)(LPCSTR)strOutFolder);
+	fsPathToGoodPath ((LPTSTR)(LPCTSTR)strOutFolder);
 
 	if (FALSE == CCreateDownloadDlg::_CheckFolderName (this, IDC_OUTFOLDER))
 		return;
@@ -234,9 +234,9 @@ void CCreateDownloadFromTorrentFileDlg::OnOK()
 
 	_LastFolders.AddRecord (strOutFolder);
 
-	if (strOutFolder [strOutFolder.GetLength () - 1] != '\\' && 
-			strOutFolder [strOutFolder.GetLength () - 1] != '/')
-		strOutFolder += '\\';
+	if (strOutFolder [strOutFolder.GetLength () - 1] != _T('\\') && 
+			strOutFolder [strOutFolder.GetLength () - 1] != _T('/'))
+		strOutFolder += _T('\\');
 
     if (_App.NewGrp_SelectWay () == NGSW_USE_ALWAYS_SAME_GROUP_WITH_OUTFOLDER_AUTO_UPDATE)
 	{
@@ -261,7 +261,7 @@ void CCreateDownloadFromTorrentFileDlg::OnOK()
 	if (strComment.IsEmpty () == FALSE)
 	{
 		if (m_dld->strComment.IsEmpty () == FALSE)
-			m_dld->strComment += "\r\n";
+			m_dld->strComment += _T("\r\n");
 		m_dld->strComment += strComment;
 	}
 

@@ -33,7 +33,7 @@ BOOL CComboBox_Ex::Create(CWnd *pParent)
 	CComboBox::Create (WS_CHILD|WS_VISIBLE|CBS_AUTOHSCROLL|CBS_DROPDOWN|WS_VSCROLL,
 		rc, pParent, 0x67909);
 
-	m_font.CreateFont (15, 0, 0, 0, FW_NORMAL, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "MS Sans Serif");
+	m_font.CreateFont (15, 0, 0, 0, FW_NORMAL, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, _T("MS Sans Serif"));
 	SetFont (&m_font);
 
 	return TRUE;
@@ -46,8 +46,6 @@ void CComboBox_Ex::SetReturnID(UINT nID)
 
 LRESULT CComboBox_Ex::OnGetDroppedState(WPARAM, LPARAM)
 {
-	
-
 	LRESULT lRes = DefWindowProc (CB_GETDROPPEDSTATE, 0, 0);
 	
 	if (lRes == FALSE)

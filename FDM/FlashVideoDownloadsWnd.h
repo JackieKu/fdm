@@ -24,7 +24,7 @@ public:
 public:
 	
 	static void Plugin_SetLanguage (wgLanguage, HMENU hMenuMain, HMENU);
-	static void Plugin_GetPluginNames(LPCSTR *ppszLong, LPCSTR *ppszShort);
+	static void Plugin_GetPluginNames(LPCTSTR *ppszLong, LPCTSTR *ppszShort);
 	static void Plugin_GetMenuViewItems(wgMenuViewItem **ppItems, int *cItems);
 	static void Plugin_GetMenuImages(fsSetImage **ppImages, int *pcImages);
 	static void Plugin_GetToolBarInfo (wgTButtonInfo **ppButtons, int *pcButtons);
@@ -38,7 +38,7 @@ public:
 	//}}AFX_VIRTUAL  
 
 public:
-	BOOL CreateDownload (LPCSTR pszUrl = NULL);
+	BOOL CreateDownload (LPCTSTR pszUrl = NULL);
 	void SetActiveDownload (vmsDownloadSmartPtr dld);
 	void SaveAll();
 	void OnDownloadDone (vmsDownloadSmartPtr dld);

@@ -14,18 +14,18 @@ static char THIS_FILE[]=__FILE__;
 
 fsSitePingMgr::fsSitePingMgr()
 {
-	m_hDllIcmp = LoadLibrary ("icmp.dll");
+	m_hDllIcmp = LoadLibrary (_T("icmp.dll"));
 	if (m_hDllIcmp)
 	{
 		m_pfnIcmpCreateFile = (HANDLE (WINAPI *)(void))
-			GetProcAddress (m_hDllIcmp, "IcmpCreateFile");
+			GetProcAddress (m_hDllIcmp, _T("IcmpCreateFile"));
 
 		m_pfnIcmpCloseHandle = (BOOL (WINAPI *)(HANDLE))
-			GetProcAddress (m_hDllIcmp, "IcmpCloseHandle");
+			GetProcAddress (m_hDllIcmp, _T("IcmpCloseHandle"));
 
 		m_pfnIcmpSendEcho = (DWORD (WINAPI *)
 			(HANDLE,DWORD,LPVOID,WORD,PIPINFO,LPVOID,DWORD,DWORD))
-			GetProcAddress (m_hDllIcmp, "IcmpSendEcho");
+			GetProcAddress (m_hDllIcmp, _T("IcmpSendEcho"));
     }
 }
 
@@ -35,7 +35,7 @@ fsSitePingMgr::~fsSitePingMgr()
 		FreeLibrary (m_hDllIcmp);
 }
 
-DWORD fsSitePingMgr::Ping(LPCSTR pszSite)
+DWORD fsSitePingMgr::Ping(LPCTSTR pszSite)
 {
    
     IPINFO ipInfo;
@@ -67,11 +67,11 @@ DWORD fsSitePingMgr::Ping(LPCSTR pszSite)
 		return SPM_PINGERR;
 	}
 
-	char reply [sizeof (ICMPECHO)+50];
+	TCHAR reply [sizeof (ICMPECHO)+50];
 	ICMPECHO* iep = (ICMPECHO*) reply;
 	iep->RTTime = 0xffffffff;
 
-	char buftosend [32];
+	TCHAR buftosend [32];
 	memset (buftosend, 0, sizeof (buftosend));
     
      m_pfnIcmpSendEcho(

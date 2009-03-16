@@ -35,20 +35,20 @@ class fsInternetFileListMgr
 {
 public:
 	
-	fsInternetResult GetList (LPCSTR pszUrl, LPCSTR pszUser, LPCSTR pszPassword);
+	fsInternetResult GetList (LPCTSTR pszUrl, LPCTSTR pszUser, LPCTSTR pszPassword);
 	
 	fsInternetResult Refresh();
 	
-	LPCSTR GetCurrentPath();
+	LPCTSTR GetCurrentPath();
 	
 	
 	
 	
-	void GetCurrentUrl (LPSTR pszUrl, DWORD dwLen, BOOL bIncludeUser = TRUE, BOOL bIncludePassword = TRUE);
+	void GetCurrentUrl (LPTSTR pszUrl, DWORD dwLen, BOOL bIncludeUser = TRUE, BOOL bIncludePassword = TRUE);
 	
-	void GetParentFolderUrl (LPSTR pszUrl);
+	void GetParentFolderUrl (LPTSTR pszUrl);
 	
-	void FolderToUrl (LPCSTR pszFolder, LPSTR pszUrl);
+	void FolderToUrl (LPCTSTR pszFolder, LPTSTR pszUrl);
 	
 	void ReadSettings();
 	
@@ -63,13 +63,13 @@ public:
 	
 	
 	
-	fsInternetResult GetFullUrl (LPCSTR pszRelOrNotUrl, fsString& strUrl);
+	fsInternetResult GetFullUrl (LPCTSTR pszRelOrNotUrl, fsString& strUrl);
 	
-	fsInternetResult GoFolder (LPCSTR pszFolder);
+	fsInternetResult GoFolder (LPCTSTR pszFolder);
 	
 	fsInternetResult GoParentFolder();
 	
-	LPCSTR GetLastErrorDesc();
+	LPCTSTR GetLastErrorDesc();
 	
 	BOOL IsCurrentPathRoot ();
 	
@@ -90,7 +90,7 @@ public:
 
 protected:
 	
-	BOOL AskForLogin(LPCSTR pszHostName);
+	BOOL AskForLogin(LPCTSTR pszHostName);
 	
 	static void _HttpEvents (class fsHttpFiles* pFiles, fsHttpFilesEvent enEvent, LPVOID lpParam);
 	
@@ -101,7 +101,7 @@ protected:
 	
 	void Free(BOOL bStopBeforeFree = TRUE);
 	
-	int FindFiles (LPCSTR pszFilesUrl);
+	int FindFiles (LPCTSTR pszFilesUrl);
 	BOOL m_bCurPathIsRoot;	
 	vmsInternetSession m_session;
 	fsInternetURLServer m_server;	

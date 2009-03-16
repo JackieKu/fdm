@@ -34,11 +34,11 @@ vmsPluginSupport& vmsPluginSupport::o()
 void vmsPluginSupport::Initialize()
 {
 	CString str = ((CFdmApp*)AfxGetApp ())->m_strAppPath;
-	if (str.Right (1) != "\\")
-		str += '\\';
-	str += "Plugins\\";
+	if (str.Right (1) != _T("\\"))
+		str += _T('\\');
+	str += _T("Plugins\\");
 
-	CString strMask = str + "*.dll"; 
+	CString strMask = str + _T("*.dll"); 
 
 	WIN32_FIND_DATA wfd;
 	HANDLE hFind = FindFirstFile (strMask, &wfd);
@@ -66,8 +66,8 @@ BOOL vmsPluginSupport::LoadPlugin(vmsLoadedPlugin &plug)
 	if (plug.hDll == NULL)
 		return FALSE;
 
-	plug.pfnFdmApiPluginInitialize = GetProcAddress (plug.hDll, "FdmApiPluginInitialize");
-	plug.pfnFdmApiPluginShutdown = GetProcAddress (plug.hDll, "FdmApiPluginShutdown");
+	plug.pfnFdmApiPluginInitialize = GetProcAddress (plug.hDll, _T("FdmApiPluginInitialize"));
+	plug.pfnFdmApiPluginShutdown = GetProcAddress (plug.hDll, _T("FdmApiPluginShutdown"));
 
 	if (plug.pfnFdmApiPluginInitialize == NULL)
 		return FALSE;
@@ -90,10 +90,10 @@ BOOL vmsPluginSupport::LoadPlugin(vmsLoadedPlugin &plug)
 		return FALSE;
 	}
 
-	typedef void (*FdmApiPluginGetDescription)(LPSTR,LPSTR,LPSTR,LPSTR);
+	typedef void (*FdmApiPluginGetDescription)(LPTSTR,LPSTR,LPTSTR,LPSTR);
 	
 	FdmApiPluginGetDescription pfn = (FdmApiPluginGetDescription)
-		GetProcAddress (plug.hDll, "FdmApiPluginGetDescription");
+		GetProcAddress (plug.hDll, _T("FdmApiPluginGetDescription"));
 	
 	if (pfn == NULL)
 	{
@@ -101,7 +101,7 @@ BOOL vmsPluginSupport::LoadPlugin(vmsLoadedPlugin &plug)
 		return FALSE;
 	}
 
-	char sz1 [3000] = "", sz2 [3000] = "", sz3 [3000] = "", sz4 [3000] = "";
+	TCHAR sz1 [3000] = _T(""), sz2 [3000] = _T(""), sz3 [3000] = _T(""), sz4 [3000] = _T("");
 	pfn (sz1, sz2, sz3, sz4);
 
 	plug.strShortName = sz1;

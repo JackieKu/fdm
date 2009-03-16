@@ -28,7 +28,7 @@ enum fsUpdateMgrEvent
 };  
 
 typedef void (*fntUpdateMgrEventsFunc) (fsUpdateMgrEvent ev, LPVOID lp);
-typedef void (*fntUpdateMgrDescEvents) (LPCSTR pszEvent, LPVOID lp);
+typedef void (*fntUpdateMgrDescEvents) (LPCTSTR pszEvent, LPVOID lp);
 
 class fsUpdateMgr
 {
@@ -57,14 +57,14 @@ public:
 	fs::list <CString>* GetWhatNew();
 	
 	
-	LPCSTR GetUpgSize();
+	LPCTSTR GetUpgSize();
 	
-	LPCSTR GetFullSize();
+	LPCTSTR GetFullSize();
 	
 	void Stop();
 	
-	LPCSTR GetBuildNumber();
-	LPCSTR GetVersion();
+	LPCTSTR GetBuildNumber();
+	LPCTSTR GetVersion();
 	
 	BOOL IsRunning();
 	
@@ -87,14 +87,14 @@ public:
 protected:
 	
 	
-	static void FixIniFileFor9x (LPCSTR pszIni);
+	static void FixIniFileFor9x (LPCTSTR pszIni);
 	
 	bool m_bCheckingByUser;
 	CString m_strUpdateFile;	
 
 	
-	void Event (LPCSTR pszEvent);
-	static void _DownloadMgrDescEvents (fsDownloadMgr *pMgr, fsDownloadMgr_EventDescType enType, LPCSTR pszDesc, LPVOID lp);
+	void Event (LPCTSTR pszEvent);
+	static void _DownloadMgrDescEvents (fsDownloadMgr *pMgr, fsDownloadMgr_EventDescType enType, LPCTSTR pszDesc, LPVOID lp);
 	LPVOID m_lpEventsParam;
 	fntUpdateMgrEventsFunc m_pfnEvents;
 	LPVOID m_lpDescEventsParam;

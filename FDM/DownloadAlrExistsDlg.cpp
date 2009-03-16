@@ -95,7 +95,7 @@ void CDownloadAlrExistsDlg::ApplyLanguage()
 		fsDlgLngInfo (IDC_DONTCHECKAGAIN, L_DONTCHECKAGAIN),
 	};
 
-	CString str = LS (L_COMMENT); str += ':';
+	CString str = LS (L_COMMENT); str += _T(':');
 	SetDlgItemText (IDC__COMMENT, str);
 
 	_LngMgr.ApplyLanguage (this, lnginfo, sizeof (lnginfo) / sizeof (fsDlgLngInfo), L_NEWDLD);

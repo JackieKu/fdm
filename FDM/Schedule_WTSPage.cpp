@@ -96,9 +96,9 @@ BOOL CSchedule_WTSPage::OnInitDialog()
 	m_wndTUM.AddString (LS (L_MEDIUM));
 	m_wndTUM.AddString (LS (L_HEAVY));
 
-	m_wndBPS.AddString ("28.8K");
-	m_wndBPS.AddString ("33.6K");
-	m_wndBPS.AddString ("56K");
+	m_wndBPS.AddString (_T("28.8K"));
+	m_wndBPS.AddString (_T("33.6K"));
+	m_wndBPS.AddString (_T("56K"));
 
 	if (m_ras.EnumEntries ())
 	{
@@ -126,7 +126,7 @@ BOOL CSchedule_WTSPage::OnInitDialog()
 	CRect rc;
 	m_wndSelDlds.GetClientRect (&rc);
 	m_wndUnselDlds.InsertColumn (0, LS (L_ALLDLDS), LVCFMT_LEFT, rc.right);
-	m_wndSelDlds.InsertColumn (0, "", LVCFMT_LEFT, rc.right);
+	m_wndSelDlds.InsertColumn (0, _T(""), LVCFMT_LEFT, rc.right);
 	
 	m_wndWTS.AddString (LS (L_LAUNCHPRG));
 	m_wndWTS.AddString (LS (L_STARTDLDS));
@@ -199,7 +199,7 @@ void CSchedule_WTSPage::OnSelchangeWts()
 	
 	m_iWTS = m_wndWTS.GetCurSel ();
 
-	LPCSTR psz1 = "", psz2 = "";
+	LPCTSTR psz1 = _T(""), psz2 = _T("");
 
 	switch (m_iWTS)
 	{
@@ -222,14 +222,14 @@ void CSchedule_WTSPage::OnSelchangeWts()
 				m_task->wts.dlds.dwFlags & SDI_RESTART_COMPLETED_DOWNLOADS ? BST_CHECKED : BST_UNCHECKED);
 			LVCOLUMN col;
 			col.mask = LVCF_TEXT;
-			col.pszText = (LPSTR) LS (L_DLDSTOSTART);
+			col.pszText = (LPTSTR) LS (L_DLDSTOSTART);
 			m_wndSelDlds.SetColumn (0, &col);
 		break;
 
 		case WTS_STOPDOWNLOAD:
 			BuildDownloadsList ();
 			col.mask = LVCF_TEXT;
-			col.pszText = (LPSTR) LS (L_DLDSTOSTOP);
+			col.pszText = (LPTSTR) LS (L_DLDSTOSTOP);
 			m_wndSelDlds.SetColumn (0, &col);
 		break;
 
@@ -470,7 +470,7 @@ void CSchedule_WTSPage::OnChangeArguments()
 void CSchedule_WTSPage::OnChoosename() 
 {
 	CString strFilter;
-	strFilter.Format ("%s (*.com; *.exe)|*.com;*.exe|%s (*.*)|*.*||", LS (L_APPS), LS (L_ALLFILES));
+	strFilter.Format (_T("%s (*.com; *.exe)|*.com;*.exe|%s (*.*)|*.*||"), LS (L_APPS), LS (L_ALLFILES));
 	CFileDialog dlg (TRUE, NULL, NULL, OFN_HIDEREADONLY|OFN_FILEMUSTEXIST|OFN_NOCHANGEDIR, 
 		strFilter, this);	
 
@@ -706,11 +706,11 @@ BOOL CSchedule_WTSPage::ApplyProg()
 
 	m_task->wts.enType = (fsWhatToStartType) m_iWTS;
 
-	fsnew (m_task->wts.prog.pszName, char, strProg.GetLength () + 1);
-	fsnew (m_task->wts.prog.pszArgs, char, strArgs.GetLength () + 1);
+	fsnew (m_task->wts.prog.pszName, TCHAR, strProg.GetLength () + 1);
+	fsnew (m_task->wts.prog.pszArgs, TCHAR, strArgs.GetLength () + 1);
 
-	strcpy (m_task->wts.prog.pszName, strProg);
-	strcpy (m_task->wts.prog.pszArgs, strArgs);
+	_tcscpy (m_task->wts.prog.pszName, strProg);
+	_tcscpy (m_task->wts.prog.pszArgs, strArgs);
 
 	return TRUE;
 }
@@ -816,8 +816,8 @@ BOOL CSchedule_WTSPage::ApplyDial()
 	FreeSchedule ();
 	m_task->wts.enType = WTS_DIAL;
 	
-	fsnew (m_task->wts.dial.pszConnection, char, strConn.GetLength () + 1);
-	strcpy (m_task->wts.dial.pszConnection, strConn);
+	fsnew (m_task->wts.dial.pszConnection, TCHAR, strConn.GetLength () + 1);
+	_tcscpy (m_task->wts.dial.pszConnection, strConn);
 
 	m_task->wts.dial.cAttempts = uMaxAtt;
 	m_task->wts.dial.cPauseBetween = uPause;
@@ -846,8 +846,8 @@ BOOL CSchedule_WTSPage::ApplyHangup()
 		CString strConn;
 		m_wndConnection.GetLBText (m_wndConnection.GetCurSel (), strConn);
 
-		fsnew (m_task->wts.pszHangupConnection, char, strConn.GetLength () + 1);
-		strcpy (m_task->wts.pszHangupConnection, strConn);
+		fsnew (m_task->wts.pszHangupConnection, TCHAR, strConn.GetLength () + 1);
+		_tcscpy (m_task->wts.pszHangupConnection, strConn);
 	}
 
 	return TRUE;
@@ -893,7 +893,7 @@ void CSchedule_WTSPage::ApplyLanguage()
 		fsDlgLngInfo (IDC_RESTARTDLDIFDONE, L_RESTARTCOMPLDLDS),
 	};
 
-	CString str = LS (L_CHANGETUMTO); str += ':';
+	CString str = LS (L_CHANGETUMTO); str += _T(':');
 	SetDlgItemText (IDC__TUM, str);
 
 	_LngMgr.ApplyLanguage (this, lnginfo, sizeof (lnginfo) / sizeof (fsDlgLngInfo), 0);

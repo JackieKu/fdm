@@ -17,7 +17,7 @@ class vmsArchiveMgr
 public:
 	vmsArchiveExtractError get_LastExtractError();
 	void set_ArchiveCallback (vmsArchiveCallback* pAC);
-	bool Extract (LPCSTR pszArchive, LPCSTR pszOutFolder);
+	bool Extract (LPCTSTR pszArchive, LPCTSTR pszOutFolder);
 	vmsArchiveMgr();
 	virtual ~vmsArchiveMgr();
 

@@ -67,9 +67,9 @@ BOOL CDownloaderProperties_NetworkPage::OnInitDialog()
 
 	CString str; 
 	
-	str.Format ("%s/%s", LS (L_B), LS (L_S));	m_wndTLD.AddString (str); 
-	str.Format ("%s/%s", LS (L_KB), LS (L_S)); m_wndTLD.AddString (str); 
-	str.Format ("%s/%s", LS (L_MB), LS (L_S)); m_wndTLD.AddString (str);
+	str.Format (_T("%s/%s"), LS (L_B), LS (L_S));	m_wndTLD.AddString (str); 
+	str.Format (_T("%s/%s"), LS (L_KB), LS (L_S)); m_wndTLD.AddString (str); 
+	str.Format (_T("%s/%s"), LS (L_MB), LS (L_S)); m_wndTLD.AddString (str);
 
 	CSpinButtonCtrl *pSpin = (CSpinButtonCtrl*) GetDlgItem (IDC_MAXCONNSSPIN);
 	pSpin->SetRange (1, UD_MAXVAL);

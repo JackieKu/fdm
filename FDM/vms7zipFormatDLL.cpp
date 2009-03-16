@@ -13,7 +13,7 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif        
 
-vms7zipFormatDLL::vms7zipFormatDLL(LPCSTR pszDll)
+vms7zipFormatDLL::vms7zipFormatDLL(LPCTSTR pszDll)
 {
 	m_hDll = NULL;
 	m_pfnCreateObject = NULL;
@@ -28,14 +28,14 @@ vms7zipFormatDLL::~vms7zipFormatDLL()
 	Free ();
 }
 
-bool vms7zipFormatDLL::Load(LPCSTR pszDll)
+bool vms7zipFormatDLL::Load(LPCTSTR pszDll)
 {
 	Free ();
 	m_hDll = LoadLibrary (pszDll);
 	if (m_hDll == NULL)
 		return false;
-	m_pfnCreateObject = (FNCreateObject)GetProcAddress (m_hDll, "CreateObject");
-	m_pfnGetHandlerProperty = (FNGetHandlerProperty)GetProcAddress (m_hDll, "GetHandlerProperty");;
+	m_pfnCreateObject = (FNCreateObject)GetProcAddress (m_hDll, _T("CreateObject"));
+	m_pfnGetHandlerProperty = (FNGetHandlerProperty)GetProcAddress (m_hDll, _T("GetHandlerProperty"));;
 	return m_pfnCreateObject != NULL && m_pfnGetHandlerProperty != NULL;
 }
 
@@ -66,10 +66,10 @@ HRESULT vms7zipFormatDLL::GetHandlerProperty(PROPID propID, PROPVARIANT *value)
 	return m_pfnGetHandlerProperty (propID, value);
 }
 
-bool vms7zipFormatDLL::IsSupportedArchive(LPCSTR pszArchive)
+bool vms7zipFormatDLL::IsSupportedArchive(LPCTSTR pszArchive)
 {
-	LPCSTR pszExt;
-	pszExt = strrchr (pszArchive, '.');
+	LPCTSTR pszExt;
+	pszExt = _tcsrchr (pszArchive, _T('.'));
 	if (pszExt == NULL)
 		return false;
 	pszExt++;

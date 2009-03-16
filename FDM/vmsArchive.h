@@ -26,7 +26,7 @@ public:
 	
 	
 	
-	virtual bool Extract (LPCSTR pszArchive, LPCSTR pszOutFolder) = NULL;
+	virtual bool Extract (LPCTSTR pszArchive, LPCTSTR pszOutFolder) = NULL;
 
 	vmsArchive();
 	virtual ~vmsArchive();

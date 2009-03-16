@@ -42,9 +42,9 @@ protected:
 	
 	virtual bool SetProgress (int nProgress);
 	
-	virtual bool AfterExtract (LPCSTR pszFile, vmsAC_ExtractResult res);
+	virtual bool AfterExtract (LPCTSTR pszFile, vmsAC_ExtractResult res);
 	
-	virtual bool BeforeExtract (LPCSTR pszFile);
+	virtual bool BeforeExtract (LPCTSTR pszFile);
 
 	
 	//{{AFX_MSG(CDlg_UnpackProgress)

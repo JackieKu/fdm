@@ -112,16 +112,16 @@ BOOL CDownloads_Tasks::Create(CWnd *pParent)
 	m_selimages.Add (&bmp2, RGB (255, 0, 255));
 	SetSelectedImages (&m_selimages);
 
-	InsertColumn (0, "", LVCFMT_LEFT, 200, 0);
-	InsertColumn (1, "", LVCFMT_LEFT, 50, 0);
-	InsertColumn (2, "", LVCFMT_LEFT, 100, 0);
-	InsertColumn (3, "", LVCFMT_LEFT, 60, 0);
-	InsertColumn (4, "", LVCFMT_LEFT, 58, 0);
-	InsertColumn (5, "", LVCFMT_LEFT, 70, 0);
-	InsertColumn (6, "", LVCFMT_LEFT, 200, 0);
-	InsertColumn (7, "", LVCFMT_LEFT, 120, 0);
+	InsertColumn (0, _T(""), LVCFMT_LEFT, 200, 0);
+	InsertColumn (1, _T(""), LVCFMT_LEFT, 50, 0);
+	InsertColumn (2, _T(""), LVCFMT_LEFT, 100, 0);
+	InsertColumn (3, _T(""), LVCFMT_LEFT, 60, 0);
+	InsertColumn (4, _T(""), LVCFMT_LEFT, 58, 0);
+	InsertColumn (5, _T(""), LVCFMT_LEFT, 70, 0);
+	InsertColumn (6, _T(""), LVCFMT_LEFT, 200, 0);
+	InsertColumn (7, _T(""), LVCFMT_LEFT, 120, 0);
 
-	ReadState ("DownloadsList");
+	ReadState (_T("DownloadsList"));
 	InitSortImages ();	
 
 	ShowWindow (SW_SHOW);
@@ -874,70 +874,70 @@ void CDownloads_Tasks::ApplyLanguageToMenu(CMenu *menu)
 {
 	menu->ModifyMenu (0, MF_BYPOSITION|MF_STRING, 0, LS (L_DOWNLOADS));
 	
-	CString str = LS (L_NEWDL); str += "\tCtrl+N";
+	CString str = LS (L_NEWDL); str += _T("\tCtrl+N");
 	menu->ModifyMenu (ID_DLDCREATE, MF_BYCOMMAND|MF_STRING, ID_DLDCREATE, str);
 
 	menu->ModifyMenu (ID_DLDCREATEBATCH, MF_BYCOMMAND|MF_STRING, ID_DLDCREATEBATCH, LS (L_CREATEBATCHDLD));
 	
-	str = LS (L_STARTDLDS); str += "\tShift+S";
+	str = LS (L_STARTDLDS); str += _T("\tShift+S");
 	menu->ModifyMenu (ID_DLDSTART, MF_BYCOMMAND|MF_STRING, ID_DLDSTART, str);
-	str = LS (L_STOPDLDS); str += "\tShift+O";
+	str = LS (L_STOPDLDS); str += _T("\tShift+O");
 	menu->ModifyMenu (ID_DLDSTOP, MF_BYCOMMAND|MF_STRING, ID_DLDSTOP, str);
 
-	str = LS (L_QUERYSIZE); str += "\tShift+Q";
+	str = LS (L_QUERYSIZE); str += _T("\tShift+Q");
 	menu->ModifyMenu (ID_DLDQSIZE, MF_BYCOMMAND|MF_STRING, ID_DLDQSIZE, str);
 
 	menu->GetSubMenu (0)->ModifyMenu (9, MF_BYPOSITION|MF_STRING, 0, LS (L_ADVANCED));
-	str = LS (L_RESTARTDL); str += "\tShift+R";
+	str = LS (L_RESTARTDL); str += _T("\tShift+R");
 	menu->ModifyMenu (ID_DLDRESTART, MF_BYCOMMAND|MF_STRING, ID_DLDRESTART, str);
-	str = LS (L_ADDONEMORESECT); str += "\t+";
+	str = LS (L_ADDONEMORESECT); str += _T("\t+");
 	menu->ModifyMenu (ID_DLDADDSECTION, MF_BYCOMMAND|MF_STRING, ID_DLDADDSECTION, str);
-	str = LS (L_DELSECTION); str += "\t-";
+	str = LS (L_DELSECTION); str += _T("\t-");
 	menu->ModifyMenu (ID_DLDDELSECTION, MF_BYCOMMAND|MF_STRING, ID_DLDDELSECTION, str);
 	
 	menu->GetSubMenu (0)->ModifyMenu (11, MF_BYPOSITION|MF_STRING, 0, LS (L_SCHEDULE));
 	menu->ModifyMenu (ID_DLDSCHEDULE, MF_BYCOMMAND|MF_STRING, ID_DLDSCHEDULE, LS (L_SCHEDULE_START));
 	menu->ModifyMenu (ID_DLDSCHEDULESTOP, MF_BYCOMMAND|MF_STRING, ID_DLDSCHEDULESTOP, LS (L_SCHEDULE_STOP));
 	
-	str = LS (L_DELETEDLD); str += "\tDel (Shift+Del)";
+	str = LS (L_DELETEDLD); str += _T("\tDel (Shift+Del)");
 	menu->ModifyMenu (ID_DLDDELETE, MF_BYCOMMAND|MF_STRING, ID_DLDDELETE, str);
 
 	menu->ModifyMenu (ID_DLDLAUNCH, MF_BYCOMMAND|MF_STRING, ID_DLDLAUNCH, LS (L_LAUNCHFILE));
 	menu->ModifyMenu (ID_DLDOPENFOLDER, MF_BYCOMMAND|MF_STRING, ID_DLDOPENFOLDER, LS (L_OPENFOLDER));
 	
-	str = LS (L_AUTOSTARTDLD); str += '\t';
+	str = LS (L_AUTOSTARTDLD); str += _T('\t');
 	menu->ModifyMenu (ID_DLDAUTOSTART, MF_BYCOMMAND|MF_STRING, ID_DLDAUTOSTART, str);
 
 	menu->ModifyMenu (ID_DLDCHECKVIR, MF_BYCOMMAND|MF_STRING, ID_DLDCHECKVIR, LS (L_PERFVIRCHECK));
 
-	str = LS (L_DLDPROP); str += "\tAlt+Enter";
+	str = LS (L_DLDPROP); str += _T("\tAlt+Enter");
 	menu->ModifyMenu (ID_DLDPROPERTIES, MF_BYCOMMAND|MF_STRING, ID_DLDPROPERTIES, str);
 
-	str = LS (L_FIND); str += "\tCtrl+F";
+	str = LS (L_FIND); str += _T("\tCtrl+F");
 	menu->ModifyMenu (ID_DLDFIND, MF_BYCOMMAND|MF_STRING, ID_DLDFIND, str);
 	
-	str = LS (L_FINDNEXT); str += "\tF3";
+	str = LS (L_FINDNEXT); str += _T("\tF3");
 	menu->ModifyMenu (ID_DLDFINDNEXT, MF_BYCOMMAND|MF_STRING, ID_DLDFINDNEXT, str);
 
 	menu->ModifyMenu (ID_DLDUNPACK, MF_BYCOMMAND|MF_STRING, ID_DLDUNPACK, LS (L_EXTRACTARCHIVE));
 	menu->ModifyMenu (ID_DLDCONVERT, MF_BYCOMMAND|MF_STRING, ID_DLDCONVERT, LS (L_CONVERT_MEDIA_FILE));
 
-	str = LS (L_MOVEUP); str += "\tShift+U";
+	str = LS (L_MOVEUP); str += _T("\tShift+U");
 	menu->ModifyMenu (ID_DLDMOVEUP, MF_BYCOMMAND|MF_STRING, ID_DLDMOVEUP, str);
 
-	str = LS (L_MOVEDOWN); str += "\tShift+D";
+	str = LS (L_MOVEDOWN); str += _T("\tShift+D");
 	menu->ModifyMenu (ID_DLDMOVEDOWN, MF_BYCOMMAND|MF_STRING, ID_DLDMOVEDOWN, str);
 
-	str = LS (L_CHECKFILEINTEGRITY); str += "\tShift+I";
+	str = LS (L_CHECKFILEINTEGRITY); str += _T("\tShift+I");
 	menu->ModifyMenu (ID_DLDCHECKINTEGRITY, MF_BYCOMMAND|MF_STRING, ID_DLDCHECKINTEGRITY, str);
 
-	str = LS (L_MOVEDLDFILETOFOLDER); str += "\tShift+M";
+	str = LS (L_MOVEDLDFILETOFOLDER); str += _T("\tShift+M");
 	menu->ModifyMenu (ID_DLDMOVETOFOLDER, MF_BYCOMMAND|MF_STRING, ID_DLDMOVETOFOLDER, str);
 
-	str = LS (L_MOVETOP); str += "\tShift+T";
+	str = LS (L_MOVETOP); str += _T("\tShift+T");
 	menu->ModifyMenu (ID_DLDMOVETOP, MF_BYCOMMAND|MF_STRING, ID_DLDMOVETOP, str);
 
-	str = LS (L_MOVEBOTTOM); str += "\tShift+B";
+	str = LS (L_MOVEBOTTOM); str += _T("\tShift+B");
 	menu->ModifyMenu (ID_DLDMOVEBOTTOM, MF_BYCOMMAND|MF_STRING, ID_DLDMOVEBOTTOM, str);
 
 	menu->ModifyMenu (ID_DLDGRANTBANDWIDTHFORDLD, MF_BYCOMMAND|MF_STRING, ID_DLDGRANTBANDWIDTHFORDLD, LS (L_GRANTBANDWIDTHFORDLD));
@@ -1031,7 +1031,7 @@ void CDownloads_Tasks::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 	switch (nChar)
 	{
-		case 'S':
+		case _T('S'):
 			if (bShift)
 			{
 				OnDldstart ();
@@ -1039,7 +1039,7 @@ void CDownloads_Tasks::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 			}
 			break;
 
-		case 'O':
+		case _T('O'):
 			if (bShift)
 			{
 				OnDldstop ();
@@ -1047,7 +1047,7 @@ void CDownloads_Tasks::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 			}
 			break;
 
-		case 'Q':
+		case _T('Q'):
 			if (bShift)
 			{
 				OnDldqsize ();
@@ -1063,7 +1063,7 @@ void CDownloads_Tasks::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 			OnDlddelsection ();
 			return;
 
-		case 'R':
+		case _T('R'):
 			if (bShift)
 			{
 				OnDldrestart ();
@@ -1071,7 +1071,7 @@ void CDownloads_Tasks::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 			}
 			break;
 
-		case 'A':
+		case _T('A'):
 			if (bCtrl)
 			{
 				int cItems = GetItemCount ();
@@ -1081,7 +1081,7 @@ void CDownloads_Tasks::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 			}
 			break;
 
-		case 'U':
+		case _T('U'):
 			if (bShift)
 			{
 				OnDldmoveup ();
@@ -1089,7 +1089,7 @@ void CDownloads_Tasks::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 			}
 			break;
 
-		case 'D':
+		case _T('D'):
 			if (bShift)
 			{
 				OnDldmovedown ();
@@ -1097,7 +1097,7 @@ void CDownloads_Tasks::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 			}
 			break;
 
-		case 'T':
+		case _T('T'):
 			if (bShift)
 			{
 				OnDldmovetop ();
@@ -1105,7 +1105,7 @@ void CDownloads_Tasks::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 			}
 			break;
 
-		case 'B':
+		case _T('B'):
 			if (bShift)
 			{
 				OnDldmovebottom ();
@@ -1113,7 +1113,7 @@ void CDownloads_Tasks::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 			}
 			break;
 
-		case 'I':
+		case _T('I'):
 			if (bShift)
 			{
 				OnDldcheckintegrity ();
@@ -1121,7 +1121,7 @@ void CDownloads_Tasks::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 			}
 			break;
 
-		case 'M':
+		case _T('M'):
 			if (bShift)
 			{
 				OnDldmovetofolder ();
@@ -1137,21 +1137,21 @@ void CDownloads_Tasks::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
 	switch (nChar)
 	{
-		case 'S':
-		case 'O':
-		case 'R':
-		case 'Q':
-		case 'U':
-		case 'D':
-		case 'I':
-		case 'M':
-		case 'T':
-		case 'B':
+		case _T('S'):
+		case _T('O'):
+		case _T('R'):
+		case _T('Q'):
+		case _T('U'):
+		case _T('D'):
+		case _T('I'):
+		case _T('M'):
+		case _T('T'):
+		case _T('B'):
 			if (GetKeyState (VK_SHIFT) & 0x8000)
 				return;
 	
-		case '+':
-		case '-':
+		case _T('+'):
+		case _T('-'):
 			return;
 	}
 	
@@ -1197,7 +1197,7 @@ void CDownloads_Tasks::Sort()
 	}
 }
 
-void CDownloads_Tasks::GetFileName(vmsDownloadSmartPtr dld, LPSTR pszFileName)
+void CDownloads_Tasks::GetFileName(vmsDownloadSmartPtr dld, LPTSTR pszFileName)
 {
 	if (dld->pMgr->GetBtDownloadMgr ())
 	{
@@ -1209,9 +1209,9 @@ void CDownloads_Tasks::GetFileName(vmsDownloadSmartPtr dld, LPSTR pszFileName)
 			*pszFileName = 0;
 			return;
 		}
-		if (str [str.GetLength () - 1] != '\\')
+		if (str [str.GetLength () - 1] != _T('\\'))
 		{
-			LPCSTR psz = strrchr (str, '\\');
+			LPCTSTR psz = _tcsrchr (str, _T('\\'));
 			if (psz)
 				str	= psz + 1;
 		}
@@ -1233,12 +1233,12 @@ void CDownloads_Tasks::GetFileName(vmsDownloadSmartPtr dld, LPSTR pszFileName)
 		ASSERT (fl > 0);
 
 		
-		if (strFile [fl-1] == '\\' || strFile [fl-1] == '/')
+		if (strFile [fl-1] == _T('\\') || strFile [fl-1] == _T('/'))
 		{
-			LPCSTR psz = pMgr->GetDownloader ()->Get_FileName ();
+			LPCTSTR psz = pMgr->GetDownloader ()->Get_FileName ();
 
 			if (psz && *psz)
-				strcpy (pszFileName, psz);
+				_tcscpy (pszFileName, psz);
 			else
 			{
 				
@@ -1253,14 +1253,14 @@ void CDownloads_Tasks::GetFileName(vmsDownloadSmartPtr dld, LPSTR pszFileName)
 			fsGetFileName (strFile, pszFileName);
 			if (pMgr->GetDP ()->pszAdditionalExt && *pMgr->GetDP ()->pszAdditionalExt)
 			{
-				char* pszAddExt = pszFileName;
+				TCHAR* pszAddExt = pszFileName;
 				while (TRUE)
 				{
-					pszAddExt = strstr (pszAddExt, pMgr->GetDP ()->pszAdditionalExt);
+					pszAddExt = _tcsstr (pszAddExt, pMgr->GetDP ()->pszAdditionalExt);
 					if (pszAddExt == NULL)
 						break;
 
-					if (*(pszAddExt-1) == '.' && *(pszAddExt + strlen (pMgr->GetDP ()->pszAdditionalExt)) == 0)
+					if (*(pszAddExt-1) == _T('.') && *(pszAddExt + _tcslen (pMgr->GetDP ()->pszAdditionalExt)) == 0)
 						break;
 
 					pszAddExt++;
@@ -1272,7 +1272,7 @@ void CDownloads_Tasks::GetFileName(vmsDownloadSmartPtr dld, LPSTR pszFileName)
 		}
 
 		if (*pszFileName == 0)	
-			strcpy (pszFileName, "index.html");	
+			_tcscpy (pszFileName, _T("index.html"));	
 	}
 }
 
@@ -1403,7 +1403,7 @@ CString CDownloads_Tasks::GetDownloadText(vmsDownloadSmartPtr dld, int nSubItem)
 		if (lstrlen (szFile) > 233)
 		{
 			szFile [233] = 0;
-			_tcscat (szFile, "...");
+			_tcscat (szFile, _T("..."));
 		}
 		return szFile;
 	}
@@ -1412,7 +1412,7 @@ CString CDownloads_Tasks::GetDownloadText(vmsDownloadSmartPtr dld, int nSubItem)
 	if (nSubItem == 1)
 	{
 		if (dld->pMgr->IsBittorrent () == FALSE && dld->pMgr->GetNumberOfSections () == 0)
-			return "";
+			return _T("");
 
 		UINT64 uSize = dld->pMgr->GetLDFileSize ();
 
@@ -1425,7 +1425,7 @@ CString CDownloads_Tasks::GetDownloadText(vmsDownloadSmartPtr dld, int nSubItem)
 				if (nToDownload != uSize)
 				{
 					CString str;
-					str.Format ("%s (%s)", (LPCSTR)BytesToString (nToDownload), (LPCSTR)BytesToString (uSize));
+					str.Format (_T("%s (%s)"), (LPCTSTR)BytesToString (nToDownload), (LPCTSTR)BytesToString (uSize));
 					return str;
 				}
 			}
@@ -1433,21 +1433,21 @@ CString CDownloads_Tasks::GetDownloadText(vmsDownloadSmartPtr dld, int nSubItem)
 			return BytesToString (uSize);
 		}
 		else
-			return "?";	
+			return _T("?");	
 	}
 
 	
 	if (nSubItem == 2)
 	{
 		if (dld->pMgr->IsBittorrent () == FALSE && dld->pMgr->GetNumberOfSections () == 0)
-			return "";
+			return _T("");
 
 		if (dld->pMgr->IsReservingDiskSpace ())
 		{
 			CString str;
 			if (dld->pMgr->get_ReservingDiskSpaceProgress () == -1)
-				return "RD";
-			str.Format ("RD: %d%%", dld->pMgr->get_ReservingDiskSpaceProgress ());
+				return _T("RD");
+			str.Format (_T("RD: %d%%"), dld->pMgr->get_ReservingDiskSpaceProgress ());
 			return str;
 		}
 
@@ -1465,18 +1465,18 @@ CString CDownloads_Tasks::GetDownloadText(vmsDownloadSmartPtr dld, int nSubItem)
 				if (_pwndDownloads->IsSizesInBytes () == FALSE)
 				{
 					float val, val0;
-					char szDim [10], szDim0 [10];
+					TCHAR szDim [10], szDim0 [10];
 					BytesToXBytes (uDone, &val, szDim);
 					BytesToXBytes (nDownloaded, &val0, szDim0);
-					str.Format ("%d%% [%.*g %s] (%d%% [%.*g %s])", (int)((double)(INT64)nDownloaded / (INT64)nToDownload * 100), val > 999 ? 4 : 3, val0, szDim0,
+					str.Format (_T("%d%% [%.*g %s] (%d%% [%.*g %s])"), (int)((double)(INT64)nDownloaded / (INT64)nToDownload * 100), val > 999 ? 4 : 3, val0, szDim0,
 						(int)((double)(INT64)uDone / (INT64)uSize * 100), val > 999 ? 4 : 3, val, szDim);
 				}
 				else
 				{
 					CString s = fsBytesToStr (uDone);
 					CString s0 = fsBytesToStr (nDownloaded);
-					str.Format ("%d%% [%s] (%d%% [%s])", (int)((double)(INT64)nDownloaded / (INT64)nToDownload * 100), (LPCSTR)s0,
-						(int)((double)(INT64)uDone / (INT64)uSize * 100), (LPCSTR)s);
+					str.Format (_T("%d%% [%s] (%d%% [%s])"), (int)((double)(INT64)nDownloaded / (INT64)nToDownload * 100), (LPCTSTR)s0,
+						(int)((double)(INT64)uDone / (INT64)uSize * 100), (LPCTSTR)s);
 				}
 				return str;
 			}
@@ -1485,18 +1485,18 @@ CString CDownloads_Tasks::GetDownloadText(vmsDownloadSmartPtr dld, int nSubItem)
 		if (_pwndDownloads->IsSizesInBytes () == FALSE)
 		{
 			float val;
-			char szDim [10];
+			TCHAR szDim [10];
 			BytesToXBytes (uDone, &val, szDim);
 			if (uSize != _UI64_MAX)
-				str.Format ("%d%% [%.*g %s]", (int)((double)(INT64)uDone / (INT64)uSize * 100), val > 999 ? 4 : 3, val, szDim);
+				str.Format (_T("%d%% [%.*g %s]"), (int)((double)(INT64)uDone / (INT64)uSize * 100), val > 999 ? 4 : 3, val, szDim);
 			else
-				str.Format ("%.*g %s", val > 999 ? 4 : 3, val, szDim);
+				str.Format (_T("%.*g %s"), val > 999 ? 4 : 3, val, szDim);
 		}
 		else
 		{
 			CString s = fsBytesToStr (uDone);
 			if (uSize != _UI64_MAX)
-				str.Format ("%d%% [%s]", (int)((double)(INT64)uDone / (INT64)uSize * 100), s);
+				str.Format (_T("%d%% [%s]"), (int)((double)(INT64)uDone / (INT64)uSize * 100), s);
 			else
 				str = s;
 		}
@@ -1508,15 +1508,15 @@ CString CDownloads_Tasks::GetDownloadText(vmsDownloadSmartPtr dld, int nSubItem)
 	if (nSubItem == 3)
 	{
 		if (dld->pMgr->IsRunning () == FALSE)
-			return "";
+			return _T("");
 		
 		UINT64 uSpeed = dld->pMgr->GetSpeed ();
 		if (uSpeed == 0)
-			return "";		
+			return _T("");		
 
 		UINT64 uLeft = dld->pMgr->GetBytesLeft ();
 		if (uLeft == _UI64_MAX)
-			return "";
+			return _T("");
 
 		if (dld->pMgr->IsBittorrent ())
 		{
@@ -1532,7 +1532,7 @@ CString CDownloads_Tasks::GetDownloadText(vmsDownloadSmartPtr dld, int nSubItem)
 	if (nSubItem == 4)
 	{
 		CString str;
-		str.Format ("%d/%d", dld->pMgr->GetDownloadingSectionCount (), 
+		str.Format (_T("%d/%d"), dld->pMgr->GetDownloadingSectionCount (), 
 			dld->pMgr->GetNumberOfSections ());
 		return str;
 	}
@@ -1546,24 +1546,24 @@ CString CDownloads_Tasks::GetDownloadText(vmsDownloadSmartPtr dld, int nSubItem)
 					dld->pMgr->GetBtDownloadMgr ()->get_State () == BTDS_SEEDING)
 			{
 				CString str;
-				str.Format ("%s/%s; %s/%s", BytesToString (0), LS (L_S),
+				str.Format (_T("%s/%s; %s/%s"), BytesToString (0), LS (L_S),
 					BytesToString (dld->pMgr->GetBtDownloadMgr ()->GetUploadSpeed ()), LS (L_S));
 				return str;
 			}
 
-			return "";
+			return _T("");
 		}
 
 		CString str;
 
 		if (dld->pMgr->IsBittorrent () && dld->pMgr->GetBtDownloadMgr ()->GetUploadSpeed () != 0)
 		{
-			str.Format ("%s/%s; %s/%s", BytesToString (dld->pMgr->GetSpeed ()), LS (L_S),
+			str.Format (_T("%s/%s; %s/%s"), BytesToString (dld->pMgr->GetSpeed ()), LS (L_S),
 				BytesToString (dld->pMgr->GetBtDownloadMgr ()->GetUploadSpeed ()), LS (L_S));
 		}
 		else
 		{
-			str.Format ("%s/%s", BytesToString (dld->pMgr->GetSpeed ()), LS (L_S));
+			str.Format (_T("%s/%s"), BytesToString (dld->pMgr->GetSpeed ()), LS (L_S));
 		}
 		return str;
 	}
@@ -1572,21 +1572,21 @@ CString CDownloads_Tasks::GetDownloadText(vmsDownloadSmartPtr dld, int nSubItem)
 	if (nSubItem == 6)
 	{
 		CString str = dld->strComment;
-		str.Replace ("\r", " ");
-		str.Replace ("\n", " ");
+		str.Replace (_T("\r"), _T(" "));
+		str.Replace (_T("\n"), _T(" "));
 		return str;
 	}
 
 	
 	if (nSubItem == 7)
 	{
-		char szDate [100], szTime [100];
+		TCHAR szDate [100], szTime [100];
 		FileTimeToStr (&dld->dateAdded, szDate, szTime, TRUE);
-		CString str = szDate; str += ", "; str += szTime;
+		CString str = szDate; str += _T(", "); str += szTime;
 		return str;
 	}
 
-	return "";
+	return _T("");
 }
 
 void CDownloads_Tasks::DeleteAllItems()
@@ -1602,7 +1602,7 @@ int CDownloads_Tasks::_compareDownloads(vmsDownloadSmartPtr dld1, vmsDownloadSma
 	switch (nColumn)
 	{
 		case 0:
-			char szFile1 [10000];  char szFile2 [10000];
+			TCHAR szFile1 [10000];  TCHAR szFile2 [10000];
 			GetFileName (dld1, szFile1);
 			GetFileName (dld2, szFile2);
 			return lstrcmpi (szFile1, szFile2);
@@ -1793,12 +1793,12 @@ void CDownloads_Tasks::OnDldunpack()
 	CDlg_UnpackSettings dlgS;
 
 	dlgS.m_strDstFolder = strArchive;
-	dlgS.m_strDstFolder.Replace ('/', '\\');
+	dlgS.m_strDstFolder.Replace (_T('/'), _T('\\'));
 
-	LPCSTR pszE = strrchr (dlgS.m_strDstFolder, '\\');
+	LPCTSTR pszE = _tcsrchr (dlgS.m_strDstFolder, _T('\\'));
 	if (pszE)
-		dlgS.m_strDstFolder.Insert (pszE - dlgS.m_strDstFolder + 1, "_extracted\\");
-	dlgS.m_strDstFolder += ".extracted\\";
+		dlgS.m_strDstFolder.Insert (pszE - dlgS.m_strDstFolder + 1, _T("_extracted\\"));
+	dlgS.m_strDstFolder += _T(".extracted\\");
 
 	if (IDCANCEL == _DlgMgr.DoModal (&dlgS))
 		return;
@@ -1910,7 +1910,7 @@ void CDownloads_Tasks::OnDldcheckintegrity()
 	if (dld->pMgr->GetDownloadMgr () == NULL)
 		return;
 
-	LPCSTR pszFile = dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName;
+	LPCTSTR pszFile = dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName;
 
 	if (GetFileAttributes (pszFile) == DWORD (-1))
 		return;
@@ -1926,7 +1926,7 @@ void CDownloads_Tasks::OnDldcheckintegrity()
 		return;
 
 	SAFE_DELETE_ARRAY (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszCheckSum);
-	dld->pMgr->GetDownloadMgr ()->GetDP ()->pszCheckSum = new char [dlg.m_strChecksum.GetLength () + 1];
+	dld->pMgr->GetDownloadMgr ()->GetDP ()->pszCheckSum = new TCHAR [dlg.m_strChecksum.GetLength () + 1];
 	_tcscpy (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszCheckSum, dlg.m_strChecksum);
 	dld->pMgr->GetDownloadMgr ()->GetDP ()->dwIntegrityCheckAlgorithm = MAKELONG (dlg.m_nAlgorithm, dlg.m_nSHA2Strength);
 
@@ -1943,7 +1943,7 @@ void CDownloads_Tasks::OnDldcheckintegrity()
 	{
 		CDlg_CheckFileIntegrity_Result dlg3;
 		dlg3.m_bResultOK = dlg2.is_CheckingSucceeded ();
-		char sz [MY_MAX_PATH];
+		TCHAR sz [MY_MAX_PATH];
 		fsGetFileName (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, sz);
 		dlg3.m_strFileName = sz;
 		dlg3.m_strUrl = dld->pMgr->GetDownloadMgr ()->GetDownloader ()->get_URL ();

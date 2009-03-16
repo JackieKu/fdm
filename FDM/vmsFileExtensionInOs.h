@@ -13,18 +13,18 @@ class vmsFileExtensionInOs
 {
 public:
 	
-	static BOOL CreateAssociation (LPCSTR pszExt, LPCSTR pszProgId);
+	static BOOL CreateAssociation (LPCTSTR pszExt, LPCTSTR pszProgId);
 	
 	
-	static BOOL SetAssociation(LPCSTR pszExt, LPCSTR pszVerb, LPCSTR pszValue);
-	static fsString GetAssociation (LPCSTR pszExt, LPCSTR pszVerb);
+	static BOOL SetAssociation(LPCTSTR pszExt, LPCTSTR pszVerb, LPCTSTR pszValue);
+	static fsString GetAssociation (LPCTSTR pszExt, LPCTSTR pszVerb);
 
 	vmsFileExtensionInOs();
 	virtual ~vmsFileExtensionInOs();
 
 protected:
-	static BOOL SetAssociation_2(LPCSTR pszProgId, LPCSTR pszVerb, LPCSTR pszValue);
-	static fsString GetAssociation_2 (LPCSTR pszProgId, LPCSTR pszVerb);
+	static BOOL SetAssociation_2(LPCTSTR pszProgId, LPCTSTR pszVerb, LPCTSTR pszValue);
+	static fsString GetAssociation_2 (LPCTSTR pszProgId, LPCTSTR pszVerb);
 };
 
 #endif 

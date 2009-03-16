@@ -26,7 +26,7 @@ fsDownloadRegSaver::~fsDownloadRegSaver()
 
 }
 
-BOOL fsDownloadRegSaver::Save(t_downloads* vDownloads, LPCSTR pszFileName)
+BOOL fsDownloadRegSaver::Save(t_downloads* vDownloads, LPCTSTR pszFileName)
 {
 	
 
@@ -35,8 +35,8 @@ BOOL fsDownloadRegSaver::Save(t_downloads* vDownloads, LPCSTR pszFileName)
 	fsString strFileName = pszFileName;
 	fsString strFileNameBak = pszFileName;
 
-	strFileName += ".sav";
-	strFileNameBak += ".bak";
+	strFileName += _T(".sav");
+	strFileNameBak += _T(".bak");
 
 	strFileName = fsGetDataFilePath (strFileName);
 	strFileNameBak = fsGetDataFilePath (strFileNameBak);
@@ -124,7 +124,7 @@ BOOL fsDownloadRegSaver::Save(t_downloads* vDownloads, LPCSTR pszFileName)
 	return MoveFile (strFileNameBak, strFileName);
 }
 
-fsDLLoadResult fsDownloadRegSaver::Load(t_downloads *vDownloads, LPCSTR pszFileName, BOOL bDontLoadIfTooLarge, fsDLLoadFromType lt, BOOL bErrIfNotExists)
+fsDLLoadResult fsDownloadRegSaver::Load(t_downloads *vDownloads, LPCTSTR pszFileName, BOOL bDontLoadIfTooLarge, fsDLLoadFromType lt, BOOL bErrIfNotExists)
 {
 	HANDLE hFile = INVALID_HANDLE_VALUE;
 	fsDLLoadFromType nlt = DLLFT_SAV; 
@@ -135,12 +135,12 @@ fsDLLoadResult fsDownloadRegSaver::Load(t_downloads *vDownloads, LPCSTR pszFileN
 	switch (lt)
 	{
 	case DLLFT_SAV:
-		strFileName += ".sav";
+		strFileName += _T(".sav");
 		nlt = DLLFT_BAK;
 		break;
 
 	case DLLFT_BAK:
-		strFileName += ".bak";
+		strFileName += _T(".bak");
 		nlt = DLLFT_SAV;
 		break;
 	}
@@ -186,7 +186,7 @@ fsDLLoadResult fsDownloadRegSaver::Load(t_downloads *vDownloads, LPCSTR pszFileN
 
 	
 	if (FALSE == ReadFile (hFile, &hdr, sizeof (hdr), &dw, NULL) || 
-			strnicmp (hdr.szSig, DLFILE_SIG, strlen (DLFILE_SIG)) )
+			strnicmp (hdr.szSig, DLFILE_SIG, _tcslen (DLFILE_SIG)) )
 	{
 		
 		SetFilePointer (hFile, 0, NULL, FILE_BEGIN);
@@ -388,7 +388,7 @@ BOOL fsDownloadRegSaver::LoadDownload(vmsDownloadSmartPtr dld, LPVOID lpBuffer, 
 	
 	LPBYTE pB = LPBYTE (lpBuffer);
 	DWORD dw = *lpdwSize;
-	LPSTR szStr;
+	LPTSTR szStr;
 	int iReserved;
 
 	if (FALSE == dld->pMgr->LoadState (pB, &dw, wVer))
@@ -510,7 +510,7 @@ BOOL fsDownloadRegSaver::OLD_LoadDownload(vmsDownloadSmartPtr dld, LPVOID lpBuff
 	
 	LPBYTE pB = LPBYTE (lpBuffer);
 	DWORD dw = *lpdwSize;
-	LPSTR szStr;
+	LPTSTR szStr;
 	int iReserved = 0;
 
 	if (FALSE == dld->pMgr->LoadState (pB, &dw, 0))

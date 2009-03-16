@@ -169,11 +169,11 @@ void CListCtrlEx::DrawItem(LPDRAWITEMSTRUCT lpDraw)
 			if (needX > colWidth-5)
 			{
 				RECT rc = rcText;
-				int dx = GetStringWidth ("...");
+				int dx = GetStringWidth (_T("..."));
 				if (dx <= colWidth-5)
 				{
 					rc.left = rc.right - dx;
-					dc->DrawText ("...", &rc, DT_SINGLELINE | DT_LEFT | DT_VCENTER);
+					dc->DrawText (_T("..."), &rc, DT_SINGLELINE | DT_LEFT | DT_VCENTER);
 					rcText.right = rc.left - 5;
 				}
 				else
@@ -266,7 +266,7 @@ void CListCtrlEx::OnDeleteAllItems()
 
 }
 
-int CListCtrlEx::AddItem(LPCSTR pszItem, COLORREF clrBg, COLORREF clrText, int iImage, BOOL bAddToBeginning)
+int CListCtrlEx::AddItem(LPCTSTR pszItem, COLORREF clrBg, COLORREF clrText, int iImage, BOOL bAddToBeginning)
 {
 	int c = bAddToBeginning ? 0 : GetItemCount ();
 
@@ -278,7 +278,7 @@ int CListCtrlEx::AddItem(LPCSTR pszItem, COLORREF clrBg, COLORREF clrText, int i
 	else
 		m_vInfo.push_back (info);
 
-	c = InsertItem (c, "", iImage);
+	c = InsertItem (c, _T(""), iImage);
 	if (*pszItem)
 		SetItemText (c, 0, pszItem);
 
@@ -355,7 +355,7 @@ void CListCtrlEx::UseGrid(BOOL bUse)
 	m_bGrid = bUse;
 }
 
-void CListCtrlEx::SaveState(LPCSTR pszName)
+void CListCtrlEx::SaveState(LPCTSTR pszName)
 {
 	int *piWidthes;	
 	fsnew (piWidthes, int, m_cTotalCols);
@@ -370,8 +370,8 @@ void CListCtrlEx::SaveState(LPCSTR pszName)
 			piWidthes [i] = -1;	
 
 	CString strIndexes = pszName, strWidthes = pszName;
-	strIndexes += 'I';
-	strWidthes += 'W';
+	strIndexes += _T('I');
+	strWidthes += _T('W');
 
 	
 	_App.get_SettingsStore ()->WriteProfileBinary (_T ("Settings\\View\\ListViews"), strIndexes, (LPBYTE)m_aIndex, m_cTotalCols * sizeof (int));
@@ -380,7 +380,7 @@ void CListCtrlEx::SaveState(LPCSTR pszName)
 	delete [] piWidthes;
 }
 
-void CListCtrlEx::ReadState(LPCSTR pszName)
+void CListCtrlEx::ReadState(LPCTSTR pszName)
 {
 	CHeaderCtrl* pHdr = GetHeaderCtrl ();
 	int *piWidthes;
@@ -391,8 +391,8 @@ void CListCtrlEx::ReadState(LPCSTR pszName)
 	UINT uSizeI, uSizeW;
 
 	CString strIndexes = pszName, strWidthes = pszName;
-	strIndexes += 'I';
-	strWidthes += 'W';
+	strIndexes += _T('I');
+	strWidthes += _T('W');
 
 	
 	if (_App.get_SettingsStore ()->GetProfileBinary (_T ("Settings\\View\\ListViews"), strIndexes, &pbI, &uSizeI) &&
@@ -466,7 +466,7 @@ void CListCtrlEx::OnParentNotify(UINT message, LPARAM lParam)
 		CMenu menu, m;
 		menu.CreateMenu ();
 		m.CreateMenu ();
-		m.AppendMenu (MF_POPUP, (UINT) menu.m_hMenu, "-");
+		m.AppendMenu (MF_POPUP, (UINT) menu.m_hMenu, _T("-"));
 
 		int cCols = GetHeaderCtrl ()->GetItemCount ();
 		
@@ -531,7 +531,7 @@ void CListCtrlEx::Initialize()
 	RebuildAIndex ();
 }
 
-void CListCtrlEx::SetColumnText(int iCol, LPCSTR pszText)
+void CListCtrlEx::SetColumnText(int iCol, LPCTSTR pszText)
 {
 	m_appszCols [iCol] = pszText;
 
@@ -545,7 +545,7 @@ void CListCtrlEx::SetColumnText(int iCol, LPCSTR pszText)
 
 	HDITEM item;
 	item.mask = HDI_TEXT;
-	item.pszText = (LPSTR) pszText;
+	item.pszText = (LPTSTR) pszText;
 	GetHeaderCtrl ()->SetItem (iCol, &item);
 }
 
@@ -567,7 +567,7 @@ void CListCtrlEx::InsertHdrItem(int iCol)
 	OnForceUpdate ();
 }
 
-void CListCtrlEx::SetItemText(int iItem, int iSubItem, LPCSTR pszText)
+void CListCtrlEx::SetItemText(int iItem, int iSubItem, LPCTSTR pszText)
 {
 	if (m_aIndex [iSubItem] != -1)
 		CListCtrl::SetItemText (iItem, m_aIndex [iSubItem], pszText);

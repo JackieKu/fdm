@@ -15,11 +15,11 @@ class vmsFdmAppMgr
 {
 public:
 	static BOOL MakeSureBtInstalled();
-	static LPCSTR getAppName();
-	static LPCSTR getAppAgentName();
-	static LPCSTR getAppVersionedName();
+	static LPCTSTR getAppName();
+	static LPCTSTR getAppAgentName();
+	static LPCTSTR getAppVersionedName();
 	static const vmsBinaryFileVersionInfo* getVersion();
-	static LPCSTR getBuildNumber ();
+	static LPCTSTR getBuildNumber ();
 	static void ShowInstallBtMessage();
 	static void ShowInstallMediaFeaturesMessage();
 	static BOOL IsMediaFeaturesInstalled();

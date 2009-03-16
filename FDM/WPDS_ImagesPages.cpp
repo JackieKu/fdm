@@ -40,7 +40,7 @@ void CWPDS_ImagesPages::DoDataExchange(CDataExchange* pDX)
 	DDX_Check (pDX, IDC_ELDL, bElDL);
 	DDX_Check (pDX, IDC_ELDONTDL, bElNDL);
 
-	if (strExts == "" && bEl)
+	if (strExts == _T("") && bEl)
 	{
 		MessageBox (LS (L_ENTEREXTS), LS (L_INPERR), MB_ICONEXCLAMATION);
 		GetDlgItem (IDC_EXTS)->SetFocus ();

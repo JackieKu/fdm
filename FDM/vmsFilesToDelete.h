@@ -15,7 +15,7 @@ public:
 	
 	static void Process();
 	
-	static void AddFile (LPCSTR pszFile);
+	static void AddFile (LPCTSTR pszFile);
 
 	vmsFilesToDelete();
 	virtual ~vmsFilesToDelete();

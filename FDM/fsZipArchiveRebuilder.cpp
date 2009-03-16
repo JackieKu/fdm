@@ -255,7 +255,7 @@ fsString fsZipArchiveRebuilder::GetFileName(int iFile)
 
 void fsZipArchiveRebuilder::RemoveFile(int iIndex)
 {
-	LPCSTR pszFile = m_vLocalFiles [iIndex].strFileName;
+	LPCTSTR pszFile = m_vLocalFiles [iIndex].strFileName;
 
 	int imvFilesIndex = FindFile (pszFile, iIndex);
 	if (imvFilesIndex != -1)
@@ -345,7 +345,7 @@ const fsArchiveFilePosition* fsZipArchiveRebuilder::GetFilePosition(int iFile)
 	return &m_vLocalFiles [iFile].position;
 }
 
-int fsZipArchiveRebuilder::FindFile(LPCSTR pszFile, int iProbIndex)
+int fsZipArchiveRebuilder::FindFile(LPCTSTR pszFile, int iProbIndex)
 {
 	int imvFilesIndex = -1;
 				

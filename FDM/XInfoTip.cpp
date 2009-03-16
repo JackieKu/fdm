@@ -82,7 +82,7 @@ BOOL CXInfoTip::Create(CWnd* pParentWnd)
 	return bSuccess;
 }                                      
 
-void CXInfoTip::Show(LPCSTR pszCaption, CString szText, BOOL bAutoHide , CPoint *pt )
+void CXInfoTip::Show(LPCTSTR pszCaption, CString szText, BOOL bAutoHide , CPoint *pt )
 {
 	if (pt != NULL)
 		m_ptOrigin	= *pt;
@@ -175,7 +175,7 @@ BOOL CXInfoTip::GetWindowRegion(CDC* pDC, HRGN* hRegion, CSize *Size )
 
 	CRect rcWnd1, rcWnd2;
 
-	pDC->DrawText(m_strCaption + "\n", &rcWnd1, DT_CALCRECT);
+	pDC->DrawText(m_strCaption + _T("\n"), &rcWnd1, DT_CALCRECT);
 
 	pDC->SelectObject (m_pFont);
 
@@ -348,7 +348,7 @@ void CXInfoTip::RelayEvent(LPMSG lpMsg)
 					
 					m_ptOrigin = point;
 					SetIcon(Info.hIcon);
-					Show("", Info.szText, TRUE, &point);
+					Show(_T(""), Info.szText, TRUE, &point);
 				}
 			}
 		}

@@ -69,7 +69,7 @@ public:
 	void RebuidDownloadsList();
 	
 	
-	static void ShowTimeoutBalloon (LPCSTR pszInfo, LPCSTR pszTitle, DWORD dwIcon = NIIF_INFO, BOOL bClear = FALSE);
+	static void ShowTimeoutBalloon (LPCTSTR pszInfo, LPCTSTR pszTitle, DWORD dwIcon = NIIF_INFO, BOOL bClear = FALSE);
 	
 	
 	void ShowTrayMenu(BOOL bModeTray = TRUE);
@@ -136,11 +136,11 @@ protected:
 	
 	bool m_bDontShowSHD;
 	
-	BOOL ImportListOfDownloads_FromDLInfoListFile(LPCSTR pszFile);
+	BOOL ImportListOfDownloads_FromDLInfoListFile(LPCTSTR pszFile);
 	BOOL ImportDownload (IXMLDOMNode* pNode, DLDS_LIST_REF v);
 	
 	
-	BOOL ImportListOfDownloads_FromURLListFile (LPCSTR pszFile);
+	BOOL ImportListOfDownloads_FromURLListFile (LPCTSTR pszFile);
 	
 	afx_msg void OnTUMChanged();
 	
@@ -171,7 +171,7 @@ protected:
 	
 	
 	
-	void ShowBalloon (LPCSTR pszInfo, LPCSTR pszTitle, BOOL bCheckSettings = TRUE, DWORD dwIcon = NIIF_INFO);
+	void ShowBalloon (LPCTSTR pszInfo, LPCTSTR pszTitle, BOOL bCheckSettings = TRUE, DWORD dwIcon = NIIF_INFO);
 	void HideBalloon();
 	BOOL m_bBalloonShowing;		
 	int m_balloonX, m_balloonY;  

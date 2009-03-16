@@ -13,12 +13,12 @@ class vmsMaliciousDownloadChecker
 {
 public:
 	
-	fsInternetResult Check (LPCSTR pszUrl);
+	fsInternetResult Check (LPCTSTR pszUrl);
 	
 	void Stop();
 	
 	
-	LPCSTR get_VirusCheckResult();
+	LPCTSTR get_VirusCheckResult();
 	
 	float get_AverageRating();
 	
@@ -30,7 +30,7 @@ public:
 	virtual ~vmsMaliciousDownloadChecker();
 
 	
-	static CString EncodeUrl (LPCSTR pszUrl);
+	static CString EncodeUrl (LPCTSTR pszUrl);
 
 protected:
 	bool m_bNeedStop;

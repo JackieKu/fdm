@@ -56,19 +56,19 @@ BOOL CDlg_CreateFVDownload::OnInitDialog()
 		SWP_NOZORDER | SWP_NOMOVE);
 	
 
-	LPCSTR apszSites [] = {
-		"Youtube", "http://youtube.com/watch?v=xPxDw7ajfGE",
-		"Google Video", "http://video.google.com/url?docid=1688669...",
-		"LiveDigital", "http://livedigital.com/video/",
-		"MySpace Videos", "http://vids.myspace.com/index.cfm?fuseaction=...",
-		"Blennus", "http://blennus.com/index.php?option=content&task=...",
-		"Dailymotion", "http://www.dailymotion.com/us/cluster/animals/...",
+	LPCTSTR apszSites [] = {
+		_T("Youtube"), "http://youtube.com/watch?v=xPxDw7ajfGE",
+		_T("Google Video"), "http://video.google.com/url?docid=1688669...",
+		_T("LiveDigital"), "http://livedigital.com/video/",
+		_T("MySpace Videos"), "http://vids.myspace.com/index.cfm?fuseaction=...",
+		_T("Blennus"), "http://blennus.com/index.php?option=content&task=...",
+		_T("Dailymotion"), "http://www.dailymotion.com/us/cluster/animals/...",
 	};
 
 	CString str;
-	for (int i = 0; i < sizeof (apszSites) / sizeof (LPCSTR) / 2; i++)
+	for (int i = 0; i < sizeof (apszSites) / sizeof (LPCTSTR) / 2; i++)
 	{
-		str.Format ("%s, %s %s", apszSites [i*2], LS (L_E_G), apszSites [i*2+1]);
+		str.Format (_T("%s, %s %s"), apszSites [i*2], LS (L_E_G), apszSites [i*2+1]);
 		m_wndSSites.AddString (str);
 	}
 	m_wndSSites.SetCurSel (0);
@@ -80,7 +80,7 @@ BOOL CDlg_CreateFVDownload::OnInitDialog()
 
 	if (m_strUrl.IsEmpty ())
 	{
-		LPCSTR pszUrl = _ClipbrdMgr.Text ();
+		LPCTSTR pszUrl = _ClipbrdMgr.Text ();
 		if (pszUrl && *pszUrl)
 		{
 			fsURL url;

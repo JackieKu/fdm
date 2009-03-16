@@ -13,17 +13,17 @@
 class vmsAppSettingsStore  
 {
 public:
-	void SaveSettingsToFile(LPCSTR pszFile);
-	void LoadSettingsFromFile (LPCSTR pszFile);
+	void SaveSettingsToFile(LPCTSTR pszFile);
+	void LoadSettingsFromFile (LPCTSTR pszFile);
 
-	BOOL WriteProfileBinary (LPCSTR pszSection, LPCSTR pszEntry, LPBYTE pbData, UINT nBytes);
-	BOOL GetProfileBinary (LPCSTR pszSection, LPCSTR pszEntry, LPBYTE* ppData, UINT* pBytes);
+	BOOL WriteProfileBinary (LPCTSTR pszSection, LPCTSTR pszEntry, LPBYTE pbData, UINT nBytes);
+	BOOL GetProfileBinary (LPCTSTR pszSection, LPCTSTR pszEntry, LPBYTE* ppData, UINT* pBytes);
 
-	BOOL WriteProfileString(LPCSTR pszSection, LPCSTR pszEntry, LPCSTR pszValue);
-	CString GetProfileString(LPCSTR pszSection, LPCSTR pszEntry, LPCSTR pszDefault);
+	BOOL WriteProfileString(LPCTSTR pszSection, LPCTSTR pszEntry, LPCTSTR pszValue);
+	CString GetProfileString(LPCTSTR pszSection, LPCTSTR pszEntry, LPCTSTR pszDefault);
 
-	BOOL WriteProfileInt (LPCSTR pszSection, LPCSTR pszEntry, int nValue);
-	UINT GetProfileInt (LPCSTR pszSection, LPCSTR pszEntry, INT nDefault);
+	BOOL WriteProfileInt (LPCTSTR pszSection, LPCTSTR pszEntry, int nValue);
+	UINT GetProfileInt (LPCTSTR pszSection, LPCTSTR pszEntry, INT nDefault);
 
 	vmsAppSettingsStore();
 	virtual ~vmsAppSettingsStore();

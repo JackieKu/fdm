@@ -15,10 +15,10 @@ public:
 	
 	
 	
-	static bool IsInstalled (LPCSTR pszCID, bool bInDefaultProfileOnly);
+	static bool IsInstalled (LPCTSTR pszCID, bool bInDefaultProfileOnly);
 	
 	
-	static bool Do (LPCSTR pszCID, LPCSTR pszExtPath, bool bInstall = true);
+	static bool Do (LPCTSTR pszCID, LPCTSTR pszExtPath, bool bInstall = true);
 
 	vmsFirefoxExtensionInstaller();
 	virtual ~vmsFirefoxExtensionInstaller();

@@ -145,12 +145,12 @@ class fsWebPageDownloader
 public:
 	bool isDownloadsMgrRequired () const;
 	
-	void GetDownloadingSiteName (LPSTR psz);
+	void GetDownloadingSiteName (LPTSTR psz);
 	
 	
 	
 	
-	BOOL Create (LPCSTR pszPageURL, BOOL bAutoStart = TRUE, fsSchedule *task = NULL);
+	BOOL Create (LPCTSTR pszPageURL, BOOL bAutoStart = TRUE, fsSchedule *task = NULL);
 	
 	t_wptree GetRootPage();
 	
@@ -196,7 +196,7 @@ public:
 	
 	float GetPercentDone();
 	
-	LPCSTR GetStartURL ();
+	LPCTSTR GetStartURL ();
 
 	
 	fs::ListTree <fsDLWebPage>* FindWebPageTree (vmsDownloadSmartPtr dld);
@@ -216,7 +216,7 @@ protected:
 	
 	BOOL IsURLShouldBeIgnored (fsURL& url);
 	
-	int ParseHTMLFrameUrls(fsHTMLParser &parser, t_wptree wptree, BOOL bFixUrlsOnly, LPCSTR pszBaseURL);
+	int ParseHTMLFrameUrls(fsHTMLParser &parser, t_wptree wptree, BOOL bFixUrlsOnly, LPCTSTR pszBaseURL);
 	BOOL m_bWasShutdownMsg; 
 	
 	void CorrectUnpUrls (fsDLWebPage* wpfrom, fsDLWebPage* wpto);
@@ -234,19 +234,19 @@ protected:
 	
 	
 	
-	void GetFileForReplace (fsDLWebPage* wpwhere, fsDLWebPage *wpwhat, LPSTR pszFile);
+	void GetFileForReplace (fsDLWebPage* wpwhere, fsDLWebPage *wpwhat, LPTSTR pszFile);
 	
-	void GetPtrToFile (LPCSTR pszToFile, LPCSTR pszFromFile, LPSTR pszPtr);
+	void GetPtrToFile (LPCTSTR pszToFile, LPCTSTR pszFromFile, LPTSTR pszPtr);
 	
 	void DeleteWebPage (fsDLWebPage *wp);
 	
 	fsDLWebPage* FindWebPage (UINT nID);
 	fsDLWebPage* FindWebPage (vmsDownloadSmartPtr dld);
-	fsDLWebPage* FindWebPage (LPCSTR pszFullUrl);
+	fsDLWebPage* FindWebPage (LPCTSTR pszFullUrl);
 	
 	void OnDldRedirected (vmsDownloadSmartPtr dld);
 	
-	BOOL IsUrlsEqual (fsURL& url1, LPCSTR pszUrl2);
+	BOOL IsUrlsEqual (fsURL& url1, LPCTSTR pszUrl2);
 	UINT m_nMaxID;		
 	CRITICAL_SECTION m_csthreadProcessDoneAndRedirEventsAccLists;
 	
@@ -262,20 +262,20 @@ protected:
 	
 	
 	
-	int ParseHTMLLinkUrls(fsHTMLParser &parser, t_wptree wptree, BOOL bFixUrlsOnly, LPCSTR pszBaseURL);
+	int ParseHTMLLinkUrls(fsHTMLParser &parser, t_wptree wptree, BOOL bFixUrlsOnly, LPCTSTR pszBaseURL);
 	
 	
-	int ParseHTMLUrls (fsHTMLParser& parser, t_wptree wptree, BOOL bFixUrlsOnly, LPCSTR pszBaseURL);
+	int ParseHTMLUrls (fsHTMLParser& parser, t_wptree wptree, BOOL bFixUrlsOnly, LPCTSTR pszBaseURL);
 	
 	
-	int ParseHTMLImages(fsHTMLParser &parser, t_wptree wptree, BOOL bFixUrlsOnly, LPCSTR pszBaseURL);
+	int ParseHTMLImages(fsHTMLParser &parser, t_wptree wptree, BOOL bFixUrlsOnly, LPCTSTR pszBaseURL);
 	
 	
-	BOOL CrackUrl (LPCSTR pszFullUrl, LPSTR* ppszUrlWA, LPSTR* ppszFA = NULL);
+	BOOL CrackUrl (LPCTSTR pszFullUrl, LPTSTR* ppszUrlWA, LPTSTR* ppszFA = NULL);
 	
 	void ParseHTMLFile (t_wptree wptree, BOOL bFixUrlsOnly);
 	
-	UINT ParseHTML (LPCSTR pszHTML, t_wptree wptree, BOOL bFixUrlsOnly);
+	UINT ParseHTML (LPCTSTR pszHTML, t_wptree wptree, BOOL bFixUrlsOnly);
 	
 	int FindConfIndex (vmsDownloadSmartPtr dld);
 	
@@ -284,7 +284,7 @@ protected:
 	
 	void WebPage_FindDownload (fsDLWebPage *wp);
 	
-	fsDLWebPage* AddPage (fs::ListTree <fsDLWebPage> *root, LPCSTR pszPageURL, vmsWPDPageType enPageType, BOOL bSetCTReq = FALSE, BOOL bAutoStart = TRUE, fsSchedule *task = NULL);
+	fsDLWebPage* AddPage (fs::ListTree <fsDLWebPage> *root, LPCTSTR pszPageURL, vmsWPDPageType enPageType, BOOL bSetCTReq = FALSE, BOOL bAutoStart = TRUE, fsSchedule *task = NULL);
 	
 	
 	fsDLWebPage* AddWebPage (fsDLWebPage *wp, fs::ListTree <fsDLWebPage> *root, fsSchedule *task = NULL);

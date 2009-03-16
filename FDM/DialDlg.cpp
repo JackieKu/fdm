@@ -77,7 +77,7 @@ BOOL CDialDlg::OnInitDialog()
 
 	CRect rc;
 	m_wndLog.GetClientRect (&rc);
-	m_wndLog.InsertColumn (0, "", LVCFMT_LEFT, rc.right);
+	m_wndLog.InsertColumn (0, _T(""), LVCFMT_LEFT, rc.right);
 	
 	if (m_dial)	
 	{
@@ -177,7 +177,7 @@ VOID WINAPI CDialDlg::_RasDialFunc(UINT, RASCONNSTATE state, DWORD dwError)
 			default:	
 				
 
-				char szErr [256];	
+				TCHAR szErr [256];	
 				fsRasGetErrorString (dwError, szErr, sizeof (szErr));
 				m_pThis->Log (szErr);
 				
@@ -229,9 +229,9 @@ VOID WINAPI CDialDlg::_RasDialFunc(UINT, RASCONNSTATE state, DWORD dwError)
 		{
 			
 
-			m_pThis->Log ("");
+			m_pThis->Log (_T(""));
 			CString str;
-			str.Format ("%s... %s %d", LS (L_DIALING), LS (L_ATTEMPT), m_pThis->m_cAttempts+1);
+			str.Format (_T("%s... %s %d"), LS (L_DIALING), LS (L_ATTEMPT), m_pThis->m_cAttempts+1);
 			m_pThis->Log (str);
 
 			
@@ -289,12 +289,12 @@ VOID WINAPI CDialDlg::_RasDialFunc(UINT, RASCONNSTATE state, DWORD dwError)
 					
 
 					m_pThis->m_cAttempts = 0;
-					m_pThis->Log ("");
+					m_pThis->Log (_T(""));
 					CString str;
-					str.Format ("%s %d", LS (L_REPETITION), m_pThis->m_cAgains+1);
+					str.Format (_T("%s %d"), LS (L_REPETITION), m_pThis->m_cAgains+1);
 					m_pThis->Log (str);
-					m_pThis->Log ("");
-					str.Format ("%s... %s %d", LS (L_DIALING), LS (L_ATTEMPT), m_pThis->m_cAttempts+1);
+					m_pThis->Log (_T(""));
+					str.Format (_T("%s... %s %d"), LS (L_DIALING), LS (L_ATTEMPT), m_pThis->m_cAttempts+1);
 					m_pThis->Log (str);
 					fsRasDial (NULL, NULL, &m_pThis->m_rp, 0, _RasDialFunc, &m_hConn);
 					m_pThis->m_cAgains++;
@@ -326,7 +326,7 @@ VOID WINAPI CDialDlg::_RasDialFunc(UINT, RASCONNSTATE state, DWORD dwError)
 	m_bInRasFunc = FALSE;
 }
 
-void CDialDlg::Log(LPCSTR pszRecord)
+void CDialDlg::Log(LPCTSTR pszRecord)
 {
 	if (IsWindow (m_hWnd) == FALSE)
 		return;
@@ -384,7 +384,7 @@ void CDialDlg::StartConnect()
 	m_cAgains = 0;
 
 	CString str;
-	str.Format ("%s... %s 1", LS (L_DIALING), LS (L_ATTEMPT));
+	str.Format (_T("%s... %s 1"), LS (L_DIALING), LS (L_ATTEMPT));
 	Log (str);
 	fsRasDial (NULL, NULL, &m_rp, 0, _RasDialFunc, &m_hConn);
 

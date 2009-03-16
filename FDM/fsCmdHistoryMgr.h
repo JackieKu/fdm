@@ -13,16 +13,16 @@
 
 #define HISTFILE_CURRENT_VERSION	(1)
 
-#define HISTFILE_SIG "FDM History"
+#define HISTFILE_SIG _T("FDM History")
 
 struct fsHistFileHdr
 {
-	char szSig [sizeof (HISTFILE_SIG) + 1];
+	TCHAR szSig [sizeof (HISTFILE_SIG) + 1];
 	WORD wVer;
 
 	fsHistFileHdr ()
 	{
-		strcpy (szSig, HISTFILE_SIG);
+		_tcscpy (szSig, HISTFILE_SIG);
 		wVer = HISTFILE_CURRENT_VERSION;
 	}
 };
@@ -39,9 +39,9 @@ public:
 	
 	void Set_MaxRecordCount (int iMax);
 	
-	void AddRecord (LPCSTR pszRecord);
+	void AddRecord (LPCTSTR pszRecord);
 	
-	LPCSTR GetRecord (int iRec);
+	LPCTSTR GetRecord (int iRec);
 	
 	int GetRecordCount();
 	

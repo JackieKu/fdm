@@ -42,7 +42,7 @@ protected:
 	
 	CFont m_fntBold;
 	
-	void SetDlgItemText2 (UINT nID, LPCSTR pszText);
+	void SetDlgItemText2 (UINT nID, LPCTSTR pszText);
 	void ApplyLanguage();
 	vmsDownloadSmartPtr m_dld;
 

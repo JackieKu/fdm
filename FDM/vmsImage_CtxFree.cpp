@@ -22,7 +22,7 @@ vmsImage_CtxFree::~vmsImage_CtxFree()
 	Free ();
 }
 
-HRESULT vmsImage_CtxFree::Load(LPCSTR pszFile)
+HRESULT vmsImage_CtxFree::Load(LPCTSTR pszFile)
 {	
 	Free ();
 		
@@ -55,7 +55,7 @@ void vmsImage_CtxFree::CreateImagesBitmaps()
 		if (i)
 			m_Image.set_CurrentFrame (i);
 
-		HDC hdc = CreateDC ("DISPLAY", NULL, NULL, NULL);
+		HDC hdc = CreateDC (_T("DISPLAY"), NULL, NULL, NULL);
 		HDC hmem = CreateCompatibleDC (hdc);
 		SIZE size = m_Image.get_Size ();
 		HBITMAP hbm = CreateCompatibleBitmap (hdc, size.cx, size.cy);

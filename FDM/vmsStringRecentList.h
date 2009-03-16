@@ -16,9 +16,9 @@ public:
 	BOOL Load (HANDLE hFile);
 	BOOL Save (HANDLE hFile);
 	void Clear();
-	LPCSTR get_String (int nIndex) const;
+	LPCTSTR get_String (int nIndex) const;
 	int get_Count () const;
-	void Add(LPCSTR psz);
+	void Add(LPCTSTR psz);
 	vmsStringRecentList();
 	virtual ~vmsStringRecentList();
 

@@ -270,7 +270,7 @@ enum fsDownloaderEvent
 struct fsDlgWithServerInfo
 {
 	fsInetFileDialogDirection dir;	
-	LPCSTR pszMsg;					
+	LPCTSTR pszMsg;					
 	int iSection;					
 };  
 
@@ -314,13 +314,13 @@ public:
 	
 	void UseZipPreview (BOOL b);
 	
-	LPCSTR Get_FileName();
+	LPCTSTR Get_FileName();
 	
 	UINT64 GetDownloadedBytesCount();
 	
 	int GetFoundMirrorCount();
 	
-	LPCSTR GetContentType();
+	LPCTSTR GetContentType();
 	
 	void Set_MirrPingTime (int iMirr, DWORD dw);
 	
@@ -355,7 +355,7 @@ public:
 	
 	fsInternetResult FindMirrors();
 	
-	fsInternetResult AddMirrorURL (LPCSTR pszUrl, LPCSTR pszUser = NULL, LPCSTR pszPassword = NULL, BOOL bDontMeasureSpeed = FALSE);
+	fsInternetResult AddMirrorURL (LPCTSTR pszUrl, LPCTSTR pszUser = NULL, LPCTSTR pszPassword = NULL, BOOL bDontMeasureSpeed = FALSE);
 	
 	int GetMirrorURLCount();
 	
@@ -374,7 +374,7 @@ public:
 	
 	fsInternetResult QuerySize();
 	
-	LPCSTR GetSuggestedFileName();
+	LPCTSTR GetSuggestedFileName();
 	
 	void StopSection();
 	
@@ -543,7 +543,7 @@ protected:
 	fsMirrorURLsMgr* m_pMirrURLMgr;
 	BOOL m_bDetLog;				
 	
-	static void _InetFileDialogFunc (fsInetFileDialogDirection dir, LPCSTR pszMsg, LPVOID lp1, LPVOID lp2);
+	static void _InetFileDialogFunc (fsInetFileDialogDirection dir, LPCTSTR pszMsg, LPVOID lp1, LPVOID lp2);
 	
 	fsInternetResult QuerySize (fsInternetURLFile* file);
 	fsString m_strSuggFileName;	
@@ -589,8 +589,8 @@ protected:
 	
 	
 	
-	fsInternetResult OpenUrl (UINT64 uStartPos, fsInternetURLFile **ppFile, int iSectIndex, UINT &nMirror, BOOL bCheckFileSize = FALSE, LPCSTR pszContentTypeReq = NULL);
-	fsInternetResult OpenUrl_imp (UINT64 uStartPos, fsInternetURLFile **ppFile, int iSectIndex, UINT &nMirror, BOOL bCheckFileSize, int iAttempt, LPCSTR pszContentTypeReq = NULL);
+	fsInternetResult OpenUrl (UINT64 uStartPos, fsInternetURLFile **ppFile, int iSectIndex, UINT &nMirror, BOOL bCheckFileSize = FALSE, LPCTSTR pszContentTypeReq = NULL);
+	fsInternetResult OpenUrl_imp (UINT64 uStartPos, fsInternetURLFile **ppFile, int iSectIndex, UINT &nMirror, BOOL bCheckFileSize, int iAttempt, LPCTSTR pszContentTypeReq = NULL);
 	
 	
 	static DWORD WINAPI _threadDownload(LPVOID lp);

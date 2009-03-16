@@ -32,7 +32,7 @@ public:
 	STDMETHOD(ProcessIeDocument)( IDispatch *pDispatch);
 protected:
 	static DWORD WINAPI _threadCreateDownload (LPVOID lp);
-	void ProcessHtml (LPCSTR pszHost, LPCSTR pszHtml);
+	void ProcessHtml (LPCTSTR pszHost, LPCTSTR pszHtml);
 };
 
 #endif 

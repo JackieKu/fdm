@@ -77,9 +77,9 @@ void DrawHorizontalFrame (HDC hdc, int yStart, int yEnd, int xStart, int width)
 	DeleteObject (hShadowPen);
 }
 
-void BytesToXBytes (UINT64 uBytes, float* pfXBytes, LPSTR pszXVal)
+void BytesToXBytes (UINT64 uBytes, float* pfXBytes, LPTSTR pszXVal)
 {
-	LPCSTR ppszX [] = {LS (L_B), LS (L_KB), LS (L_MB), "GB"};
+	LPCTSTR ppszX [] = {LS (L_B), LS (L_KB), LS (L_MB), _T("GB")};
 	int i = 0;
 	double dBytes = (double) (INT64)uBytes;
 
@@ -92,9 +92,9 @@ void BytesToXBytes (UINT64 uBytes, float* pfXBytes, LPSTR pszXVal)
 	if (pszXVal)
 	{
 		if (i > 3)
-			strcpy (pszXVal, "?");
+			_tcscpy (pszXVal, _T("?"));
 		else
-			strcpy (pszXVal, ppszX [i]);
+			_tcscpy (pszXVal, ppszX [i]);
 	}
 
 	*pfXBytes = (FLOAT) dBytes;
@@ -108,9 +108,9 @@ CString BytesToString (UINT64 uSize)
 	if (_pwndDownloads != NULL && FALSE == _pwndDownloads->IsSizesInBytes ())
 	{
 		float val;
-		char szDim [10];
+		TCHAR szDim [10];
 		BytesToXBytes (uSize, &val, szDim);
-		str.Format ("%.*g %s", val > 999 ? 4 : 3, val, szDim);
+		str.Format (_T("%.*g %s"), val > 999 ? 4 : 3, val, szDim);
 	}
 	else
 		str = fsBytesToStr (uSize);
@@ -119,7 +119,7 @@ CString BytesToString (UINT64 uSize)
 }
 #endif
 
-void SystemTimeToStr (SYSTEMTIME *time, LPSTR pszDate, LPSTR pszTime, BOOL bSeconds)
+void SystemTimeToStr (SYSTEMTIME *time, LPTSTR pszDate, LPTSTR pszTime, BOOL bSeconds)
 {
 	if (pszDate)
 		GetDateFormat (LOCALE_USER_DEFAULT, DATE_SHORTDATE, time, NULL, pszDate, 100);
@@ -133,16 +133,16 @@ void SystemTimeToStr (SYSTEMTIME *time, LPSTR pszDate, LPSTR pszTime, BOOL bSeco
 	}
 }
 
-void FileTimeToStr (FILETIME *time, LPSTR pszDate, LPSTR pszTime, BOOL bSeconds)
+void FileTimeToStr (FILETIME *time, LPTSTR pszDate, LPTSTR pszTime, BOOL bSeconds)
 {
 	SYSTEMTIME s;
 	FileTimeToSystemTime (time, &s);
 	SystemTimeToStr (&s, pszDate, pszTime, bSeconds);
 }
 
-BOOL fsErrorToStr (LPSTR pszErr, DWORD dwMaxSize, DWORD* pdwLastError)
+BOOL fsErrorToStr (LPTSTR pszErr, DWORD dwMaxSize, DWORD* pdwLastError)
 {
-	LPCSTR pszDesc;
+	LPCTSTR pszDesc;
 	CString str;
 	
 	*pszErr = 0;
@@ -190,54 +190,54 @@ BOOL fsErrorToStr (LPSTR pszErr, DWORD dwMaxSize, DWORD* pdwLastError)
 			break;
 		
 		default:
-			str.Format ("%s - [%d]", LS (L_UNKERR), pdwLastError ? *pdwLastError : GetLastError ());
+			str.Format (_T("%s - [%d]"), LS (L_UNKERR), pdwLastError ? *pdwLastError : GetLastError ());
 			pszDesc = str;
 	}
 
 	if (strlen (pszDesc) >= dwMaxSize)
 		return FALSE;
 
-	strcpy (pszErr, pszDesc);
+	_tcscpy (pszErr, pszDesc);
 
 	return TRUE;
 }
 
-void fsGetPath (LPCSTR pszFile, LPSTR pszPath)
+void fsGetPath (LPCTSTR pszFile, LPTSTR pszPath)
 {
-	strcpy (pszPath, pszFile);
+	_tcscpy (pszPath, pszFile);
 	
-	int len = strlen (pszPath) - 1;
+	int len = _tcslen (pszPath) - 1;
 
-	while (len >= 0 && pszPath [len] != '\\' && pszPath [len] != '/')
+	while (len >= 0 && pszPath [len] != _T('\\') && pszPath [len] != _T('/'))
 		len--;
 
 	pszPath [len+1] = 0;
 }
 
-void fsGetFileName (LPCSTR pszFilePath, LPSTR pszFileName)
+void fsGetFileName (LPCTSTR pszFilePath, LPTSTR pszFileName)
 {
 	CHAR szPath [MY_MAX_PATH];
 	fsGetPath (pszFilePath, szPath);
-	strcpy (pszFileName, pszFilePath + strlen (szPath));
+	_tcscpy (pszFileName, pszFilePath + _tcslen (szPath));
 }
 
-BOOL fsBuildPathToFile (LPCSTR pszFileName)
+BOOL fsBuildPathToFile (LPCTSTR pszFileName)
 {
 	CHAR szPath [MY_MAX_PATH];
 	
 	fsGetPath (pszFileName, szPath);
 
-	int len = strlen (szPath);
+	int len = _tcslen (szPath);
 	int start = 0;
 
 	
-	if (szPath [0] == '\\' && szPath [1] == '\\')
+	if (szPath [0] == _T('\\') && szPath [1] == _T('\\'))
 	{
 		
-		LPCSTR psz = strchr (szPath + 2, '\\');
+		LPCTSTR psz = _tcschr (szPath + 2, _T('\\'));
 		
 		if (psz)
-			psz = strchr (psz+1, '\\');
+			psz = _tcschr (psz+1, _T('\\'));
 		if (psz)
 			psz++;
 		if (psz == NULL)
@@ -252,13 +252,13 @@ BOOL fsBuildPathToFile (LPCSTR pszFileName)
 	}
 	else
 	{
-		if (szPath [1] == ':')
+		if (szPath [1] == _T(':'))
 			start = 3;
 	}
 
 	for (int i = start; i < len; i++)
 	{
-		if (szPath [i] == '\\' || szPath [i] == '/')
+		if (szPath [i] == _T('\\') || szPath [i] == _T('/'))
 		{
 			
 			
@@ -289,7 +289,7 @@ BOOL fsBuildPathToFileW (LPCWSTR pwszFileName)
 
 	for (;;)
 	{
-		pwsz = wcschr (pwsz + 1, '\\');
+		pwsz = wcschr (pwsz + 1, _T('\\'));
 		if (pwsz == NULL)
 			break;
 		if (pwsz - pwszFileName == 2)
@@ -320,8 +320,8 @@ BOOL DPEntry_IsAllEqual (DLDS_LIST *pv, int offset, int size, BOOL bString)
 		
 		if (bString)
 		{
-			LPCSTR psz1 = *((LPCSTR*) dp0);
-			LPCSTR psz2 = *((LPCSTR*) dpn);
+			LPCTSTR psz1 = *((LPCTSTR*) dp0);
+			LPCTSTR psz2 = *((LPCTSTR*) dpn);
 
 			if (strcmp (psz1, psz2))
 				return FALSE;
@@ -352,8 +352,8 @@ BOOL DNPEntry_IsAllEqual (DLDS_LIST *pv, int offset, int size, BOOL bString)
 		
 		if (bString)
 		{
-			LPCSTR psz1 = *((LPCSTR*) dp0);
-			LPCSTR psz2 = *((LPCSTR*) dpn);
+			LPCTSTR psz1 = *((LPCTSTR*) dp0);
+			LPCTSTR psz2 = *((LPCTSTR*) dpn);
 
 			if (strcmp (psz1, psz2))
 				return FALSE;
@@ -391,11 +391,11 @@ BOOL DPEntry_IsAllEqual_BitMask (DLDS_LIST *pv, int offset, DWORD dwBitMask)
 
 void DPEntry_SetValue (DLDS_LIST *pv, int offset, int size, BOOL bString, const void* lpNewVal)
 {
-	LPCSTR pszNewVal = (LPCSTR) lpNewVal;
+	LPCTSTR pszNewVal = (LPCTSTR) lpNewVal;
 	int len = 0;
 
 	if (bString)
-		len = strlen (pszNewVal);
+		len = _tcslen (pszNewVal);
 
 	for (int i = pv->size () - 1; i >= 0; i--)
 	{
@@ -403,12 +403,12 @@ void DPEntry_SetValue (DLDS_LIST *pv, int offset, int size, BOOL bString, const 
 		
 		if (bString)
 		{
-			LPSTR *ppszVal = (LPSTR*) dp;
+			LPTSTR *ppszVal = (LPTSTR*) dp;
 			
 			SAFE_DELETE_ARRAY (*ppszVal);
 
 			fsnew (*ppszVal, CHAR, len+1);
-			strcpy (*ppszVal, pszNewVal);
+			_tcscpy (*ppszVal, pszNewVal);
 		}
 		else
 		{
@@ -437,11 +437,11 @@ void DPEntry_UnsetValue_BitMask (DLDS_LIST *pv, int offset, DWORD dwMask)
 
 void DNPEntry_SetValue (DLDS_LIST *pv, int offset, int size, BOOL bString, const void* lpNewVal)
 {
-	LPCSTR pszNewVal = (LPCSTR) lpNewVal;
+	LPCTSTR pszNewVal = (LPCTSTR) lpNewVal;
 	int len = 0;
 
 	if (bString)
-		len = strlen (pszNewVal);
+		len = _tcslen (pszNewVal);
 
 	for (int i = pv->size () - 1; i >= 0; i--)
 	{
@@ -449,12 +449,12 @@ void DNPEntry_SetValue (DLDS_LIST *pv, int offset, int size, BOOL bString, const
 		
 		if (bString)
 		{
-			LPSTR *ppszVal = (LPSTR*) dnp;
+			LPTSTR *ppszVal = (LPTSTR*) dnp;
 			
 			SAFE_DELETE_ARRAY (*ppszVal);
 
 			fsnew (*ppszVal, CHAR, len+1);
-			strcpy (*ppszVal, pszNewVal);
+			_tcscpy (*ppszVal, pszNewVal);
 		}
 		else
 		{
@@ -504,7 +504,7 @@ void DNPEntry_UnsetValue_BitMask (DLDS_LIST *pv, int offset, DWORD dwMask)
 
 #endif  
 
-LPCSTR strcmp_m (LPCSTR pszWhere, LPCSTR pszWhat)
+LPCTSTR strcmp_m (LPCTSTR pszWhere, LPCTSTR pszWhat)
 {
 	if (*pszWhere == 0)
 		return *pszWhat == 0 ? pszWhere : NULL;
@@ -513,7 +513,7 @@ LPCSTR strcmp_m (LPCSTR pszWhere, LPCSTR pszWhat)
 		return NULL;
 
 	
-	if (*pszWhat == '*')
+	if (*pszWhat == _T('*'))
 	{
 		
 		if (pszWhat [1] == 0)
@@ -521,7 +521,7 @@ LPCSTR strcmp_m (LPCSTR pszWhere, LPCSTR pszWhat)
 		
 		
 		
-		LPCSTR psz = strcmp_m (pszWhere, pszWhat+1);
+		LPCTSTR psz = strcmp_m (pszWhere, pszWhat+1);
 		if (psz)
 			return psz;
 
@@ -533,7 +533,7 @@ LPCSTR strcmp_m (LPCSTR pszWhere, LPCSTR pszWhat)
 
 	
 
-	if (*pszWhat != '?')
+	if (*pszWhat != _T('?'))
 	{
 		
 		if (*pszWhere != *pszWhat)
@@ -543,10 +543,10 @@ LPCSTR strcmp_m (LPCSTR pszWhere, LPCSTR pszWhat)
 	return strcmp_m (pszWhere+1, pszWhat+1) ? pszWhere : NULL;
 }
 
-LPCSTR strcmpi_m (LPCSTR pszWhere, LPCSTR pszWhat)
+LPCTSTR strcmpi_m (LPCTSTR pszWhere, LPCTSTR pszWhat)
 {
-	char *psz1 = new char [lstrlen (pszWhere) + 1];
-	char *psz2 = new char [lstrlen (pszWhat) + 1];
+	TCHAR *psz1 = new TCHAR [lstrlen (pszWhere) + 1];
+	TCHAR *psz2 = new TCHAR [lstrlen (pszWhat) + 1];
 
 	_tcscpy (psz1, pszWhere);
 	_tcscpy (psz2, pszWhat);
@@ -554,8 +554,8 @@ LPCSTR strcmpi_m (LPCSTR pszWhere, LPCSTR pszWhat)
 	CharLower (psz1);
 	CharLower (psz2);
 
-	LPCSTR psz = strcmp_m (psz1, psz2);
-	LPCSTR pszRet = NULL;
+	LPCTSTR psz = strcmp_m (psz1, psz2);
+	LPCTSTR pszRet = NULL;
 	
 	if (psz)
 		pszRet = pszWhere + (psz - psz1);
@@ -566,12 +566,12 @@ LPCSTR strcmpi_m (LPCSTR pszWhere, LPCSTR pszWhat)
 	return pszRet;
 }
 
-BOOL IsExtStrEq (LPCSTR pszMasked, LPCSTR psz2)
+BOOL IsExtStrEq (LPCTSTR pszMasked, LPCTSTR psz2)
 {
 	return strcmpi_m (psz2, pszMasked) != NULL;
 }
 
-BOOL IsExtInExtsStr (LPCSTR pszExts, LPCSTR pszExt)
+BOOL IsExtInExtsStr (LPCTSTR pszExts, LPCTSTR pszExt)
 {
 	if (pszExt == NULL)
 		return FALSE;
@@ -586,7 +586,7 @@ BOOL IsExtInExtsStr (LPCSTR pszExts, LPCSTR pszExt)
 
 		
 
-		while (i < len && pszExts [i] != ' ')
+		while (i < len && pszExts [i] != _T(' '))
 			szExt [j++] = pszExts [i++];
 
 		szExt [j] = 0;
@@ -600,14 +600,14 @@ BOOL IsExtInExtsStr (LPCSTR pszExts, LPCSTR pszExt)
 	return FALSE;
 }
 
-BOOL fsSaveStrToFile(LPCSTR pszStr, HANDLE hFile)
+BOOL fsSaveStrToFile(LPCTSTR pszStr, HANDLE hFile)
 {
 	int len;
 
 	if (pszStr == NULL)
 		len = -1;
 	else
-		len = strlen (pszStr);
+		len = _tcslen (pszStr);
 	
 	DWORD dw;
 
@@ -620,7 +620,7 @@ BOOL fsSaveStrToFile(LPCSTR pszStr, HANDLE hFile)
 	return TRUE;
 }
 
-BOOL fsReadStrFromFile(LPSTR *ppszStr, HANDLE hFile)
+BOOL fsReadStrFromFile(LPTSTR *ppszStr, HANDLE hFile)
 {
 	int len;
 
@@ -634,7 +634,7 @@ BOOL fsReadStrFromFile(LPSTR *ppszStr, HANDLE hFile)
 		if (UINT (len) > 100000)
 			return FALSE; 
 
-		fsnew (*ppszStr, char, len+1);
+		fsnew (*ppszStr, TCHAR, len+1);
 		if (!ReadFile (hFile, *ppszStr, len, &dw, NULL))
 			return FALSE;
 
@@ -710,20 +710,20 @@ CString fsTimeInSecondsToStr (DWORD dwAmount)
 }
 
 #pragma warning (disable:4706)
-void fsPathToGoodPath (LPSTR pszPath)
+void fsPathToGoodPath (LPTSTR pszPath)
 {
-	LPSTR pszBad = pszPath;
+	LPTSTR pszBad = pszPath;
 
-	while (pszBad = strchr (pszBad, '/'))  
-		*pszBad = '\\';
+	while (pszBad = _tcschr (pszBad, _T('/')))  
+		*pszBad = _T('\\');
 }
 
-void fsPathToGoodUrlPath (LPSTR pszPath)
+void fsPathToGoodUrlPath (LPTSTR pszPath)
 {
-	LPSTR pszBad = pszPath;
+	LPTSTR pszBad = pszPath;
 
-	while (pszBad = strchr (pszBad, '\\'))
-		*pszBad = '/';
+	while (pszBad = _tcschr (pszBad, _T('\\')))
+		*pszBad = _T('/');
 }
 #pragma warning (default:4706)
 
@@ -737,7 +737,7 @@ void fsOpenBuyPage ()
 	str.Format ("https://www.regnow.com/softsell/nph-softsell.cgi?item=9752-1&affiliate=%d", WGET_AFFILIATE_ID);
 	fsOpenUrlInBrowser (str);
 #else
-	if (stricmp (_LngMgr.GetLngName (_LngMgr.GetCurLng ()), "Russian"))
+	if (stricmp (_LngMgr.GetLngName (_LngMgr.GetCurLng ()), _T("Russian")))
 		fsOpenUrlInBrowser ("http://www.freedownloadmanager.org/buy.html");
 	else
 		fsOpenUrlInBrowser ("http://www.freedownloadmanager.org/buy.html");
@@ -746,7 +746,7 @@ void fsOpenBuyPage ()
 
 CString fsBytesToStr (UINT64 uBytes)
 {
-	CString strBytes = " "; 
+	CString strBytes = _T(" "); 
 	strBytes += LS (L_B);
 	CString str;
 	UINT u;
@@ -760,19 +760,19 @@ CString fsBytesToStr (UINT64 uBytes)
 
 		if (u)
 		{
-			str.Format (",%d", u);
+			str.Format (_T(",%d"), u);
 			if (str.GetLength () == 2)
-				str.Insert (1, "00");
+				str.Insert (1, _T("00"));
 			else if (str.GetLength () == 3)
-				str.Insert (1, "0");
+				str.Insert (1, _T("0"));
 		}
 		else
 		{
 			if (uBytes < 1000)
-				str.Format ("%d", (UINT)uBytes);
+				str.Format (_T("%d"), (UINT)uBytes);
 			else
 			{
-				str = ",000";
+				str = _T(",000");
 			}
 		}
 
@@ -791,7 +791,7 @@ CString fsGetGrpOTHEROutFolder ()
 }
 #endif
 
-void vmsUtf8ToAscii (LPSTR psz)
+void vmsUtf8ToAscii (LPTSTR psz)
 {
 	wchar_t wsz [100000] = L"";
 	int len = lstrlen (psz);
@@ -799,7 +799,7 @@ void vmsUtf8ToAscii (LPSTR psz)
 	WideCharToMultiByte (CP_ACP, 0, wsz, -1, psz, len+1, NULL, NULL);
 }
 
-std::wstring vmsUtf8Unicode (LPCSTR psz)
+std::wstring vmsUtf8Unicode (LPCTSTR psz)
 {
 	wchar_t wsz [100000] = L"";
 	MultiByteToWideChar (CP_UTF8, 0, psz, -1, wsz, 99999);

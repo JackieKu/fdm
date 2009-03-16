@@ -195,7 +195,7 @@ int CDownloadsWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	SetTimer (1, 1000, NULL);
 
 	
-	_App.View_ReadWndSize (&m_wndGroups, "DownloadsGroups");
+	_App.View_ReadWndSize (&m_wndGroups, _T("DownloadsGroups"));
 
 	ShowAllGroups (m_bShowGroups);
 	UpdateNumbersOfDownloadsInGroups ();
@@ -226,7 +226,7 @@ void CDownloadsWnd::OnSize(UINT, int cx, int cy)
 
 void CDownloadsWnd::OnDownloadCreate() 
 {
-	CreateDownload ((LPCSTR)NULL);
+	CreateDownload ((LPCTSTR)NULL);
 }
 
 void CDownloadsWnd::OnTimer(UINT ) 
@@ -450,7 +450,7 @@ BOOL CDownloadsWnd::DeleteGroup(vmsDownloadsGroupSmartPtr pGroup)
 	if (pGroup->nId == GRP_OTHER_ID)
 		return FALSE;
 
-	CString str = LS (L_AREYOUSURE); str += '\n'; str += LS (L_THISDELGRPDLDS);
+	CString str = LS (L_AREYOUSURE); str += _T('\n'); str += LS (L_THISDELGRPDLDS);
 	if (IDNO == MessageBox (str, LS (L_CONFIRMATION), MB_ICONQUESTION|MB_YESNO))
 		return FALSE;
 
@@ -613,10 +613,10 @@ DWORD CDownloadsWnd::_Events(fsDownload* dld, fsDownloadsMgrEvent ev, LPVOID lp)
 			((CMainFrame*)AfxGetApp ()->m_pMainWnd)->RebuidDownloadsList ();
 			BOOL bNoBalloon = FALSE;
 
-			char szFile [MY_MAX_PATH];
+			TCHAR szFile [MY_MAX_PATH];
 			CDownloads_Tasks::GetFileName (dld, szFile);
 			
-			LPCSTR pszMsg;
+			LPCTSTR pszMsg;
 
 			if (dld->pMgr->IsDone ())
 			{
@@ -679,7 +679,7 @@ DWORD CDownloadsWnd::_Events(fsDownload* dld, fsDownloadsMgrEvent ev, LPVOID lp)
 			if (bNoBalloon == FALSE)
 			{
 				CString str;
-				str.Format ("%s - %s", szFile, pszMsg);
+				str.Format (_T("%s - %s"), szFile, pszMsg);
 				CMainFrame::ShowTimeoutBalloon (str, vmsFdmAppMgr::getAppName ());
 			}
 		}
@@ -1001,7 +1001,7 @@ void CDownloadsWnd::OnDldstop()
 	m_wndDownloads.m_tasks.OnDldstop ();	
 }
 
-UINT CDownloadsWnd::CreateDownload(LPCSTR pszStartUrl, BOOL bReqTopMostDialog, LPCSTR pszComment, LPCSTR pszReferer, BOOL bSilent, DWORD dwForceAutoLaunch, BOOL *pbAutoStart, vmsDWCD_AdditionalParameters* pParams, UINT* pRes)
+UINT CDownloadsWnd::CreateDownload(LPCTSTR pszStartUrl, BOOL bReqTopMostDialog, LPCTSTR pszComment, LPCTSTR pszReferer, BOOL bSilent, DWORD dwForceAutoLaunch, BOOL *pbAutoStart, vmsDWCD_AdditionalParameters* pParams, UINT* pRes)
 {
 	vmsDownloadSmartPtr dld;
 	Download_CreateInstance (dld);
@@ -1047,8 +1047,8 @@ UINT CDownloadsWnd::CreateDownload(LPCSTR pszStartUrl, BOOL bReqTopMostDialog, L
 		if (pszReferer)
 		{
 			SAFE_DELETE_ARRAY (dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszReferer);
-			dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszReferer = new char [strlen (pszReferer) + 1];
-			strcpy (dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszReferer, pszReferer);
+			dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszReferer = new TCHAR [_tcslen (pszReferer) + 1];
+			_tcscpy (dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszReferer, pszReferer);
 		}
 
 		if (dwForceAutoLaunch != DWCD_NOFORCEAUTOLAUNCH)
@@ -1103,21 +1103,21 @@ UINT CDownloadsWnd::CreateDownload(LPCSTR pszStartUrl, BOOL bReqTopMostDialog, L
 		{
 			dld->pGroup = pParams->pGroup;
 
-			LPCSTR pszFolder = dld->pGroup->strOutFolder;
+			LPCTSTR pszFolder = dld->pGroup->strOutFolder;
 			delete [] dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName;
-			dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName = new char [lstrlen (pszFolder) + 2];
+			dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName = new TCHAR [lstrlen (pszFolder) + 2];
 			_tcscpy (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, pszFolder);
-			if (pszFolder [lstrlen (pszFolder) - 1] != '\\')
-				_tcscat (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, "\\");
+			if (pszFolder [lstrlen (pszFolder) - 1] != _T('\\'))
+				_tcscat (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, _T("\\"));
 		}
 
 		if (pParams->dwMask & DWCDAP_FILENAME)
 		{
 			fsDownload_Properties *dp = dld->pMgr->GetDownloadMgr ()->GetDP ();
-			if (dp->pszFileName [lstrlen (dp->pszFileName) - 1] == '\\' ||
-					dp->pszFileName [lstrlen (dp->pszFileName) - 1] == '/')
+			if (dp->pszFileName [lstrlen (dp->pszFileName) - 1] == _T('\\') ||
+					dp->pszFileName [lstrlen (dp->pszFileName) - 1] == _T('/'))
 			{
-				LPSTR psz = new char [lstrlen (dp->pszFileName) + pParams->strFileName.GetLength () + 1];
+				LPTSTR psz = new TCHAR [lstrlen (dp->pszFileName) + pParams->strFileName.GetLength () + 1];
 				_tcscpy (psz, dp->pszFileName);
 				_tcscat (psz, pParams->strFileName);
 				delete [] dp->pszFileName;
@@ -1129,24 +1129,24 @@ UINT CDownloadsWnd::CreateDownload(LPCSTR pszStartUrl, BOOL bReqTopMostDialog, L
 		{
 			if (pParams->dwFlags & DWDCDAP_F_SAVETODESKTOP)
 			{
-				char szDesktop [MY_MAX_PATH];
+				TCHAR szDesktop [MY_MAX_PATH];
 				LPITEMIDLIST pidl = NULL;
 				SHGetSpecialFolderLocation (NULL, CSIDL_DESKTOP, &pidl);
 				SHGetPathFromIDList (pidl, szDesktop);
-				if (szDesktop [lstrlen (szDesktop) - 1] != '\\')
-					_tcscat (szDesktop, "\\");
+				if (szDesktop [lstrlen (szDesktop) - 1] != _T('\\'))
+					_tcscat (szDesktop, _T("\\"));
 				delete [] dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName;
-				dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName = new char [lstrlen (szDesktop) + 1];
+				dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName = new TCHAR [lstrlen (szDesktop) + 1];
 				_tcscpy (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, szDesktop);
 			}
 			else if (pParams->dwFlags & DWDCDAP_F_SAVETOTEMPFLDR)
 			{
-				char szTmpFolder [MY_MAX_PATH];
+				TCHAR szTmpFolder [MY_MAX_PATH];
 				GetTempPath (MY_MAX_PATH, szTmpFolder);
-				if (szTmpFolder [lstrlen (szTmpFolder) - 1] != '\\')
-					_tcscat (szTmpFolder, "\\");
+				if (szTmpFolder [lstrlen (szTmpFolder) - 1] != _T('\\'))
+					_tcscat (szTmpFolder, _T("\\"));
 				delete [] dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName;
-				dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName = new char [lstrlen (szTmpFolder) + 1];
+				dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName = new TCHAR [lstrlen (szTmpFolder) + 1];
 				_tcscpy (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, szTmpFolder);
 			}
 
@@ -1178,14 +1178,14 @@ UINT CDownloadsWnd::CreateDownload(LPCSTR pszStartUrl, BOOL bReqTopMostDialog, L
 		if (pParams->dwMask & DWCDAP_COOKIES)
 		{
 			SAFE_DELETE_ARRAY (dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszCookies);
-			dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszCookies = new char [pParams->strCookies.GetLength () + 1];
+			dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszCookies = new TCHAR [pParams->strCookies.GetLength () + 1];
 			_tcscpy (dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszCookies, pParams->strCookies);
 		}
 
 		if (pParams->dwMask & DWCDAP_POSTDATA)
 		{
 			SAFE_DELETE_ARRAY (dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszPostData);
-			dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszPostData = new char [pParams->strPostData.GetLength () + 1];
+			dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszPostData = new TCHAR [pParams->strPostData.GetLength () + 1];
 			_tcscpy (dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszPostData, pParams->strPostData);
 		}
 
@@ -1363,10 +1363,10 @@ try{
 
 	ASSERT (::IsWindow (m_hWnd));
 
-	_App.View_SaveWndSize (&m_wndGroups, "DownloadsGroups");
+	_App.View_SaveWndSize (&m_wndGroups, _T("DownloadsGroups"));
 	m_wndDownloads.SaveState ();
-	m_wndHistory.SaveState ("DownloadsHistory");
-	m_wndDeleted.SaveState ("DownloadsDeleted");
+	m_wndHistory.SaveState (_T("DownloadsHistory"));
+	m_wndDeleted.SaveState (_T("DownloadsDeleted"));
 	_App.View_SizesInBytes (m_wndDownloads.m_tasks.m_bSizesInBytes);
 	_App.View_DWWN (m_enDWWN);
 }catch (...){}
@@ -1563,8 +1563,8 @@ void CDownloadsWnd::Plugin_GetMenuImages(fsSetImage **ppImages, int *pcImages)
 void CDownloadsWnd::Plugin_GetMenuViewItems(wgMenuViewItem **ppItems, int *cItems)
 {
 	static wgMenuViewItem aItems [] = {
-		wgMenuViewItem ("", &_pwndDownloads->m_bShowGroups),
-		wgMenuViewItem ("", &_pwndDownloads->m_wndDownloads.m_bShowDLInfo),
+		wgMenuViewItem (_T(""), &_pwndDownloads->m_bShowGroups),
+		wgMenuViewItem (_T(""), &_pwndDownloads->m_wndDownloads.m_bShowDLInfo),
 	};
 
 	aItems [0].pszName = LS (L_DLGROUPS);
@@ -1574,7 +1574,7 @@ void CDownloadsWnd::Plugin_GetMenuViewItems(wgMenuViewItem **ppItems, int *cItem
 	*cItems = sizeof (aItems) / sizeof (wgMenuViewItem);
 }
 
-void CDownloadsWnd::Plugin_GetPluginNames(LPCSTR *ppszLong, LPCSTR *ppszShort)
+void CDownloadsWnd::Plugin_GetPluginNames(LPCTSTR *ppszLong, LPCTSTR *ppszShort)
 {
 	static CString strName;
 	strName = LSNP (L_DOWNLOADS);
@@ -1585,13 +1585,13 @@ void CDownloadsWnd::Plugin_GetToolBarInfo(wgTButtonInfo **ppButtons, int *pcButt
 {
 	static wgTButtonInfo btns [] = 
 	{
-		wgTButtonInfo (ID_DLDCREATE, TBSTYLE_BUTTON, ""),
-		wgTButtonInfo (ID_DLDSTART, TBSTYLE_BUTTON, ""),
-		wgTButtonInfo (ID_DLDSTOP, TBSTYLE_BUTTON, ""),
-		wgTButtonInfo (ID_DLDSCHEDULE, TBSTYLE_BUTTON, ""),
-		wgTButtonInfo (0, TBSTYLE_SEP, ""),
-		wgTButtonInfo (ID_DLDMOVEUP, TBSTYLE_BUTTON, ""),
-		wgTButtonInfo (ID_DLDMOVEDOWN, TBSTYLE_BUTTON, ""),
+		wgTButtonInfo (ID_DLDCREATE, TBSTYLE_BUTTON, _T("")),
+		wgTButtonInfo (ID_DLDSTART, TBSTYLE_BUTTON, _T("")),
+		wgTButtonInfo (ID_DLDSTOP, TBSTYLE_BUTTON, _T("")),
+		wgTButtonInfo (ID_DLDSCHEDULE, TBSTYLE_BUTTON, _T("")),
+		wgTButtonInfo (0, TBSTYLE_SEP, _T("")),
+		wgTButtonInfo (ID_DLDMOVEUP, TBSTYLE_BUTTON, _T("")),
+		wgTButtonInfo (ID_DLDMOVEDOWN, TBSTYLE_BUTTON, _T("")),
 	};
 
 	btns [0].pszToolTip = LS (L_NEWDLD);
@@ -1623,7 +1623,7 @@ void CDownloadsWnd::ApplyLanguageToMenuView(CMenu *menu)
 
 	UINT aCmds [] = {ID_DLLIST_1, ID_DLLIST_2, ID_DLLIST_3, ID_DLLIST_4, ID_DLLIST_5, 
 		ID_DLLIST_6, ID_DLLIST_7, ID_DLLIST_8, ID_DLOG_1, ID_DLOG_2, ID_DLOG_3 };
-	LPCSTR apszCmds [] = {LS (L_FILENAME), LS (L_SIZE), LS (L_DOWNLOADED),
+	LPCTSTR apszCmds [] = {LS (L_FILENAME), LS (L_SIZE), LS (L_DOWNLOADED),
 		LS (L_TIMELEFT), LS (L_SECTIONS), LS (L_SPEED), LS (L_COMMENT), LS (L_ADDED),
 		LS (L_TIME), LS (L_DATE), LS (L_INFORMATION)};
 	
@@ -1781,7 +1781,7 @@ BOOL CDownloadsWnd::IsSizesInBytes()
 	return m_wndDownloads.m_tasks.m_bSizesInBytes;
 }
 
-BOOL CDownloadsWnd::CreateDownloadWithDefSettings(vmsDownloadSmartPtr dld, LPCSTR pszUrl)
+BOOL CDownloadsWnd::CreateDownloadWithDefSettings(vmsDownloadSmartPtr dld, LPCTSTR pszUrl)
 {
 	if (dld->pMgr == NULL)
 		dld->pMgr = new vmsDownloadMgrEx;
@@ -1819,19 +1819,19 @@ BOOL CDownloadsWnd::CreateDownloadWithDefSettings(vmsDownloadSmartPtr dld, LPCST
 			fsFileNameFromUrlPath (dnp->pszPathName, dnp->enProtocol == NP_FTP, 
 				TRUE, szFile, sizeof (szFile));
 
-			int len = strlen (szFile);
+			int len = _tcslen (szFile);
 
 			if (len)
 			{
 				for (int i = len-1; i > 0; i--)
-					if (szFile [i] == '.')	
+					if (szFile [i] == _T('.'))	
 						break;
 
 				if (i && i < len-1)
 				{
 					i++;
 					CHAR szExt [1000];
-					strcpy (szExt, szFile + i);
+					_tcscpy (szExt, szFile + i);
 					pGroup = _DldsGrps.FindGroupByExt (szExt);
 				}
 			}
@@ -1851,12 +1851,12 @@ BOOL CDownloadsWnd::CreateDownloadWithDefSettings(vmsDownloadSmartPtr dld, LPCST
 
 	if (strFolder.GetLength () == 0)
 		strFolder = pGroup->strOutFolder;
-	if (strFolder.Right (1) != '\\' && strFolder.Right (1) != '/')
-		strFolder += '\\';
+	if (strFolder.Right (1) != _T('\\') && strFolder.Right (1) != _T('/'))
+		strFolder += _T('\\');
 
 	SAFE_DELETE (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName);
-	dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName = new char [strFolder.GetLength () + 1];
-	strcpy (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, strFolder);
+	dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName = new TCHAR [strFolder.GetLength () + 1];
+	_tcscpy (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, strFolder);
 
 	return TRUE;
 }
@@ -2150,11 +2150,11 @@ DWORD WINAPI CDownloadsWnd::_threadCheckDldHasOpinions(LPVOID lp)
 	strUrl.Format ("http://fdm.freedownloadmanager.org/fromfdm/checkurl.php?url=%s",
 		vmsMaliciousDownloadChecker::EncodeUrl (dld->pMgr->get_URL ()));
 
-	char szTmpPath [MY_MAX_PATH];
-	char szTmpFile [MY_MAX_PATH];
+	TCHAR szTmpPath [MY_MAX_PATH];
+	TCHAR szTmpFile [MY_MAX_PATH];
 
 	GetTempPath (sizeof (szTmpPath), szTmpPath);
-	GetTempFileName (szTmpPath, "fdm", 0, szTmpFile);
+	GetTempFileName (szTmpPath, _T("fdm"), 0, szTmpFile);
 
 	dldr.Download (strUrl, szTmpFile);
 	while (pthis->m_bExiting == FALSE && dldr.IsRunning ())
@@ -2281,7 +2281,7 @@ void CDownloadsWnd::OnBtDownloadProperties(DLDS_LIST &vDlds, CWnd *pwndParent)
     _DlgMgr.OnEndDialog (&sheet);
 }
 
-BOOL CDownloadsWnd::CreateBtDownloadFromFile(LPCSTR pszFile, LPCSTR pszTorrentUrl, BOOL bSilent, BOOL bSeedOnly, LPCSTR pszOutputOrSrcForSeedFolder)
+BOOL CDownloadsWnd::CreateBtDownloadFromFile(LPCTSTR pszFile, LPCTSTR pszTorrentUrl, BOOL bSilent, BOOL bSeedOnly, LPCTSTR pszOutputOrSrcForSeedFolder)
 {
 	if (bSeedOnly)
 	{
@@ -2320,7 +2320,7 @@ BOOL CDownloadsWnd::CreateBtDownloadFromFile(LPCSTR pszFile, LPCSTR pszTorrentUr
 		if (_App.NewDL_GroupId () != -1)
 			dld->pGroup = _DldsGrps.FindGroup (_App.NewDL_GroupId ());
 		if (dld->pGroup == NULL)
-			dld->pGroup = _DldsGrps.FindGroupByExt ("torrent");
+			dld->pGroup = _DldsGrps.FindGroupByExt (_T("torrent"));
 		if (dld->pGroup == NULL)
 			dld->pGroup = _DldsGrps.FindGroup (GRP_OTHER_ID);
 		dld->bAutoStart = _App.NewDL_AutoStart ();
@@ -2335,7 +2335,7 @@ BOOL CDownloadsWnd::CreateBtDownloadFromFile(LPCSTR pszFile, LPCSTR pszTorrentUr
 		if (strComment.IsEmpty () == FALSE)
 		{
 			if (dld->strComment.IsEmpty () == FALSE)
-				dld->strComment += "\r\n";
+				dld->strComment += _T("\r\n");
 			dld->strComment += strComment;
 		}
 
@@ -2419,7 +2419,7 @@ void CDownloadsWnd::OnDldconvert()
 BOOL CDownloadsWnd::IsMediaDownload(vmsDownloadSmartPtr dld)
 {
 	fsString strFile = dld->pMgr->get_OutputFilePathName ();
-	LPCSTR pszExt = strrchr (strFile, '.');
+	LPCTSTR pszExt = _tcsrchr (strFile, _T('.'));
 	if (pszExt++ == NULL)
 		return FALSE;
 	return IsExtInExtsStr (vmsDownloadsGroupsMgr::GetVideoExts (), pszExt) ||

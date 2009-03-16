@@ -16,7 +16,7 @@ public:
 	HRESULT get_GUID (GUID* guid);
 	
 	
-	bool IsSupportedArchive(LPCSTR pszArchive);
+	bool IsSupportedArchive(LPCTSTR pszArchive);
 	
 	HRESULT GetHandlerProperty(PROPID propID, PROPVARIANT *value);
 	
@@ -24,9 +24,9 @@ public:
 	
 	void Free();
 	
-	bool Load (LPCSTR pszDll);
+	bool Load (LPCTSTR pszDll);
 
-	vms7zipFormatDLL(LPCSTR pszDll = NULL);
+	vms7zipFormatDLL(LPCTSTR pszDll = NULL);
 	virtual ~vms7zipFormatDLL();
 
 protected:

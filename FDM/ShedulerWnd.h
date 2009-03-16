@@ -36,7 +36,7 @@ public:
 	static HMENU Plugin_GetMainMenu();
 	
 	static void Plugin_SetLanguage (wgLanguage, HMENU hMenuMain, HMENU);
-	static void Plugin_GetPluginNames(LPCSTR *ppszLong, LPCSTR *ppszShort);
+	static void Plugin_GetPluginNames(LPCTSTR *ppszLong, LPCTSTR *ppszShort);
 	static void Plugin_GetMenuViewItems(wgMenuViewItem **ppItems, int *cItems);
 	static void Plugin_GetMenuImages(fsSetImage **ppImages, int *pcImages);
 	static void Plugin_GetToolBarInfo(wgTButtonInfo **ppButtons, int *pcButtons);
@@ -93,7 +93,7 @@ protected:
 	BOOL m_bShowLog;			
 	fsEventsMgr m_evMgr;
 	
-	static void _ScheduleMgrEventDesc (LPCSTR pszEvent, fsScheduleMgrEventType enType, LPVOID lp);
+	static void _ScheduleMgrEventDesc (LPCTSTR pszEvent, fsScheduleMgrEventType enType, LPVOID lp);
 	
 	void LoadTasks();
 	fsScheduleMgr m_mgr;

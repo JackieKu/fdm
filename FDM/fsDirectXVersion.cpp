@@ -48,7 +48,7 @@ DWORD fsDirectXVersion::GetCurrentVersion()
     HRESULT              hr;
 
     
-    hDDrawDLL = LoadLibrary( "DDRAW.DLL" );
+    hDDrawDLL = LoadLibrary( _T("DDRAW.DLL") );
     if( hDDrawDLL == NULL )
     {
         dwDXVersion = 0;
@@ -56,7 +56,7 @@ DWORD fsDirectXVersion::GetCurrentVersion()
     }
 
     
-    DirectDrawCreate = (DIRECTDRAWCREATE)GetProcAddress( hDDrawDLL, "DirectDrawCreate" );
+    DirectDrawCreate = (DIRECTDRAWCREATE)GetProcAddress( hDDrawDLL, _T("DirectDrawCreate") );
     if( DirectDrawCreate == NULL )
     {
         dwDXVersion = 0;
@@ -94,7 +94,7 @@ DWORD fsDirectXVersion::GetCurrentVersion()
 	
 
     
-    hDInputDLL = LoadLibrary( "DINPUT.DLL" );
+    hDInputDLL = LoadLibrary( _T("DINPUT.DLL") );
     if( hDInputDLL == NULL )
     {
         
@@ -103,7 +103,7 @@ DWORD fsDirectXVersion::GetCurrentVersion()
     }
 
     DirectInputCreate = (DIRECTINPUTCREATE)GetProcAddress( hDInputDLL,
-                                                        "DirectInputCreateA" );
+                                                        _T("DirectInputCreateA") );
     if( DirectInputCreate == NULL )
     {
         
@@ -209,7 +209,7 @@ DWORD fsDirectXVersion::GetCurrentVersion()
     
     LPDIRECTDRAW7 pDD7;
     DirectDrawCreateEx = (DIRECTDRAWCREATEEX)GetProcAddress( hDDrawDLL,
-                                                       "DirectDrawCreateEx" );
+                                                       _T("DirectDrawCreateEx") );
     if( NULL == DirectDrawCreateEx )
     {
         FreeLibrary( hDDrawDLL );
@@ -232,7 +232,7 @@ DWORD fsDirectXVersion::GetCurrentVersion()
 	
 
     
-    hD3D8DLL = LoadLibrary( "D3D8.DLL" );
+    hD3D8DLL = LoadLibrary( _T("D3D8.DLL") );
     if( hD3D8DLL == NULL )
     {
 	    FreeLibrary( hDDrawDLL );

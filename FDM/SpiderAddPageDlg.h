@@ -19,7 +19,7 @@ public:
 	
 	
 	
-	static BOOL IsOkUrl (LPCSTR pszUrl, LPCSTR pszHTMLExts, BOOL *pbMustAddSlash = NULL);
+	static BOOL IsOkUrl (LPCTSTR pszUrl, LPCTSTR pszHTMLExts, BOOL *pbMustAddSlash = NULL);
 	
 	void ReadAutostart();
 	fsWebPageDownloader* m_wpd;	

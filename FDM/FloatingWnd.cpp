@@ -60,7 +60,7 @@ BOOL CFloatingWnd::Create()
 
 	SetBlend (_App.DropBoxWndBlend ());
 	
-	_App.View_ReadWndPlacement (this, "FloatingWnd", _App.View_FloatingWindow () == FALSE);
+	_App.View_ReadWndPlacement (this, _T("FloatingWnd"), _App.View_FloatingWindow () == FALSE);
 
 	SetWindowPos (NULL, 0, 0, 40, 40, SWP_NOMOVE | SWP_NOZORDER);
 
@@ -93,7 +93,7 @@ void CFloatingWnd::OnPaint()
 
 void CFloatingWnd::SaveState()
 {
-	_App.View_SaveWndPlacement (this, "FloatingWnd");
+	_App.View_SaveWndPlacement (this, _T("FloatingWnd"));
 	
 }
 

@@ -24,11 +24,11 @@ vmsNotEverywhereSupportedFunctions::~vmsNotEverywhereSupportedFunctions()
 
 LONG vmsNotEverywhereSupportedFunctions::RegOverridePredefKey(HKEY hkey1, HKEY hkey2)
 {
-	HMODULE h = LoadLibrary ("avdapi32.dll");
+	HMODULE h = LoadLibrary (_T("avdapi32.dll"));
 	if (!h)
 		return ERROR_BAD_ENVIRONMENT;
 	typedef LONG (WINAPI *FNROPK)(HKEY,HKEY);
-	FNROPK pfn = (FNROPK)GetProcAddress (h, "RegOverridePredefKey");
+	FNROPK pfn = (FNROPK)GetProcAddress (h, _T("RegOverridePredefKey"));
 	if (!pfn)
 	{
 		FreeLibrary (h);

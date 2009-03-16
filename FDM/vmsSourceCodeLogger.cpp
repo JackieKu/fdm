@@ -20,25 +20,25 @@ vmsSourceCodeLogger::vmsSourceCodeLogger(int bufSizePerThread)
 	m_vThreadsLogs.reserve (300);
 	m_nBufSizePerThread = bufSizePerThread;
 
-	char sz [MAX_PATH];
+	TCHAR sz [MAX_PATH];
 	GetModuleFileNameA (NULL, sz, MAX_PATH);
-	strcat (sz, ".*.sclgr");
+	_tcscat (sz, _T(".*.sclgr"));
 	WIN32_FIND_DATA wfd;
 	HANDLE hFind = FindFirstFileA (sz, &wfd);
 	if (hFind != INVALID_HANDLE_VALUE)
 	{
-		char szPath [MAX_PATH];
-		strcpy (szPath, sz);
-		int l = strlen (szPath);
-		while (szPath [l-1] != '\\')
+		TCHAR szPath [MAX_PATH];
+		_tcscpy (szPath, sz);
+		int l = _tcslen (szPath);
+		while (szPath [l-1] != _T('\\'))
 			l--;
 		szPath [l] = 0;
 
 		do 
 		{
-			char sz2 [MAX_PATH];
-			strcpy (sz2, szPath);
-			strcat (sz2, wfd.cFileName);
+			TCHAR sz2 [MAX_PATH];
+			_tcscpy (sz2, szPath);
+			_tcscat (sz2, wfd.cFileName);
 			DeleteFileA (sz2);
 		}
 		while (FindNextFile (hFind, &wfd));
@@ -57,7 +57,7 @@ vmsSourceCodeLogger::~vmsSourceCodeLogger()
 	}
 }
 
-void vmsSourceCodeLogger::log(LPCSTR psz, bool bAddNextLine)
+void vmsSourceCodeLogger::log(LPCTSTR psz, bool bAddNextLine)
 {
 	threadCtx *thr = getCurrentThreadContext ();
 	if (thr == NULL)
@@ -67,10 +67,10 @@ void vmsSourceCodeLogger::log(LPCSTR psz, bool bAddNextLine)
 
 	thr->strLog += psz;
 	if (bAddNextLine)
-		thr->strLog += "\r\n";
+		thr->strLog += _T("\r\n");
 
 	if (thr->bLogCurrentTime && 
-			(thr->strLog [thr->strLog.length ()-1] == '\n' || thr->strLog [thr->strLog.length ()-1] == '\r'))
+			(thr->strLog [thr->strLog.length ()-1] == _T('\n') || thr->strLog [thr->strLog.length ()-1] == _T('\r')))
 	{
 		SYSTEMTIME time;
 		GetLocalTime (&time);
@@ -79,8 +79,8 @@ void vmsSourceCodeLogger::log(LPCSTR psz, bool bAddNextLine)
 			time.wMinute != thr->stLastTimeLogged.wMinute ||
 			time.wHour != thr->stLastTimeLogged.wHour)
 		{
-			char sz [40];
-			sprintf (sz, "(time was: %02d:%02d:%02d)\r\n", (int)time.wHour, (int)time.wMinute, (int)time.wSecond);
+			TCHAR sz [40];
+			_stprintf (sz, _T("(time was: %02d:%02d:%02d)\r\n"), (int)time.wHour, (int)time.wMinute, (int)time.wSecond);
 			thr->strLog += sz;
 			thr->stLastTimeLogged = time;
 		}
@@ -90,7 +90,7 @@ void vmsSourceCodeLogger::log(LPCSTR psz, bool bAddNextLine)
 		FlushThreadLogBuffer (thr);
 }
 
-void vmsSourceCodeLogger::logf(LPCSTR pszFormat ...)
+void vmsSourceCodeLogger::logf(LPCTSTR pszFormat ...)
 {
 	threadCtx *thr = getCurrentThreadContext ();
 	if (thr == NULL)
@@ -99,11 +99,11 @@ void vmsSourceCodeLogger::logf(LPCSTR pszFormat ...)
 		return;
 	
 	va_list ap;
-	char sz [10000];
+	TCHAR sz [10000];
 
 	va_start (ap, pszFormat);
-	vsprintf (sz, pszFormat, ap);
-	strcat (sz, "\r\n");
+	_vstprintf (sz, pszFormat, ap);
+	_tcscat (sz, _T("\r\n"));
 	va_end (ap);
 
 	log (sz);
@@ -127,7 +127,7 @@ void vmsSourceCodeLogger::FlushThreadLogBuffer(threadCtx *thr)
 	DWORD dw;
 	if (FALSE == WriteFile (thr->hLogFile, thr->strLog.c_str (), thr->strLog.length (), &dw, NULL))
 		return;
-	thr->strLog = "";
+	thr->strLog = _T("");
 }
 
 void vmsSourceCodeLogger::FlushBuffers()
@@ -142,13 +142,13 @@ vmsSourceCodeLogger::threadCtx* vmsSourceCodeLogger::CreateCurrentThreadContext(
 	threadCtx t;
 	t.dwThreadId = GetCurrentThreadId ();
 	t.bLogCurrentTime = false;
-	char sz [MAX_PATH] = "";
+	TCHAR sz [MAX_PATH] = _T("");
 	GetModuleFileNameA (NULL, sz, MAX_PATH);
-	strcat (sz, ".");
-	char sz2 [20] = "";
+	_tcscat (sz, _T("."));
+	TCHAR sz2 [20] = _T("");
 	itoa (t.dwThreadId, sz2, 16);
-	strcat (sz, sz2);
-	strcat (sz, ".sclgr");
+	_tcscat (sz, sz2);
+	_tcscat (sz, _T(".sclgr"));
 	t.hLogFile = CreateFileA (sz, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 	if (t.hLogFile == INVALID_HANDLE_VALUE)
 		return NULL;
@@ -194,42 +194,42 @@ void vmsSourceCodeLogger::logSysError(DWORD dw)
 {
 	if (!dw)
 		return;
-	logf ("(0x%x - %s)", dw, StringFromError (dw).c_str ());
+	logf (_T("(0x%x - %s)"), dw, StringFromError (dw).c_str ());
 }
 
-void vmsSourceCodeLogger::logResult(LPCSTR pszDescription, DWORD dwResultCode)
+void vmsSourceCodeLogger::logResult(LPCTSTR pszDescription, DWORD dwResultCode)
 {
 	if (dwResultCode == 0)
 	{
 		std::string str = pszDescription;
-		str += ": ok";
+		str += _T(": ok");
 		log (str.c_str (), true);
 	}
 	else
 	{
-		logf ("%s: 0x%x - %s", pszDescription, dwResultCode, StringFromError (dwResultCode).c_str ());
+		logf (_T("%s: 0x%x - %s"), pszDescription, dwResultCode, StringFromError (dwResultCode).c_str ());
 	}
 }
 
 std::string vmsSourceCodeLogger::StringFromError(DWORD dw)
 {
-	LPSTR psz = NULL;
+	LPTSTR psz = NULL;
 	
 	FormatMessage (FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER, 
-		NULL, dw, 0, (LPSTR)&psz, 0, NULL);
+		NULL, dw, 0, (LPTSTR)&psz, 0, NULL);
 	
 	if (psz)
 	{
-		while (*psz != 0 && (psz [strlen (psz)-1] == '\n' || psz [strlen (psz)-1] == '\r'))
-			psz [strlen (psz)-1] = 0;
-		if (*psz && psz [strlen (psz)-1] == '.')
-			psz [strlen (psz)-1] = 0;
+		while (*psz != 0 && (psz [_tcslen (psz)-1] == _T('\n') || psz [_tcslen (psz)-1] == _T('\r')))
+			psz [_tcslen (psz)-1] = 0;
+		if (*psz && psz [_tcslen (psz)-1] == _T('.'))
+			psz [_tcslen (psz)-1] = 0;
 		std::string str = psz;
 		LocalFree (psz);
 		return str;
 	}
 	else
 	{
-		return "unknown error";
+		return _T("unknown error");
 	}
 }

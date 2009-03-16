@@ -79,7 +79,7 @@ void CLoginDlg::ApplyLanguage()
 		fsDlgLngInfo (IDCANCEL, L_CANCEL),
 	};
 
-	CString str; str = LS (L_LOGINREQ); str += '\n'; str += LS (L_LOGINREQENTERLOGIN);
+	CString str; str = LS (L_LOGINREQ); str += _T('\n'); str += LS (L_LOGINREQENTERLOGIN);
 	SetDlgItemText (IDC__LOGINREQ, str);
 
 	_LngMgr.ApplyLanguage (this, lnginfo, sizeof (lnginfo) / sizeof (fsDlgLngInfo), 0);

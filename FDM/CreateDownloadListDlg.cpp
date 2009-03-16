@@ -247,7 +247,7 @@ void CCreateDownloadListDlg::OnOK()
 
 	GetDlgItemText (IDC_OUTFOLDER, strOutFolder);
 
-	fsPathToGoodPath ((LPSTR)(LPCSTR)strOutFolder);
+	fsPathToGoodPath ((LPTSTR)(LPCTSTR)strOutFolder);
 
 	if (strOutFolder.GetLength () == 0)
 	{
@@ -261,9 +261,9 @@ void CCreateDownloadListDlg::OnOK()
 
 	_LastFolders.AddRecord (strOutFolder);
 
-	if (strOutFolder [strOutFolder.GetLength () - 1] != '\\' && 
-		strOutFolder [strOutFolder.GetLength () - 1] != '/')
-		strOutFolder += '\\';
+	if (strOutFolder [strOutFolder.GetLength () - 1] != _T('\\') && 
+		strOutFolder [strOutFolder.GetLength () - 1] != _T('/'))
+		strOutFolder += _T('\\');
 
         if (_App.NewGrp_SelectWay () == NGSW_USE_ALWAYS_SAME_GROUP_WITH_OUTFOLDER_AUTO_UPDATE)
 	{
@@ -273,7 +273,7 @@ void CCreateDownloadListDlg::OnOK()
 	}  
 
 	fsnew (m_dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, CHAR, strOutFolder.GetLength () + 1);
-	strcpy (m_dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, strOutFolder);
+	_tcscpy (m_dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, strOutFolder);
 
 	m_dld->pGroup = m_wndGroups.GetSelectedGroup ();
 
@@ -313,7 +313,7 @@ BOOL CCreateDownloadListDlg::ReadAuth()
 		}
 	}
 
-	if (strUser != "")
+	if (strUser != _T(""))
 	{
 		fsDownload_NetworkProperties *dnp = m_dld->pMgr->GetDownloadMgr ()->GetDNP ();
 		
@@ -322,8 +322,8 @@ BOOL CCreateDownloadListDlg::ReadAuth()
 
 		fsnew (dnp->pszUserName, CHAR, strUser.GetLength ()+1);
 		fsnew (dnp->pszPassword, CHAR, strPassword.GetLength ()+1);
-		strcpy (dnp->pszUserName, strUser);
-		strcpy (dnp->pszPassword, strPassword);
+		_tcscpy (dnp->pszUserName, strUser);
+		_tcscpy (dnp->pszPassword, strPassword);
 	}
 
 	return TRUE;
@@ -346,7 +346,7 @@ BOOL CCreateDownloadListDlg::AddDownloads()
 
 void CCreateDownloadListDlg::WriteUrlsToDialog()
 {
-	m_wndUrlList.InsertColumn (0, "", LVCFMT_LEFT, 200);
+	m_wndUrlList.InsertColumn (0, _T(""), LVCFMT_LEFT, 200);
 	
 
 	int wmax = 0;
@@ -357,7 +357,7 @@ void CCreateDownloadListDlg::WriteUrlsToDialog()
 
 	for (int i = 0, cItems = 0; i < m_pvUrls->size (); i++)
 	{
-		LPCSTR pszURL = m_pvUrls->at (i);
+		LPCTSTR pszURL = m_pvUrls->at (i);
 
 		fsURL url;
 		if (IR_SUCCESS != url.Crack (pszURL))
@@ -471,10 +471,10 @@ void CCreateDownloadListDlg::OnCreategroup()
 
 void CCreateDownloadListDlg::OnChoosefolder() 
 {
-	CString str = "";
+	CString str = _T("");
 	GetDlgItemText (IDC_OUTFOLDER, str);
 
-	if (str.GetLength () > 3 && (str [str.GetLength () - 1] == '\\' || str [str.GetLength () - 1] == '/'))
+	if (str.GetLength () > 3 && (str [str.GetLength () - 1] == _T('\\') || str [str.GetLength () - 1] == _T('/')))
 		str.GetBuffer (0) [str.GetLength () - 1] = 0;
 
 	CFolderBrowser *fb = CFolderBrowser::Create (LS (L_CHOOSEOUTFOLDER), str, NULL, this);
@@ -588,7 +588,7 @@ DWORD WINAPI CCreateDownloadListDlg::_threadCalculateSize(LPVOID lp)
 		uSummSize += uSize;
 
 		CString str;
-		str.Format ("%s (%d - %s, %d - %s)", LS (L_QUERINGSIZE), i+1, LS (L_DONE), iFailed, LS (L_ERR));
+		str.Format (_T("%s (%d - %s, %d - %s)"), LS (L_QUERINGSIZE), i+1, LS (L_DONE), iFailed, LS (L_ERR));
 		dlg->SetDlgItemText (IDC_MESSAGE, str);	
 
 		info->iProgress = (int) ((double) i / pvpDlds->size () * 100);
@@ -604,10 +604,10 @@ DWORD WINAPI CCreateDownloadListDlg::_threadCalculateSize(LPVOID lp)
 		{
 			if (_pwndDownloads->IsSizesInBytes () == FALSE)
 			{
-				char szDim [50];
+				TCHAR szDim [50];
 				float fSize;
 				BytesToXBytes (uSummSize, &fSize, szDim);
-				strSize.Format ("%.*g %s", fSize > 999 ? 4 : 3, fSize, szDim);
+				strSize.Format (_T("%.*g %s"), fSize > 999 ? 4 : 3, fSize, szDim);
 			}
 			else
 				strSize = fsBytesToStr (uSummSize);
@@ -636,8 +636,8 @@ DLDS_LIST* CCreateDownloadListDlg::GenerateDownloads(BOOL bCheckDldExistance)
 		vmsDownloadSmartPtr dld;
 		Download_CreateInstance (dld);
 
-		LPCSTR pszUrl = m_pvUrls->at (m_wndUrlList.GetItemData (i));
-		LPCSTR pszCookies = m_pvCookies->at (m_wndUrlList.GetItemData (i));
+		LPCTSTR pszUrl = m_pvUrls->at (m_wndUrlList.GetItemData (i));
+		LPCTSTR pszCookies = m_pvCookies->at (m_wndUrlList.GetItemData (i));
 
 		if (IR_SUCCESS != dld->pMgr->GetDownloadMgr ()->CreateByUrl (pszUrl, TRUE))
 			continue;
@@ -659,12 +659,12 @@ DLDS_LIST* CCreateDownloadListDlg::GenerateDownloads(BOOL bCheckDldExistance)
 
 		if (bNeedReferer)
 		{
-			LPCSTR pszReferer = m_pvReferers->at (m_wndUrlList.GetItemData (i));
+			LPCTSTR pszReferer = m_pvReferers->at (m_wndUrlList.GetItemData (i));
 			int len = pszReferer ? lstrlen (pszReferer) : 0;
 			if (len) 
 			{
 				SAFE_DELETE_ARRAY (dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszReferer);
-				dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszReferer = new char [len+1];
+				dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszReferer = new TCHAR [len+1];
 				_tcscpy (dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszReferer, pszReferer);
 			}
 		}
@@ -672,7 +672,7 @@ DLDS_LIST* CCreateDownloadListDlg::GenerateDownloads(BOOL bCheckDldExistance)
 		if (pszCookies && *pszCookies)
 		{
 			SAFE_DELETE_ARRAY (dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszCookies);
-			dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszCookies = new char [lstrlen (pszCookies) + 1];
+			dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszCookies = new TCHAR [lstrlen (pszCookies) + 1];
 			_tcscpy (dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszCookies, pszCookies);
 		}
 
@@ -721,13 +721,13 @@ void CCreateDownloadListDlg::OnFilter()
 	_App.DldListDlg_Filter_LastExts (dlg.m_strExts);
 	_App.DldListDlg_Filter_LastExtsRemove (dlg.m_bRemove);
 
-	char szFile [10000];
+	TCHAR szFile [10000];
 
 	std::vector <int> v;
 
 	for (int i = 0; i < m_wndUrlList.GetItemCount (); i++)
 	{
-		LPCSTR pszUrl = m_pvUrls->at (m_wndUrlList.GetItemData (i));
+		LPCTSTR pszUrl = m_pvUrls->at (m_wndUrlList.GetItemData (i));
 		fsURL url;
 		if (IR_SUCCESS == url.Crack (pszUrl))
 		{
@@ -736,7 +736,7 @@ void CCreateDownloadListDlg::OnFilter()
 
 			BOOL bExtPresent = FALSE;
 
-			LPCSTR pszExt = strrchr (szFile, '.');
+			LPCTSTR pszExt = _tcsrchr (szFile, _T('.'));
 			if (pszExt && IsExtInExtsStr (dlg.m_strExts, pszExt+1))
 				bExtPresent = TRUE;
 

@@ -25,10 +25,10 @@ void vmsSkinMgr::Scan()
 {
 	m_vList.clear ();
 
-	CString strSkinDir = "Skins";
+	CString strSkinDir = _T("Skins");
 
 	WIN32_FIND_DATA wfd;
-	HANDLE hFind = FindFirstFile (strSkinDir + "\\*.*", &wfd);
+	HANDLE hFind = FindFirstFile (strSkinDir + _T("\\*.*"), &wfd);
 	if (hFind == INVALID_HANDLE_VALUE)
 		return;
 
@@ -38,10 +38,10 @@ void vmsSkinMgr::Scan()
 	{
 		if (wfd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 		{
-			if (lstrcmp (wfd.cFileName, ".") && lstrcmp (wfd.cFileName, ".."))
+			if (lstrcmp (wfd.cFileName, _T(".")) && lstrcmp (wfd.cFileName, _T("..")))
 			{
 				
-				Scan_TryFolder (strSkinDir + "\\" + wfd.cFileName);
+				Scan_TryFolder (strSkinDir + _T("\\") + wfd.cFileName);
 			}
 		}
 	} 
@@ -50,45 +50,45 @@ void vmsSkinMgr::Scan()
 	FindClose (hFind);
 }
 
-void vmsSkinMgr::Scan_TryFolder(LPCSTR pszFolder)
+void vmsSkinMgr::Scan_TryFolder(LPCTSTR pszFolder)
 {
 	CFile file;
 	CString strIni = pszFolder;
-	strIni += "\\skin.ini";
+	strIni += _T("\\skin.ini");
 
 	if (GetFileAttributes (strIni) == DWORD (-1))
 		return; 
 
-	char szValues [30000] = "";
-	GetPrivateProfileSection ("Skin", szValues, sizeof (szValues), strIni);
+	TCHAR szValues [30000] = _T("");
+	GetPrivateProfileSection (_T("Skin"), szValues, sizeof (szValues), strIni);
 	if (*szValues == 0)
 		return;
 
 	vmsSkinInfo skin;
 	skin.strSkinFolder = pszFolder;
 
-	LPCSTR pszValue = szValues;
+	LPCTSTR pszValue = szValues;
 
 	while (*pszValue)
 	{
-		LPSTR pszVVal = (LPSTR) strchr (pszValue, '=');
+		LPTSTR pszVVal = (LPTSTR) _tcschr (pszValue, _T('='));
 		*pszVVal = 0;
 		pszVVal++;
 
-		if (lstrcmpi (pszValue, "Name") == 0)
+		if (lstrcmpi (pszValue, _T("Name")) == 0)
 			skin.strName = pszVVal;
 
-		else if (lstrcmpi (pszValue, "tbSizeX") == 0)
-			skin.tbSizeX = atoi (pszVVal);
+		else if (lstrcmpi (pszValue, _T("tbSizeX")) == 0)
+			skin.tbSizeX = _ttoi (pszVVal);
 
-		else if (lstrcmpi (pszValue, "tbSizeY") == 0)
-			skin.tbSizeY = atoi (pszVVal);
+		else if (lstrcmpi (pszValue, _T("tbSizeY")) == 0)
+			skin.tbSizeY = _ttoi (pszVVal);
 
-		else if (lstrcmpi (pszValue, "tbUseAlpha") == 0)
-			skin.tbUseAlpha = lstrcmpi (pszVVal, "yes") == 0;
+		else if (lstrcmpi (pszValue, _T("tbUseAlpha")) == 0)
+			skin.tbUseAlpha = lstrcmpi (pszVVal, _T("yes")) == 0;
 
-		else if (lstrcmpi (pszValue, "fdmBuild") == 0)
-			skin.nFDMBuild = atoi (pszVVal);
+		else if (lstrcmpi (pszValue, _T("fdmBuild")) == 0)
+			skin.nFDMBuild = _ttoi (pszVVal);
 
 		pszValue = pszVVal;
 		while (*pszValue++);	
@@ -107,7 +107,7 @@ void vmsSkinMgr::set_CurrentSkin(int iSkin)
 	m_nCurrSkin = iSkin;
 }
 
-HBITMAP vmsSkinMgr::bmp_x(UINT nID, LPCSTR pszName)
+HBITMAP vmsSkinMgr::bmp_x(UINT nID, LPCTSTR pszName)
 {
 	if ((m_dwFlags & SM_ALLOWBITMAPS) == 0)
 		pszName = NULL;
@@ -118,7 +118,7 @@ HBITMAP vmsSkinMgr::bmp_x(UINT nID, LPCSTR pszName)
 				0, 0, LR_CREATEDIBSECTION);
 
 	HBITMAP hbm = (HBITMAP) 
-		LoadImage (NULL, m_vList [m_nCurrSkin].strSkinFolder + "\\" + pszName + ".bmp",
+		LoadImage (NULL, m_vList [m_nCurrSkin].strSkinFolder + _T("\\") + pszName + _T(".bmp"),
 			IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 
 	return hbm ? hbm : bmp_x (nID, NULL);
@@ -144,22 +144,22 @@ HBITMAP vmsSkinMgr::bmp(UINT nID)
 		IDB_VIDMAN, IDB_VIDMAN_D
 	};
 
-	static LPCSTR ppszNames [] = {
-		"back", "back_d", "checks", "dldtasks_sel", "dldtasks",
-		"dlinfo", "filelist", "filelist_sel", "go", "groups",
-		"groupsmenu_d", "groupsmenu", "logstat", "mute", 
-		"scheduler_sel", "scheduler", "sitelist", "sitelist_sel",
-		"tool0", "tool0_small", "tool0_small_d", "tool0_d",
-		"tool_dld", "tool_dld_d", "tool_dld_small", "tool_dld_small_d",
-        "tool_bt", "tool_bt_d", "tool_bt_small", "tool_bt_small_d",
-		"tool_hfe",	"tool_hfe_d", "tool_hfe_small", "tool_hfe_small_d",
-		"tool_sch", "tool_sch_d", "tool_sch_small", "tool_sch_small_d",
-		"tool_sites", "tool_sites_d", "tool_sites_small", "tool_sites_small_d",
-		"tool_spider", "tool_spider_d", "tool_spider_small", "tool_spider_small_d",
-		"vidman", "vidman_d"		
+	static LPCTSTR ppszNames [] = {
+		_T("back"), _T("back_d"), _T("checks"), _T("dldtasks_sel"), _T("dldtasks"),
+		_T("dlinfo"), _T("filelist"), _T("filelist_sel"), _T("go"), _T("groups"),
+		_T("groupsmenu_d"), _T("groupsmenu"), _T("logstat"), _T("mute"), 
+		_T("scheduler_sel"), _T("scheduler"), _T("sitelist"), _T("sitelist_sel"),
+		_T("tool0"), _T("tool0_small"), _T("tool0_small_d"), _T("tool0_d"),
+		_T("tool_dld"), _T("tool_dld_d"), _T("tool_dld_small"), _T("tool_dld_small_d"),
+        _T("tool_bt"), _T("tool_bt_d"), _T("tool_bt_small"), _T("tool_bt_small_d"),
+		_T("tool_hfe"),	_T("tool_hfe_d"), _T("tool_hfe_small"), _T("tool_hfe_small_d"),
+		_T("tool_sch"), _T("tool_sch_d"), _T("tool_sch_small"), _T("tool_sch_small_d"),
+		_T("tool_sites"), _T("tool_sites_d"), _T("tool_sites_small"), _T("tool_sites_small_d"),
+		_T("tool_spider"), _T("tool_spider_d"), _T("tool_spider_small"), _T("tool_spider_small_d"),
+		_T("vidman"), _T("vidman_d")		
 	};
 
-	ASSERT (sizeof (aIDs)/sizeof (UINT) == sizeof (ppszNames)/sizeof (LPCSTR));
+	ASSERT (sizeof (aIDs)/sizeof (UINT) == sizeof (ppszNames)/sizeof (LPCTSTR));
 
 	for (int i = 0; i < sizeof (aIDs) / sizeof (UINT); i++)
 	{
@@ -178,7 +178,7 @@ void vmsSkinMgr::Initialize()
 	m_dwFlags = _App.Skin_Flags ();
 	Scan ();
 	CString strSkin = _App.Skin_Current ();
-	if (strSkin != "")
+	if (strSkin != _T(""))
 	{
 		for (int i = 0; i < m_vList.size (); i++)
 		{
@@ -215,14 +215,14 @@ HICON vmsSkinMgr::icon(UINT nID, int cx, int cy)
 		IDI_TEST_OK,
 	};
 
-	static LPCSTR ppszNames [] = {
-		"choosefolder", "creategroup", "dropbox", "login", "settime",
-		"tosel", "tounsel", 
-		"tray",	"tray_down", "tray_err", "tray_starting",
-		"check_ok",
+	static LPCTSTR ppszNames [] = {
+		_T("choosefolder"), _T("creategroup"), _T("dropbox"), _T("login"), _T("settime"),
+		_T("tosel"), _T("tounsel"), 
+		_T("tray"),	_T("tray_down"), _T("tray_err"), _T("tray_starting"),
+		_T("check_ok"),
 	};
 
-	ASSERT (sizeof (aIDs)/sizeof (UINT) == sizeof (ppszNames)/sizeof (LPCSTR));
+	ASSERT (sizeof (aIDs)/sizeof (UINT) == sizeof (ppszNames)/sizeof (LPCTSTR));
 
 	for (int i = 0; i < sizeof (aIDs) / sizeof (UINT); i++)
 	{
@@ -233,7 +233,7 @@ HICON vmsSkinMgr::icon(UINT nID, int cx, int cy)
 	return icon_x (nID, NULL, cx, cy);
 }
 
-HICON vmsSkinMgr::icon_x(UINT nID, LPCSTR pszName, int cx, int cy)
+HICON vmsSkinMgr::icon_x(UINT nID, LPCTSTR pszName, int cx, int cy)
 {
 	if ((m_dwFlags & SM_ALLOWICONS) == 0)
 		pszName = NULL;
@@ -244,7 +244,7 @@ HICON vmsSkinMgr::icon_x(UINT nID, LPCSTR pszName, int cx, int cy)
 			
 
 	HICON hico = (HICON) 
-		LoadImage (NULL, m_vList [m_nCurrSkin].strSkinFolder + "\\" + pszName + ".ico",
+		LoadImage (NULL, m_vList [m_nCurrSkin].strSkinFolder + _T("\\") + pszName + _T(".ico"),
 			IMAGE_ICON, cx, cy, LR_LOADFROMFILE);
 
 	return hico ? hico : icon_x (nID, NULL, cx, cy);

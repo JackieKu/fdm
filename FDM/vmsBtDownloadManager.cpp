@@ -80,7 +80,7 @@ vmsBtDownloadManager::~vmsBtDownloadManager()
 	}
 }
 
-BOOL vmsBtDownloadManager::CreateByTorrentFile(LPCSTR pszTorrentFile, LPCSTR pszOutputPath, LPCSTR pszTorrentUrl, BOOL bSeedOnly)
+BOOL vmsBtDownloadManager::CreateByTorrentFile(LPCTSTR pszTorrentFile, LPCTSTR pszOutputPath, LPCTSTR pszTorrentUrl, BOOL bSeedOnly)
 {
 	if (FALSE == LoadTorrentFile (pszTorrentFile))
 		return FALSE;
@@ -103,8 +103,8 @@ BOOL vmsBtDownloadManager::CreateByTorrentFile(LPCSTR pszTorrentFile, LPCSTR psz
 
 	m_info.strTorrentUrl = pszTorrentUrl;
 	m_info.strOutputPath = pszOutputPath;
-	if (m_info.strOutputPath [m_info.strOutputPath.GetLength () - 1] != '\\')
-		m_info.strOutputPath += '\\';
+	if (m_info.strOutputPath [m_info.strOutputPath.GetLength () - 1] != _T('\\'))
+		m_info.strOutputPath += _T('\\');
 
 	m_info.pfProgress = new float [get_FileCount () * sizeof (float)];
 	for (int i = get_FileCount () - 1; i >= 0; i--)
@@ -155,33 +155,33 @@ void vmsBtDownloadManager::ProcessFilePathMacroses(CString &str)
 {
 	ASSERT (m_pTorrent != NULL);
 
-	if (str.Find ('%', 0) == -1)
+	if (str.Find (_T('%'), 0) == -1)
 		return;	
 
-	char szTracker [10000];
+	TCHAR szTracker [10000];
 	m_pTorrent->get_TrackerUrl2 (szTracker, 0, sizeof (szTracker));
 	fsURL url;
 	url.Crack (szTracker);
 
-	str.Replace ("%server%", url.GetHostName ());
-	str.Replace ("%path_on_server%", url.GetPath ());
+	str.Replace (_T("%server%"), url.GetHostName ());
+	str.Replace (_T("%path_on_server%"), url.GetPath ());
 
-	str.Replace ("/", "\\");
-	str.Replace ("\\\\", "\\");
+	str.Replace (_T("/"), _T("\\"));
+	str.Replace (_T("\\\\"), _T("\\"));
 
 	SYSTEMTIME st;
 	GetLocalTime (&st);
 
-	str.Replace ("%date%", "%year%-%month%-%day%");
+	str.Replace (_T("%date%"), _T("%year%-%month%-%day%"));
 
 	CString strY, strM, strD;
-	strY.Format ("%04d", (int)st.wYear);
-	strM.Format ("%02d", (int)st.wMonth);
-	strD.Format ("%02d", (int)st.wDay);
+	strY.Format (_T("%04d"), (int)st.wYear);
+	strM.Format (_T("%02d"), (int)st.wMonth);
+	strD.Format (_T("%02d"), (int)st.wDay);
 
-	str.Replace ("%year%", strY);
-	str.Replace ("%month%", strM);
-	str.Replace ("%day%", strD);
+	str.Replace (_T("%year%"), strY);
+	str.Replace (_T("%month%"), strM);
+	str.Replace (_T("%day%"), strD);
 }
 
 void vmsBtDownloadManager::DeleteBtDownload()
@@ -211,7 +211,7 @@ vmsBtDownloadStateEx vmsBtDownloadManager::get_State()
 fsString vmsBtDownloadManager::get_TorrentName()
 {
 	ASSERT (m_pTorrent != NULL);
-	char sz [10000] = "";
+	TCHAR sz [10000] = _T("");
 	m_pTorrent->get_TorrentName2 (sz, sizeof (sz));
 	vmsUtf8ToAscii (sz);
 	return sz;
@@ -235,13 +235,13 @@ fsString vmsBtDownloadManager::get_OutputFilePathName(int nIndex)
 {
 	ASSERT (m_pTorrent != NULL);
 	fsString str = get_OutputPath ();
-	if (str [str.GetLength () - 1] != '\\')
-		str += '\\';
+	if (str [str.GetLength () - 1] != _T('\\'))
+		str += _T('\\');
 	str += get_FileName (nIndex);
 	return str;
 }
 
-LPCSTR vmsBtDownloadManager::get_OutputPath()
+LPCTSTR vmsBtDownloadManager::get_OutputPath()
 {
 	return m_info.strOutputPath;
 }
@@ -261,14 +261,14 @@ void vmsBtDownloadManager::SetEventsHandler(fntBtDownloadManagerEventHandler pfn
 fsString vmsBtDownloadManager::get_InfoHash()
 {
 	ASSERT (m_pTorrent != NULL);
-	char sz [1000] = "";
+	TCHAR sz [1000] = _T("");
 	m_pTorrent->get_InfoHash (sz);
 	return sz;
 }
 
-LPCSTR vmsBtDownloadManager::get_TorrentUrl()
+LPCTSTR vmsBtDownloadManager::get_TorrentUrl()
 {
-	return m_info.strTorrentUrl.IsEmpty () ? "" : m_info.strTorrentUrl;
+	return m_info.strTorrentUrl.IsEmpty () ? _T("") : m_info.strTorrentUrl;
 }
 
 void vmsBtDownloadManager::get_TrackerLogin(fsString &strUser, fsString &strPassword)
@@ -297,7 +297,7 @@ void vmsBtDownloadManager::disable_Flags(DWORD dw)
 	m_info.dwFlags &= ~dw;
 }
 
-void vmsBtDownloadManager::set_TrackerLogin(LPCSTR pszUser, LPCSTR pszPassword)
+void vmsBtDownloadManager::set_TrackerLogin(LPCTSTR pszUser, LPCTSTR pszPassword)
 {
 	m_info.strTrackerUser = pszUser;
 	m_info.strTrackerPassword = pszPassword;
@@ -310,7 +310,7 @@ void vmsBtDownloadManager::set_TrackerLogin(LPCSTR pszUser, LPCSTR pszPassword)
 fsString vmsBtDownloadManager::get_TorrentComment()
 {
 	ASSERT (m_pTorrent != NULL);
-	char sz [3000] = "";
+	TCHAR sz [3000] = _T("");
 	m_pTorrent->get_TorrentComment2 (sz, sizeof (sz));
 	vmsUtf8ToAscii (sz);
 	return sz;
@@ -319,14 +319,14 @@ fsString vmsBtDownloadManager::get_TorrentComment()
 fsString vmsBtDownloadManager::get_FileName(int nIndex)
 {
 	ASSERT (m_pTorrent != NULL);
-	char sz [MY_MAX_PATH] = "";
+	TCHAR sz [MY_MAX_PATH] = _T("");
 	m_pTorrent->get_FileName2 (nIndex, sz, sizeof (sz));
 	vmsUtf8ToAscii (sz);
-	LPSTR psz = sz;
+	LPTSTR psz = sz;
 	while (*psz)
 	{
-		if (*psz == '/')
-			*psz = '\\';
+		if (*psz == _T('/'))
+			*psz = _T('\\');
 		psz++;
 	}
 	return sz;
@@ -372,7 +372,7 @@ fsString vmsBtDownloadManager::get_CurrentTracker()
 		InterlockedDecrement (&m_nUsingBtDownload);
 		return m_info.strCurrentTracker;
 	}
-	char sz [10000] = "";
+	TCHAR sz [10000] = _T("");
 	m_pDownload->get_CurrentTracker2 (sz, sizeof (sz));
 	InterlockedDecrement (&m_nUsingBtDownload);
 	return sz;
@@ -564,7 +564,7 @@ UINT vmsBtDownloadManager::GetSpeed()
 	return u;
 }
 
-BOOL vmsBtDownloadManager::MoveToFolder(LPCSTR pszPath)
+BOOL vmsBtDownloadManager::MoveToFolder(LPCTSTR pszPath)
 {
 	InterlockedIncrement (&m_nUsingBtDownload);
 
@@ -576,12 +576,12 @@ BOOL vmsBtDownloadManager::MoveToFolder(LPCSTR pszPath)
 
 		
 		std::wstring wstrSrcPath = A2W (m_info.strOutputPath);
-		if (wstrSrcPath [wstrSrcPath.length () - 1] != '\\')
-			wstrSrcPath += '\\';
+		if (wstrSrcPath [wstrSrcPath.length () - 1] != _T('\\'))
+			wstrSrcPath += _T('\\');
 		
 		std::wstring wstrDstPath = A2W (pszPath);
-		if (wstrDstPath [wstrDstPath.length () - 1] != '\\')
-			wstrDstPath += '\\';
+		if (wstrDstPath [wstrDstPath.length () - 1] != _T('\\'))
+			wstrDstPath += _T('\\');
 
 		
 		for (int i = 0; i < get_FileCount (); i++)
@@ -616,8 +616,8 @@ BOOL vmsBtDownloadManager::MoveToFolder(LPCSTR pszPath)
 	}
 
 	CString str = pszPath;
-	if (str [str.GetLength () - 1] != '\\')
-			str += '\\';
+	if (str [str.GetLength () - 1] != _T('\\'))
+			str += _T('\\');
 	ProcessFilePathMacroses (str);
 	if (FALSE == m_pDownload->MoveToFolder (str))
 	{
@@ -722,8 +722,8 @@ BOOL vmsBtDownloadManager::DeleteFile()
 
 	
 	std::wstring wstrSrcPath = A2W (m_info.strOutputPath);
-	if (wstrSrcPath [wstrSrcPath.length () - 1] != '\\')
-		wstrSrcPath += '\\';
+	if (wstrSrcPath [wstrSrcPath.length () - 1] != _T('\\'))
+		wstrSrcPath += _T('\\');
 
 	
 	bool bAllDeletedOk = true;
@@ -997,7 +997,7 @@ BOOL vmsBtDownloadManager::LoadState(LPBYTE lpBuffer, LPDWORD pdwSize, WORD wVer
 	LPBYTE pbStart = lpBuffer;
 
 	int i;
-	char sz [10000];
+	TCHAR sz [10000];
 
 	if (wVer > 10)
 	{
@@ -1010,7 +1010,7 @@ BOOL vmsBtDownloadManager::LoadState(LPBYTE lpBuffer, LPDWORD pdwSize, WORD wVer
 	}
 	else
 	{
-		m_info.strTorrentUrl = "";
+		m_info.strTorrentUrl = _T("");
 	}
 
 	CopyMemory (&i, lpBuffer, sizeof (int));
@@ -1408,8 +1408,8 @@ void vmsBtDownloadManager::EnableSeeding(BOOL bEnable)
 void vmsBtDownloadManager::RecursiveRemoveDirectory(LPCWSTR pwszPath)
 {
 	std::wstring wstrPath = pwszPath;
-	if (wstrPath [wstrPath.length () - 1] != '\\')
-		wstrPath += '\\';
+	if (wstrPath [wstrPath.length () - 1] != _T('\\'))
+		wstrPath += _T('\\');
 	std::wstring wstrMask = wstrPath; wstrMask += L"*.*";
 
 	fs::list <std::wstring> vFolders;
@@ -1423,7 +1423,7 @@ void vmsBtDownloadManager::RecursiveRemoveDirectory(LPCWSTR pwszPath)
 			std::wstring wstr = wstrPath; wstr += wfd.cFileName;
 			DWORD dw = GetFileAttributesW (wstr.c_str ());
 			if (dw != DWORD (-1) && (dw & FILE_ATTRIBUTE_DIRECTORY) != 0 && 
-					wcscmp (wfd.cFileName, L".") && wcscmp (wfd.cFileName, L".."))
+					wcscmp (wfd.cFileName, L"._T(") && wcscmp (wfd.cFileName, L").."))
 			{
 				vFolders.add (wstr);
 			}
@@ -1443,10 +1443,10 @@ void vmsBtDownloadManager::RemoveBtDownloadDirectory()
 {
 	USES_CONVERSION;
 	std::wstring wstr = get_FileNameW (0);
-	if (wcschr (wstr.c_str (), '\\'))
+	if (wcschr (wstr.c_str (), _T('\\')))
 	{
 		std::wstring wstr2 = A2W (m_info.strOutputPath);
-		for (int i = 0; wstr [i] != '\\'; i++)
+		for (int i = 0; wstr [i] != _T('\\'); i++)
 			wstr2 += wstr [i];	
 		RecursiveRemoveDirectory (wstr2.c_str ());
 	}
@@ -1515,14 +1515,14 @@ void vmsBtDownloadManager::StopSeeding()
 std::wstring vmsBtDownloadManager::get_FileNameW(int nIndex)
 {
 	ASSERT (m_pTorrent != NULL);
-	char sz [MY_MAX_PATH] = "";
+	TCHAR sz [MY_MAX_PATH] = _T("");
 	m_pTorrent->get_FileName2 (nIndex, sz, MY_MAX_PATH);
 	std::wstring wstr = vmsUtf8Unicode (sz);
 	LPWSTR pwsz = (LPWSTR)wstr.c_str ();
 	while (*pwsz)
 	{
-		if (*pwsz == '/')
-			*pwsz = '\\';
+		if (*pwsz == _T('/'))
+			*pwsz = _T('\\');
 		pwsz++;
 	}
 	return wstr;
@@ -1601,7 +1601,7 @@ UINT64 vmsBtDownloadManager::get_SplittedByteCountAtBeginningOfFile()
 fsString vmsBtDownloadManager::get_RootFolderName()
 {
 	if (get_FileCount () == 1)
-		return "";
+		return _T("");
 
 	int nOffset = 0;
 	
@@ -1610,7 +1610,7 @@ fsString vmsBtDownloadManager::get_RootFolderName()
 		fsString str = get_FileName (i);
 		if (nOffset == 0)
 		{
-			LPCSTR psz = strchr (str, '\\');
+			LPCTSTR psz = _tcschr (str, _T('\\'));
 			if (psz)
 				nOffset = psz - str + 1;
 			else
@@ -1618,7 +1618,7 @@ fsString vmsBtDownloadManager::get_RootFolderName()
 		}
 		else
 		{
-			LPCSTR psz = strchr (str, '\\');
+			LPCTSTR psz = _tcschr (str, _T('\\'));
 			int nOffset2 = 0;
 			if (psz)
 				nOffset2 = psz - str + 1;
@@ -1631,9 +1631,9 @@ fsString vmsBtDownloadManager::get_RootFolderName()
 	}
 
 	if (nOffset == 0)
-		return "";
+		return _T("");
 
-	char sz [MY_MAX_PATH];
+	TCHAR sz [MY_MAX_PATH];
 	_tcsncpy (sz, get_FileName (0), nOffset);
 	return sz;	
 }
@@ -1657,10 +1657,10 @@ void vmsBtDownloadManager::GetFilesTree(fs::ListTree <vmsFile> &tree)
 	calculateFoldersSizesInTree (&tree);
 }
 
-void vmsBtDownloadManager::addFileToTree(fs::ListTree <vmsFile> *pTree, LPCSTR pszFile, int nFileIndex)
+void vmsBtDownloadManager::addFileToTree(fs::ListTree <vmsFile> *pTree, LPCTSTR pszFile, int nFileIndex)
 {
 	fsString strFilePart;
-	while (*pszFile && *pszFile != '\\' && *pszFile != '/')
+	while (*pszFile && *pszFile != _T('\\') && *pszFile != _T('/'))
 		strFilePart += *pszFile++;
 	if (*pszFile)
 		pszFile++;
@@ -1716,7 +1716,7 @@ void vmsBtDownloadManager::calculateFoldersSizesInTree(fs::ListTree <vmsFile> *p
 	}
 }
 
-BOOL vmsBtDownloadManager::LoadTorrentFile(LPCSTR pszFile)
+BOOL vmsBtDownloadManager::LoadTorrentFile(LPCTSTR pszFile)
 {
 	if (m_pTorrent)
 		return TRUE;
@@ -1876,8 +1876,8 @@ void vmsBtDownloadManager::ApplyNewFilesPriorities()
 	{
 		USES_CONVERSION;
 		std::wstring wstrSrcPath = A2W (m_info.strOutputPath);
-		if (wstrSrcPath [wstrSrcPath.length () - 1] != '\\')
-			wstrSrcPath += '\\';
+		if (wstrSrcPath [wstrSrcPath.length () - 1] != _T('\\'))
+			wstrSrcPath += _T('\\');
 		
 		for (int i = 0; i < (int)m_info.vFilesPriorities.size (); i++)
 		{

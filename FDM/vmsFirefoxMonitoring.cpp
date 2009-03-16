@@ -7,8 +7,8 @@
 #include "vmsFirefoxMonitoring.h"
 #include "vmsFirefoxExtensionInstaller.h"
 
-#define FLASHGOT_CID	"{19503e42-ca3c-4c27-b1e2-9cdb2170ee34}"
-#define FDM_CID			"fdm_ffext@freedownloadmanager.org"  
+#define FLASHGOT_CID	_T("{19503e42-ca3c-4c27-b1e2-9cdb2170ee34}")
+#define FDM_CID			_T("fdm_ffext@freedownloadmanager.org")  
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -39,7 +39,7 @@ bool vmsFirefoxMonitoring::IsFlashGotInstalled()
 bool vmsFirefoxMonitoring::Install(bool bInstall)
 {
 	CString strPath = ((CFdmApp*)AfxGetApp ())->m_strAppPath;
-	strPath += "Firefox\\Extension";
+	strPath += _T("Firefox\\Extension");
 	return vmsFirefoxExtensionInstaller::Do (FDM_CID, strPath, bInstall);
 }
 

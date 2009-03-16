@@ -18,10 +18,10 @@ public:
 	
 	BOOL Load (HANDLE hFile);
 	BOOL Save (HANDLE hFile);
-	LPCSTR get_String (int nIndex) const;
+	LPCTSTR get_String (int nIndex) const;
 	void Del (int nIndex);
 	int get_Count() const;
-	void Add (LPCSTR psz);
+	void Add (LPCTSTR psz);
 
 	vmsStringList();
 	virtual ~vmsStringList();

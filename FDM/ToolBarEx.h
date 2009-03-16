@@ -19,7 +19,7 @@ struct fsTButtonInfo
 	CString strToolTip;		
 	int iName;			
 
-	fsTButtonInfo (int cmd, BYTE style, LPCSTR pszTip, int iString) : idCommand (cmd), bStyle (style), 
+	fsTButtonInfo (int cmd, BYTE style, LPCTSTR pszTip, int iString) : idCommand (cmd), bStyle (style), 
 		strToolTip (pszTip), iName (iString) {};
 	fsTButtonInfo () {};
 };
@@ -58,7 +58,7 @@ public:
 	
 	
 	
-	void UpdateGroupToolTips (int iGrp, LPCSTR* ppszTips, UINT uSize);
+	void UpdateGroupToolTips (int iGrp, LPCTSTR* ppszTips, UINT uSize);
 	
 	BOOL Create(CWnd* pParent);
 	virtual ~CToolBarEx();

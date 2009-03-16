@@ -54,8 +54,8 @@ BOOL CDlg_CreateNewTorrent::OnInitDialog()
 	
 	int ai_bt_PS [] = {0, 16*1024, 32*1024, 64*1024, 128*1024, 256*1024,
 		512*1024, 1024*1024, 2*1024*1024, 4*1024*1024, 8*1024*1024};
-	LPCSTR apsz_bt_PS [] = {LS (L_AUTO_WQ), "16 KB", "32 KB", "64 KB", "128 KB", "256 KB", 
-		"512 KB", "1024 KB", "2048 KB", "4096 KB", "8192 KB"};
+	LPCTSTR apsz_bt_PS [] = {LS (L_AUTO_WQ), _T("16 KB"), _T("32 KB"), _T("64 KB"), _T("128 KB"), _T("256 KB"), 
+		_T("512 KB"), _T("1024 KB"), _T("2048 KB"), _T("4096 KB"), _T("8192 KB")};
 	for (int i = 0; i < sizeof (ai_bt_PS)/sizeof (int); i++)
 	{
 		m_wndPS.AddString (apsz_bt_PS [i]);
@@ -76,9 +76,9 @@ BOOL CDlg_CreateNewTorrent::OnInitDialog()
 void CDlg_CreateNewTorrent::OnFile() 
 {
 	CString strFilter;
-	strFilter.Format ("%s (*.*)|*.*||", LS (L_ALLFILES));
+	strFilter.Format (_T("%s (*.*)|*.*||"), LS (L_ALLFILES));
 	
-	CFileDialog dlg (TRUE, "", NULL, OFN_HIDEREADONLY|OFN_NOCHANGEDIR, strFilter, this);
+	CFileDialog dlg (TRUE, _T(""), NULL, OFN_HIDEREADONLY|OFN_NOCHANGEDIR, strFilter, this);
 	if (_DlgMgr.DoModal (&dlg) != IDOK)
 		return;
 	m_wndSource.SetWindowText (dlg.GetPathName ());
@@ -89,7 +89,7 @@ void CDlg_CreateNewTorrent::OnFolder()
 	CString str;
 	m_wndSource.GetWindowText (str);
 	
-	if (str.GetLength () > 3 && (str [str.GetLength () - 1] == '\\' || str [str.GetLength () - 1] == '/'))
+	if (str.GetLength () > 3 && (str [str.GetLength () - 1] == _T('\\') || str [str.GetLength () - 1] == _T('/')))
 		str.Delete (str.GetLength () - 1);
 	
 	CFolderBrowser *fb = CFolderBrowser::Create (NULL, str, NULL, this);
@@ -133,8 +133,8 @@ void CDlg_CreateNewTorrent::OnSaveTrackers()
 	POSITION pos = sl.GetHeadPosition ();
 	while (pos)
 		len += sl.GetNext (pos).GetLength () + 1;
-	LPSTR psz = (LPSTR)_alloca (len);
-	LPSTR psz2 = psz;
+	LPTSTR psz = (LPTSTR)_alloca (len);
+	LPTSTR psz2 = psz;
 	pos = sl.GetHeadPosition ();
 	while (pos)
 	{
@@ -143,17 +143,17 @@ void CDlg_CreateNewTorrent::OnSaveTrackers()
 		psz += str.GetLength () + 1;
 	}
 	*psz = 0;
-	AfxGetApp ()->WriteProfileBinary ("Settings\\Torrents", "DefaultTrackerListForNewTorrent", (LPBYTE)psz2, len);
+	AfxGetApp ()->WriteProfileBinary (_T("Settings\\Torrents"), _T("DefaultTrackerListForNewTorrent"), (LPBYTE)psz2, len);
 }
 
 void CDlg_CreateNewTorrent::OnRestoreTrackers() 
 {
-	LPSTR psz = NULL;
+	LPTSTR psz = NULL;
 	UINT len = 0;
-	AfxGetApp ()->GetProfileBinary ("Settings\\Torrents", "DefaultTrackerListForNewTorrent", (LPBYTE*)&psz, &len); 
+	AfxGetApp ()->GetProfileBinary (_T("Settings\\Torrents"), _T("DefaultTrackerListForNewTorrent"), (LPBYTE*)&psz, &len); 
 	if (psz == NULL || len == 0)
 		return;
-	LPCSTR psz2 = psz;
+	LPCTSTR psz2 = psz;
 	m_wndTrackerList.ResetContent ();
 	while (*psz2)
 	{
@@ -237,8 +237,8 @@ DWORD WINAPI CDlg_CreateNewTorrent::_threadCreateNewTorrent(LPVOID lp)
 	POSITION pos = sl.GetHeadPosition ();
 	while (pos)
 		len += sl.GetNext (pos).GetLength () + 1;
-	LPSTR psz = (LPSTR)_alloca (len);
-	LPSTR pszTrackers = psz;
+	LPTSTR psz = (LPTSTR)_alloca (len);
+	LPTSTR pszTrackers = psz;
 	pos = sl.GetHeadPosition ();
 	while (pos)
 	{
@@ -263,8 +263,8 @@ DWORD WINAPI CDlg_CreateNewTorrent::_threadCreateNewTorrent(LPVOID lp)
 	else
 	{
 		BOOL bOk = FALSE;
-		CString str; str.Format ("%s (*.torrent)|*.torrent||", LS (L_TORRENT_FILES));
-		CFileDialog dlg (FALSE, "torrent", NULL, OFN_OVERWRITEPROMPT|OFN_NOCHANGEDIR, str, pthis);
+		CString str; str.Format (_T("%s (*.torrent)|*.torrent||"), LS (L_TORRENT_FILES));
+		CFileDialog dlg (FALSE, _T("torrent"), NULL, OFN_OVERWRITEPROMPT|OFN_NOCHANGEDIR, str, pthis);
 		if (dlg.DoModal () == IDOK)
 		{
 			HANDLE hFile = CreateFile (dlg.GetPathName (), GENERIC_WRITE, 0, NULL, CREATE_ALWAYS,
@@ -284,8 +284,8 @@ DWORD WINAPI CDlg_CreateNewTorrent::_threadCreateNewTorrent(LPVOID lp)
 				if (pthis->IsDlgButtonChecked (IDC_SEED) == BST_CHECKED)
 				{
 					CString strSavePath = strSrcFile;
-					while (strSavePath.IsEmpty () == FALSE && strSavePath.Right (1) != '\\' &&
-							strSavePath.Right (1) != '/')
+					while (strSavePath.IsEmpty () == FALSE && strSavePath.Right (1) != _T('\\') &&
+							strSavePath.Right (1) != _T('/'))
 						strSavePath.Delete (strSavePath.GetLength () - 1);
 					CString strUrl = "file://"; strUrl += dlg.GetPathName ();
 					_pwndDownloads->CreateBtDownloadFromFile (dlg.GetPathName (), 

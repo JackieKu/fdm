@@ -56,9 +56,9 @@ void CDownloaderProperties_MonitorPage_SkipList::OnOK()
 	_App.Monitor_SkipExts (str);
 
 	GetDlgItemText (IDC_SERVERS, str);
-	str.Replace ("\r\n", " ");
-	str.Replace ("\r", " ");
-	str.Replace ("\n", " ");
+	str.Replace (_T("\r\n"), _T(" "));
+	str.Replace (_T("\r"), _T(" "));
+	str.Replace (_T("\n"), _T(" "));
 	str.Replace ("http://", "");
 	str.Replace ("https://", "");
 	str.Replace ("ftp://", "");

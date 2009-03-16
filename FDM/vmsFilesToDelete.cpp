@@ -22,7 +22,7 @@ vmsFilesToDelete::~vmsFilesToDelete()
 
 }
 
-void vmsFilesToDelete::AddFile(LPCSTR pszFile)
+void vmsFilesToDelete::AddFile(LPCTSTR pszFile)
 {
 	CStringList sl;
 	
@@ -40,7 +40,7 @@ void vmsFilesToDelete::Process()
 
 	for (int i = sl.GetCount () - 1; i >= 0; i--)
 	{
-		LPCSTR psz = sl.GetAt (sl.FindIndex (i));
+		LPCTSTR psz = sl.GetAt (sl.FindIndex (i));
 		BOOL bOK = TRUE;
 		if (GetFileAttributes (psz) != DWORD (-1))
 			bOK = DeleteFile (psz);

@@ -23,7 +23,7 @@ public:
 	void WriteInt64 (__int64 i);
 	void WriteDouble (double f);
 	void ReadString(fsString& str);
-	void WriteString (LPCSTR psz);
+	void WriteString (LPCTSTR psz);
 	
 	void Seek (DWORD dwDistance, DWORD dwMethod = FILE_BEGIN);
 	

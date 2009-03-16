@@ -38,7 +38,7 @@ public:
 	void SaveAll();
 	void ApplyLanguageToMenu(CMenu* menu);
 	static void Plugin_SetLanguage(wgLanguage, HMENU hMenuMain, HMENU hMenuView);
-	static void Plugin_GetPluginNames(LPCSTR *ppszLong, LPCSTR *ppszShort);
+	static void Plugin_GetPluginNames(LPCTSTR *ppszLong, LPCTSTR *ppszShort);
 	static void Plugin_GetMenuViewItems(wgMenuViewItem **ppItems, int* );
 	static void Plugin_GetMenuImages(fsSetImage **ppImages, int *pcImages);
 	static void Plugin_GetToolBarInfo(wgTButtonInfo **ppButtons, int *pcButtons);

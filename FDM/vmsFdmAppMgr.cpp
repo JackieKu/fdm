@@ -23,7 +23,7 @@ BOOL vmsFdmAppMgr::IsBtInstalled()
 
 	if (_r == -1)
 	{
-		if (GetFileAttributes (((CFdmApp*)AfxGetApp ())->m_strAppPath + "fdmbtsupp.dll") == DWORD (-1))
+		if (GetFileAttributes (((CFdmApp*)AfxGetApp ())->m_strAppPath + _T("fdmbtsupp.dll")) == DWORD (-1))
 			_r = FALSE;
 		else if (vmsBtSupport::getBtDllVersion () < BTSUPP_DLL_MINVERREQ)
 			_r = FALSE;
@@ -36,25 +36,25 @@ BOOL vmsFdmAppMgr::IsBtInstalled()
 
 BOOL vmsFdmAppMgr::IsMediaFeaturesInstalled()
 {
-	return GetFileAttributes (((CFdmApp*)AfxGetApp ())->m_strAppPath + "mediaconverter.dll") != DWORD (-1);
+	return GetFileAttributes (((CFdmApp*)AfxGetApp ())->m_strAppPath + _T("mediaconverter.dll")) != DWORD (-1);
 }
 
 void vmsFdmAppMgr::ShowInstallMediaFeaturesMessage()
 {
-	MessageBox (NULL, LS (L_INST_MEDIA_FEATURES), "Free Download Manager", 0);
+	MessageBox (NULL, LS (L_INST_MEDIA_FEATURES), _T("Free Download Manager"), 0);
 }
 
 void vmsFdmAppMgr::ShowInstallBtMessage()
 {
-	MessageBox (NULL, LS (L_INST_BT_SUPPORT), "Free Download Manager", 0);
+	MessageBox (NULL, LS (L_INST_BT_SUPPORT), _T("Free Download Manager"), 0);
 }
 
-LPCSTR vmsFdmAppMgr::getBuildNumber()
+LPCTSTR vmsFdmAppMgr::getBuildNumber()
 {
 	static std::string str;
 	if (!str.empty ())
 		return str.c_str ();
-	str = getVersion ()->m_appVersion.size () > 2 ? getVersion ()->m_appVersion [2].toString () : "???";
+	str = getVersion ()->m_appVersion.size () > 2 ? getVersion ()->m_appVersion [2].toString () : _T("???");
 	return str.c_str ();
 }
 
@@ -70,32 +70,32 @@ const vmsBinaryFileVersionInfo* vmsFdmAppMgr::getVersion()
 	return &bfvi;
 }
 
-LPCSTR vmsFdmAppMgr::getAppVersionedName()
+LPCTSTR vmsFdmAppMgr::getAppVersionedName()
 {
 	static std::string str;
 	if (str.empty ())
 	{
 		str = getAppName ();
-		str += ' ';
+		str += _T(' ');
 		str += getVersion ()->m_strProductVersion;
 	}
 	return str.c_str ();
 }
 
-LPCSTR vmsFdmAppMgr::getAppAgentName()
+LPCTSTR vmsFdmAppMgr::getAppAgentName()
 {
 	static std::string str;
 	if (str.empty ())
 	{
-		str = "FDM ";
-		char sz [100];
+		str = _T("FDM ");
+		TCHAR sz [100];
 		str += itoa (getVersion ()->m_appVersion [0].dwVal, sz, 10);
-		str += ".x"; 
+		str += _T(".x"); 
 	}
 	return str.c_str ();
 }
 
-LPCSTR vmsFdmAppMgr::getAppName()
+LPCTSTR vmsFdmAppMgr::getAppName()
 {
 	return getVersion ()->m_strProductName.c_str ();
 }

@@ -67,7 +67,7 @@ BOOL fsCmdHistoryMgr::ReadFromFile(HANDLE hFile)
 	if (!ReadFile (hFile, &hdr, sizeof (hdr), &dw, NULL))
 		return FALSE;
 
-	if (strnicmp (hdr.szSig, HISTFILE_SIG, strlen (HISTFILE_SIG)))
+	if (strnicmp (hdr.szSig, HISTFILE_SIG, _tcslen (HISTFILE_SIG)))
 		return FALSE;
 
 	if (hdr.wVer != HISTFILE_CURRENT_VERSION)
@@ -89,7 +89,7 @@ BOOL fsCmdHistoryMgr::ReadFromFile(HANDLE hFile)
 
 		while (cRecs--)
 		{
-			char *pszRec;
+			TCHAR *pszRec;
 
 			if (!fsReadStrFromFile (&pszRec, hFile))
 				return FALSE;
@@ -118,7 +118,7 @@ int fsCmdHistoryMgr::GetRecordCount()
 	return cRecords;
 }
 
-void fsCmdHistoryMgr::AddRecord(LPCSTR pszRecord)
+void fsCmdHistoryMgr::AddRecord(LPCTSTR pszRecord)
 {
 	if (m_bNoHistory)
 		return;
@@ -187,7 +187,7 @@ void fsCmdHistoryMgr::AddRecord(LPCSTR pszRecord)
 	}
 }
 
-LPCSTR fsCmdHistoryMgr::GetRecord(int iRec)
+LPCTSTR fsCmdHistoryMgr::GetRecord(int iRec)
 {
 	
 	

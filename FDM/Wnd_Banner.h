@@ -29,7 +29,7 @@ public:
 	
 	
 	
-	void SetBanner (LPCSTR pszFile, LPCSTR pszURL);
+	void SetBanner (LPCTSTR pszFile, LPCTSTR pszURL);
 	BOOL Create (CWnd* pWndParent, int cy);
 	virtual ~CWnd_Banner();
 

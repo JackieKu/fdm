@@ -16,16 +16,16 @@ typedef DLDS_LIST t_downloads;
 
 #define DLFILE_CURRENT_VERSION	(14)
 
-#define DLFILE_SIG "FDM Downloads  "
+#define DLFILE_SIG _T("FDM Downloads  ")
 
 struct fsDLFileHdr
 {
-	char szSig [sizeof (DLFILE_SIG) + 1];
+	TCHAR szSig [sizeof (DLFILE_SIG) + 1];
 	WORD wVer;
 
 	fsDLFileHdr ()
 	{
-		strcpy (szSig, DLFILE_SIG);
+		_tcscpy (szSig, DLFILE_SIG);
 		wVer = DLFILE_CURRENT_VERSION;
 	}
 };  
@@ -49,8 +49,8 @@ public:
 	
 	
 	
-	fsDLLoadResult Load (t_downloads* vDownloads, LPCSTR pszFileName, BOOL bDontLoadIfTooLarge, fsDLLoadFromType lt = DLLFT_SAV, BOOL bErrIfNotExists = FALSE);
-	BOOL Save (t_downloads* vDownloads, LPCSTR pszFileName);
+	fsDLLoadResult Load (t_downloads* vDownloads, LPCTSTR pszFileName, BOOL bDontLoadIfTooLarge, fsDLLoadFromType lt = DLLFT_SAV, BOOL bErrIfNotExists = FALSE);
+	BOOL Save (t_downloads* vDownloads, LPCTSTR pszFileName);
 
 	fsDownloadRegSaver();
 	virtual ~fsDownloadRegSaver();

@@ -29,7 +29,7 @@ CDlg_Options_Page::~CDlg_Options_Page()
 
 }
 
-LPCSTR CDlg_Options_Page::get_Template()
+LPCTSTR CDlg_Options_Page::get_Template()
 {
 	return m_lpszTemplateName;
 }

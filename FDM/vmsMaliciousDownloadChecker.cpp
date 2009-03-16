@@ -24,15 +24,15 @@ vmsMaliciousDownloadChecker::~vmsMaliciousDownloadChecker()
 
 }
 
-fsInternetResult vmsMaliciousDownloadChecker::Check(LPCSTR pszUrl)
+fsInternetResult vmsMaliciousDownloadChecker::Check(LPCTSTR pszUrl)
 {
-	char szTmpPath [MY_MAX_PATH];
-	char szTmpFile [MY_MAX_PATH];
+	TCHAR szTmpPath [MY_MAX_PATH];
+	TCHAR szTmpFile [MY_MAX_PATH];
 
 	m_bNeedStop = false;
 
 	GetTempPath (sizeof (szTmpPath), szTmpPath);
-	GetTempFileName (szTmpPath, "fdm", 0, szTmpFile);
+	GetTempFileName (szTmpPath, _T("fdm"), 0, szTmpFile);
 
 	
 	CString strUrl;
@@ -67,7 +67,7 @@ fsInternetResult vmsMaliciousDownloadChecker::Check(LPCSTR pszUrl)
 		return IR_ERROR;
 	}
 
-	char szBuf [1000];
+	TCHAR szBuf [1000];
 	DWORD dwSize = 0;
 	ReadFile (hFile, szBuf, sizeof (szBuf), &dwSize, NULL);
 	CloseHandle (hFile);
@@ -79,7 +79,7 @@ fsInternetResult vmsMaliciousDownloadChecker::Check(LPCSTR pszUrl)
 		m_cOpinions = 0;
 		m_cMalOpinions = 0;
 		m_fRating = 0;
-		m_strVirusCheckResult = "";
+		m_strVirusCheckResult = _T("");
 	}
 	else
 	{
@@ -88,24 +88,24 @@ fsInternetResult vmsMaliciousDownloadChecker::Check(LPCSTR pszUrl)
 
 		szBuf [dwSize] = 0;
 
-		char szVCR [10000];
-		sscanf (szBuf, "%d %f %d %s", &m_cOpinions, &m_fRating, &m_cMalOpinions, szVCR);
+		TCHAR szVCR [10000];
+		_stscanf (szBuf, _T("%d %f %d %s"), &m_cOpinions, &m_fRating, &m_cMalOpinions, szVCR);
 		m_strVirusCheckResult = szVCR;
 	}
 
 	return IR_SUCCESS;
 }
 
-CString vmsMaliciousDownloadChecker::EncodeUrl(LPCSTR pszUrl)
+CString vmsMaliciousDownloadChecker::EncodeUrl(LPCTSTR pszUrl)
 {
 	CString str;
 
 	while (*pszUrl)
 	{
-		char c = *pszUrl++;
-		if ((c >= 'a' && c <= 'z') ||
-				(c >= 'A' && c <='Z') ||
-				(c >= '0' && c <= '9'))
+		TCHAR c = *pszUrl++;
+		if ((c >= _T('a') && c <= _T('z')) ||
+				(c >= _T('A') && c <=_T('Z')) ||
+				(c >= _T('0') && c <= _T('9')))
 		{
 			str += c;
 		}
@@ -113,8 +113,8 @@ CString vmsMaliciousDownloadChecker::EncodeUrl(LPCSTR pszUrl)
 		{
 			
 			
-			char szHex [10];
-			sprintf (szHex, "%%%x", (int)(BYTE)c);
+			TCHAR szHex [10];
+			_stprintf (szHex, _T("%%%x"), (int)(BYTE)c);
 			str += szHex;
 		}
 	}
@@ -137,7 +137,7 @@ float vmsMaliciousDownloadChecker::get_AverageRating()
 	return m_fRating;
 }
 
-LPCSTR vmsMaliciousDownloadChecker::get_VirusCheckResult()
+LPCTSTR vmsMaliciousDownloadChecker::get_VirusCheckResult()
 {
 	return m_strVirusCheckResult;
 }

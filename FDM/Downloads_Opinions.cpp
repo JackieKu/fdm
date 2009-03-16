@@ -107,7 +107,7 @@ try{
 		{
 			
 			m_enCS = DOCS_BLANK;
-			m_wb.Navigate ("about:blank", NULL, NULL, NULL, NULL);
+			m_wb.Navigate (_T("about:blank"), NULL, NULL, NULL, NULL);
 		}
 	}
 	else

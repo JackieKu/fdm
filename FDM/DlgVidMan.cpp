@@ -167,7 +167,7 @@ void CDlgVidMan::Update()
 
 	SetDlgItemText (IDC__FILENAME, m_parent->Get_FileName ());
 
-	char szDim [100];
+	TCHAR szDim [100];
 	CString str;
 	UINT64 u;
 	float val;
@@ -176,25 +176,25 @@ void CDlgVidMan::Update()
 	if (u)
 	{
 		if (u == _UI64_MAX)
-			str = "?";
+			str = _T("?");
 		else
 		{
 			BytesToXBytes (u, &val, szDim);
-			str.Format ("%.*g %s", val > 999 ? 4 : 3, val, szDim);
+			str.Format (_T("%.*g %s"), val > 999 ? 4 : 3, val, szDim);
 		}
 	}
 	else
-		str = "";
+		str = _T("");
 	SetDlgItemText (IDC__SIZEVAL, str);
 
 	u = m_parent->Get_AvailFileSize ();
 	if (u || m_parent->Get_FileSize ())
 	{
 		BytesToXBytes (u, &val, szDim);
-		str.Format ("%.*g %s", val > 999 ? 4 : 3, val, szDim);
+		str.Format (_T("%.*g %s"), val > 999 ? 4 : 3, val, szDim);
 	}
 	else
-		str = "";
+		str = _T("");
 	SetDlgItemText (IDC__SIZEAVAILVAL, str);
 
 	SetDlgItemText (IDC__DURATIONVAL, m_parent->GetDuration ());
@@ -285,7 +285,7 @@ void CDlgVidMan::ApplyVolumeSettings()
 void CDlgVidMan::UpdateVolumePerc()
 {
 	CString str;
-	str.Format ("%d%%", m_wndVol.GetPos ());
+	str.Format (_T("%d%%"), m_wndVol.GetPos ());
 	SetDlgItemText (IDC__VOLPERC, str);
 }
 
@@ -355,19 +355,19 @@ BOOL CDlgVidMan::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
 			switch (nID)
 			{
 				case ID_DLD_VID_MUTE:
-					strcpy (inf->pszText, LS (L_MUTE));
+					_tcscpy (inf->pszText, LS (L_MUTE));
 					break;
 
 				case ID_DLD_VID_PLAY:
-					strcpy (inf->pszText, LS (L_PLAY));
+					_tcscpy (inf->pszText, LS (L_PLAY));
 					break;
 
 				case ID_DLD_VID_PAUSE:
-					strcpy (inf->pszText, LS (L_PAUSE));
+					_tcscpy (inf->pszText, LS (L_PAUSE));
 					break;
 
 				case ID_DLD_VID_STOP:
-					strcpy (inf->pszText, LS (L_STOP));
+					_tcscpy (inf->pszText, LS (L_STOP));
 					break;
 
 			}

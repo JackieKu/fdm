@@ -24,12 +24,12 @@ vmsArchiveRAR::~vmsArchiveRAR()
 
 #pragma warning (disable: 4701)
 
-bool vmsArchiveRAR::Extract(LPCSTR pszArchive, LPCSTR pszOutFolder)
+bool vmsArchiveRAR::Extract(LPCTSTR pszArchive, LPCTSTR pszOutFolder)
 {
 	m_errExtract = AEE_GENERIC_ERROR;
 
 	if (m_unrar.is_Loaded () == false) {
-		if (false == m_unrar.Load ("Archive\\unrar.dll"))
+		if (false == m_unrar.Load (_T("Archive\\unrar.dll")))
 			return false;
 	}
 
@@ -42,12 +42,12 @@ bool vmsArchiveRAR::Extract(LPCSTR pszArchive, LPCSTR pszOutFolder)
 
 	HANDLE hArcData;
 	int RHCode, PFCode;
-	char CmtBuf [16384];
+	TCHAR CmtBuf [16384];
 	RARHeaderData HeaderData;
 	RAROpenArchiveDataEx OpenArchiveData;
 
 	ZeroMemory (&OpenArchiveData, sizeof (OpenArchiveData));
-	OpenArchiveData.ArcName = (LPSTR)pszArchive;
+	OpenArchiveData.ArcName = (LPTSTR)pszArchive;
 	OpenArchiveData.CmtBuf = CmtBuf;
 	OpenArchiveData.CmtBufSize = sizeof (CmtBuf);
 	OpenArchiveData.OpenMode = RAR_OM_EXTRACT;
@@ -64,8 +64,8 @@ bool vmsArchiveRAR::Extract(LPCSTR pszArchive, LPCSTR pszOutFolder)
 	DWORD dwProcessed = 0;
 
 	CString strOutFolder = pszOutFolder;
-	if (strOutFolder [strOutFolder.GetLength () - 1] != '\\')
-		strOutFolder += '\\';
+	if (strOutFolder [strOutFolder.GetLength () - 1] != _T('\\'))
+		strOutFolder += _T('\\');
 
 	vmsAC_OverwriteMode enOM;
 	bool bAskOverwrite = true;
@@ -118,7 +118,7 @@ bool vmsArchiveRAR::Extract(LPCSTR pszArchive, LPCSTR pszOutFolder)
 		}
 
 		PFCode = m_unrar.RARProcessFile (hArcData, bSkip ? RAR_SKIP : RAR_EXTRACT, 
-			(LPSTR)pszOutFolder, NULL);
+			(LPTSTR)pszOutFolder, NULL);
 
 		if (PFCode == 0) {
 			if (m_pAC) {

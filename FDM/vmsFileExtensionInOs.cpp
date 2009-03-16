@@ -22,15 +22,15 @@ vmsFileExtensionInOs::~vmsFileExtensionInOs()
 
 }
 
-fsString vmsFileExtensionInOs::GetAssociation(LPCSTR pszExt, LPCSTR pszVerb)
+fsString vmsFileExtensionInOs::GetAssociation(LPCTSTR pszExt, LPCTSTR pszVerb)
 {
-	fsString strExt; strExt = "."; strExt += pszExt;
+	fsString strExt; strExt = _T("."); strExt += pszExt;
 
 	CRegKey key;
 	if (ERROR_SUCCESS != key.Open (HKEY_CLASSES_ROOT, strExt, KEY_READ))
-		return "";
+		return _T("");
 
-	char sz [1000];
+	TCHAR sz [1000];
 	DWORD dw = sizeof (sz);
 	if (ERROR_SUCCESS == key.QueryValue (sz, NULL, &dw))
 		return GetAssociation_2 (sz, pszVerb);
@@ -38,27 +38,27 @@ fsString vmsFileExtensionInOs::GetAssociation(LPCSTR pszExt, LPCSTR pszVerb)
 		return GetAssociation_2 (strExt, pszVerb);
 }
 
-fsString vmsFileExtensionInOs::GetAssociation_2(LPCSTR pszProgId, LPCSTR pszVerb)
+fsString vmsFileExtensionInOs::GetAssociation_2(LPCTSTR pszProgId, LPCTSTR pszVerb)
 {
 	fsString str = pszProgId;
-	str += "\\shell\\"; str += pszVerb; str += "\\command";
+	str += _T("\\shell\\"); str += pszVerb; str += _T("\\command");
 
 	CRegKey key;
 	
 	if (ERROR_SUCCESS != key.Open (HKEY_CLASSES_ROOT, str, KEY_READ))
-		return "";
+		return _T("");
 
-	char sz [MY_MAX_PATH];
+	TCHAR sz [MY_MAX_PATH];
 	DWORD dw = sizeof (sz);
 	if (ERROR_SUCCESS != key.QueryValue (sz, NULL, &dw))
-		return "";
+		return _T("");
 	
 	return sz;
 }
 
-BOOL vmsFileExtensionInOs::SetAssociation(LPCSTR pszExt, LPCSTR pszVerb, LPCSTR pszValue)
+BOOL vmsFileExtensionInOs::SetAssociation(LPCTSTR pszExt, LPCTSTR pszVerb, LPCTSTR pszValue)
 {
-	fsString strExt; strExt = "."; strExt += pszExt;
+	fsString strExt; strExt = _T("."); strExt += pszExt;
 
 	CRegKey key;
 	if (ERROR_SUCCESS != key.Open (HKEY_CLASSES_ROOT, strExt, KEY_READ | KEY_WRITE))
@@ -67,7 +67,7 @@ BOOL vmsFileExtensionInOs::SetAssociation(LPCSTR pszExt, LPCSTR pszVerb, LPCSTR 
 			return FALSE;
 	}
 
-	char sz [1000];
+	TCHAR sz [1000];
 	DWORD dw = sizeof (sz);
 	if (ERROR_SUCCESS == key.QueryValue (sz, NULL, &dw))
 		return SetAssociation_2 (sz, pszVerb, pszValue);
@@ -75,10 +75,10 @@ BOOL vmsFileExtensionInOs::SetAssociation(LPCSTR pszExt, LPCSTR pszVerb, LPCSTR 
 		return SetAssociation_2 (strExt, pszVerb, pszValue);
 }
 
-BOOL vmsFileExtensionInOs::SetAssociation_2(LPCSTR pszProgId, LPCSTR pszVerb, LPCSTR pszValue)
+BOOL vmsFileExtensionInOs::SetAssociation_2(LPCTSTR pszProgId, LPCTSTR pszVerb, LPCTSTR pszValue)
 {
 	fsString str = pszProgId;
-	str += "\\shell\\"; str += pszVerb; str += "\\command";
+	str += _T("\\shell\\"); str += pszVerb; str += _T("\\command");
 
 	CRegKey key;
 	
@@ -91,9 +91,9 @@ BOOL vmsFileExtensionInOs::SetAssociation_2(LPCSTR pszProgId, LPCSTR pszVerb, LP
 	return ERROR_SUCCESS == key.SetValue (pszValue, NULL);
 }
 
-BOOL vmsFileExtensionInOs::CreateAssociation(LPCSTR pszExt, LPCSTR pszProgId)
+BOOL vmsFileExtensionInOs::CreateAssociation(LPCTSTR pszExt, LPCTSTR pszProgId)
 {
-	fsString strExt; strExt = "."; strExt += pszExt;
+	fsString strExt; strExt = _T("."); strExt += pszExt;
 
 	CRegKey key;
 

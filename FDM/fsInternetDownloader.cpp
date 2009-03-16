@@ -77,7 +77,7 @@ fsInternetDownloader::fsInternetDownloader()
 	m_dwState = 0;
 	m_cMirrsFound = 0;
 
-	m_strContentType = "";
+	m_strContentType = _T("");
 
 	m_pZipPreviewStream = NULL;
 	m_uTimeout = 120;
@@ -696,13 +696,13 @@ DWORD WINAPI fsInternetDownloader::_threadDownload(LPVOID lp)
 		{
 			if (sect->pThis->GetNumberOfSections () == 1)
 			{
-				LPCSTR pszHost = sect->pThis->DNP (0)->pszServerName;
+				LPCTSTR pszHost = sect->pThis->DNP (0)->pszServerName;
 				bool bDone = false;
 
-				if (strlen (pszHost) > sizeof ("mail.yahoo.com") &&
-						stricmp (pszHost+strlen (pszHost)-sizeof ("mail.yahoo.com"), ".mail.yahoo.com") == 0)
+				if (strlen (pszHost) > sizeof (_T("mail.yahoo.com")) &&
+						stricmp (pszHost+_tcslen (pszHost)-sizeof (_T("mail.yahoo.com")), _T(".mail.yahoo.com")) == 0)
 					bDone = true;
-				else if (strstr (sect->pThis->DNP (0)->pszPathName, ".mail.yahoo.com/"))
+				else if (strstr (sect->pThis->DNP (0)->pszPathName, _T(".mail.yahoo.com/")))
 					bDone = true;
 
 				if (bDone)
@@ -1122,12 +1122,12 @@ _exit:
 	return 0;
 }
 
-fsInternetResult fsInternetDownloader::OpenUrl(UINT64 uStartPos, fsInternetURLFile **ppFile,  int iSectIndex, UINT &nMirror, BOOL bCheckFileSize, LPCSTR pszContentTypeReq)
+fsInternetResult fsInternetDownloader::OpenUrl(UINT64 uStartPos, fsInternetURLFile **ppFile,  int iSectIndex, UINT &nMirror, BOOL bCheckFileSize, LPCTSTR pszContentTypeReq)
 {
 	return OpenUrl_imp (uStartPos, ppFile, iSectIndex, nMirror, bCheckFileSize, 0, pszContentTypeReq);
 }
 
-fsInternetResult fsInternetDownloader::OpenUrl_imp(UINT64 uStartPos, fsInternetURLFile **ppFile,  int iSectIndex, UINT &nMirror,  BOOL bCheckFileSize, int iAttempt, LPCSTR )
+fsInternetResult fsInternetDownloader::OpenUrl_imp(UINT64 uStartPos, fsInternetURLFile **ppFile,  int iSectIndex, UINT &nMirror,  BOOL bCheckFileSize, int iAttempt, LPCTSTR )
 {
 	fsInternetResult ir;
 	fsDownload_NetworkProperties* dnp;
@@ -1151,7 +1151,7 @@ fsInternetResult fsInternetDownloader::OpenUrl_imp(UINT64 uStartPos, fsInternetU
 	m_pOpeningFile->SetDialogFunc (_InetFileDialogFunc, this, LPVOID (iSectIndex));
 	
 	vmsInternetSession* pSession = new vmsInternetSession;
-	char szProxy [10000];
+	TCHAR szProxy [10000];
 	vmsMakeWinInetProxy (dnp->pszProxyName, dnp->enProtocol, dnp->enProtocol, szProxy);
 	ir  = pSession->Create (dnp->pszAgent, dnp->enAccType, szProxy, dnp->enProtocol);
 	if (ir != IR_SUCCESS)
@@ -1171,16 +1171,16 @@ fsInternetResult fsInternetDownloader::OpenUrl_imp(UINT64 uStartPos, fsInternetU
 	
 	if (dnp->enProtocol == NP_FTP && dnp->enFtpTransferType == FTT_UNKNOWN)
 	{
-		int posPath = strlen (dnp->pszPathName) - 1;
+		int posPath = _tcslen (dnp->pszPathName) - 1;
 		int posExt = 0;
-		LPSTR pszExt = new char [MY_MAX_PATH];
+		LPTSTR pszExt = new TCHAR [MY_MAX_PATH];
 
-		while (posPath && dnp->pszPathName [posPath] != '.')
+		while (posPath && dnp->pszPathName [posPath] != _T('.'))
 			pszExt [posExt++] = dnp->pszPathName [posPath--];
 
 		if (posPath)
 		{
-			LPSTR pszExtension = new char [MY_MAX_PATH];
+			LPTSTR pszExtension = new TCHAR [MY_MAX_PATH];
 
 			pszExt [posExt] = 0;
 
@@ -1250,34 +1250,34 @@ fsInternetResult fsInternetDownloader::OpenUrl_imp(UINT64 uStartPos, fsInternetU
 				return IR_SERVERUNKERROR;
 			}
 
-			LPCSTR pszUrlTo = m_pOpeningFile->GetLastError ();
+			LPCTSTR pszUrlTo = m_pOpeningFile->GetLastError ();
 
 			fsURL url;
-			LPSTR pszUrl = new char [10000];
+			LPTSTR pszUrl = new TCHAR [10000];
 			DWORD dwLen = 10000;
 
 			if (url.Crack (pszUrlTo) != IR_SUCCESS) 
 			{
 				
 
-				LPSTR pszUrlPath = new char [10000];
+				LPTSTR pszUrlPath = new TCHAR [10000];
 
 				if (*pszUrlTo == 0)
-					strcpy (pszUrlPath, "/");
-				else if (*pszUrlTo != '/' && *pszUrlTo != '\\') 
+					_tcscpy (pszUrlPath, _T("/"));
+				else if (*pszUrlTo != _T('/') && *pszUrlTo != _T('\\')) 
 				{
 					
 
 					fsPathFromUrlPath (dnp->pszPathName, dnp->enProtocol == NP_FTP, FALSE, pszUrlPath, 10000);
 
-					if (pszUrlPath [lstrlen (pszUrlPath)-1] != '\\' &&
-							pszUrlPath [lstrlen (pszUrlPath)-1] != '/')
-						_tcscat (pszUrlPath, "\\");
+					if (pszUrlPath [lstrlen (pszUrlPath)-1] != _T('\\') &&
+							pszUrlPath [lstrlen (pszUrlPath)-1] != _T('/'))
+						_tcscat (pszUrlPath, _T("\\"));
 					
-					strcat (pszUrlPath, pszUrlTo);
+					_tcscat (pszUrlPath, pszUrlTo);
 				}
 				else
-					strcpy (pszUrlPath, pszUrlTo);	
+					_tcscpy (pszUrlPath, pszUrlTo);	
 
 				
 				url.Create (fsNPToScheme (dnp->enProtocol), dnp->pszServerName, dnp->uServerPort, 
@@ -1286,19 +1286,19 @@ fsInternetResult fsInternetDownloader::OpenUrl_imp(UINT64 uStartPos, fsInternetU
 				delete [] pszUrlPath;
 			}
 			else
-				strcpy (pszUrl, pszUrlTo);	
+				_tcscpy (pszUrl, pszUrlTo);	
 
 			Event (DE_REDIRECTING);
 
 			
-			LPSTR pszUser = new char [10000], pszPassword = new char [10000];
+			LPTSTR pszUser = new TCHAR [10000], pszPassword = new TCHAR [10000];
 			if (dnp->pszUserName)
-				strcpy (pszUser, dnp->pszUserName);
+				_tcscpy (pszUser, dnp->pszUserName);
 			else
 				*pszUser = 0;
 
 			if (dnp->pszPassword)
-				strcpy (pszPassword, dnp->pszPassword);
+				_tcscpy (pszPassword, dnp->pszPassword);
 			else
 				*pszPassword = 0;
 
@@ -1318,12 +1318,12 @@ fsInternetResult fsInternetDownloader::OpenUrl_imp(UINT64 uStartPos, fsInternetU
 			if (dnp->pszUserName == NULL || *dnp->pszUserName == 0)
 			{
 				SAFE_DELETE_ARRAY (dnp->pszUserName);
-				dnp->pszUserName = new char [strlen (pszUser) + 1];
-				strcpy (dnp->pszUserName, pszUser);
+				dnp->pszUserName = new TCHAR [_tcslen (pszUser) + 1];
+				_tcscpy (dnp->pszUserName, pszUser);
 
 				SAFE_DELETE_ARRAY (dnp->pszPassword);
-				dnp->pszPassword = new char [strlen (pszPassword) + 1];
-				strcpy (dnp->pszPassword, pszPassword);
+				dnp->pszPassword = new TCHAR [_tcslen (pszPassword) + 1];
+				_tcscpy (dnp->pszPassword, pszPassword);
 			}
 
 			delete [] pszUser; delete [] pszPassword;
@@ -1400,7 +1400,7 @@ fsInternetResult fsInternetDownloader::OpenUrl_imp(UINT64 uStartPos, fsInternetU
 
 	if (m_strContentType.Length () == 0)
 	{
-		char szContType [1000];
+		TCHAR szContType [1000];
 		if ((*ppFile)->GetContentType (szContType))
 			m_strContentType = szContType;
 	}
@@ -1411,7 +1411,7 @@ fsInternetResult fsInternetDownloader::OpenUrl_imp(UINT64 uStartPos, fsInternetU
 			m_strFileName = m_strSuggFileName;
 		else
 		{
-			char szFile [10000];
+			TCHAR szFile [10000];
 			fsFileNameFromUrlPath (dnp->pszPathName, dnp->enProtocol == NP_FTP,
 				TRUE, szFile, sizeof (szFile));
 			m_strFileName = szFile;
@@ -1539,7 +1539,7 @@ BOOL fsInternetDownloader::SaveSectionsState(LPBYTE pBuffer, LPDWORD pdwSize)
 	pBuffer = LPBYTE (pBuf);
 	*((LPINT)pBuffer) = m_strFileName.Length ();
 	pBuffer += sizeof (int);
-	strncpy (LPSTR (pBuffer), m_strFileName, m_strFileName.Length ());
+	_tcsncpy (LPTSTR (pBuffer), m_strFileName, m_strFileName.Length ());
 	pBuffer += m_strFileName.Length ();
 
 	*((LPDWORD)pBuffer) = m_dwState;
@@ -1595,8 +1595,8 @@ BOOL fsInternetDownloader::RestoreSectionsState(LPBYTE pBuffer, DWORD dwSize, DW
 	if (iStrLen > MY_MAX_PATH || iStrLen < 0)
 		return FALSE;
 	
-	char sz [10000];
-	strncpy (sz, LPCSTR (pBuffer), iStrLen);
+	TCHAR sz [10000];
+	_tcsncpy (sz, LPCTSTR (pBuffer), iStrLen);
 	sz [iStrLen] = 0;
 	m_strFileName = sz;
 	pBuffer += iStrLen;
@@ -1651,8 +1651,8 @@ BOOL fsInternetDownloader::RestoreSectionsState_vlt5(LPBYTE pBuffer, DWORD dwSiz
 	if (iStrLen > MY_MAX_PATH || iStrLen < 0)
 		return FALSE;
 	
-	char sz [10000];
-	strncpy (sz, LPCSTR (pBuffer), iStrLen);
+	TCHAR sz [10000];
+	_tcsncpy (sz, LPCTSTR (pBuffer), iStrLen);
 	sz [iStrLen] = 0;
 	m_strFileName = sz;
 	pBuffer += iStrLen;
@@ -2130,19 +2130,19 @@ void fsInternetDownloader::ApplyProperties(fsInternetURLFile *pFile, fsDownload_
 		
 		
 		
-		char szUrl [10000];
-		char szRefUrl [10000];
+		TCHAR szUrl [10000];
+		TCHAR szRefUrl [10000];
 		fsURL url;
 		DWORD dw = sizeof (szUrl);
-		if (*dnp->pszPathName && strcmp (dnp->pszPathName, "/") && strcmp (dnp->pszPathName, "\\") && 
+		if (*dnp->pszPathName && _tcscmp (dnp->pszPathName, _T("/")) && _tcscmp (dnp->pszPathName, _T("\\")) && 
 			 IR_SUCCESS == url.Create (fsNPToScheme (dnp->enProtocol), dnp->pszServerName, dnp->uServerPort, NULL, NULL, dnp->pszPathName,
 			szUrl, &dw))
 		{
 			if (fsFilePathFromUrlPath (szUrl, dnp->enProtocol == NP_FTP, 
 					FALSE, szRefUrl, sizeof (szRefUrl)))
 			{
-				LPSTR psz1 = strrchr (szRefUrl, '\\');
-				LPSTR psz2 = strrchr (szRefUrl, '/');
+				LPTSTR psz1 = _tcsrchr (szRefUrl, _T('\\'));
+				LPTSTR psz2 = _tcsrchr (szRefUrl, _T('/'));
 				if (psz2 > psz1) 
 					psz1 = psz2;
 
@@ -2315,7 +2315,7 @@ void fsInternetDownloader::StopSection()
 	}
 }
 
-LPCSTR fsInternetDownloader::GetSuggestedFileName()
+LPCTSTR fsInternetDownloader::GetSuggestedFileName()
 {
 	return m_strSuggFileName.Length () ? m_strSuggFileName : NULL ;
 }
@@ -2374,7 +2374,7 @@ fsInternetResult fsInternetDownloader::QuerySize(fsInternetURLFile *file)
 	fsInternetResult ir;
 
 	vmsInternetSession* pSession = new vmsInternetSession;
-	char szProxy [10000];
+	TCHAR szProxy [10000];
 	vmsMakeWinInetProxy (DNP ()->pszProxyName, DNP ()->enProtocol, DNP ()->enProtocol, szProxy);
 	ir  = pSession->Create (DNP ()->pszAgent, DNP ()->enAccType, szProxy, DNP ()->enProtocol);
 	if (ir != IR_SUCCESS)
@@ -2398,7 +2398,7 @@ fsInternetResult fsInternetDownloader::QuerySize(fsInternetURLFile *file)
 			if (m_vSections.size ()) 
 				return IR_SERVERUNKERROR;
 
-			LPCSTR pszUrl = file->GetLastError ();
+			LPCTSTR pszUrl = file->GetLastError ();
 
 			
 
@@ -2408,40 +2408,40 @@ fsInternetResult fsInternetDownloader::QuerySize(fsInternetURLFile *file)
 
 			if (url.Crack (pszUrl) != IR_SUCCESS) 
 			{
-				char szUrlPath [10000];
+				TCHAR szUrlPath [10000];
 
 				if (*pszUrl == 0)
-					strcpy (szUrlPath, "/");
-				else if (*pszUrl != '/' && *pszUrl != '\\')
+					_tcscpy (szUrlPath, _T("/"));
+				else if (*pszUrl != _T('/') && *pszUrl != _T('\\'))
 				{
 					fsPathFromUrlPath (DNP()->pszPathName, DNP()->enProtocol == NP_FTP, FALSE, szUrlPath, 10000);
 
-					if (szUrlPath [lstrlen (szUrlPath)-1] != '\\' &&
-							szUrlPath [lstrlen (szUrlPath)-1] != '/')
-						_tcscat (szUrlPath, "\\");
+					if (szUrlPath [lstrlen (szUrlPath)-1] != _T('\\') &&
+							szUrlPath [lstrlen (szUrlPath)-1] != _T('/'))
+						_tcscat (szUrlPath, _T("\\"));
 					
-					strcat (szUrlPath, pszUrl);
+					_tcscat (szUrlPath, pszUrl);
 				}
 				else
-					strcpy (szUrlPath, pszUrl);
+					_tcscpy (szUrlPath, pszUrl);
 
 				url.Create (fsNPToScheme (DNP ()->enProtocol), DNP ()->pszServerName, DNP ()->uServerPort, 
 					DNP ()->pszUserName, DNP ()->pszPassword, szUrlPath, szUrl, &dwLen);
 			}
 			else
-				strcpy (szUrl, pszUrl);	
+				_tcscpy (szUrl, pszUrl);	
 
 			fsDownload_NetworkProperties *dnp = DNP ();
 
 			
-			LPSTR pszUser = new char [10000], pszPassword = new char [10000];
+			LPTSTR pszUser = new TCHAR [10000], pszPassword = new TCHAR [10000];
 			if (dnp->pszUserName)
-				strcpy (pszUser, dnp->pszUserName);
+				_tcscpy (pszUser, dnp->pszUserName);
 			else
 				*pszUser = 0;
 			
 			if (dnp->pszPassword)
-				strcpy (pszPassword, dnp->pszPassword);
+				_tcscpy (pszPassword, dnp->pszPassword);
 			else
 				*pszPassword = 0;
 			
@@ -2454,12 +2454,12 @@ fsInternetResult fsInternetDownloader::QuerySize(fsInternetURLFile *file)
 			if (dnp->pszUserName == NULL || *dnp->pszUserName == 0)
 			{
 				SAFE_DELETE_ARRAY (dnp->pszUserName);
-				dnp->pszUserName = new char [strlen (pszUser) + 1];
-				strcpy (dnp->pszUserName, pszUser);
+				dnp->pszUserName = new TCHAR [_tcslen (pszUser) + 1];
+				_tcscpy (dnp->pszUserName, pszUser);
 				
 				SAFE_DELETE_ARRAY (dnp->pszPassword);
-				dnp->pszPassword = new char [strlen (pszPassword) + 1];
-				strcpy (dnp->pszPassword, pszPassword);
+				dnp->pszPassword = new TCHAR [_tcslen (pszPassword) + 1];
+				_tcscpy (dnp->pszPassword, pszPassword);
 			}
 			
 			delete [] pszUser; delete [] pszPassword;
@@ -2490,7 +2490,7 @@ fsInternetResult fsInternetDownloader::QuerySize(fsInternetURLFile *file)
 			m_strFileName = m_strSuggFileName;
 		else
 		{
-			char szFile [10000];
+			TCHAR szFile [10000];
 			fsFileNameFromUrlPath (DNP ()->pszPathName, DNP ()->enProtocol == NP_FTP,
 				TRUE, szFile, sizeof (szFile));
 			m_strFileName = szFile;
@@ -2529,7 +2529,7 @@ fsInternetResult fsInternetDownloader::LaunchOneMoreSection()
 	return IR_S_FALSE;
 }
 
-void fsInternetDownloader::_InetFileDialogFunc(fsInetFileDialogDirection dir, LPCSTR pszMsg, LPVOID lp1, LPVOID lp2)
+void fsInternetDownloader::_InetFileDialogFunc(fsInetFileDialogDirection dir, LPCTSTR pszMsg, LPVOID lp1, LPVOID lp2)
 {
 	fsInternetDownloader* pThis = (fsInternetDownloader*) lp1;
 	int sect = (int) lp2;
@@ -2559,7 +2559,7 @@ int fsInternetDownloader::GetMirrorURLCount()
 	return m_vMirrs.size ();
 }
 
-fsInternetResult fsInternetDownloader::AddMirrorURL(LPCSTR pszUrl, LPCSTR pszUser, LPCSTR pszPassword, BOOL bDontMeasureSpeed)
+fsInternetResult fsInternetDownloader::AddMirrorURL(LPCTSTR pszUrl, LPCTSTR pszUser, LPCTSTR pszPassword, BOOL bDontMeasureSpeed)
 {
 	fsInternetResult ir;
 
@@ -2580,11 +2580,11 @@ fsInternetResult fsInternetDownloader::AddMirrorURL(LPCSTR pszUrl, LPCSTR pszUse
 		SAFE_DELETE_ARRAY (dnp.pszUserName);
 		SAFE_DELETE_ARRAY (dnp.pszPassword);
 
-		dnp.pszUserName = new char [strlen (pszUser) + 1];
-		strcpy (dnp.pszUserName, pszUser);
+		dnp.pszUserName = new TCHAR [_tcslen (pszUser) + 1];
+		_tcscpy (dnp.pszUserName, pszUser);
 
-		dnp.pszPassword = new char [pszPassword ? strlen (pszPassword) + 1 : 1];
-		strcpy (dnp.pszPassword, pszPassword ? pszPassword : "");
+		dnp.pszPassword = new TCHAR [pszPassword ? _tcslen (pszPassword) + 1 : 1];
+		_tcscpy (dnp.pszPassword, pszPassword ? pszPassword : _T(""));
 	}
 
 	AddMirror (&dnp, TRUE, bDontMeasureSpeed);
@@ -2599,7 +2599,7 @@ fsInternetResult fsInternetDownloader::FindMirrors()
 	if (m_dwState & IDS_MIRRSEARCHPERFORMED)
 		return IR_SUCCESS;
 
-	char szFileName [10000];
+	TCHAR szFileName [10000];
 
 	if (m_strFileName.Length () == 0)
 	{
@@ -2607,7 +2607,7 @@ fsInternetResult fsInternetDownloader::FindMirrors()
 			szFileName, sizeof (szFileName));
 	}
 	else
-		strcpy (szFileName, m_strFileName);
+		_tcscpy (szFileName, m_strFileName);
 
 	fsMirrorURLsMgr_FileMirrorsDotCom mirrors;
 #ifndef FDM_DLDR__RAWCODEONLY
@@ -2621,7 +2621,7 @@ fsInternetResult fsInternetDownloader::FindMirrors()
 	mirrors.Set_EventFunc (_MirrMgrEvents, this);
 
 	vmsInternetSession* pSession = new vmsInternetSession;
-	char szProxy [10000];
+	TCHAR szProxy [10000];
 	vmsMakeWinInetProxy (DNP ()->pszProxyName, DNP ()->enProtocol, DNP ()->enProtocol, szProxy);
 	fsInternetResult ir  = pSession->Create (DNP()->pszAgent, DNP()->enAccType, szProxy, DNP ()->enProtocol);
 	if (ir != IR_SUCCESS)
@@ -2845,7 +2845,7 @@ void fsInternetDownloader::RemoveAllMirrors()
 
 	m_vMirrs.clear ();
 	m_dwState &= ~ IDS_MIRRSEARCHPERFORMED;
-	m_strFileName = "";
+	m_strFileName = _T("");
 }
 
 void fsInternetDownloader::AddMirror(fsDownload_NetworkProperties *dnp, BOOL bIsGood, BOOL bDontMeasureSpeed)
@@ -2885,7 +2885,7 @@ void fsInternetDownloader::Set_MirrPingTime(int iMirr, DWORD dw)
 	m_vMirrs [iMirr].dwPingTime = dw;
 }
 
-LPCSTR fsInternetDownloader::GetContentType()
+LPCTSTR fsInternetDownloader::GetContentType()
 {
 	return m_strContentType;
 }
@@ -2904,7 +2904,7 @@ UINT64 fsInternetDownloader::GetDownloadedBytesCount()
 	return m_vSections.size () ? m_vSections [0].uDCurrent + m_dwDataLenInCache : 0;
 }
 
-LPCSTR fsInternetDownloader::Get_FileName()
+LPCTSTR fsInternetDownloader::Get_FileName()
 {
 	return m_strFileName;
 }
@@ -2943,8 +2943,8 @@ BOOL fsInternetDownloader::RestoreSectionsState_v5(LPBYTE pBuffer, DWORD )
 	if (iStrLen > MY_MAX_PATH || iStrLen < 0)
 		return FALSE;
 	
-	char sz [10000];
-	strncpy (sz, LPCSTR (pBuffer), iStrLen);
+	TCHAR sz [10000];
+	_tcsncpy (sz, LPCTSTR (pBuffer), iStrLen);
 	sz [iStrLen] = 0;
 	m_strFileName = sz;
 	pBuffer += iStrLen;
@@ -3161,14 +3161,14 @@ BOOL fsInternetDownloader::IsMayZIP(BOOL bIsExeMay)
 	if (GetSSFileSize () == _UI64_MAX)
 		return FALSE;	
 
-	LPCSTR pszExt = strrchr (m_strFileName, '.');
+	LPCTSTR pszExt = _tcsrchr (m_strFileName, _T('.'));
 	if (pszExt++ == NULL)
 		return FALSE;	
 	
-	if (stricmp (pszExt, "zip") == 0)
+	if (stricmp (pszExt, _T("zip")) == 0)
 		return TRUE;	
 	
-	if (bIsExeMay && stricmp (pszExt, "exe") == 0)
+	if (bIsExeMay && stricmp (pszExt, _T("exe")) == 0)
 		return TRUE; 
 
 	return FALSE; 
@@ -3220,14 +3220,14 @@ BOOL fsInternetDownloader::RemoveMirror(int iIndex)
 fsString fsInternetDownloader::get_URL(BOOL bIncludeAuthInfo)
 {
 	fsURL url;
-	char szUrl [10000];
+	TCHAR szUrl [10000];
 	DWORD dw = sizeof (szUrl);
 
 	if (IR_SUCCESS != url.Create (fsNPToScheme (DNP ()->enProtocol), DNP ()->pszServerName, DNP ()->uServerPort,
-			bIncludeAuthInfo ? DNP ()->pszUserName : "", bIncludeAuthInfo ? DNP ()->pszPassword : "", 
+			bIncludeAuthInfo ? DNP ()->pszUserName : _T(""), bIncludeAuthInfo ? DNP ()->pszPassword : _T(""), 
 			DNP ()->pszPathName, szUrl, &dw))
 	{
-		return "";
+		return _T("");
 	}
 
 	return szUrl;
@@ -3316,22 +3316,22 @@ void fsInternetDownloader::CheckIfSuggFileNameEncoded()
 	if (m_strSuggFileName.Length () < 13)
 		return;
 
-	if (strnicmp (m_strSuggFileName, "=?UTF-8?", 8))
+	if (strnicmp (m_strSuggFileName, _T("=?UTF-8?"), 8))
 		return;
 
-	LPCSTR psz = &m_strSuggFileName [8];
-	if (*psz != 'B' && *psz != 'b') 
+	LPCTSTR psz = &m_strSuggFileName [8];
+	if (*psz != _T('B') && *psz != _T('b')) 
 		return;
-	if (psz [1] != '?')
+	if (psz [1] != _T('?'))
 		return; 
 
 	psz += 2;
 
 	fsString str;
-	while (psz [1] && (*psz != '?' || psz [1] != '='))
+	while (psz [1] && (*psz != _T('?') || psz [1] != _T('=')))
 		str += *psz++;
 	
-	if (*psz != '?' || psz [1] != '=')
+	if (*psz != _T('?') || psz [1] != _T('='))
 		return; 
 
 	LPBYTE pb = new BYTE [str.Length ()];
@@ -3344,12 +3344,12 @@ void fsInternetDownloader::CheckIfSuggFileNameEncoded()
 	}
 
 	LPWSTR pwsz = new wchar_t [len+1];
-	MultiByteToWideChar (CP_UTF8, 0, (LPCSTR)pb, len, pwsz, len);
+	MultiByteToWideChar (CP_UTF8, 0, (LPCTSTR)pb, len, pwsz, len);
 
-	WideCharToMultiByte (CP_ACP, 0, pwsz, len, (LPSTR)pb, len, NULL, NULL);
+	WideCharToMultiByte (CP_ACP, 0, pwsz, len, (LPTSTR)pb, len, NULL, NULL);
 	pb [len] = 0;
 
-	m_strSuggFileName = (LPSTR)pb;
+	m_strSuggFileName = (LPTSTR)pb;
 
 	delete [] pb;
 	delete [] pwsz;

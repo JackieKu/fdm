@@ -142,7 +142,7 @@ HRESULT CWGUrlReceiver::AddDownload_imp(_ic_DownloadInfo* dlinfo)
 			DWCD_NOFORCEAUTOLAUNCH, NULL, &ap, &res);
 
 	if (bAdded && bSilent)
-		CMainFrame::ShowTimeoutBalloon (W2A (dlinfo->bstrUrl), "Download added", NIIF_INFO, TRUE);
+		CMainFrame::ShowTimeoutBalloon (W2A (dlinfo->bstrUrl), _T("Download added"), NIIF_INFO, TRUE);
 
 	
 	if (res == ID_DLNOTADDED)
@@ -195,14 +195,14 @@ BOOL CWGUrlReceiver::is_ExtToSkip()
 	if (url.Crack (W2A (m_dlInfo.bstrUrl)) != IR_SUCCESS)
 		return TRUE;
 
-	char szFile [MY_MAX_PATH];
+	TCHAR szFile [MY_MAX_PATH];
 	fsFileNameFromUrlPath (url.GetPath (), url.GetInternetScheme () == INTERNET_SCHEME_FTP,
 		TRUE, szFile, sizeof (szFile));
 
 	if (*szFile == 0)
 		return FALSE;
 
-	LPCSTR pszExt = strrchr (szFile, '.');
+	LPCTSTR pszExt = _tcsrchr (szFile, _T('.'));
 	if (pszExt == NULL) 
 		return FALSE;
 

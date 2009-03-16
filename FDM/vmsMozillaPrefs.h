@@ -12,17 +12,17 @@
 #include <windows.h>
 #include "fsString.h"  
 
-#define MOZILLAPREFS_VALUE_NOT_FOUND	"vmsMozillaPrefs::value not found"
-#define MOZILLAPREFS_UNEXPECTED_ERROR	"vmsMozillaPrefs::unexp error"
+#define MOZILLAPREFS_VALUE_NOT_FOUND	_T("vmsMozillaPrefs::value not found")
+#define MOZILLAPREFS_UNEXPECTED_ERROR	_T("vmsMozillaPrefs::unexp error")
 
 class vmsMozillaPrefs  
 {
 public:
 	
-	bool LoadPrefs (LPCSTR pszFile);
+	bool LoadPrefs (LPCTSTR pszFile);
 	
 	
-	fsString get_Value (LPCSTR pszPrefName) const;
+	fsString get_Value (LPCTSTR pszPrefName) const;
 	
 	void Free();
 	

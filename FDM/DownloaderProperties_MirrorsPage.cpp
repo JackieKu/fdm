@@ -95,8 +95,8 @@ BOOL CDownloaderProperties_MirrorsPage::OnInitDialog()
 
 	CheckDlgButton (IDC_DONTIFSIZEUNK, _App.Mirr_DontSearchIfSizeUnk () ? BST_CHECKED : BST_UNCHECKED);
 
-	m_wndMirrServers.AddString ("FileSearching.com");
-	m_wndMirrServers.AddString ("FindFiles.com");
+	m_wndMirrServers.AddString (_T("FileSearching.com"));
+	m_wndMirrServers.AddString (_T("FindFiles.com"));
 	m_wndMirrServers.SetCurSel (_App.Mirr_Server ());
 	
 	ApplyLanguage ();

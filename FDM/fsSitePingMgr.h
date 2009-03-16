@@ -35,7 +35,7 @@ class fsSitePingMgr
 {
 public:
 	
-	DWORD Ping (LPCSTR pszSite);
+	DWORD Ping (LPCTSTR pszSite);
 	
 	BOOL TestState();
 	

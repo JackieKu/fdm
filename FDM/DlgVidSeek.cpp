@@ -153,7 +153,7 @@ void CDlgVidSeek::Set_MediaSeeking(IMediaSeeking *seek)
 CString CDlgVidSeek::GetDuration()
 {
 	if (m_seek == NULL)
-		return "00:00/00:00";
+		return _T("00:00/00:00");
 
 	LONGLONG cur, stop;
 
@@ -172,7 +172,7 @@ CString CDlgVidSeek::GetDuration()
 	str1 = DurationToString (cur, &bH);
 
 	CString strDuration;
-	strDuration.Format ("%s/%s", str1, str2);
+	strDuration.Format (_T("%s/%s"), str1, str2);
 
 	return strDuration;
 }
@@ -192,10 +192,10 @@ CString CDlgVidSeek::DurationToString(LONGLONG llDur, BOOL* pbNeedHours)
 	BOOL bH = pbNeedHours ? *pbNeedHours : FALSE;
 
 	if (nHours == 0 && bH == FALSE)
-		strDur.Format ("%02d:%02d", nMinutes, nSeconds);
+		strDur.Format (_T("%02d:%02d"), nMinutes, nSeconds);
 	else
 	{
-		strDur.Format ("%02d:%02d:%02d", nHours, nMinutes, nSeconds);
+		strDur.Format (_T("%02d:%02d:%02d"), nHours, nMinutes, nSeconds);
 		bH = TRUE;
 	}
 

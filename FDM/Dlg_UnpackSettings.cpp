@@ -51,10 +51,10 @@ BOOL CDlg_UnpackSettings::OnInitDialog()
 
 void CDlg_UnpackSettings::OnBrowse() 
 {
-	CString str = "";
+	CString str = _T("");
 	GetDlgItemText (IDC_DSTFOLDER, str);
 
-	if (str.GetLength () > 3 && (str [str.GetLength () - 1] == '\\' || str [str.GetLength () - 1] == '/'))
+	if (str.GetLength () > 3 && (str [str.GetLength () - 1] == _T('\\') || str [str.GetLength () - 1] == _T('/')))
 		str.GetBuffer (0) [str.GetLength () - 1] = 0;
 
 	CFolderBrowser *fb = CFolderBrowser::Create (LS (L_CHOOSEOUTFOLDER), str, NULL, this);

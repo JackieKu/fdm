@@ -158,7 +158,7 @@ protected:
 	
 	virtual DWORD SaveArchiveHeaders_imp();
 	
-	int FindFile (LPCSTR pszFile, int iProbIndex = -1);
+	int FindFile (LPCTSTR pszFile, int iProbIndex = -1);
 	
 	void Free();
 	

@@ -49,7 +49,7 @@ fsWebPageDownloader::~fsWebPageDownloader()
 	DeleteCriticalSection (&m_csthreadProcessDoneAndRedirEventsAccLists);
 }
 
-BOOL fsWebPageDownloader::Create(LPCSTR pszPageURL, BOOL bAutoStart, fsSchedule *task)
+BOOL fsWebPageDownloader::Create(LPCTSTR pszPageURL, BOOL bAutoStart, fsSchedule *task)
 {
 	if (AddPage (NULL, pszPageURL, WPDPT_PAGE, TRUE, bAutoStart, task))
 	{
@@ -60,7 +60,7 @@ BOOL fsWebPageDownloader::Create(LPCSTR pszPageURL, BOOL bAutoStart, fsSchedule 
 	return FALSE;
 }
 
-fsDLWebPage* fsWebPageDownloader::AddPage(fs::ListTree <fsDLWebPage> *root, LPCSTR pszPageURL, vmsWPDPageType enPageType, BOOL bSetCTReq, BOOL bAutoStart, fsSchedule *task)
+fsDLWebPage* fsWebPageDownloader::AddPage(fs::ListTree <fsDLWebPage> *root, LPCTSTR pszPageURL, vmsWPDPageType enPageType, BOOL bSetCTReq, BOOL bAutoStart, fsSchedule *task)
 {
 	fsDLWebPage wp;
 	vmsDownloadSmartPtr dld;
@@ -72,7 +72,7 @@ fsDLWebPage* fsWebPageDownloader::AddPage(fs::ListTree <fsDLWebPage> *root, LPCS
 	if (enPageType != WPDPT_PAGE)
 		bSetCTReq = FALSE;
 
-	LPSTR pszWA; 
+	LPTSTR pszWA; 
 	
 	if (fsIsAnchorInUrl (pszPageURL, &pszWA))
 	{
@@ -99,17 +99,17 @@ fsDLWebPage* fsWebPageDownloader::AddPage(fs::ListTree <fsDLWebPage> *root, LPCS
 		SAFE_DELETE_ARRAY (dnp->pszUserName);
 		SAFE_DELETE_ARRAY (dnp->pszPassword);
 
-		fsnew (dnp->pszUserName, char, m_wpds.strUserName.Length () + 1);
-		fsnew (dnp->pszPassword, char, m_wpds.strPassword.Length () + 1);
-		strcpy (dnp->pszUserName, m_wpds.strUserName);
-		strcpy (dnp->pszPassword, m_wpds.strPassword);
+		fsnew (dnp->pszUserName, TCHAR, m_wpds.strUserName.Length () + 1);
+		fsnew (dnp->pszPassword, TCHAR, m_wpds.strPassword.Length () + 1);
+		_tcscpy (dnp->pszUserName, m_wpds.strUserName);
+		_tcscpy (dnp->pszPassword, m_wpds.strPassword);
 	}
 
 	if (root == NULL)	
 		m_strStartServer = dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszServerName;	
 
 	
-	char szAddPath [10000];
+	TCHAR szAddPath [10000];
 	*szAddPath = 0;	
 
 	
@@ -117,8 +117,8 @@ fsDLWebPage* fsWebPageDownloader::AddPage(fs::ListTree <fsDLWebPage> *root, LPCS
 	{
 		
 
-		char szFilePath [10000];
-		char szPath [10000];
+		TCHAR szFilePath [10000];
+		TCHAR szPath [10000];
 
 		
 		fsFilePathFromUrlPath (dnp->pszPathName+1, dnp->enProtocol == NP_FTP,
@@ -129,20 +129,20 @@ fsDLWebPage* fsWebPageDownloader::AddPage(fs::ListTree <fsDLWebPage> *root, LPCS
 		fsPathToGoodPath (szPath);
 
 		
-		if (strcmp (szPath, "\\") == 0)
+		if (strcmp (szPath, _T("\\")) == 0)
 			*szPath = 0;	
 
 		
 		
 		
 		_tcscpy (szAddPath, m_strStartServer);
-		_tcscat (szAddPath, "\\");
+		_tcscat (szAddPath, _T("\\"));
 		_tcscat (szAddPath, szPath);
 	}
 
 	
-	fsnew (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, char, m_wpds.strFolderSaveTo.Length () + strlen (szAddPath) + 1);
-	LPSTR pszFile = dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName;
+	fsnew (dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, TCHAR, m_wpds.strFolderSaveTo.Length () + _tcslen (szAddPath) + 1);
+	LPTSTR pszFile = dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName;
 	_tcscpy (pszFile, m_wpds.strFolderSaveTo);	
 	_tcscat (pszFile, szAddPath);		
 
@@ -155,7 +155,7 @@ fsDLWebPage* fsWebPageDownloader::AddPage(fs::ListTree <fsDLWebPage> *root, LPCS
 	if ((m_wpds.dwFlags & WPDF_DONTSTOREPAGES) == 0)
 	{
 		
-		if (FALSE == dld->pMgr->GetDownloadMgr ()->InitFile (TRUE, enPageType == WPDPT_PAGE && m_wpds.bSavePagesUnderHTM ? "htm" : NULL))
+		if (FALSE == dld->pMgr->GetDownloadMgr ()->InitFile (TRUE, enPageType == WPDPT_PAGE && m_wpds.bSavePagesUnderHTM ? _T("htm") : NULL))
 			return NULL;
 	}
 
@@ -382,12 +382,12 @@ void fsWebPageDownloader::OnWPDownloadDone(vmsDownloadSmartPtr dld)
 
 	SAFE_DELETE (wptree->GetData ().pvUnpLinks);
 
-	char szFile [MY_MAX_PATH];
+	TCHAR szFile [MY_MAX_PATH];
 	if (fsFileNameFromUrlPath (dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszPathName, 
 			dld->pMgr->GetDownloadMgr ()->GetDNP ()->enProtocol == NP_FTP,
 			TRUE, szFile, sizeof (szFile)))
 	{
-		LPCSTR pszExt = strrchr (szFile, '.');
+		LPCTSTR pszExt = _tcsrchr (szFile, _T('.'));
 		if (pszExt == NULL || IsExtInExtsStr (m_wpds.strHTMLExts, pszExt+1) || *szFile == 0)
 		{
 			
@@ -451,8 +451,8 @@ void fsWebPageDownloader::ParseHTMLFile(t_wptree wptree, BOOL bFixUrlsOnly)
 	
 
 	DWORD dwSize = GetFileSize (hFile, NULL);
-	LPSTR pszHTML;
-	fsnew (pszHTML, char, int (dwSize*1.5) + 50000 + 1); 
+	LPTSTR pszHTML;
+	fsnew (pszHTML, TCHAR, int (dwSize*1.5) + 50000 + 1); 
 
 	UINT newlen = 0;
 	if (ReadFile (hFile, pszHTML, dwSize, &dwSize, NULL))
@@ -477,7 +477,7 @@ void fsWebPageDownloader::ParseHTMLFile(t_wptree wptree, BOOL bFixUrlsOnly)
 	wp->bState |= WPSTATE_PAGEPROCESSED;
 }
 
-UINT fsWebPageDownloader::ParseHTML(LPCSTR pszHTML, t_wptree wptree, BOOL bFixUrlsOnly)
+UINT fsWebPageDownloader::ParseHTML(LPCTSTR pszHTML, t_wptree wptree, BOOL bFixUrlsOnly)
 {
 	if ((m_wpds.dwFlags & WPDF_DONTSTOREPAGES) && bFixUrlsOnly)
 		return 0;
@@ -487,13 +487,13 @@ UINT fsWebPageDownloader::ParseHTML(LPCSTR pszHTML, t_wptree wptree, BOOL bFixUr
 	html.SetKillDupes (FALSE);
 
 	
-	html.ParseHTML ((LPSTR)pszHTML);
+	html.ParseHTML ((LPTSTR)pszHTML);
 
 	
 
 	
-	char szBaseURL [10000];
-	LPCSTR pszBaseURL = html.Get_BaseURL ();
+	TCHAR szBaseURL [10000];
+	LPCTSTR pszBaseURL = html.Get_BaseURL ();
 	if (*pszBaseURL == 0)
 		pszBaseURL = wptree->GetData ().strURL;
 	else
@@ -505,8 +505,8 @@ UINT fsWebPageDownloader::ParseHTML(LPCSTR pszHTML, t_wptree wptree, BOOL bFixUr
 			_tcscat (szBaseURL, pszBaseURL);
 			if (url.Crack (szBaseURL) == IR_SUCCESS)
 			{
-				if (szBaseURL [strlen (szBaseURL)-1] != '/' && szBaseURL [strlen (szBaseURL)-1] != '\\')
-					_tcscat (szBaseURL, "/");
+				if (szBaseURL [_tcslen (szBaseURL)-1] != _T('/') && szBaseURL [_tcslen (szBaseURL)-1] != _T('\\'))
+					_tcscat (szBaseURL, _T("/"));
 
 				pszBaseURL = szBaseURL;
 			}
@@ -515,10 +515,10 @@ UINT fsWebPageDownloader::ParseHTML(LPCSTR pszHTML, t_wptree wptree, BOOL bFixUr
 		}
 		else
 		{
-			if (pszBaseURL [strlen (pszBaseURL)-1] != '/' && pszBaseURL [strlen (pszBaseURL)-1] != '\\')
+			if (pszBaseURL [_tcslen (pszBaseURL)-1] != _T('/') && pszBaseURL [_tcslen (pszBaseURL)-1] != _T('\\'))
 			{
 				_tcscpy (szBaseURL, pszBaseURL);
-				_tcscat (szBaseURL, "/");
+				_tcscat (szBaseURL, _T("/"));
 				pszBaseURL = szBaseURL;
 			}
 		}
@@ -558,20 +558,20 @@ UINT fsWebPageDownloader::ParseHTML(LPCSTR pszHTML, t_wptree wptree, BOOL bFixUr
 	return html.GetHTMLLength ();
 }
 
-int fsWebPageDownloader::ParseHTMLUrls(fsHTMLParser &parser, t_wptree wptree, BOOL bFixUrlsOnly, LPCSTR pszBaseURL)
+int fsWebPageDownloader::ParseHTMLUrls(fsHTMLParser &parser, t_wptree wptree, BOOL bFixUrlsOnly, LPCTSTR pszBaseURL)
 {
 	int cAdded = 0;
 
 	
 	for (int i = 0; i < parser.GetUrlCount (); i ++)
 	{
-		LPCSTR pszUrl = parser.GetUrl (i);
+		LPCTSTR pszUrl = parser.GetUrl (i);
 
 		
-		if (*pszUrl == '#')
+		if (*pszUrl == _T('#'))
 			continue;	
 
-		LPSTR pszFullUrl;
+		LPTSTR pszFullUrl;
 		
 		fsUrlToFullUrl (pszBaseURL, pszUrl, &pszFullUrl);
 		if (pszFullUrl == NULL)
@@ -590,15 +590,15 @@ int fsWebPageDownloader::ParseHTMLUrls(fsHTMLParser &parser, t_wptree wptree, BO
 			continue;
 		}
 
-		LPCSTR pszPath = url.GetPath ();
+		LPCTSTR pszPath = url.GetPath ();
 
 		
-		char szFile [MY_MAX_PATH];
+		TCHAR szFile [MY_MAX_PATH];
 		fsFileNameFromUrlPath (pszPath, url.GetInternetScheme () == INTERNET_SCHEME_FTP,
 			TRUE, szFile, sizeof (szFile));
 
 		
-		LPCSTR pszExt = strrchr (szFile, '.');
+		LPCTSTR pszExt = _tcsrchr (szFile, _T('.'));
 
 		BOOL bExt = FALSE;		
 		BOOL bWebPage = FALSE;	
@@ -613,7 +613,7 @@ int fsWebPageDownloader::ParseHTMLUrls(fsHTMLParser &parser, t_wptree wptree, BO
 			bWebPage = TRUE; 
 		}
 
-		if (*pszPath == 0 || pszPath [strlen (pszPath)-1] == '/' || pszPath [strlen (pszPath)-1] == '\\')
+		if (*pszPath == 0 || pszPath [_tcslen (pszPath)-1] == _T('/') || pszPath [_tcslen (pszPath)-1] == _T('\\'))
 			bWebPage = TRUE;
 
 		if (url.GetInternetScheme () != INTERNET_SCHEME_HTTP && url.GetInternetScheme () != INTERNET_SCHEME_HTTPS)
@@ -672,7 +672,7 @@ int fsWebPageDownloader::ParseHTMLUrls(fsHTMLParser &parser, t_wptree wptree, BO
 			continue;
 		}
 		
-		LPSTR pszWA = NULL, pszFA = NULL; 
+		LPTSTR pszWA = NULL, pszFA = NULL; 
 
 		if (bWebPage && bFixUrlsOnly == FALSE)
 		{
@@ -719,7 +719,7 @@ int fsWebPageDownloader::ParseHTMLUrls(fsHTMLParser &parser, t_wptree wptree, BO
 				
 				GetFileForReplace (&wptree->GetData (), wp, szFile);
 				if (pszFA)	
-					strcat (szFile, strchr (pszFA, '#'));	
+					_tcscat (szFile, _tcschr (pszFA, _T('#')));	
 				
 				
 				parser.ReplaceUrl (i, szFile);	
@@ -736,7 +736,7 @@ int fsWebPageDownloader::ParseHTMLUrls(fsHTMLParser &parser, t_wptree wptree, BO
 	return cAdded;
 }
 
-fsDLWebPage* fsWebPageDownloader::FindWebPage(LPCSTR pszFullUrl)
+fsDLWebPage* fsWebPageDownloader::FindWebPage(LPCTSTR pszFullUrl)
 {
 	fsURL url1, url2;
 
@@ -762,7 +762,7 @@ fsDLWebPage* fsWebPageDownloader::FindWebPage(LPCSTR pszFullUrl)
 	return NULL;	
 }
 
-int fsWebPageDownloader::ParseHTMLImages(fsHTMLParser &parser, t_wptree wptree, BOOL bFixUrlsOnly, LPCSTR pszBaseURL)
+int fsWebPageDownloader::ParseHTMLImages(fsHTMLParser &parser, t_wptree wptree, BOOL bFixUrlsOnly, LPCTSTR pszBaseURL)
 {
 	
 
@@ -770,9 +770,9 @@ int fsWebPageDownloader::ParseHTMLImages(fsHTMLParser &parser, t_wptree wptree, 
 
 	for (int i = 0; i < parser.GetImageCount (); i ++)
 	{
-		LPCSTR pszUrl = parser.GetImage (i);
+		LPCTSTR pszUrl = parser.GetImage (i);
 
-		LPSTR pszFullUrl;
+		LPTSTR pszFullUrl;
 		fsUrlToFullUrl (pszBaseURL, pszUrl, &pszFullUrl);
 		if (pszFullUrl == NULL)
 			continue;
@@ -790,10 +790,10 @@ int fsWebPageDownloader::ParseHTMLImages(fsHTMLParser &parser, t_wptree wptree, 
 			continue;
 		}
 
-		char szFile [MY_MAX_PATH];
+		TCHAR szFile [MY_MAX_PATH];
 		fsFileNameFromUrlPath (url.GetPath (), url.GetInternetScheme () == INTERNET_SCHEME_FTP,
 			TRUE, szFile, sizeof (szFile));
-		LPCSTR pszExt = strrchr (szFile, '.');
+		LPCTSTR pszExt = _tcsrchr (szFile, _T('.'));
 		BOOL bExt = FALSE;
 		if (pszExt++)
 			bExt = IsExtInExtsStr (m_wpds.strImgsExts, pszExt);
@@ -815,8 +815,8 @@ int fsWebPageDownloader::ParseHTMLImages(fsHTMLParser &parser, t_wptree wptree, 
 			if (iUrl != -1)
 			{
 				fsURL url;
-				LPCSTR pszUrlTo = parser.GetUrl (iUrl);
-				LPSTR pszFullUrlTo;
+				LPCTSTR pszUrlTo = parser.GetUrl (iUrl);
+				LPTSTR pszFullUrlTo;
 				fsUrlToFullUrl (wptree->GetData ().strURL, pszUrlTo, &pszFullUrlTo);
 
 				if (pszFullUrlTo)
@@ -876,7 +876,7 @@ int fsWebPageDownloader::ParseHTMLImages(fsHTMLParser &parser, t_wptree wptree, 
 	return cAdded;
 }
 
-LPCSTR fsWebPageDownloader::GetStartURL()
+LPCTSTR fsWebPageDownloader::GetStartURL()
 {
 	return m_pages.GetData ().strURL;
 }
@@ -1011,9 +1011,9 @@ BOOL fsWebPageDownloader::IsDownloading()
 	return FALSE;
 }
 
-BOOL fsWebPageDownloader::CrackUrl(LPCSTR pszFullUrl, LPSTR *ppszUrlWA, LPSTR *ppszFA)
+BOOL fsWebPageDownloader::CrackUrl(LPCTSTR pszFullUrl, LPTSTR *ppszUrlWA, LPTSTR *ppszFA)
 {
-	LPCSTR pszA;	
+	LPCTSTR pszA;	
 
 	
 	if (fsIsAnchorInUrl (pszFullUrl, ppszUrlWA, &pszA) == FALSE)
@@ -1025,14 +1025,14 @@ BOOL fsWebPageDownloader::CrackUrl(LPCSTR pszFullUrl, LPSTR *ppszUrlWA, LPSTR *p
 	{
 		
 
-		char szFile [10000];	
+		TCHAR szFile [10000];	
         *szFile = 0;
 		fsFileNameFromUrlPath (*ppszUrlWA, FALSE, FALSE, szFile, sizeof (szFile));		
 
-		fsnew (*ppszFA, char, strlen (szFile) + strlen (pszA) + 1);
+		fsnew (*ppszFA, TCHAR, _tcslen (szFile) + _tcslen (pszA) + 1);
 
-		strcpy (*ppszFA, szFile);
-		strcat (*ppszFA, pszA);
+		_tcscpy (*ppszFA, szFile);
+		_tcscat (*ppszFA, pszA);
 	}
 
 	return TRUE;
@@ -1061,20 +1061,20 @@ void fsWebPageDownloader::ReadDefaultWPDS(fsWPDSettings *wpds)
 	wpds->dwFlags = WPDF_KEEPFOLDERSTRUCTURE | WPDF_DELCOMPLETEDDLDS;
 }
 
-int fsWebPageDownloader::ParseHTMLLinkUrls(fsHTMLParser &parser, t_wptree wptree, BOOL bFixUrlsOnly, LPCSTR pszBaseURL)
+int fsWebPageDownloader::ParseHTMLLinkUrls(fsHTMLParser &parser, t_wptree wptree, BOOL bFixUrlsOnly, LPCTSTR pszBaseURL)
 {
 	
 	int cAdded = 0;
 
 	for (int i = 0; i < parser.GetLinkUrlCount (); i ++)
 	{
-		LPCSTR pszUrl = parser.GetLinkUrl (i);
+		LPCTSTR pszUrl = parser.GetLinkUrl (i);
 		fsLinkRelType lrt = parser.GetLinkUrlRelType (i);
 
 		if (lrt != LRT_STYLESHEET)
 			continue;
 
-		LPSTR pszFullUrl;
+		LPTSTR pszFullUrl;
 		fsUrlToFullUrl (pszBaseURL, pszUrl, &pszFullUrl);
 		if (pszFullUrl == NULL)
 			continue;
@@ -1088,7 +1088,7 @@ int fsWebPageDownloader::ParseHTMLLinkUrls(fsHTMLParser &parser, t_wptree wptree
 			continue;
 		}
 
-		char szFile [MY_MAX_PATH];
+		TCHAR szFile [MY_MAX_PATH];
 		fsFileNameFromUrlPath (url.GetPath (), url.GetInternetScheme () == INTERNET_SCHEME_FTP,
 			TRUE, szFile, sizeof (szFile));
 		
@@ -1574,7 +1574,7 @@ t_wptree fsWebPageDownloader::GetRootPage()
 	return &m_pages;
 }
 
-BOOL fsWebPageDownloader::IsUrlsEqual(fsURL &url1, LPCSTR pszUrl)
+BOOL fsWebPageDownloader::IsUrlsEqual(fsURL &url1, LPCTSTR pszUrl)
 {
 	fsURL url2;
 	if (url2.Crack (pszUrl) == IR_SUCCESS)
@@ -1590,23 +1590,23 @@ BOOL fsWebPageDownloader::IsUrlsEqual(fsURL &url1, LPCSTR pszUrl)
 			
 			
 
-			if (*url2.GetPath () == 0 || strcmp (url2.GetPath (), "/")  == 0 || strcmp (url2.GetPath (), "\\")  == 0)
+			if (*url2.GetPath () == 0 || _tcscmp (url2.GetPath (), _T("/"))  == 0 || _tcscmp (url2.GetPath (), _T("\\"))  == 0)
 			{
-				char szFile [MY_MAX_PATH];
+				TCHAR szFile [MY_MAX_PATH];
 				if (fsFileNameFromUrlPath (url1.GetPath (), url1.GetInternetScheme () == INTERNET_SCHEME_FTP,
 						FALSE, szFile, sizeof (szFile)))
 				{
-					LPCSTR pszPath = url1.GetPath (); 
-					if (*pszPath == '\\' || *pszPath == '/') 
+					LPCTSTR pszPath = url1.GetPath (); 
+					if (*pszPath == _T('\\') || *pszPath == _T('/')) 
 						pszPath++;
 					
 					if (strcmp (szFile, pszPath) == 0)
 					{
-						char *pszExt = strrchr (szFile, '.');
+						TCHAR *pszExt = _tcsrchr (szFile, _T('.'));
 						if (pszExt)
 						{
 							
-							if (pszExt - szFile == 5 && strncmp (szFile, "index", 5) == 0)
+							if (pszExt - szFile == 5 && _tcsncmp (szFile, _T("index"), 5) == 0)
 							{
 								
 								if (IsExtInExtsStr (m_wpds.strHTMLExts, pszExt+1))
@@ -1824,28 +1824,28 @@ BOOL fsWebPageDownloader::Load(HANDLE hFile, WORD wVer)
 }
 
 #pragma warning (disable:4706)
-void fsWebPageDownloader::GetPtrToFile(LPCSTR pszToFile, LPCSTR pszFromFile, LPSTR pszPtr)
+void fsWebPageDownloader::GetPtrToFile(LPCTSTR pszToFile, LPCTSTR pszFromFile, LPTSTR pszPtr)
 {
 	
 	int cComm = 0;
 
-	char szToPath [10000];	
-	char szFromPath [10000];
+	TCHAR szToPath [10000];	
+	TCHAR szFromPath [10000];
 
 	fsGetPath (pszToFile, szToPath);
 	fsGetPath (pszFromFile, szFromPath);
 
-	int lto = strlen (szToPath);
-	int lfrom = strlen (szFromPath);
+	int lto = _tcslen (szToPath);
+	int lfrom = _tcslen (szFromPath);
 
-	LPCSTR pszTo = szToPath;
-	LPCSTR pszFrom = szFromPath;
+	LPCTSTR pszTo = szToPath;
+	LPCTSTR pszFrom = szFromPath;
 
 	cComm = min (lto, lfrom);
 
 	while (TRUE)
 	{
-		if (strnicmp (pszTo, pszFrom, cComm) == 0 && pszTo [cComm-1] == '\\')
+		if (strnicmp (pszTo, pszFrom, cComm) == 0 && pszTo [cComm-1] == _T('\\'))
 			break;	
 
 		cComm--;
@@ -1856,26 +1856,26 @@ void fsWebPageDownloader::GetPtrToFile(LPCSTR pszToFile, LPCSTR pszFromFile, LPS
 	pszTo += cComm;
 	pszFrom += cComm;
 
-	char szFile [10000];
+	TCHAR szFile [10000];
 	fsGetFileName (pszToFile, szFile);
 
 	int cUppers = 0;	
 
-	while (pszFrom = strchr (pszFrom+1, '\\'))
+	while (pszFrom = _tcschr (pszFrom+1, _T('\\')))
 		cUppers ++;
 
 	*pszPtr = 0;
 
 	while (cUppers--)
-		strcat (pszPtr, "..\\");	
+		_tcscat (pszPtr, _T("..\\"));	
 
 	
-	strcat (pszPtr, pszTo);
-	strcat (pszPtr, szFile);	
+	_tcscat (pszPtr, pszTo);
+	_tcscat (pszPtr, szFile);	
 }
 #pragma warning (default:4706)
 
-void fsWebPageDownloader::GetFileForReplace(fsDLWebPage *wpwhere, fsDLWebPage *wpwhat, LPSTR pszFile)
+void fsWebPageDownloader::GetFileForReplace(fsDLWebPage *wpwhere, fsDLWebPage *wpwhat, LPTSTR pszFile)
 {
 	fsString strFileWhat = wpwhat->dld ? wpwhat->dld->pMgr->get_OutputFilePathName () : wpwhat->strFile;
 
@@ -1891,13 +1891,13 @@ void fsWebPageDownloader::GetFileForReplace(fsDLWebPage *wpwhere, fsDLWebPage *w
 	fsPathToGoodUrlPath (pszFile);
 }
 
-void fsWebPageDownloader::GetDownloadingSiteName(LPSTR psz)
+void fsWebPageDownloader::GetDownloadingSiteName(LPTSTR psz)
 {
 	fsURL url;
 	DWORD dw = 10000;
 	url.Crack (GetStartURL ());
 	url.Create (url.GetInternetScheme (), url.GetHostName (), url.GetPort (), 
-		"", "", "", psz, &dw);
+		_T(""), _T(""), _T(""), psz, &dw);
 }
 
 void fsWebPageDownloader::Load_PerformRollback()
@@ -1921,13 +1921,13 @@ DWORD fsWebPageDownloader::OnCheckFileExtIsOK(vmsDownloadSmartPtr dld)
 		return TRUE;
 
 	
-	char szFile [MY_MAX_PATH];
+	TCHAR szFile [MY_MAX_PATH];
 	fsFileNameFromUrlPath (dld->pMgr->GetDownloadMgr ()->GetDNP ()->pszPathName, 
 		dld->pMgr->GetDownloadMgr ()->GetDNP ()->enProtocol == NP_FTP,
 		TRUE, szFile, sizeof (szFile));
 
 	
-	LPCSTR pszExt = strrchr (szFile, '.');
+	LPCTSTR pszExt = _tcsrchr (szFile, _T('.'));
 
 	BOOL bExt = FALSE;		
 
@@ -1959,7 +1959,7 @@ DWORD fsWebPageDownloader::OnCheckFileExtIsOK(vmsDownloadSmartPtr dld)
 
 void fsWebPageDownloader::CorrectUnpUrls(fsDLWebPage* wpfrom, fsDLWebPage* wpto)
 {
-	char szFile [MY_MAX_PATH];
+	TCHAR szFile [MY_MAX_PATH];
 
 	if (wpfrom == wpto)
 		return;
@@ -2013,13 +2013,13 @@ void fsWebPageDownloader::CorrectUnpUrls(fsDLWebPage* wpfrom, fsDLWebPage* wpto)
 		}
 
 		DWORD dwSize = GetFileSize (hFile, NULL);
-		LPSTR pszHTML;
-		fsnew (pszHTML, char, int (dwSize*1.5) + 10000 + 1); 
+		LPTSTR pszHTML;
+		fsnew (pszHTML, TCHAR, int (dwSize*1.5) + 10000 + 1); 
 
 		if (wpto) 
 			GetFileForReplace (wpwhere, wpto, szFile); 
 		else
-			strcpy (szFile, wpfrom->strURL); 
+			_tcscpy (szFile, wpfrom->strURL); 
 
 		UINT newlen = 0;
 		if (ReadFile (hFile, pszHTML, dwSize, &dwSize, NULL))
@@ -2067,20 +2067,20 @@ void fsWebPageDownloader::CorrectUnpUrls(fsDLWebPage* wpfrom, fsDLWebPage* wpto)
 	}
 }
 
-int fsWebPageDownloader::ParseHTMLFrameUrls(fsHTMLParser &parser, t_wptree wptree, BOOL bFixUrlsOnly, LPCSTR pszBaseURL)
+int fsWebPageDownloader::ParseHTMLFrameUrls(fsHTMLParser &parser, t_wptree wptree, BOOL bFixUrlsOnly, LPCTSTR pszBaseURL)
 {
 	int cAdded = 0;
 
 	
 	for (int i = 0; i < parser.GetFrameUrlCount (); i ++)
 	{
-		LPCSTR pszUrl = parser.GetFrameUrl (i);
+		LPCTSTR pszUrl = parser.GetFrameUrl (i);
 
 		
-		if (*pszUrl == '#')
+		if (*pszUrl == _T('#'))
 			continue;	
 
-		LPSTR pszFullUrl;
+		LPTSTR pszFullUrl;
 		
 		fsUrlToFullUrl (pszBaseURL, pszUrl, &pszFullUrl);
 		if (pszFullUrl == NULL)
@@ -2100,7 +2100,7 @@ int fsWebPageDownloader::ParseHTMLFrameUrls(fsHTMLParser &parser, t_wptree wptre
 		}
 
 		
-		char szFile [MY_MAX_PATH];
+		TCHAR szFile [MY_MAX_PATH];
 		fsFileNameFromUrlPath (url.GetPath (), url.GetInternetScheme () == INTERNET_SCHEME_FTP,
 			TRUE, szFile, sizeof (szFile));
 
@@ -2138,7 +2138,7 @@ int fsWebPageDownloader::ParseHTMLFrameUrls(fsHTMLParser &parser, t_wptree wptre
 					
 					
 					if (FALSE == fsIsServersEqual (urlStart.GetHostName (), url2.GetHostName ()) ||
-							_strnicmp (urlStart.GetPath (), url2.GetPath (), 
+							_tcsnicmp (urlStart.GetPath (), url2.GetPath (), 
 								lstrlen (url2.GetPath ())))
 					{
 						
@@ -2149,7 +2149,7 @@ int fsWebPageDownloader::ParseHTMLFrameUrls(fsHTMLParser &parser, t_wptree wptre
 							bSkip = l == l2;
 						
 						if (bSkip == FALSE && l > l2)
-							bSkip = (url.GetPath ()) [l] == '#';
+							bSkip = (url.GetPath ()) [l] == _T('#');
 
 						if (bSkip)
 						{
@@ -2165,7 +2165,7 @@ int fsWebPageDownloader::ParseHTMLFrameUrls(fsHTMLParser &parser, t_wptree wptre
 		if (pszFullUrl == NULL)
 			continue;
 
-		LPSTR pszWA = NULL, pszFA = NULL; 
+		LPTSTR pszWA = NULL, pszFA = NULL; 
 
 		if (bFixUrlsOnly == FALSE)
 		{
@@ -2211,7 +2211,7 @@ int fsWebPageDownloader::ParseHTMLFrameUrls(fsHTMLParser &parser, t_wptree wptre
 				
 				GetFileForReplace (&wptree->GetData (), wp, szFile);
 				if (pszFA)	
-					strcat (szFile, strchr (pszFA, '#'));	
+					_tcscat (szFile, _tcschr (pszFA, _T('#')));	
 				
 				
 				parser.ReplaceFrameUrl (i, szFile);	
@@ -2261,7 +2261,7 @@ BOOL fsWebPageDownloader::IsURLShouldBeIgnored(fsURL &url)
 					
 					
 					if (bSQ == FALSE && l > l2)
-						bSQ = (url.GetPath ()) [l2] == '#' || (url.GetPath ()) [l2] == '?';
+						bSQ = (url.GetPath ()) [l2] == _T('#') || (url.GetPath ()) [l2] == _T('?');
 				}
 			}
 		}
@@ -2275,7 +2275,7 @@ BOOL fsWebPageDownloader::IsURLShouldBeIgnored(fsURL &url)
 
 DWORD WINAPI fsWebPageDownloader::_threadProcessDoneAndRedirEvents(LPVOID lp)
 {
-	LOGFN ("fsWebPageDownloader::_threadProcessDoneAndRedirEvents");
+	LOGFN (_T("fsWebPageDownloader::_threadProcessDoneAndRedirEvents"));
 
 	fsWebPageDownloader *pthis = (fsWebPageDownloader*)lp;
 	pthis->m_bthreadProcessDoneAndRedirEvents_Running = true;
@@ -2300,7 +2300,7 @@ DWORD WINAPI fsWebPageDownloader::_threadProcessDoneAndRedirEvents(LPVOID lp)
 			continue;
 		}
 
-		LOGsnl ("Processing will be deleted downloads");
+		LOGsnl (_T("Processing will be deleted downloads"));
 
 		while (pthis->m__threadProcessDoneAndRedirEvents__WillBeDeletedDownloads.size ())
 		{
@@ -2324,7 +2324,7 @@ DWORD WINAPI fsWebPageDownloader::_threadProcessDoneAndRedirEvents(LPVOID lp)
 			} catch (...) {}
 		}
 
-		LOGsnl ("Processing redir downloads...");
+		LOGsnl (_T("Processing redir downloads..."));
 
 		while (pthis->m__threadProcessDoneAndRedirEvents__RedirDownloads.size ())
 		{
@@ -2338,7 +2338,7 @@ DWORD WINAPI fsWebPageDownloader::_threadProcessDoneAndRedirEvents(LPVOID lp)
 			}catch (...) {}			
 		}
 
-		LOGsnl ("Processing finished downloads...");
+		LOGsnl (_T("Processing finished downloads..."));
 
 		_pwndDownloads->BeginCreateDownloads ();
 
@@ -2356,7 +2356,7 @@ DWORD WINAPI fsWebPageDownloader::_threadProcessDoneAndRedirEvents(LPVOID lp)
 
 		_pwndDownloads->EndCreateDownloads ();
 
-		LOGsnl ("Processing downloads having events...");
+		LOGsnl (_T("Processing downloads having events..."));
 
 		std::vector <UINT> vProceeded;
 		while (pthis->m__threadProcessDoneAndRedirEvents__RcvdEventDownloads.size ())
@@ -2384,7 +2384,7 @@ DWORD WINAPI fsWebPageDownloader::_threadProcessDoneAndRedirEvents(LPVOID lp)
 				vProceeded.clear ();
 		}
 
-		LOGsnl ("Processing need check done or stopped...");
+		LOGsnl (_T("Processing need check done or stopped..."));
 
 		if (pthis->m__threadProcessDoneAndRedirEvents__NeedCheckDoneOrStopped)
 		{
@@ -2405,7 +2405,7 @@ DWORD WINAPI fsWebPageDownloader::_threadProcessDoneAndRedirEvents(LPVOID lp)
 			}
 		}
 
-		LOGsnl ("Once cycle done");
+		LOGsnl (_T("Once cycle done"));
 	}
 
 	}catch (...) {ASSERT (FALSE);}

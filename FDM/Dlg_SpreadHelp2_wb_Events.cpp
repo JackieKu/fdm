@@ -13,7 +13,7 @@ static char THIS_FILE[]=__FILE__;
 #endif        
 
 BEGIN_DISPATCH_MAP(CDlg_SpreadHelp2_wb_Events, vmsWebBrowserEvents)
-	DISP_FUNCTION_ID(CDlg_SpreadHelp2_wb_Events, "BeforeNavigate2", DISPID_BEFORENAVIGATE2, OnBeforeNavigate2, VT_EMPTY, VTS_DISPATCH VTS_PVARIANT VTS_PVARIANT VTS_PVARIANT VTS_PVARIANT VTS_PVARIANT VTS_PBOOL)
+	DISP_FUNCTION_ID(CDlg_SpreadHelp2_wb_Events, _T("BeforeNavigate2"), DISPID_BEFORENAVIGATE2, OnBeforeNavigate2, VT_EMPTY, VTS_DISPATCH VTS_PVARIANT VTS_PVARIANT VTS_PVARIANT VTS_PVARIANT VTS_PVARIANT VTS_PBOOL)
 END_DISPATCH_MAP()
 
 CDlg_SpreadHelp2_wb_Events::CDlg_SpreadHelp2_wb_Events(CWebBrowser2 *pWB, IDocHostUIHandler *pUIHandler) :
@@ -31,7 +31,7 @@ void CDlg_SpreadHelp2_wb_Events::OnBeforeNavigate2(LPDISPATCH, VARIANT *vtUrl, V
 {
 	CString strUrl = vtUrl->bstrVal;
 
-	if (strUrl.Left (4).CompareNoCase ("http") == 0) 
+	if (strUrl.Left (4).CompareNoCase (_T("http")) == 0) 
 	{
 		*pbCancel = TRUE;
 		fsOpenUrlInBrowser (strUrl);

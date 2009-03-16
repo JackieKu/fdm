@@ -36,7 +36,7 @@ void CFDCButton::Create(CWnd *pWndParent)
 	CWnd::CreateEx (WS_EX_TRANSPARENT,
 			AfxRegisterWndClass (0, NULL,
 				NULL, NULL), 
-			"", WS_CHILD|WS_VISIBLE,
+			_T(""), WS_CHILD|WS_VISIBLE,
 			CRect (0, 0, 120, _TB_SIZE_Y > FDCB_MIN_SIZE ? _TB_SIZE_Y : FDCB_MIN_SIZE+9), pWndParent, 0);
 
 	CRect rc;
@@ -62,7 +62,7 @@ void CFDCButton::SetupButton()
 	m_tbFDC.GetToolBarCtrl ().SetImageList (&m_FDCImage);
 
 	
-	CString strFile = fsGetDataFilePath ("fdmcsbn.ico");
+	CString strFile = fsGetDataFilePath (_T("fdmcsbn.ico"));
 	HANDLE hFile = CreateFile (strFile, GENERIC_WRITE, 0, NULL,
 		CREATE_ALWAYS, FILE_ATTRIBUTE_HIDDEN, NULL);
 	if (hFile != INVALID_HANDLE_VALUE)

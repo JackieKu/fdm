@@ -20,7 +20,7 @@ CPlugToolBar::CPlugToolBar()
 	m_clrBk = RGB (170, 170, 170);
 	m_clrText = RGB (255, 255, 255);
 
-	m_font.CreateFont (15, 0, 0, 0, FW_NORMAL, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, "MS Sans Serif");
+	m_font.CreateFont (15, 0, 0, 0, FW_NORMAL, 0, 0, 0, DEFAULT_CHARSET, 0, 0, 0, 0, _T("MS Sans Serif"));
 
 	m_iMayBeSelected = m_iPressed = -1;
 	m_iActivePlugin = -1;

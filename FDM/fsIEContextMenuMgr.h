@@ -46,9 +46,9 @@ protected:
 	
 	
 	
-	BOOL AddContextMenu (LPCSTR pszMenuName, LPCSTR pszMenuUrl, DWORD dwContext = 0);
+	BOOL AddContextMenu (LPCTSTR pszMenuName, LPCTSTR pszMenuUrl, DWORD dwContext = 0);
 	
-	BOOL DeleteContextMenu (LPCSTR pszMenuName);
+	BOOL DeleteContextMenu (LPCTSTR pszMenuName);
 
 	BOOL m_bDLPageMenu;	
 	BOOL m_bDLThisMenu;	
@@ -57,7 +57,7 @@ protected:
 	BOOL m_bDLFlashVideoMenu;
 
 	
-	BOOL IsContextMenuPresent (LPCSTR pszMenuName);
+	BOOL IsContextMenuPresent (LPCTSTR pszMenuName);
 };
 
 #endif 

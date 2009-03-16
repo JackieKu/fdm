@@ -125,12 +125,12 @@ void CPrg_GeneralPage_FWDlg::OnDlinfo()
 
 void CPrg_GeneralPage_FWDlg::UpdateBlendsVals()
 {
-	CString str; str.Format ("%d%%", m_wndBlend1.GetPos () * 100 / 255);
+	CString str; str.Format (_T("%d%%"), m_wndBlend1.GetPos () * 100 / 255);
 	CString str2; GetDlgItemText (IDC__TRANCPARENCY1_VAL, str2);
 	if (str != str2)
 		SetDlgItemText (IDC__TRANCPARENCY1_VAL, str);
 
-	str.Format ("%d%%", m_wndBlend2.GetPos () * 100 / 255);
+	str.Format (_T("%d%%"), m_wndBlend2.GetPos () * 100 / 255);
 	GetDlgItemText (IDC__TRANCPARENCY2_VAL, str2);
 	if (str != str2)
 		SetDlgItemText (IDC__TRANCPARENCY2_VAL, str);

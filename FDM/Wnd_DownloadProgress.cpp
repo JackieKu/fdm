@@ -46,7 +46,7 @@ void CWnd_DownloadProgress::Create(CWnd *pwndParent)
 {
 	CWnd::CreateEx (_theme.IsThemeActive () ? 0 : WS_EX_STATICEDGE,
 			AfxRegisterWndClass (0, NULL, NULL, NULL), 
-			"", WS_CHILD|WS_VISIBLE,
+			_T(""), WS_CHILD|WS_VISIBLE,
 			CRect (0, 0, 0, 0), pwndParent, 0);
 }
 

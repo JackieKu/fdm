@@ -169,7 +169,7 @@ BOOL fsPluginMgr::LoadBuiltIn()
 
 	for (int i = 0; i < cPlugins; i++)
 	{
-		LPCSTR pszPlug, psz;
+		LPCTSTR pszPlug, psz;
 		afnGPN [i] (&psz, &pszPlug);
 	
 		
@@ -291,12 +291,12 @@ int fsPluginMgr::OnUpdateToolBar(UINT nID)
 	return SendMessage (m_vWndPlugs [m_iActivePlugin].hWnd, WM_WGP_UPDATE_CMDITEM, nID, (LPARAM)_TBMgr.m_hWnd);
 }
 
-void fsPluginMgr::OnNewLng(LPCSTR )
+void fsPluginMgr::OnNewLng(LPCTSTR )
 {
 	for (int i = 0; i < m_vWndPlugs.size (); i++)
 	{
 		fsPluginInfo *plug = &m_vWndPlugs [i];
-		LPCSTR pszLongName, pszShortName;
+		LPCTSTR pszLongName, pszShortName;
 
 		if (plug->pfnSetLanguage)
 			plug->pfnSetLanguage (WGL_UNKNOWN, plug->hMenuMain, plug->hMenuView);
@@ -313,8 +313,8 @@ void fsPluginMgr::OnNewLng(LPCSTR )
 		int cButtons;
 		plug->pfnGTBI (&pButtons, &cButtons);
 
-		LPCSTR *ppszToolTips;
-		fsnew (ppszToolTips, LPCSTR, cButtons);
+		LPCTSTR *ppszToolTips;
+		fsnew (ppszToolTips, LPCTSTR, cButtons);
 		for (int j = 0; j < cButtons; j++)
 			ppszToolTips [j] = pButtons [j].pszToolTip;
 

@@ -19,7 +19,7 @@ typedef HMENU (*fntGetViewMenu)();
 typedef void (*fntGetMenuImages)(wgMenuItemImage**, int *);
 typedef void (*fntGetTBInfo)(wgTButtonInfo**, int*);
 typedef void (*fntGetMenuViewItems)(wgMenuViewItem** ppItems, int* cItems);
-typedef void (*fntGetPluginNames)(LPCSTR* ppszLongName, LPCSTR* ppszShortName);
+typedef void (*fntGetPluginNames)(LPCTSTR* ppszLongName, LPCTSTR* ppszShortName);
 typedef void (*fntSetLanguage)(wgLanguage, HMENU, HMENU);
 typedef BOOL (*fntReadyToShutdown)();
 typedef void (*fntShutdown)();    
@@ -68,7 +68,7 @@ public:
 	
 	BOOL QueryExit();
 	
-	void OnNewLng (LPCSTR pszLng);
+	void OnNewLng (LPCTSTR pszLng);
 	
 	int OnUpdateToolBar (UINT nID);
 	

@@ -178,20 +178,20 @@ void CDlg_Download::Update()
 	SetDlgItemText2 (IDC__TIMELEFT, CDownloads_Tasks::GetDownloadText (m_dld, 3));
 
 	int nProgress = (int)m_dld->pMgr->GetPercentDone ();
-	char szName [10000] = "";
+	TCHAR szName [10000] = _T("");
 	CDownloads_Tasks::GetFileName (m_dld, szName);
 	CString str;
 
 	if (nProgress != 100)
-		str.Format ("[%d%%] - %s", nProgress, szName);
+		str.Format (_T("[%d%%] - %s"), nProgress, szName);
 	else
-		str.Format ("%s - %s", szName, LS (L_DONE));
+		str.Format (_T("%s - %s"), szName, LS (L_DONE));
 	SetWindowText (str);
 
 	m_wndProgress.Invalidate (FALSE);
 }
 
-void CDlg_Download::SetDlgItemText2(UINT nID, LPCSTR pszText)
+void CDlg_Download::SetDlgItemText2(UINT nID, LPCTSTR pszText)
 {
 	CString str; 
 	GetDlgItemText (nID, str);

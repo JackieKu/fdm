@@ -97,7 +97,7 @@ void vmsFile::Seek(DWORD dwDistance, DWORD dwMethod)
 	SetFilePointer (m_hFile, dwDistance, NULL, dwMethod);
 }
 
-void vmsFile::WriteString(LPCSTR psz)
+void vmsFile::WriteString(LPCTSTR psz)
 {
 	if (FALSE == fsSaveStrToFile (psz, m_hFile))
 		throw GetLastError ();
@@ -105,7 +105,7 @@ void vmsFile::WriteString(LPCSTR psz)
 
 void vmsFile::ReadString(fsString& str)
 {
-	LPSTR psz;
+	LPTSTR psz;
 	if (FALSE == fsReadStrFromFile (&psz, m_hFile))
 		throw GetLastError ();
 	str  = psz;
