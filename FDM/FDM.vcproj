@@ -181,7 +181,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MAPINFO:LINES /MAPINFO /MAPINFO:EXPORTS "
 				AdditionalDependencies="PartMediaPreview/Release/PartMediaPreview.lib FDMCustomized/FDMCustomized_lib/Release/FDMCustomized_lib.lib inetfile.lib alsfolderbrowser.lib Mswsock.lib Hash\Release\hash.lib inetfile/curl_lib/release/curl_lib.lib dxguid.lib wininet.lib rasapi32.lib Ws2_32.lib htmlhelp.lib winmm.lib strmiids.lib Version.lib Iphlpapi.lib libeay32.lib ssleay32.lib"
 				OutputFile=".\Release/FDM.exe"
 				LinkIncremental="1"

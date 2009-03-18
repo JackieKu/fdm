@@ -16,6 +16,7 @@
 inline int IsValidUTF8(LPCSTR str, DWORD cch = -1) { return MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, str, cch, NULL, 0); }
 inline int IsValidACP(LPCSTR str, DWORD cch = -1) { return MultiByteToWideChar(CP_ACP, MB_ERR_INVALID_CHARS, str, cch, NULL, 0); }
 
+#ifdef __ATLCONV_H__
 class CU2W : public CA2W
 {
 public:
@@ -27,6 +28,6 @@ class CW2U : public CW2A
 public:
 	CW2U(LPCWSTR str) : CW2A((str), CP_UTF8) {}
 };
-	
+#endif
 
 #endif
