@@ -31,7 +31,6 @@ public:
 	
 	//{{AFX_VIRTUAL(CDownloads_Downloads)
 	protected:
-	virtual BOOL OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult);
 	//}}AFX_VIRTUAL  
 
 public:
@@ -56,6 +55,8 @@ protected:
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg UINT OnNotifyFormat(CWnd *pWnd, UINT nCommand);
 };    
 
 //{{AFX_INSERT_LOCATION}//}}  

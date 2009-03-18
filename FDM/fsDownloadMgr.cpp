@@ -318,7 +318,7 @@ DWORD WINAPI fsDownloadMgr::_threadDownloadMgr(LPVOID lp)
 		{
 			if (pThis->m_hOutFile == INVALID_HANDLE_VALUE)
 			{
-				pThis->m_hOutFile = CreateFile (pThis->m_dp.pszFileName, GENERIC_WRITE, 
+				pThis->m_hOutFile = CreateFileW (CU2W(pThis->m_dp.pszFileName), GENERIC_WRITE, 
 					FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
 			}
 		
@@ -1352,7 +1352,7 @@ void fsDownloadMgr::RenameFile(BOOL bFormat1)
 	fsnew (m_dp.pszFileName, CHAR, strFile.GetLength () + 1);
 	strcpy (m_dp.pszFileName, strFile);
 
-	HANDLE hFile = CreateFile (m_dp.pszFileName, GENERIC_WRITE, 0, NULL, 
+	HANDLE hFile = CreateFileW (CU2W(m_dp.pszFileName), GENERIC_WRITE, 0, NULL, 
 		CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 	if (hFile != INVALID_HANDLE_VALUE)
 		CloseHandle (hFile);
@@ -1378,8 +1378,8 @@ BOOL fsDownloadMgr::OpenFile(BOOL bFailIfDeleted, BOOL bDisableEvents)
 	if (m_hOutFile != INVALID_HANDLE_VALUE)
 		return TRUE;
 
-	
-	if (bFailIfDeleted && GetFileAttributes (m_dp.pszFileName) == DWORD (-1) && m_dldr.GetNumberOfSections ())
+	CU2W wFileName(m_dp.pszFileName);
+	if (bFailIfDeleted && GetFileAttributesW (wFileName) == DWORD (-1) && m_dldr.GetNumberOfSections ())
 	{
 		fsSection sect;
 		m_dldr.GetSectionInfo (0, &sect);
@@ -1399,12 +1399,12 @@ BOOL fsDownloadMgr::OpenFile(BOOL bFailIfDeleted, BOOL bDisableEvents)
 
 	DWORD dwFileAttribs = FILE_ATTRIBUTE_NORMAL;
 
-	m_hOutFile = CreateFile (m_dp.pszFileName, GENERIC_WRITE, FILE_SHARE_READ,
+	m_hOutFile = CreateFileW (wFileName, GENERIC_WRITE, FILE_SHARE_READ,
 				NULL, OPEN_ALWAYS, dwFileAttribs, NULL);
 	
-	DWORD dw = GetFileAttributes (m_dp.pszFileName);
+	DWORD dw = GetFileAttributesW (wFileName);
 	if ((m_dp.dwFlags & DPF_USEHIDDENATTRIB) && (dw & FILE_ATTRIBUTE_HIDDEN) == 0)
-		SetFileAttributes (m_dp.pszFileName, dw | FILE_ATTRIBUTE_HIDDEN);
+		SetFileAttributesW (wFileName, dw | FILE_ATTRIBUTE_HIDDEN);
 
 	if (m_hOutFile == INVALID_HANDLE_VALUE)
 		return FALSE;
@@ -1736,9 +1736,10 @@ void fsDownloadMgr::OnDone()
 	
 	CheckDstFileExists ();
 
-	if (DWORD (-1) != GetFileAttributes (m_dp.pszFileName))
-		::DeleteFile (m_dp.pszFileName);	
-	if (FALSE == ::MoveFile (szFileNameFrom, m_dp.pszFileName))	
+	CU2W wFileName(m_dp.pszFileName);
+	if (DWORD (-1) != GetFileAttributesW (wFileName))
+		::DeleteFileW (wFileName);	
+	if (FALSE == ::MoveFileW (CU2W(szFileNameFrom), wFileName))	
 	{
 		DWORD dwLastError = GetLastError ();
 		Event (LS (L_CANTRENAMEBACK), EDT_RESPONSE_E);
@@ -1756,12 +1757,13 @@ BOOL fsDownloadMgr::DeleteFile()
 
 	CloseFile ();
 
-	if (GetFileAttributes (m_dp.pszFileName) != DWORD (-1))
+	CU2W wFileName(m_dp.pszFileName);
+	if (GetFileAttributesW (wFileName) != DWORD (-1))
 	{
-		fsString str = m_dp.pszFileName;
-		str += ".dsc.txt";	
-		::DeleteFile (str);
-		return ::DeleteFile (m_dp.pszFileName);
+		CStringW str = wFileName;
+		str += L".dsc.txt";	
+		::DeleteFileW (str);
+		return ::DeleteFileW (wFileName);
 	}
 	else
 		return TRUE;
@@ -1800,12 +1802,12 @@ BOOL fsDownloadMgr::InitFile(BOOL bCreateOnDisk, LPCSTR pszSetExt)
 	
 	ApplyAdditionalExt ();
 
-	
+	CU2W wFileName(m_dp.pszFileName);	
 
 	if (!fsBuildPathToFile (m_dp.pszFileName))
 		goto _lErr;
 
-	if (DWORD (-1) != GetFileAttributes (m_dp.pszFileName)) 
+	if (DWORD (-1) != GetFileAttributesW (wFileName)) 
 	{
 		fsAlreadyExistReaction enAER = m_dp.enAER;
 
@@ -1819,7 +1821,7 @@ BOOL fsDownloadMgr::InitFile(BOOL bCreateOnDisk, LPCSTR pszSetExt)
 
 	if (bCreateOnDisk)
 	{
-		HANDLE hFile = CreateFile (m_dp.pszFileName, GENERIC_READ, FILE_SHARE_READ, NULL,
+		HANDLE hFile = CreateFileW (wFileName, GENERIC_READ, FILE_SHARE_READ, NULL,
 			OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
 		if (hFile == INVALID_HANDLE_VALUE)
@@ -2140,16 +2142,17 @@ void fsDownloadMgr::RemoveHiddenAttribute()
 {
 	if (m_dp.dwFlags & DPF_USEHIDDENATTRIB)
 	{
-		DWORD dw = GetFileAttributes (m_dp.pszFileName);
+		CU2W wFileName(m_dp.pszFileName);
+		DWORD dw = GetFileAttributesW (wFileName);
 		dw &= ~ FILE_ATTRIBUTE_HIDDEN;
-		SetFileAttributes (m_dp.pszFileName, dw);
+		SetFileAttributesW (wFileName, dw);
 	}
 }
 
 void fsDownloadMgr::CheckDstFileExists()
 {
 	
-	if (GetFileAttributes (m_dp.pszFileName) != DWORD (-1))
+	if (GetFileAttributesW (CU2W(m_dp.pszFileName)) != DWORD (-1))
 	{
 		fsAlreadyExistReaction enAER = m_dp.enAER;	
 
@@ -2180,7 +2183,7 @@ void fsDownloadMgr::CheckDstFileExists()
 		{
 			case AER_REWRITE:
 				Event (LS (L_REWRITINGIT), EDT_WARNING);
-				if (FALSE == ::DeleteFile (m_dp.pszFileName))
+				if (FALSE == ::DeleteFileW (CU2W(m_dp.pszFileName)))
 				{
 					DWORD dwLastError = GetLastError ();
 					Event (LS (L_CANTREWRITE), EDT_RESPONSE_E);
@@ -2314,8 +2317,9 @@ BOOL fsDownloadMgr::MoveFile(LPCSTR pszNewFileName)
 	{
 		fsBuildPathToFile (pszNewFileName);
 		
-		if (GetFileAttributes (m_dp.pszFileName) != DWORD (-1))
-			bOk = ::MoveFile (m_dp.pszFileName, pszNewFileName); 
+		CU2W wFileName(m_dp.pszFileName);
+		if (GetFileAttributesW (wFileName) != DWORD (-1))
+			bOk = ::MoveFileW (wFileName, CU2W(pszNewFileName)); 
 		else
 			bOk = TRUE;
 	}

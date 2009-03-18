@@ -165,7 +165,7 @@ struct fsDownload_Properties
 	BOOL  bRestartSpeedLow;		
 
 	
-	LPSTR pszFileName;			
+	LPSTR pszFileName; // UTF-8
 	BOOL  bReserveDiskSpace;	
 	
 	

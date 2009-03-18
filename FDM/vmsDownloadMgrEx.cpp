@@ -437,7 +437,7 @@ void vmsDownloadMgrEx::GetSplittedSectionsList(std::vector <vmsSectionInfo> &v)
 			else
 			{
 				v.push_back (sect);
-				sectLast = &(*v.end ()) - 1;
+				sectLast = &(*(v.end() - 1));
 			}
 		}
 		

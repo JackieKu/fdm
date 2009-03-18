@@ -21,12 +21,15 @@ public:
 	int GetDlgItemTextW(int nID, CStringW& rString) const
 	{
 		rString.Empty();
-		int iLen = ::GetDlgItemTextW(m_hWnd, nID, NULL, 0);
-		if (iLen > 0) {
-			iLen = ::GetDlgItemTextW(m_hWnd, nID, rString.GetBufferSetLength(iLen), iLen);
+
+		HWND hWnd = ::GetDlgItem(m_hWnd, nID);
+		if (hWnd != NULL)
+		{
+			int nLen = ::GetWindowTextLengthW(hWnd);
+			::GetWindowTextW(hWnd, rString.GetBufferSetLength(nLen), nLen+1);
 			rString.ReleaseBuffer();
 		}
-		return iLen;
+		return rString.GetLength();
 	}
 	void SetDlgItemTextW(int nID, LPCWSTR lpszString)
 	{

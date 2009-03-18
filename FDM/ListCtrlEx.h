@@ -51,9 +51,6 @@ public:
 
 public:
 	
-	
-	
-	
 	int SubItemToSubItem (int nSubItem);
 	
 	

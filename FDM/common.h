@@ -16,7 +16,17 @@
 inline int IsValidUTF8(LPCSTR str, DWORD cch = -1) { return MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, str, cch, NULL, 0); }
 inline int IsValidACP(LPCSTR str, DWORD cch = -1) { return MultiByteToWideChar(CP_ACP, MB_ERR_INVALID_CHARS, str, cch, NULL, 0); }
 
-#define CU2W(str) CA2W((str), IsValidUTF8(str) ? CP_UTF8 : CP_ACP)
-#define CW2U(str) CW2A((str), CP_UTF8)
+class CU2W : public CA2W
+{
+public:
+	CU2W(LPCSTR str) : CA2W((str), IsValidUTF8(str) ? CP_UTF8 : CP_ACP) {}
+};
+
+class CW2U : public CW2A
+{
+public:
+	CW2U(LPCWSTR str) : CW2A((str), CP_UTF8) {}
+};
+	
 
 #endif

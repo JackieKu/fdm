@@ -81,7 +81,7 @@ BEGIN_MESSAGE_MAP(CDownloads_Tasks, CListCtrlEx)
 	ON_COMMAND(ID_DLDSHOWPROGRESSDLG, OnDldshowprogressdlg)
 	ON_COMMAND(ID_DLDCONVERT, OnDldconvert)
 	ON_WM_TIMER()
-	ON_NOTIFY_REFLECT(LVN_GETDISPINFO, OnGetdispinfo)
+	ON_NOTIFY_REFLECT(LVN_GETDISPINFOW, OnGetdispinfo)
 	ON_COMMAND(ID_DLDENABLESEEDING, OnDldenableseeding)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()      
@@ -1370,8 +1370,11 @@ void CDownloads_Tasks::UnlockList()
 
 void CDownloads_Tasks::OnGetdispinfo(NMHDR *pNMHDR, LRESULT *pResult)
 {
-	LV_DISPINFO* pDispInfo = (LV_DISPINFO*)pNMHDR;
-	LV_ITEM* pItem = &(pDispInfo)->item;
+	LV_DISPINFOW* pDispInfo = (LV_DISPINFOW*)pNMHDR;
+	LV_ITEMW* pItem = &(pDispInfo)->item;
+
+	//LV_DISPINFO* pDispInfo = (LV_DISPINFO*)pNMHDR;
+	//LV_ITEM* pItem = &(pDispInfo)->item;
 
 	try{
 
@@ -1387,7 +1390,8 @@ void CDownloads_Tasks::OnGetdispinfo(NMHDR *pNMHDR, LRESULT *pResult)
 	{
 		int nSubItem = SubItemToSubItem (pItem->iSubItem);
 		if (nSubItem != -1)
-			_tcscpy (pItem->pszText, GetDownloadText (dld, nSubItem));		
+			//strcpy(pItem->pszText, GetDownloadText (dld, nSubItem));
+			wcscpy (pItem->pszText, CU2W(GetDownloadText (dld, nSubItem)));		
 	}
 
 	}catch (...) {}

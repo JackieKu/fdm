@@ -64,8 +64,8 @@ void CListCtrlEx::DrawItem(LPDRAWITEMSTRUCT lpDraw)
 	
 	for (int i = 0; i < cCols; i++)
 	{
-		LVITEM item;
-		TCHAR szItem [10000];
+		LVITEMW item;
+		wchar_t szItem [10000];
 		int colWidth = GetColumnWidth (pHdr->OrderToIndex (i));
 
 		xStart += 5;
@@ -74,11 +74,10 @@ void CListCtrlEx::DrawItem(LPDRAWITEMSTRUCT lpDraw)
 		item.iItem = lpDraw->itemID;
 		item.iSubItem = i;
 		item.pszText = szItem;
-		item.cchTextMax = sizeof (szItem);
+		item.cchTextMax = _countof (szItem);
 		item.mask = LVIF_IMAGE | LVIF_TEXT;
 
-		GetItem (&item);
-
+		SendMessage(LVM_GETITEMW, 0, (LPARAM)&item);
 		
 		if (i == 0)
 		{
@@ -156,16 +155,16 @@ void CListCtrlEx::DrawItem(LPDRAWITEMSTRUCT lpDraw)
 
 		if (*item.pszText)
 		{
-			
-
+			/*
 			int needX = GetStringWidth (item.pszText);
 			BOOL bDrawText = TRUE;
+			*/
 
 			RECT rcText = lpDraw->rcItem;
 			rcText.left = xStart;
 			rcText.right = xStart + colWidth - 5;
 
-			
+			/*
 			if (needX > colWidth-5)
 			{
 				RECT rc = rcText;
@@ -180,8 +179,8 @@ void CListCtrlEx::DrawItem(LPDRAWITEMSTRUCT lpDraw)
 					bDrawText = FALSE;
 			}
 
-			if (bDrawText)
-				dc->DrawText (szItem, &rcText, DT_SINGLELINE | DT_LEFT | DT_VCENTER | DT_NOPREFIX);
+			if (bDrawText)*/
+			::DrawTextW (dc->m_hDC, szItem, -1, &rcText, DT_SINGLELINE | DT_LEFT | DT_VCENTER | DT_NOPREFIX | DT_END_ELLIPSIS);
 		}
 
 		xStart += colWidth;
@@ -569,8 +568,15 @@ void CListCtrlEx::InsertHdrItem(int iCol)
 
 void CListCtrlEx::SetItemText(int iItem, int iSubItem, LPCSTR pszText)
 {
-	if (m_aIndex [iSubItem] != -1)
-		CListCtrl::SetItemText (iItem, m_aIndex [iSubItem], pszText);
+	if (m_aIndex [iSubItem] != -1) {
+		CU2W sText(pszText);
+		LV_ITEMW lvi;
+		lvi.iSubItem = m_aIndex [iSubItem];
+		lvi.pszText = (LPWSTR) sText;
+		SendMessage(LVM_SETITEMTEXTW, (WPARAM) iItem, (LPARAM) &lvi);
+
+		//CListCtrl::SetItemText (iItem, m_aIndex [iSubItem], pszText);
+	}
 }
 
 BOOL CListCtrlEx::IsColumnShown(int iCol)

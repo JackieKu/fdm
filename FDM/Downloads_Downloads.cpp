@@ -26,6 +26,7 @@ BEGIN_MESSAGE_MAP(CDownloads_Downloads, CWnd)
 	ON_WM_SIZE()
 	ON_WM_SETFOCUS()
 	ON_WM_ERASEBKGND()
+	ON_WM_NOTIFYFORMAT()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()        
 
@@ -71,15 +72,6 @@ void CDownloads_Downloads::OnSize(UINT, int cx, int cy)
 		m_tasks.MoveWindow (0, 0, cx, cy);
 }
 
-BOOL CDownloads_Downloads::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult) 
-{
-	
-
-	
-	
-	return CWnd::OnNotify(wParam, lParam, pResult);
-}
-
 void CDownloads_Downloads::ShowDLInfo(BOOL bShow)
 {
 	UINT nShow = bShow ? SW_SHOW : SW_HIDE;
@@ -115,21 +107,20 @@ void CDownloads_Downloads::OnSetFocus(CWnd* pOldWnd)
 
 BOOL CDownloads_Downloads::OnEraseBkgnd(CDC* pDC) 
 {
-	
-	
-	
-	
 	if (m_info.m_video.m_wndVideo.m_player.Get_State () != VFPS_CLOSED)
 	{
-    		CRect rc;
+		CRect rc;
 
-		
 		m_info.m_video.GetWindowRect(&rc);
 		ScreenToClient(&rc);
 
-		
 		pDC->ExcludeClipRect(&rc);
 	}
 
 	return CWnd::OnEraseBkgnd(pDC);
+}
+
+UINT CDownloads_Downloads::OnNotifyFormat(CWnd *pWnd, UINT nCommand)
+{
+	return NFR_UNICODE;
 }
