@@ -21,13 +21,11 @@ STDMETHODIMP CFDMFlashVideoDownloads::ProcessIeDocument(IDispatch *pDispatch)
 	if (spFile == NULL)
 		return E_INVALIDARG;
 
-	
 
-	USES_CONVERSION;
 	BSTR bstrHost = NULL;
 	spDoc->get_URL (&bstrHost);
 	fsURL url;
-	if (url.Crack (W2A (bstrHost)) != IR_SUCCESS)
+	if (url.Crack (CW2A (bstrHost, CP_UTF8)) != IR_SUCCESS)
 		return E_FAIL;
 	SysFreeString (bstrHost);
 
@@ -61,8 +59,7 @@ STDMETHODIMP CFDMFlashVideoDownloads::ProcessIeDocument(IDispatch *pDispatch)
 
 STDMETHODIMP CFDMFlashVideoDownloads::ProcessHtml(BSTR bstrHost, BSTR bstrHtml)
 {
-	USES_CONVERSION;
-	ProcessHtml (W2A (bstrHost), W2A (bstrHtml));
+	ProcessHtml (CW2A (bstrHost, CP_UTF8), CW2A (bstrHtml, CP_UTF8));
 	return S_OK;
 }
 
@@ -72,19 +69,17 @@ void CFDMFlashVideoDownloads::ProcessHtml(LPCSTR pszHost, LPCSTR pszHtml)
 	if (FALSE == vshcp.Parse (pszHost, pszHtml))
 		return;
 
-	USES_CONVERSION;
-
 	IWGUrlReceiverPtr spRcvr;
 	spRcvr.CreateInstance (__uuidof (WGUrlReceiver));
-	spRcvr->put_Url (A2W (vshcp.get_VideoUrl ()));
+	spRcvr->put_Url (CA2W (vshcp.get_VideoUrl (), CP_UTF8));
 
 	if (vshcp.get_IsVideoUrlDirectLink ())
 	{
 		CString str = vshcp.get_VideoTitle ();
 		str += "."; str += vshcp.get_VideoType ();
-		spRcvr->put_FileName (A2W (str));
+		spRcvr->put_FileName (CA2W (str, CP_UTF8));
 
-		spRcvr->put_Comment (A2W (vshcp.get_VideoTitle ()));
+		spRcvr->put_Comment (CA2W (vshcp.get_VideoTitle (), CP_UTF8));
 
 		spRcvr->put_FlashVideoDownload (TRUE);
 	}
@@ -94,11 +89,9 @@ void CFDMFlashVideoDownloads::ProcessHtml(LPCSTR pszHost, LPCSTR pszHtml)
 
 DWORD WINAPI CFDMFlashVideoDownloads::_threadCreateDownload(LPVOID lp)
 {
-	USES_CONVERSION;
-
 	BSTR bstrUrl = (BSTR) lp;
 
-	_pwndFVDownloads->CreateDownload (W2A (bstrUrl));
+	_pwndFVDownloads->CreateDownload (CW2A (bstrUrl, CP_UTF8));
 
 	SysFreeString (bstrUrl);
 

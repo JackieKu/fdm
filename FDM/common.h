@@ -13,4 +13,7 @@
                  
 #define Is9xME ((GetVersion () & 0x80000000) != 0)
 
+#define IsValidUTF8(str, cch) MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, (str), (cch), NULL, 0)
+#define IsValidACP(str, cch) MultiByteToWideChar(CP_ACP, MB_ERR_INVALID_CHARS, (str), (cch), NULL, 0)
+
 #endif

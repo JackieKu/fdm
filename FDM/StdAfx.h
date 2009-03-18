@@ -160,7 +160,7 @@ extern DWORD _dwAppState;
 #define IS_PORTABLE_MODE	((_dwAppState & APPSTATE_PORTABLE_MODE) != 0)
 //#else
 //#define IS_PORTABLE_MODE	FALSE	
-#endif
+//#endif
 
 #include "lngphrases.h"  
 

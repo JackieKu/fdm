@@ -8,15 +8,13 @@
 
 STDMETHODIMP CFDMDownload::get_Url(BSTR *pVal)
 {
-	USES_CONVERSION;
-	*pVal = SysAllocString (A2W (m_strUrl));
+	*pVal = SysAllocString (CA2W (m_strUrl, CP_UTF8));
 	return S_OK;
 }
 
 STDMETHODIMP CFDMDownload::put_Url(BSTR newVal)
 {
-	USES_CONVERSION;
-	m_strUrl = W2A (newVal);
+	m_strUrl = CW2A (newVal, CP_UTF8);
 	return S_OK;
 }
 
@@ -33,8 +31,7 @@ STDMETHODIMP CFDMDownload::get_DownloadText(long nTextIndex, BSTR *pVal)
 	if (nTextIndex < 0 || nTextIndex > 5)
 		return E_INVALIDARG;
 
-	USES_CONVERSION;
-	*pVal = SysAllocString (A2W (m_astrDldTexts [nTextIndex]));
+	*pVal = SysAllocString (CA2W (m_astrDldTexts [nTextIndex], CP_UTF8));
 
 	return S_OK;
 }
