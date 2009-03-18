@@ -4,6 +4,7 @@
 	Version="9.00"
 	Name="FDM"
 	ProjectGUID="{737F6DB8-15DA-48B2-B5A9-B954CAB55CF3}"
+	RootNamespace="FDM"
 	Keyword="AtlProj"
 	TargetFrameworkVersion="0"
 	>
@@ -8776,10 +8777,6 @@
 			</File>
 			<File
 				RelativePath="res\eng_lngs.bin"
-				>
-			</File>
-			<File
-				RelativePath="res\Fdm.ico"
 				>
 			</File>
 			<File

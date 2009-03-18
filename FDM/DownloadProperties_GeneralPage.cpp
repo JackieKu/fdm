@@ -90,7 +90,7 @@ BOOL CDownloadProperties_GeneralPage::OnInitDialog()
 			NULL, NULL, dnp0->pszPathName, szUrl, &dwLen);
 
 		SetDlgItemText (IDC_URL, szUrl);
-		SetDlgItemText (IDC_SAVEAS, m_pvDlds->at (0)->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName);
+		SetDlgItemTextW (IDC_SAVEAS, CU2W(m_pvDlds->at (0)->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName));
 
 		m_strUrl = szUrl;
 	}
@@ -125,7 +125,7 @@ BOOL CDownloadProperties_GeneralPage::OnInitDialog()
 	}
 
 	if (i == size)
-		SetDlgItemText (IDC_COMMENT, dld0->strComment);
+		SetDlgItemTextW (IDC_COMMENT, CU2W(dld0->strComment));
 
 	m_bCommentModified = FALSE;
 	m_bNeedProcessDownloads = FALSE;
@@ -158,9 +158,9 @@ BOOL CDownloadProperties_GeneralPage::OnApply()
 	if (size == 1)
 	{
 		CString strNewUrl;
-		CString strNewFile;
+		CStringW strNewFile;
 		GetDlgItemText (IDC_URL, strNewUrl);
-		GetDlgItemText (IDC_SAVEAS, strNewFile);
+		GetDlgItemTextW (IDC_SAVEAS, strNewFile);
         if (FALSE == CCreateDownloadDlg::_CheckFolderName (this, IDC_SAVEAS))
 			return FALSE;
 
@@ -188,10 +188,10 @@ BOOL CDownloadProperties_GeneralPage::OnApply()
 
 		fsDownload_Properties *dp = m_pvDlds->at (0)->pMgr->GetDownloadMgr ()->GetDP ();
 
-		
-		if (strNewFile != dp->pszFileName)
+		CW2U uFileName(strNewFile);
+		if (uFileName != dp->pszFileName)
 		{
-			if (FALSE == m_pvDlds->at (0)->pMgr->GetDownloadMgr ()->MoveFile (strNewFile))
+			if (FALSE == m_pvDlds->at (0)->pMgr->GetDownloadMgr ()->MoveFile (uFileName))
 			{
 				if (GetLastError () == 0)
 				{

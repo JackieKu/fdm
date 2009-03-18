@@ -170,7 +170,9 @@ void CCreateDownloadDlg::OnOK()
 
 	m_dld->pGroup = m_wndGroups.GetSelectedGroup ();
 
-	GetDlgItemText (IDC_COMMENT, m_dld->strComment);
+	CStringW wComment;
+	GetDlgItemTextW (IDC_COMMENT, wComment);
+	m_dld->strComment = CW2U(wComment);
 
 	BOOL bUseZipPreview = _App.NewDL_UseZIPPreview ();
 	_App.UseZipPreview (bUseZipPreview);
@@ -243,7 +245,7 @@ BOOL CCreateDownloadDlg::OnInitDialog()
 			m_strUrl = "http://";
 	}
 
-	SetDlgItemText (IDC_COMMENT, m_strComment);
+	SetDlgItemTextW (IDC_COMMENT, CU2W(m_strComment));
 
 	CString strUser = _App.UserName ();
 	m_bAuthorization = strUser.GetLength () != 0;
