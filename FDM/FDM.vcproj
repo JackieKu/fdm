@@ -8370,6 +8370,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\UnicodeWnd.h"
+				>
+			</File>
+			<File
 				RelativePath="UpdateDlg.h"
 				>
 			</File>
@@ -8775,11 +8779,11 @@
 				>
 			</File>
 			<File
-				RelativePath="res\fdm.ico"
+				RelativePath="res\Fdm.ico"
 				>
 			</File>
 			<File
-				RelativePath="res\Fdm.ico"
+				RelativePath="res\fdm.ico"
 				>
 			</File>
 			<File

@@ -17,7 +17,7 @@
 struct vmsDownloadsGroup : public vmsObject
 {
 	fsString strName;		
-	fsString strOutFolder;	
+	fsString strOutFolder; // UTF-8
 	fsString strExts;		
 
 	

@@ -23,7 +23,7 @@ static char THIS_FILE[] = __FILE__;
 
 IMPLEMENT_DYNCREATE(CDownloadProperties_GeneralPage, CPropertyPage)
 
-CDownloadProperties_GeneralPage::CDownloadProperties_GeneralPage() : CPropertyPage(CDownloadProperties_GeneralPage::IDD)
+CDownloadProperties_GeneralPage::CDownloadProperties_GeneralPage() : CPropertyPageW(CDownloadProperties_GeneralPage::IDD)
 {
 	m_psp.dwFlags |= PSP_USETITLE;
 	m_psp.pszTitle = LS (L_GENERAL);

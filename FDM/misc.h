@@ -45,9 +45,18 @@ extern void fsGetPath (LPCSTR pszFile, LPSTR pszPath);
 
 extern void fsGetFileName (LPCSTR pszFilePath, LPSTR pszFileName);
 
-extern void fsPathToGoodPath (LPSTR pszPath);
-
-extern void fsPathToGoodUrlPath (LPSTR pszPath);    
+template <typename CHAR_T> void fsPathToGoodPath (CHAR_T * pszPath)
+{
+	for (;*pszPath;pszPath++)
+		if (*pszPath == (CHAR_T) '/')
+			*pszPath = (CHAR_T) '\\';
+}
+template <typename CHAR_T> void fsPathToGoodUrlPath (CHAR_T * pszPath)
+{
+	for (;*pszPath;pszPath++)
+		if (*pszPath == (CHAR_T) '\\')
+			*pszPath = (CHAR_T) '/';
+}
 
 extern BOOL fsSaveStrToFile(LPCSTR pszStr, HANDLE hFile);
 extern BOOL fsReadStrFromFile(LPTSTR *ppszStr, HANDLE hFile);

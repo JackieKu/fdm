@@ -7,11 +7,12 @@
 
 #include "fsScheduleMgr.h"	
 #include "DownloadsGroupsComboBox.h"
+#include "UnicodeWnd.h"
 #if _MSC_VER > 1000
 #pragma once
 #endif           
 
-class CCreateDownloadListDlg : public CDialog
+class CCreateDownloadListDlg : public CDialogW
 {
 
 public:

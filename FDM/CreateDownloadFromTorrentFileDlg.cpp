@@ -18,7 +18,7 @@ static char THIS_FILE[] = __FILE__;
 #endif        
 
 CCreateDownloadFromTorrentFileDlg::CCreateDownloadFromTorrentFileDlg(CWnd* pParent )
-	: CDialog(CCreateDownloadFromTorrentFileDlg::IDD, pParent)
+	: CDialogW(CCreateDownloadFromTorrentFileDlg::IDD, pParent)
 {
 	//{{AFX_DATA_INIT(CCreateDownloadFromTorrentFileDlg)
 	m_strTorrentFile = _T("");

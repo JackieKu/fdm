@@ -12,12 +12,12 @@
 #include "DownloadsWnd.h"
 #include "fsScheduleMgr.h"
 #include "DownloadsGroupsComboBox.h"      
+#include "UnicodeWnd.h"
 
 #define ID_DLNOTADDED (IDCANCEL+100)
 
-class CCreateDownloadDlg : public CDialog
+class CCreateDownloadDlg : public CDialogW
 {
-
 public:
 	static BOOL _CheckFolderName(CDialog *pdlg, UINT nIdCtrl);
 	

@@ -41,8 +41,7 @@ void CDownloadsGroupsComboBox::Fill()
 #if _MSC_VER < 1300
 		WC_TREEVIEW, "", 
 #endif
-		WS_POPUP | WS_BORDER |
-		TVS_FULLROWSELECT | TVS_HASLINES |  TVS_TRACKSELECT, 
+		WS_BORDER | TVS_FULLROWSELECT | TVS_HASLINES |  TVS_TRACKSELECT, 
 		CRect (0,0,0,0), GetParent (), 0);
 	m_wndTree.SetWindowPos (&CWnd::wndTopMost, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 

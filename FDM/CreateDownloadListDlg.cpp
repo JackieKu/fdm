@@ -24,7 +24,7 @@ static char THIS_FILE[] = __FILE__;
 extern CDownloadsWnd *_pwndDownloads;        
 
 CCreateDownloadListDlg::CCreateDownloadListDlg(CWnd* pParent )
-	: CDialog(CCreateDownloadListDlg::IDD, pParent)
+	: CDialogW(CCreateDownloadListDlg::IDD, pParent)
 {
 	//{{AFX_DATA_INIT(CCreateDownloadListDlg)
 	//}}AFX_DATA_INIT

@@ -26,7 +26,7 @@ static char THIS_FILE[] = __FILE__;
 extern CDownloadsWnd *_pwndDownloads;        
 
 CCreateBatchDownload::CCreateBatchDownload(CWnd* pParent )
-	: CDialog(CCreateBatchDownload::IDD, pParent)
+	: CDialogW(CCreateBatchDownload::IDD, pParent)
 {
 	Download_CreateInstance (m_dld);
 	m_iAlphaFrom = 0;

@@ -13,8 +13,9 @@
 #include "TreeCtrlEx.h"
 #include "fsScheduleMgr.h"	
 #include "DownloadsGroupsComboBox.h"    
+#include "UnicodeWnd.h"
 
-class CCreateDownloadsDlg : public CDialog
+class CCreateDownloadsDlg : public CDialogW
 {
 
 public:

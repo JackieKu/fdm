@@ -172,7 +172,7 @@ void CGroupDlg::OnOK()
 		m_pGroup->strOutFolder += '\\';
 	}
 
-	fsPathToGoodPath (m_pGroup->strOutFolder);
+	fsPathToGoodPath ((LPSTR) m_pGroup->strOutFolder);
 
 	_LastFolders.AddRecord (m_pGroup->strOutFolder);
 

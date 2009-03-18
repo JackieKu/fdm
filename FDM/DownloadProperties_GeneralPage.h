@@ -11,8 +11,9 @@
 
 #include "list.h"
 #include "DownloadsGroupsComboBox.h"    
+#include "UnicodeWnd.h"
 
-class CDownloadProperties_GeneralPage : public CPropertyPage
+class CDownloadProperties_GeneralPage : public CPropertyPageW
 {
 	friend class CDownloadPropertiesSheet;
 

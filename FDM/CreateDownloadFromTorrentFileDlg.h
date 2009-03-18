@@ -11,9 +11,10 @@
 #endif   
 
 #include "DownloadsGroupsComboBox.h"
-#include "fsDownload.h"	    
+#include "fsDownload.h"
+#include "UnicodeWnd.h"
 
-class CCreateDownloadFromTorrentFileDlg : public CDialog
+class CCreateDownloadFromTorrentFileDlg : public CDialogW
 {
 
 public:

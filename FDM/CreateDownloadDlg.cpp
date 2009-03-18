@@ -32,7 +32,7 @@ static char THIS_FILE[] = __FILE__;
 #endif      
 
 CCreateDownloadDlg::CCreateDownloadDlg(vmsDownloadSmartPtr dld, LPCSTR pszStartUrl, LPCSTR pszComment, LPCSTR pszReferer, CWnd* pParent )
-	: CDialog(CCreateDownloadDlg::IDD, pParent), m_dld (dld)
+	: CDialogW(CCreateDownloadDlg::IDD, pParent), m_dld (dld)
 {
 	//{{AFX_DATA_INIT(CCreateDownloadDlg)
 	//}}AFX_DATA_INIT
@@ -98,25 +98,25 @@ void CCreateDownloadDlg::OnOK()
 	if (FALSE == ReadDNP ())
 		return;
 
-	CString strOutFolder, strFileName;
+	CStringW strOutFolder, strFileName;
 
 	int nDldType = m_wndDldType.GetCurSel ();
 
 	if (nDldType == 1)	
 	{
-		char sz [MY_MAX_PATH];
-		GetTempPath (sizeof (sz), sz);
+		wchar_t sz [MY_MAX_PATH];
+		GetTempPathW (_countof (sz), sz);
 		strOutFolder = sz;
 	}
 	else
 	{
 		if (FALSE == _CheckFolderName (this, IDC_OUTFOLDER))
 			return;
-		GetDlgItemText (IDC_OUTFOLDER, strOutFolder);
+		GetDlgItemTextW (IDC_OUTFOLDER, strOutFolder);
 	
 		if (IsDlgButtonChecked (IDC_FILEAUTO) == BST_UNCHECKED)
 		{
-			GetDlgItemText (IDC_SAVEAS, strFileName);
+			GetDlgItemTextW (IDC_SAVEAS, strFileName);
 			if (FALSE == _CheckFileName (this, IDC_SAVEAS))
 				return;
 			_App.NewDL_GenerateNameAutomatically (FALSE);
@@ -125,8 +125,10 @@ void CCreateDownloadDlg::OnOK()
 			_App.NewDL_GenerateNameAutomatically (TRUE);
 	}
 
-	fsPathToGoodPath ((LPSTR)(LPCSTR)strOutFolder);
-	fsPathToGoodPath ((LPSTR)(LPCSTR)strFileName);
+	fsPathToGoodPath (strOutFolder.GetBuffer());
+	strOutFolder.ReleaseBuffer();
+	fsPathToGoodPath (strFileName.GetBuffer());
+	strFileName.ReleaseBuffer();
 
 	if (strOutFolder.GetLength () == 0)
 	{
@@ -136,18 +138,18 @@ void CCreateDownloadDlg::OnOK()
 	}
 
 	if (nDldType != 1)
-		_LastFolders.AddRecord (strOutFolder);
+		_LastFolders.AddRecord (CW2U(strOutFolder));
 	_LastUrlFiles.AddRecord (m_strUrl);
 
-	if (strOutFolder [strOutFolder.GetLength () - 1] != '\\' && 
-		strOutFolder [strOutFolder.GetLength () - 1] != '/')
-		strOutFolder += '\\';
+	if (strOutFolder [strOutFolder.GetLength () - 1] != L'\\' && 
+		strOutFolder [strOutFolder.GetLength () - 1] != L'/')
+		strOutFolder += L'\\';
 
 	if (_App.NewGrp_SelectWay () == NGSW_USE_ALWAYS_SAME_GROUP_WITH_OUTFOLDER_AUTO_UPDATE)
 	{
 		vmsDownloadsGroupSmartPtr pGrp = _DldsGrps.FindGroup (_App.NewDL_GroupId ());
 		if (pGrp != NULL)
-			pGrp->strOutFolder = strOutFolder;
+			pGrp->strOutFolder = CW2U(strOutFolder);
 	}
 
 	CString strFile = strOutFolder + strFileName;
@@ -881,9 +883,9 @@ void CCreateDownloadDlg::OnCancel()
 
 void CCreateDownloadDlg::OnFileauto() 
 {
-	CString str;
-	GetDlgItemText (IDC_SAVEAS, str);
-	if (str == "" && IsDlgButtonChecked (IDC_FILEAUTO) == BST_UNCHECKED)
+	CStringW str;
+	GetDlgItemTextW (IDC_SAVEAS, str);
+	if (str.IsEmpty() && IsDlgButtonChecked (IDC_FILEAUTO) == BST_UNCHECKED)
 	{
 		fsURL url;
 		CString strURL;
@@ -892,7 +894,7 @@ void CCreateDownloadDlg::OnFileauto()
 		char szFile [MY_MAX_PATH];
 		fsFileNameFromUrlPath (url.GetPath (), url.GetInternetScheme () == INTERNET_SCHEME_FTP,
 			TRUE, szFile, sizeof (szFile));
-		SetDlgItemText (IDC_SAVEAS, szFile);
+		SetDlgItemTextW (IDC_SAVEAS, CU2W(szFile));
 	}
 
 	UpdateEnabled ();
@@ -1161,9 +1163,9 @@ BOOL CCreateDownloadDlg::_SetDownloadOutputFolderAsDefault(CWnd *pwndParent, LPC
 
 BOOL CCreateDownloadDlg::_CheckFileName(CDialog *pdlg, UINT nIdCtrl)
 {
-	CString str;
-	pdlg->GetDlgItemText (nIdCtrl, str);
-	LPCSTR pszInvChars = "\\/:*?\"<>|";
+	CStringW str;
+	((CDialogW *) pdlg)->GetDlgItemTextW (nIdCtrl, str);
+	LPCWSTR pszInvChars = L"\\/:*?\"<>|";
 	if (str.FindOneOf (pszInvChars) != -1)
 	{
 		pdlg->MessageBox (LS (L_INVFILENAME), LS (L_INPERR), MB_ICONEXCLAMATION);
@@ -1176,10 +1178,10 @@ BOOL CCreateDownloadDlg::_CheckFileName(CDialog *pdlg, UINT nIdCtrl)
 
 BOOL CCreateDownloadDlg::_CheckFolderName(CDialog *pdlg, UINT nIdCtrl)
 {
-	CString str;
-	pdlg->GetDlgItemText (nIdCtrl, str);
-	LPCSTR pszInvChars = ":*?\"<>|";
-	if (str.GetLength () > 2 && str [1] == ':')
+	CStringW str;
+	((CDialogW *) pdlg)->GetDlgItemTextW (nIdCtrl, str);
+	LPCWSTR pszInvChars = L":*?\"<>|";
+	if (str.GetLength () > 2 && str [1] == L':')
 		str.Delete (1);	
 	if (str.FindOneOf (pszInvChars) != -1)
 	{

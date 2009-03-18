@@ -709,24 +709,6 @@ CString fsTimeInSecondsToStr (DWORD dwAmount)
 	return strResult;
 }
 
-#pragma warning (disable:4706)
-void fsPathToGoodPath (LPSTR pszPath)
-{
-	LPSTR pszBad = pszPath;
-
-	while (pszBad = strchr (pszBad, '/'))  
-		*pszBad = '\\';
-}
-
-void fsPathToGoodUrlPath (LPSTR pszPath)
-{
-	LPSTR pszBad = pszPath;
-
-	while (pszBad = strchr (pszBad, '\\'))
-		*pszBad = '/';
-}
-#pragma warning (default:4706)
-
 #ifndef FDM_DLDR__RAWCODEONLY
 void fsOpenBuyPage ()
 {

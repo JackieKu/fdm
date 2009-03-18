@@ -8,13 +8,10 @@
 #include "fsScheduleMgr.h"	
 #include "fsDownloadsMgr.h"	
 #include "DownloadsGroupsComboBox.h"
-#if _MSC_VER > 1000
-#pragma once
-#endif   
-
+#include "UnicodeWnd.h"
 #include "vmsBatchList.h"	    
 
-class CCreateBatchDownload : public CDialog
+class CCreateBatchDownload : public CDialogW
 {
 
 public:
