@@ -155,31 +155,10 @@ void CListCtrlEx::DrawItem(LPDRAWITEMSTRUCT lpDraw)
 
 		if (*item.pszText)
 		{
-			/*
-			int needX = GetStringWidth (item.pszText);
-			BOOL bDrawText = TRUE;
-			*/
-
 			RECT rcText = lpDraw->rcItem;
 			rcText.left = xStart;
 			rcText.right = xStart + colWidth - 5;
 
-			/*
-			if (needX > colWidth-5)
-			{
-				RECT rc = rcText;
-				int dx = GetStringWidth ("...");
-				if (dx <= colWidth-5)
-				{
-					rc.left = rc.right - dx;
-					dc->DrawText ("...", &rc, DT_SINGLELINE | DT_LEFT | DT_VCENTER);
-					rcText.right = rc.left - 5;
-				}
-				else
-					bDrawText = FALSE;
-			}
-
-			if (bDrawText)*/
 			::DrawTextW (dc->m_hDC, szItem, -1, &rcText, DT_SINGLELINE | DT_LEFT | DT_VCENTER | DT_NOPREFIX | DT_END_ELLIPSIS);
 		}
 
@@ -574,8 +553,6 @@ void CListCtrlEx::SetItemText(int iItem, int iSubItem, LPCSTR pszText)
 		lvi.iSubItem = m_aIndex [iSubItem];
 		lvi.pszText = (LPWSTR) sText;
 		SendMessage(LVM_SETITEMTEXTW, (WPARAM) iItem, (LPARAM) &lvi);
-
-		//CListCtrl::SetItemText (iItem, m_aIndex [iSubItem], pszText);
 	}
 }
 

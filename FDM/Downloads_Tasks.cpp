@@ -1373,9 +1373,6 @@ void CDownloads_Tasks::OnGetdispinfo(NMHDR *pNMHDR, LRESULT *pResult)
 	LV_DISPINFOW* pDispInfo = (LV_DISPINFOW*)pNMHDR;
 	LV_ITEMW* pItem = &(pDispInfo)->item;
 
-	//LV_DISPINFO* pDispInfo = (LV_DISPINFO*)pNMHDR;
-	//LV_ITEM* pItem = &(pDispInfo)->item;
-
 	try{
 
 	vmsDownloadSmartPtr dld = m_vDownloads [pItem->iItem];
@@ -1390,8 +1387,7 @@ void CDownloads_Tasks::OnGetdispinfo(NMHDR *pNMHDR, LRESULT *pResult)
 	{
 		int nSubItem = SubItemToSubItem (pItem->iSubItem);
 		if (nSubItem != -1)
-			//strcpy(pItem->pszText, GetDownloadText (dld, nSubItem));
-			wcscpy (pItem->pszText, CU2W(GetDownloadText (dld, nSubItem)));		
+			wcsncpy (pItem->pszText, CU2W(GetDownloadText (dld, nSubItem)), pItem->cchTextMax);
 	}
 
 	}catch (...) {}
