@@ -152,7 +152,7 @@ void CCreateDownloadDlg::OnOK()
 			pGrp->strOutFolder = CW2U(strOutFolder);
 	}
 
-	CString strFile = strOutFolder + strFileName;
+	CString strFile = CW2U(strOutFolder + strFileName);
 	fsnew (m_dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, CHAR, strFile.GetLength () + 1);
 	_tcscpy (m_dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, strFile);
 	

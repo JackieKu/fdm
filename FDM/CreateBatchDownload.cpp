@@ -668,14 +668,15 @@ void CCreateBatchDownload::OnOK()
 	else
 		m_dld->pMgr->GetDownloadMgr ()->GetDP ()->dwFlags &= ~DPF_USEZIPPREVIEW;
 
-	CString strOutFolder;
+	CStringW strOutFolder;
 
 	if (FALSE == CCreateDownloadDlg::_CheckFolderName (this, IDC_OUTFOLDER))
 		return;
 
-	GetDlgItemText (IDC_OUTFOLDER, strOutFolder);
+	GetDlgItemTextW (IDC_OUTFOLDER, strOutFolder);
 
-	fsPathToGoodPath ((LPSTR)(LPCSTR)strOutFolder);
+	fsPathToGoodPath (strOutFolder.GetBuffer());
+	strOutFolder.ReleaseBuffer();
 
 	if (strOutFolder.GetLength () == 0)
 	{
@@ -684,22 +685,23 @@ void CCreateBatchDownload::OnOK()
 		return;
 	}
 
-	_LastFolders.AddRecord (strOutFolder);
+	_LastFolders.AddRecord (CW2U(strOutFolder));
 	_LastBatchUrls.AddRecord (m_strUrl);
 
-	if (strOutFolder [strOutFolder.GetLength () - 1] != '\\' && 
-		strOutFolder [strOutFolder.GetLength () - 1] != '/')
-		strOutFolder += '\\';
+	if (strOutFolder [strOutFolder.GetLength () - 1] != L'\\' && 
+		strOutFolder [strOutFolder.GetLength () - 1] != L'/')
+		strOutFolder += L'\\';
 
         if (_App.NewGrp_SelectWay () == NGSW_USE_ALWAYS_SAME_GROUP_WITH_OUTFOLDER_AUTO_UPDATE)
 	{
 		vmsDownloadsGroupSmartPtr pGrp = _DldsGrps.FindGroup (_App.NewDL_GroupId ());
 		if (pGrp != NULL)
-			pGrp->strOutFolder = strOutFolder;
+			pGrp->strOutFolder = CW2U(strOutFolder);
 	}  
 
-	fsnew (m_dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, CHAR, strOutFolder.GetLength () + 1);
-	strcpy (m_dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, strOutFolder);
+	CString strFile = CW2U(strOutFolder);
+	fsnew (m_dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, CHAR, strFile.GetLength () + 1);
+	strcpy (m_dld->pMgr->GetDownloadMgr ()->GetDP ()->pszFileName, strFile);
 
 	m_dld->pGroup = m_wndGroups.GetSelectedGroup ();
 

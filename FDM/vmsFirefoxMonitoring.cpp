@@ -38,8 +38,14 @@ bool vmsFirefoxMonitoring::IsFlashGotInstalled()
 
 bool vmsFirefoxMonitoring::Install(bool bInstall)
 {
+	
+	// kumod +++ do not install firefox extension.
+	/*
 	CString strPath = ((CFdmApp*)AfxGetApp ())->m_strAppPath;
 	strPath += "Firefox\\Extension";
 	return vmsFirefoxExtensionInstaller::Do (FDM_CID, strPath, bInstall);
+	*/
+	return true;
+	// kumod --- do not install firefox extension.
 }
 
